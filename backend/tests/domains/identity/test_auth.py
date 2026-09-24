@@ -90,14 +90,14 @@ def test_register_existing_email_looks_identical_and_warns_owner(client, outbox)
     assert r.status_code == 202  # same answer as a brand-new email
     assert outbox[-1]["subject"] == "Someone tried to sign up with your email"
     assert not re.search(r">(\d{6})<", outbox[-1]["html_body"])  # no code sent
-    # and the real owner's password still works
-    assert client.post("/api/v1/auth/login", json={"email": EMAIL, "password": PASSWORD}).status_code == 200
+    # and the real owner's password still works (202: a new phone gets a code)
+    assert client.post("/api/v1/auth/login", json={"email": EMAIL, "password": PASSWORD}).status_code == 202
 
 
 def test_email_is_case_and_space_insensitive(client, outbox):
     signed_up(client, outbox)
     r = client.post("/api/v1/auth/login", json={"email": "  NOMSA@Example.com ", "password": PASSWORD})
-    assert r.status_code == 200
+    assert r.status_code == 202 and r.get_json()["data"]["code_required"]
 
 
 # ------------------------------------------------------------------- codes
@@ -181,22 +181,28 @@ def test_refresh_rotates_and_reuse_kills_the_session(client, outbox):
 
 def test_new_phone_switches_off_the_old_one(client, outbox):
     old = signed_up(client, outbox, phone=device())
-    new = client.post("/api/v1/auth/login", json={"email": EMAIL, "password": PASSWORD, "device": device()})
+    step1 = client.post("/api/v1/auth/login", json={"email": EMAIL, "password": PASSWORD})
+    assert step1.status_code == 202
+    new = client.post(
+        "/api/v1/auth/login/verify",
+        json={"challenge": step1.get_json()["data"]["challenge"], "code": last_code(outbox), "device": device()},
+    )
     assert new.status_code == 200
     assert client.get("/api/v1/me", headers=bearer(old["access_token"])).status_code == 401
     assert client.get("/api/v1/me", headers=bearer(new.get_json()["data"]["access_token"])).status_code == 200
 
 
 def test_invalid_device_key_rejected(client, outbox):
-    signed_up(client, outbox)
+    trusted = signed_up(client, outbox)["trusted_phone_token"]
     # A copied public key with someone else's signature: no proof of possession.
     stolen = device()
     stolen["signature"] = device()["signature"]
-    r = client.post("/api/v1/auth/login", json={"email": EMAIL, "password": PASSWORD, "device": stolen})
+    body = {"email": EMAIL, "password": PASSWORD, "trusted_phone_token": trusted}
+    r = client.post("/api/v1/auth/login", json={**body, "device": stolen})
     assert r.status_code == 422 and r.get_json()["code"] == "INVALID_DEVICE_KEY"
     # And 32 bytes of junk that parse as a key but can't sign anything.
     junk = {**device(), "public_key": "A" * 43}
-    r = client.post("/api/v1/auth/login", json={"email": EMAIL, "password": PASSWORD, "device": junk})
+    r = client.post("/api/v1/auth/login", json={**body, "device": junk})
     assert r.status_code == 422 and r.get_json()["code"] == "INVALID_DEVICE_KEY"
 
 
@@ -225,7 +231,7 @@ def test_forgot_password_same_answer_and_reset_works_once(client, outbox):
     # signed out everywhere, old password dead, new one works
     assert client.get("/api/v1/me", headers=bearer(data["access_token"])).status_code == 401
     assert client.post("/api/v1/auth/login", json={"email": EMAIL, "password": PASSWORD}).status_code == 401
-    assert client.post("/api/v1/auth/login", json={"email": EMAIL, "password": "NewPass2026#"}).status_code == 200
+    assert client.post("/api/v1/auth/login", json={"email": EMAIL, "password": "NewPass2026#"}).status_code == 202
 
 
 def test_reset_rejects_weak_password(client, outbox):

@@ -1,0 +1,10 @@
+Someone is signing in to your account on a new phone.
+
+Your Akayza code is: {{ code }}
+
+Enter it in the app to finish signing in. It expires in {{ minutes }} minutes.
+
+Wasn't you? Don't share this code with anyone. Someone knows your
+password: open the app and change it now.
+
+-- Akayza. We will never ask for your password or this code.

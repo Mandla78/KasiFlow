@@ -34,6 +34,17 @@ class DeviceSchema(_Strict):
     label = fields.String(load_default=None, validate=validate.Length(max=80))
 
 
+class PhoneSchema(_Strict):
+    """How the phone names itself on the Security screen. Not a secret."""
+
+    platform = fields.String(load_default=None, validate=validate.OneOf(["android", "ios", "web"]))
+    label = fields.String(load_default=None, validate=validate.Length(max=80))
+
+
+_code = fields.String(required=True, validate=validate.Regexp(r"^\d{6}$", error="Enter the 6-digit code."))
+_challenge = fields.String(required=True, validate=validate.Length(min=20, max=100))
+
+
 class ConsentSchema(_Strict):
     privacy_version = fields.String(required=True, validate=validate.Length(max=30))
     terms_version = fields.String(required=True, validate=validate.Length(max=30))
@@ -48,8 +59,9 @@ class RegisterSchema(_Strict):
 
 class VerifyEmailSchema(_Strict):
     email = _email
-    code = fields.String(required=True, validate=validate.Regexp(r"^\d{6}$", error="Enter the 6-digit code."))
+    code = _code
     device = fields.Nested(DeviceSchema, load_default=None)
+    phone = fields.Nested(PhoneSchema, load_default=None)
 
 
 class EmailOnlySchema(_Strict):
@@ -60,6 +72,20 @@ class LoginSchema(_Strict):
     email = _email
     password = _password
     device = fields.Nested(DeviceSchema, load_default=None)
+    #: Given to this phone after it passed an email code; skips the code.
+    trusted_phone_token = fields.String(load_default=None, validate=validate.Length(min=20, max=100))
+    phone = fields.Nested(PhoneSchema, load_default=None)
+
+
+class VerifySignInSchema(_Strict):
+    challenge = _challenge
+    code = _code
+    device = fields.Nested(DeviceSchema, load_default=None)
+    phone = fields.Nested(PhoneSchema, load_default=None)
+
+
+class ChallengeSchema(_Strict):
+    challenge = _challenge
 
 
 class GoogleSignInSchema(_Strict):

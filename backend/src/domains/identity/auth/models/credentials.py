@@ -33,6 +33,7 @@ class PasswordCredential(db.Model):
 
 class CodePurpose(str, enum.Enum):
     VERIFY_EMAIL = "verify_email"
+    SIGN_IN = "sign_in"  # 2FA: password was right, phone isn't trusted yet
 
 
 class EmailCode(db.Model):
@@ -40,7 +41,7 @@ class EmailCode(db.Model):
 
     __tablename__ = "email_codes"
     __table_args__ = (
-        db.CheckConstraint("purpose IN ('verify_email')", name="ck_email_codes_purpose"),
+        db.CheckConstraint("purpose IN ('verify_email', 'sign_in')", name="ck_email_codes_purpose"),
         {"schema": "identity"},
     )
 
@@ -49,6 +50,10 @@ class EmailCode(db.Model):
     purpose = db.Column(db.String(20), nullable=False)
     code_hash = db.Column(db.String(64), nullable=False)
     attempts = db.Column(db.Integer, nullable=False, default=0)
+    #: SIGN_IN codes only: HMAC of the random challenge handed to the phone
+    #: that got the password right. The code is only accepted together with
+    #: it, so it can't be tried from anywhere else.
+    challenge_hash = db.Column(db.String(64), nullable=True, index=True)
     expires_at = db.Column(db.DateTime(timezone=True), nullable=False)
     used_at = db.Column(db.DateTime(timezone=True), nullable=True)
     created_at = db.Column(db.DateTime(timezone=True), nullable=False, default=utcnow)
@@ -70,6 +75,8 @@ class Session(db.Model):
     id = db.Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
     user_id = db.Column(UUID(as_uuid=True), db.ForeignKey("identity.users.id", ondelete="CASCADE"), nullable=False, index=True)
     device_id = db.Column(UUID(as_uuid=True), db.ForeignKey("identity.devices.id", ondelete="SET NULL"), nullable=True)
+    #: The trusted phone this session was opened on (see trusted_phone.py).
+    trusted_phone_id = db.Column(UUID(as_uuid=True), db.ForeignKey("identity.trusted_phones.id", ondelete="SET NULL"), nullable=True)
     refresh_jti = db.Column(db.String(64), nullable=False, unique=True)
     created_at = db.Column(db.DateTime(timezone=True), nullable=False, default=utcnow)
     last_used_at = db.Column(db.DateTime(timezone=True), nullable=False, default=utcnow)

@@ -14,6 +14,7 @@ from src.shared.rate_limit.limiter import limiter
 
 from ..rate_limit import policies
 from ..schemas.auth_schemas import (
+    ChallengeSchema,
     ChangePasswordSchema,
     EmailOnlySchema,
     GoogleLinkSchema,
@@ -23,10 +24,11 @@ from ..schemas.auth_schemas import (
     RegisterSchema,
     ResetPasswordSchema,
     VerifyEmailSchema,
+    VerifySignInSchema,
     load,
 )
 from ..services import auth_service
-from ..services.auth_service import DeviceInfo
+from ..services.auth_service import DeviceInfo, PhoneInfo
 
 CHECK_EMAIL = "Check your email."
 
@@ -34,6 +36,11 @@ CHECK_EMAIL = "Check your email."
 def _device(data: dict):
     d = data.get("device")
     return DeviceInfo(**d) if d else None
+
+
+def _phone(data: dict):
+    p = data.get("phone")
+    return PhoneInfo(**p) if p else None
 
 
 @api_bp.post("/auth/register")
@@ -50,7 +57,7 @@ def register():
 @limiter.limit(policies.VERIFY_EMAIL)
 def verify_email():
     data = load(VerifyEmailSchema(), request.get_json(silent=True))
-    return success_response(auth_service.verify_email(data["email"], data["code"], _device(data)), message="Email confirmed.")
+    return success_response(auth_service.verify_email(data["email"], data["code"], _device(data), _phone(data)), message="Email confirmed.")
 
 
 @api_bp.post("/auth/resend-code")
@@ -65,7 +72,26 @@ def resend_code():
 @limiter.limit(policies.LOGIN, key_func=policies.login_key_func)
 def login():
     data = load(LoginSchema(), request.get_json(silent=True))
-    return success_response(auth_service.login(data["email"], data["password"], _device(data)), message="Signed in.")
+    result = auth_service.login(data["email"], data["password"], _device(data), data["trusted_phone_token"], _phone(data))
+    if result.get("code_required"):
+        return success_response(result, message="Check your email for a code.", status_code=202)
+    return success_response(result, message="Signed in.")
+
+
+@api_bp.post("/auth/login/verify")
+@limiter.limit(policies.VERIFY_SIGN_IN)
+def verify_sign_in():
+    """Step two on a new phone: the code from the email + the challenge from step one."""
+    data = load(VerifySignInSchema(), request.get_json(silent=True))
+    return success_response(auth_service.verify_sign_in(data["challenge"], data["code"], _device(data), _phone(data)), message="Signed in.")
+
+
+@api_bp.post("/auth/login/resend-code")
+@limiter.limit(policies.RESEND_CODE)
+def resend_sign_in_code():
+    data = load(ChallengeSchema(), request.get_json(silent=True))
+    auth_service.resend_sign_in_code(data["challenge"])
+    return success_response({}, message=CHECK_EMAIL, status_code=202)
 
 
 @api_bp.post("/auth/refresh")

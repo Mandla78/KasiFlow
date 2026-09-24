@@ -18,6 +18,7 @@ from src.shared.audit.event_types.auth import AuthAuditEvent
 LOGIN = "5 per minute"
 REGISTER = "5 per hour"
 VERIFY_EMAIL = "10 per 15 minutes"
+VERIFY_SIGN_IN = "10 per 15 minutes"  # each code also dies after 5 wrong tries
 RESEND_CODE = "3 per 15 minutes"
 REFRESH = "30 per minute"
 FORGOT_PASSWORD = "3 per hour"
@@ -52,6 +53,8 @@ RATE_LIMIT_AUDIT_EVENTS = {
     "api.register": AuthAuditEvent.REGISTER_RATE_LIMITED,
     "api.verify_email": AuthAuditEvent.OTP_VERIFY_RATE_LIMITED,
     "api.resend_code": AuthAuditEvent.OTP_REQUEST_RATE_LIMITED,
+    "api.verify_sign_in": AuthAuditEvent.OTP_VERIFY_RATE_LIMITED,
+    "api.resend_sign_in_code": AuthAuditEvent.OTP_REQUEST_RATE_LIMITED,
     "api.refresh": AuthAuditEvent.REFRESH_RATE_LIMITED,
     "api.forgot_password": AuthAuditEvent.PASSWORD_RESET_REQUEST_RATE_LIMITED,
     "api.reset_password": AuthAuditEvent.PASSWORD_RESET_RATE_LIMITED,

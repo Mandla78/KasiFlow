@@ -40,7 +40,7 @@ def _issue(user_id: uuid.UUID, sid: uuid.UUID) -> tuple[str, str, str]:
     return access, refresh, jti
 
 
-def start(user_id: uuid.UUID, device_id: Optional[uuid.UUID]) -> tuple[dict, uuid.UUID]:
+def start(user_id: uuid.UUID, device_id: Optional[uuid.UUID], trusted_phone_id: Optional[uuid.UUID] = None) -> tuple[dict, uuid.UUID]:
     """A new signed-in session. Returns (tokens for the app, session id)."""
     sid = uuid.uuid4()
     access, refresh, jti = _issue(user_id, sid)
@@ -49,6 +49,7 @@ def start(user_id: uuid.UUID, device_id: Optional[uuid.UUID]) -> tuple[dict, uui
             id=sid,
             user_id=user_id,
             device_id=device_id,
+            trusted_phone_id=trusted_phone_id,
             refresh_jti=jti,
             expires_at=utcnow() + current_app.config["JWT_REFRESH_TOKEN_EXPIRES"],
             ip_address=request.remote_addr,

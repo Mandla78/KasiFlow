@@ -72,9 +72,11 @@ Commit the migration file with the model change, so everyone else gets it with `
 | Route | What it does |
 |---|---|
 | `POST /auth/register` | business name, email, password, consent versions. Always answers "Check your email." |
-| `POST /auth/verify-email` | email + 6-digit code (+ optional phone key) → tokens |
+| `POST /auth/verify-email` | email + 6-digit code (+ optional phone key) → tokens + `trusted_phone_token` |
 | `POST /auth/resend-code` | always answers "Check your email." |
-| `POST /auth/login` | email + password (+ optional phone key) → tokens |
+| `POST /auth/login` | email + password (+ `trusted_phone_token` if this phone has one) → tokens; on a new phone → 202 `code_required` + `challenge`, and a code by email |
+| `POST /auth/login/verify` | challenge + 6-digit code → tokens + `trusted_phone_token` (this phone skips the code from now on) |
+| `POST /auth/login/resend-code` | challenge → a new code (max 3 per sign-in); always answers "Check your email." |
 | `POST /auth/google` | Google ID token (+ business name and consent for new users) → tokens |
 | `POST /auth/google/link` | Google ID token + password: adds Google to an existing account |
 | `POST /auth/refresh` | refresh token → new tokens (the old refresh token stops working) |
@@ -86,6 +88,8 @@ Commit the migration file with the model change, so everyone else gets it with `
 | `GET /me` | the signed-in account |
 | `GET /me/export` | everything identity holds about you (POPIA) |
 | `POST /me/close-account` | password required; ends all sessions and phone keys |
+
+**Two-factor sign-in:** the password plus either a trusted phone or a code sent to the email. A phone becomes trusted by entering an emailed code (sign-up counts); it stays trusted for 90 days of not being used, until the owner signs out other phones, or until the account is closed. Only the HMAC of the trusted-phone token is stored.
 
 Every route is rate-limited (`identity/auth/rate_limit/policies.py`) and every action is written to the append-only audit trail (`audit.audit_events`).
 

@@ -9,6 +9,7 @@ import { Body, Title } from '@/shared/components/Text';
 import { TextField } from '@/shared/components/TextField';
 import { isEmail } from '@/shared/lib/validation';
 import { AuthError, authApi } from '@/features/auth/api/authApi';
+import { setPendingSignIn } from '@/features/auth/session/pendingSignIn';
 import { useSession } from '@/features/auth/session/SessionProvider';
 import { colors, fonts } from '@/shared/theme/tokens';
 
@@ -28,7 +29,16 @@ export default function SignIn() {
     setBusy(true);
     setError('');
     try {
-      signedIn(await authApi.signIn(email.trim().toLowerCase(), password));
+      const normalized = email.trim().toLowerCase();
+      const result = await authApi.signIn(normalized, password);
+      if (result.kind === 'code_required') {
+        // New phone: the password was right, now the code from the email.
+        setPendingSignIn({ email: normalized, challenge: result.challenge });
+        setPassword('');
+        router.push('/sign-in-code');
+        return;
+      }
+      signedIn(result.profile);
     } catch (e) {
       if (e instanceof AuthError && e.code === 'EMAIL_NOT_VERIFIED') {
         // Right password, email never confirmed: the server just sent a new code.
@@ -86,8 +96,8 @@ export default function SignIn() {
       <Pressable onPress={() => router.push({ pathname: '/forgot-password', params: { email } })}>
         <Text style={styles.link}>Forgot password?</Text>
       </Pressable>
-      <InfoNote icon="smartphone">
-        Signing in on a new phone switches off the old phone&apos;s key, so a lost phone can&apos;t confirm anything for you.
+      <InfoNote icon="shield">
+        On a new phone we&apos;ll also email you a code, so your password alone can&apos;t open your business.
       </InfoNote>
     </Screen>
   );

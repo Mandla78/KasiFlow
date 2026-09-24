@@ -9,6 +9,7 @@ import { PRIVACY_POLICY } from '@/content/legal/privacyPolicy';
 import { TERMS_OF_USE } from '@/content/legal/termsOfUse';
 import { api, ApiError } from '@/shared/api/client';
 import { clearTokens, setTokens } from '@/shared/api/tokenStore';
+import { getTrustedToken, phoneInfo, setTrustedToken } from '@/shared/api/trustedPhone';
 
 import { consentNow, emptyProfile } from '../profile';
 import { AuthApi, AuthError, Profile } from '../types';
@@ -20,7 +21,8 @@ type ServerUser = {
   status: string;
   signed_up_with: 'email' | 'google';
 };
-type SignedIn = { access_token: string; refresh_token: string; user: ServerUser };
+type SignedIn = { access_token: string; refresh_token: string; user: ServerUser; trusted_phone_token?: string };
+type LoginStep = SignedIn | { code_required: true; challenge: string };
 
 /** Turn server failures into AuthErrors with the server's own message. */
 async function call<T>(fn: () => Promise<T>): Promise<T> {
@@ -34,6 +36,8 @@ async function call<T>(fn: () => Promise<T>): Promise<T> {
 
 async function keep(result: SignedIn): Promise<Profile> {
   await setTokens({ accessToken: result.access_token, refreshToken: result.refresh_token });
+  // Given after an email code: this phone skips the code next time.
+  await setTrustedToken(result.user.email, result.trusted_phone_token);
   // The server has the account; business details (type, pin, categories)
   // are still kept on the phone until the business-profile API exists.
   return {
@@ -59,7 +63,7 @@ export const httpAuthApi: AuthApi = {
 
   verifyEmail: (email, code) =>
     call(async () => {
-      await keep(await api<SignedIn>('POST', '/auth/verify-email', { email, code }));
+      await keep(await api<SignedIn>('POST', '/auth/verify-email', { email, code, phone: phoneInfo() }));
     }),
 
   resendCode: (email) =>
@@ -75,7 +79,26 @@ export const httpAuthApi: AuthApi = {
     throw new AuthError('GOOGLE_UNAVAILABLE', "Google sign-in isn't available yet. Use your email for now.");
   },
 
-  signIn: (email, password) => call(async () => keep(await api<SignedIn>('POST', '/auth/login', { email, password }))),
+  signIn: (email, password) =>
+    call(async () => {
+      const trusted = await getTrustedToken(email);
+      const step = await api<LoginStep>('POST', '/auth/login', {
+        email,
+        password,
+        phone: phoneInfo(),
+        ...(trusted ? { trusted_phone_token: trusted } : {}),
+      });
+      if ('code_required' in step) return { kind: 'code_required' as const, challenge: step.challenge };
+      return { kind: 'signed_in' as const, profile: await keep(step) };
+    }),
+
+  verifySignIn: (_email, challenge, code) =>
+    call(async () => keep(await api<SignedIn>('POST', '/auth/login/verify', { challenge, code, phone: phoneInfo() }))),
+
+  resendSignInCode: (challenge) =>
+    call(async () => {
+      await api('POST', '/auth/login/resend-code', { challenge });
+    }),
 
   requestPasswordReset: (email) =>
     call(async () => {

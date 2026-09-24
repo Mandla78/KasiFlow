@@ -18,19 +18,23 @@ def signed_up(client, outbox) -> dict:
     return client.post("/api/v1/auth/verify-email", json={"email": EMAIL, "code": code}).get_json()["data"]
 
 
-def second_phone(client) -> dict:
-    return client.post("/api/v1/auth/login", json={"email": EMAIL, "password": PASSWORD}).get_json()["data"]
+def second_phone(client, outbox) -> dict:
+    """Sign in on another phone: password, then the emailed code."""
+    challenge = client.post("/api/v1/auth/login", json={"email": EMAIL, "password": PASSWORD}).get_json()["data"]["challenge"]
+    code = re.search(r">(\d{6})<", outbox[-1]["html_body"]).group(1)
+    body = {"challenge": challenge, "code": code, "phone": {"platform": "android", "label": "Samsung A14"}}
+    return client.post("/api/v1/auth/login/verify", json=body).get_json()["data"]
 
 
 def test_change_password_keeps_this_phone_and_signs_out_others(client, outbox):
     a = signed_up(client, outbox)
-    b = second_phone(client)
+    b = second_phone(client, outbox)
     r = client.post("/api/v1/auth/change-password", headers=bearer(a["access_token"]),
                     json={"current_password": PASSWORD, "new_password": "NewSpaza2026#"})
     assert r.status_code == 200 and r.get_json()["data"]["signed_out"] == 1
     assert client.get("/api/v1/me", headers=bearer(a["access_token"])).status_code == 200  # this phone stays
     assert client.get("/api/v1/me", headers=bearer(b["access_token"])).status_code == 401  # the other is out
-    assert client.post("/api/v1/auth/login", json={"email": EMAIL, "password": "NewSpaza2026#"}).status_code == 200
+    assert client.post("/api/v1/auth/login", json={"email": EMAIL, "password": "NewSpaza2026#"}).status_code == 202
 
 
 def test_change_password_needs_the_right_current_password(client, outbox):
@@ -45,14 +49,21 @@ def test_change_password_needs_the_right_current_password(client, outbox):
 
 def test_sign_out_other_phones_and_list_them(client, outbox):
     a = signed_up(client, outbox)
-    second_phone(client)
+    b = second_phone(client, outbox)
     sessions = client.get("/api/v1/auth/sessions", headers=bearer(a["access_token"])).get_json()["data"]["sessions"]
     assert len(sessions) == 2 and sum(s["this_phone"] for s in sessions) == 1
+    assert {s["label"] for s in sessions if not s["this_phone"]} == {"Samsung A14"}  # named by the phone
     assert all("token" not in str(s) for s in sessions)  # never tokens
     r = client.post("/api/v1/auth/logout-others", headers=bearer(a["access_token"]))
     assert r.get_json()["data"]["signed_out"] == 1
     sessions = client.get("/api/v1/auth/sessions", headers=bearer(a["access_token"])).get_json()["data"]["sessions"]
     assert len(sessions) == 1 and sessions[0]["this_phone"]
+    # The other phone is no longer trusted: its password alone only gets a code.
+    back = client.post("/api/v1/auth/login", json={"email": EMAIL, "password": PASSWORD, "trusted_phone_token": b["trusted_phone_token"]})
+    assert back.status_code == 202 and back.get_json()["data"]["code_required"]
+    # ...while this phone still is.
+    here = client.post("/api/v1/auth/login", json={"email": EMAIL, "password": PASSWORD, "trusted_phone_token": a["trusted_phone_token"]})
+    assert here.status_code == 200
 
 
 def test_close_account_ends_everything(client, outbox):
@@ -72,7 +83,8 @@ def test_export_contains_my_data_and_no_secrets(client, outbox):
     assert data["account"]["email"] == EMAIL
     assert {c["document"] for c in data["consents"]} == {"privacy_policy", "terms_of_use"}
     text = str(data).lower()
-    for secret in ("password_hash", "code_hash", "token_hash", "refresh_jti", PASSWORD.lower()):
+    assert len(data["trusted_phones"]) == 1
+    for secret in ("password_hash", "code_hash", "token_hash", "refresh_jti", PASSWORD.lower(), a["trusted_phone_token"].lower()):
         assert secret not in text
 
 

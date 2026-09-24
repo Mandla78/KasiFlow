@@ -1,22 +1,24 @@
 import { Feather } from '@expo/vector-icons';
-import { router } from 'expo-router';
+import { Redirect, router } from 'expo-router';
 import { useEffect, useRef, useState } from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 
-import { Button } from '@/shared/components/Button';
-import { CODE_LENGTH as LENGTH, CodeInput, CodeInputHandle } from '@/shared/components/CodeInput';
-import { IconTile, InfoNote } from '@/shared/components/Parts';
-import { BackButton, Screen } from '@/shared/components/Screen';
-import { Body, Title } from '@/shared/components/Text';
 import { AuthError, authApi } from '@/features/auth/api/authApi';
+import { getPendingSignIn, setPendingSignIn } from '@/features/auth/session/pendingSignIn';
 import { useSession } from '@/features/auth/session/SessionProvider';
+import { Button } from '@/shared/components/Button';
+import { CODE_LENGTH, CodeInput, CodeInputHandle } from '@/shared/components/CodeInput';
+import { IconTile, InfoNote } from '@/shared/components/Parts';
+import { Screen } from '@/shared/components/Screen';
+import { Body, Title } from '@/shared/components/Text';
 import { colors, fonts } from '@/shared/theme/tokens';
 
 const RESEND_AFTER = 45;
 
-/** Step 2 of 4: a 6-digit code by email. Nothing else happens until it's confirmed. */
-export default function VerifyEmail() {
-  const { profile, emailVerified, signOut } = useSession();
+/** Two-factor, step two on a new phone: the code we emailed. */
+export default function SignInCodeScreen() {
+  const { signedIn } = useSession();
+  const [pending] = useState(getPendingSignIn);
   const [code, setCode] = useState('');
   const [error, setError] = useState('');
   const [busy, setBusy] = useState(false);
@@ -29,19 +31,17 @@ export default function VerifyEmail() {
     return () => clearTimeout(t);
   }, [seconds]);
 
-  function wrongEmail() {
-    // Start again with a different address.
-    signOut();
-    router.replace('/create-account');
-  }
+  // Opened without a sign-in in progress (e.g. app restarted): start over.
+  if (!pending) return <Redirect href="/sign-in" />;
 
   async function verify() {
-    if (code.length !== LENGTH) return;
+    if (!pending || code.length !== CODE_LENGTH) return;
     setBusy(true);
     setError('');
     try {
-      await authApi.verifyEmail(profile.email, code);
-      emailVerified(); // the router moves on to business type by itself
+      const profile = await authApi.verifySignIn(pending.email, pending.challenge, code);
+      setPendingSignIn(null);
+      signedIn(profile);
     } catch (e) {
       setError(e instanceof AuthError ? e.message : 'Something went wrong. Try again.');
       setCode('');
@@ -52,39 +52,43 @@ export default function VerifyEmail() {
   }
 
   async function resend() {
-    await authApi.resendCode(profile.email);
+    if (!pending) return;
+    try {
+      await authApi.resendSignInCode(pending.challenge);
+    } catch {
+      // Same screen either way; the limit message isn't worth a detour.
+    }
     setSeconds(RESEND_AFTER);
   }
 
   return (
-    <Screen
-      footer={
-        <>
-          <InfoNote icon="key">
-            Once confirmed, Akayza creates a private key on this phone. It signs everything you confirm, so nobody can fake it.
-          </InfoNote>
-          <Button title="Verify email" onPress={verify} loading={busy} disabled={code.length !== LENGTH} />
-        </>
-      }>
-      <BackButton onPress={wrongEmail} />
+    <Screen back footer={<Button title="Sign in" onPress={verify} loading={busy} disabled={code.length !== CODE_LENGTH} />}>
       <View style={{ gap: 14 }}>
-        <IconTile name="mail" size={50} />
+        <IconTile name="shield" size={50} />
         <Title>Check your email</Title>
         <Body>
-          We sent a 6-digit code to <Text style={styles.email}>{profile.email}</Text>. Enter it to confirm the address is yours.
+          This phone is new to your account. We sent a 6-digit code to <Text style={styles.email}>{pending.email}</Text>.
         </Body>
       </View>
 
       <CodeInput
         ref={input}
         value={code}
+        label="Sign-in code"
         onChange={(c) => {
           setCode(c);
           setError('');
         }}
         error={!!error}
       />
-      {error ? <Text style={styles.error}>{error}</Text> : null}
+      {error ? (
+        <View style={{ gap: 6 }}>
+          <Text style={styles.error}>{error}</Text>
+          <Pressable onPress={() => router.back()}>
+            <Text style={[styles.small, styles.link]}>Sign in again</Text>
+          </Pressable>
+        </View>
+      ) : null}
 
       <View style={styles.resendRow}>
         <Feather name="clock" size={13} color={colors.textMuted} />
@@ -95,12 +99,9 @@ export default function VerifyEmail() {
             <Text style={[styles.small, styles.link]}>Resend code</Text>
           </Pressable>
         )}
-        <Text style={styles.small}>·</Text>
-        <Pressable onPress={wrongEmail}>
-          <Text style={[styles.small, styles.link]}>Wrong email?</Text>
-        </Pressable>
       </View>
       <Text style={styles.small}>Can&apos;t see it? Check Spam or Promotions.</Text>
+      <InfoNote icon="smartphone">After this, this phone signs in with just your password.</InfoNote>
     </Screen>
   );
 }

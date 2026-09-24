@@ -92,6 +92,9 @@ class BaseConfig:
     EMAIL_CODE_MAX_ATTEMPTS = int(os.environ.get("EMAIL_CODE_MAX_ATTEMPTS", 5))
     LOGIN_MAX_FAILED_ATTEMPTS = int(os.environ.get("LOGIN_MAX_FAILED_ATTEMPTS", 5))
     LOGIN_LOCKOUT_MINUTES = int(os.environ.get("LOGIN_LOCKOUT_MINUTES", 15))
+    # Two-factor: a phone that passed the email code skips it until it goes
+    # this many days unused (or is signed out from Security).
+    TRUSTED_PHONE_DAYS = 90
 
     # Password reset links (one use).
     PASSWORD_RESET_EXPIRY_MINUTES = int(os.environ.get("PASSWORD_RESET_EXPIRY_MINUTES", 30))

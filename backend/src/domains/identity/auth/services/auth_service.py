@@ -11,6 +11,11 @@ RULES THIS FILE KEEPS (security by design):
   * ONE-TIME SECRETS are stored hashed, expire, and die after too many
     wrong attempts.
   * A PASSWORD RESET signs the user out everywhere.
+  * TWO FACTORS TO SIGN IN. The right password on a phone we don't trust
+    yet only earns a code by email; the session starts when the code is
+    entered, and that phone is then trusted (see trusted_phones.py). The
+    code step is only reached with the right password, so it reveals
+    nothing to someone guessing.
 """
 from __future__ import annotations
 
@@ -32,7 +37,7 @@ from src.shared.email.email import EmailService
 from src.shared.security.security import hash_password, validate_password_complexity, verify_password
 
 from ..models import CodePurpose, EmailCode, GoogleIdentity, PasswordCredential, PasswordReset
-from . import auth_audit, google_verifier, secrets, session_service
+from . import auth_audit, google_verifier, secrets, session_service, trusted_phones
 
 logger = logging.getLogger("akayza.auth")
 
@@ -43,11 +48,24 @@ _DUMMY_HASH = hash_password("dummy-password-for-timing-1!A")
 GENERIC_LOGIN_ERROR = "Email or password is incorrect."
 GENERIC_CODE_ERROR = "That code is wrong or has expired."
 GENERIC_RESET_ERROR = "This link is not valid any more. Ask for a new one."
+GENERIC_SIGN_IN_CODE_ERROR = "That code is wrong or has expired."
+
+#: Codes one sign-in attempt can ask for (the first + resends) before the
+#: password has to be entered again.
+MAX_CODES_PER_SIGN_IN = 3
 
 
 class InvalidCodeError(AppError):
     status_code = 400
     code = "INVALID_CODE"
+
+
+@dataclass
+class PhoneInfo:
+    """What the phone says about itself, to name it in the Security screen."""
+
+    platform: Optional[str] = None
+    label: Optional[str] = None
 
 
 @dataclass
@@ -98,7 +116,7 @@ def _send_code(user, resent: bool = False) -> None:
     auth_audit.record(E.OTP_RESENT if resent else E.OTP_SENT, user_id=user.id, email=user.email, purpose="verify_email")
 
 
-def _tokens(user, device: Optional[DeviceInfo]) -> dict:
+def _tokens(user, device: Optional[DeviceInfo], trusted_phone_id=None) -> dict:
     device_id = None
     if device and device.public_key:
         registered, previous_id = device_service.register(user.id, device.public_key, device.signature, device.platform, device.label)
@@ -111,9 +129,17 @@ def _tokens(user, device: Optional[DeviceInfo]) -> dict:
                 reason="new_device", sessions_ended=ended, new_device_id=str(device_id),
             )
     account_service.record_login(user)
-    tokens, sid = session_service.start(user.id, device_id)
+    tokens, sid = session_service.start(user.id, device_id, trusted_phone_id)
     auth_audit.record(E.TOKEN_CREATED, user_id=user.id, email=user.email, session_id=sid, device_id=device_id)
     return {**tokens, "user": account_service.public_view(user)}
+
+
+def _trust_this_phone(user, phone: Optional[PhoneInfo]) -> tuple:
+    """After an emailed code: this phone skips the code from now on."""
+    phone = phone or PhoneInfo()
+    row, token = trusted_phones.add(user.id, phone.platform, phone.label)
+    auth_audit.record(E.TRUSTED_PHONE_ADDED, user_id=user.id, email=user.email, trusted_phone_id=str(row.id), platform=phone.platform)
+    return row, token
 
 
 # --------------------------------------------------------------- register
@@ -170,7 +196,7 @@ def resend_code(email: str) -> None:
         db.session.commit()
 
 
-def verify_email(email: str, code: str, device: Optional[DeviceInfo]) -> dict:
+def verify_email(email: str, code: str, device: Optional[DeviceInfo], phone: Optional[PhoneInfo] = None) -> dict:
     user = account_service.find_by_email(email)
     if not user or user.status != AccountStatus.UNVERIFIED.value:
         auth_audit.record(
@@ -202,16 +228,27 @@ def verify_email(email: str, code: str, device: Optional[DeviceInfo]) -> dict:
 
     record.used_at = now
     account_service.mark_verified(user)
-    result = _tokens(user, device)
+    # The code reached this phone from the inbox: it is trusted from the start.
+    trusted, trusted_token = _trust_this_phone(user, phone)
+    result = _tokens(user, device, trusted.id)
     db.session.commit()
     auth_audit.record(E.EMAIL_VERIFIED, user_id=user.id, email=user.email)
-    return result
+    return {**result, "trusted_phone_token": trusted_token}
 
 
 # ------------------------------------------------------------------ login
 
 
-def login(email: str, password: str, device: Optional[DeviceInfo]) -> dict:
+def login(
+    email: str,
+    password: str,
+    device: Optional[DeviceInfo],
+    trusted_phone_token: Optional[str] = None,
+    phone: Optional[PhoneInfo] = None,
+) -> dict:
+    """Right password on a trusted phone -> signed in. Right password on
+    any other phone -> {"code_required": True, "challenge": ...} and a code
+    by email; finish with verify_sign_in."""
     user = account_service.find_by_email(email)
     credential = db.session.get(PasswordCredential, user.id) if user else None
 
@@ -253,10 +290,108 @@ def login(email: str, password: str, device: Optional[DeviceInfo]) -> dict:
         auth_audit.record(E.LOGIN_BLOCKED, False, user_id=user.id, email=user.email, reason="account_closed")
         raise AccountInactiveError("This account is closed.")
 
-    result = _tokens(user, device)
+    trusted = trusted_phones.match(user.id, trusted_phone_token)
+    if not trusted:
+        challenge = secrets.new_token()
+        _send_sign_in_code(user, secrets.digest(challenge))
+        db.session.commit()
+        auth_audit.record(
+            E.LOGIN_CODE_REQUIRED, user_id=user.id, email=user.email,
+            reason="unknown_phone" if not trusted_phone_token else "phone_not_trusted",
+        )
+        return {"code_required": True, "challenge": challenge, "expires_in_minutes": current_app.config["EMAIL_CODE_EXPIRY_MINUTES"]}
+
+    result = _tokens(user, device, trusted.id)
     db.session.commit()
-    auth_audit.record(E.LOGIN_SUCCESS, user_id=user.id, email=user.email)
+    auth_audit.record(E.LOGIN_SUCCESS, user_id=user.id, email=user.email, second_factor="trusted_phone", trusted_phone_id=str(trusted.id))
     return result
+
+
+def _send_sign_in_code(user, challenge_hash: str, resent: bool = False) -> None:
+    """A fresh code for this sign-in attempt; any earlier one for it dies."""
+    now = utcnow()
+    EmailCode.query.filter_by(user_id=user.id, purpose=CodePurpose.SIGN_IN.value, challenge_hash=challenge_hash, used_at=None).update(
+        {"used_at": now}
+    )
+    code = secrets.new_code()
+    minutes = current_app.config["EMAIL_CODE_EXPIRY_MINUTES"]
+    db.session.add(
+        EmailCode(
+            user_id=user.id,
+            purpose=CodePurpose.SIGN_IN.value,
+            challenge_hash=challenge_hash,
+            code_hash=secrets.digest(code),
+            expires_at=now + timedelta(minutes=minutes),
+        )
+    )
+    EmailService.send_template(
+        to=user.email,
+        template_name="sign_in_code.html",
+        subject="Your Akayza sign-in code",
+        context={"code": code, "minutes": minutes},
+        rate_limit_key=f"sign_in_code:{user.email}",
+        rate_limit_max=6,
+        rate_limit_window_seconds=3600,
+    )
+    auth_audit.record(E.OTP_RESENT if resent else E.OTP_SENT, user_id=user.id, email=user.email, purpose="sign_in")
+
+
+def _live_sign_in_code(challenge: str) -> Optional[EmailCode]:
+    return (
+        EmailCode.query.filter_by(purpose=CodePurpose.SIGN_IN.value, challenge_hash=secrets.digest(challenge or ""), used_at=None)
+        .order_by(EmailCode.created_at.desc())
+        .first()
+    )
+
+
+def verify_sign_in(challenge: str, code: str, device: Optional[DeviceInfo], phone: Optional[PhoneInfo] = None) -> dict:
+    """Second step: the code from the email, with the challenge from step one."""
+    now = utcnow()
+    record = _live_sign_in_code(challenge)
+    if not record or record.expires_at <= now:
+        auth_audit.record(E.OTP_FAILED, False, user_id=record.user_id if record else None, reason="no_valid_code", purpose="sign_in")
+        raise InvalidCodeError(GENERIC_SIGN_IN_CODE_ERROR)
+    user = account_service.get(record.user_id)
+    if not user or not user.is_active:
+        record.used_at = now
+        db.session.commit()
+        raise InvalidCodeError(GENERIC_SIGN_IN_CODE_ERROR)
+
+    if not secrets.matches((code or "").strip(), record.code_hash):
+        record.attempts += 1
+        burnt = record.attempts >= current_app.config["EMAIL_CODE_MAX_ATTEMPTS"]
+        if burnt:
+            record.used_at = now
+        db.session.commit()
+        auth_audit.record(
+            E.OTP_EXPIRED if burnt else E.OTP_FAILED, False, user_id=user.id, email=user.email,
+            reason="too_many_attempts" if burnt else "wrong_code", attempts=record.attempts, purpose="sign_in",
+        )
+        raise InvalidCodeError(GENERIC_SIGN_IN_CODE_ERROR)
+
+    record.used_at = now
+    auth_audit.record(E.OTP_VERIFIED, user_id=user.id, email=user.email, purpose="sign_in")
+    trusted, trusted_token = _trust_this_phone(user, phone)
+    result = _tokens(user, device, trusted.id)
+    db.session.commit()
+    auth_audit.record(E.LOGIN_SUCCESS, user_id=user.id, email=user.email, second_factor="email_code", trusted_phone_id=str(trusted.id))
+    return {**result, "trusted_phone_token": trusted_token}
+
+
+def resend_sign_in_code(challenge: str) -> None:
+    """A new code for the same sign-in attempt. Same answer whatever happens;
+    after MAX_CODES_PER_SIGN_IN codes the password has to be entered again."""
+    record = _live_sign_in_code(challenge)
+    if not record or record.expires_at <= utcnow():
+        return
+    challenge_hash = record.challenge_hash
+    sent = EmailCode.query.filter_by(purpose=CodePurpose.SIGN_IN.value, challenge_hash=challenge_hash).count()
+    user = account_service.get(record.user_id)
+    if sent >= MAX_CODES_PER_SIGN_IN or not user or not user.is_active:
+        auth_audit.record(E.OTP_REQUEST_RATE_LIMITED, False, user_id=record.user_id, reason="too_many_codes", purpose="sign_in")
+        return
+    _send_sign_in_code(user, challenge_hash, resent=True)
+    db.session.commit()
 
 
 def refresh(sid: str, jti: str) -> dict:
@@ -382,9 +517,18 @@ def change_password(user, current_sid: str, current_password: str, new_password:
 
 
 def sign_out_other_phones(user, current_sid: str) -> int:
+    """Other phones are signed out AND stop being trusted: to come back they
+    need the password and a fresh code from the owner's email."""
+    current = session_service.get(current_sid)
     ended = session_service.revoke_all_except(user.id, current_sid, session_service.RevokeReason.OTHERS_SIGNED_OUT)
+    keep = current.trusted_phone_id if current else None
+    untrusted = trusted_phones.revoke_all(user.id, trusted_phones.RevokeReason.SIGNED_OUT, keep_id=keep)
     db.session.commit()
-    auth_audit.record(E.LOGOUT_ALL_DEVICES, user_id=user.id, email=user.email, session_id=current_sid, sessions_ended=ended)
+    auth_audit.record(
+        E.LOGOUT_ALL_DEVICES, user_id=user.id, email=user.email, session_id=current_sid, sessions_ended=ended, phones_untrusted=untrusted,
+    )
+    if untrusted:
+        auth_audit.record(E.TRUSTED_PHONE_REVOKED, user_id=user.id, email=user.email, reason="others_signed_out", count=untrusted)
     return ended
 
 
@@ -394,7 +538,7 @@ def signed_in_phones(user, current_sid: str) -> list[dict]:
     devices = {d.id: d for d in device_service.list_for(user.id)}
     out = []
     for s in session_service.live_for(user.id):
-        d = devices.get(s.device_id)
+        d = devices.get(s.device_id) or trusted_phones.get(s.trusted_phone_id)
         out.append(
             {
                 "id": str(s.id),
@@ -413,6 +557,7 @@ def close_account(user, current_sid: str, password: str) -> None:
     account_service.deactivate(user)
     ended = session_service.revoke_all(user.id, session_service.RevokeReason.ACCOUNT_CLOSED)
     keys = device_service.revoke_all(user.id)
+    trusted_phones.revoke_all(user.id, trusted_phones.RevokeReason.ACCOUNT_CLOSED)
     db.session.commit()
     auth_audit.record(E.ACCOUNT_DISABLED, user_id=user.id, email=user.email, session_id=current_sid, sessions_ended=ended, device_keys_revoked=keys)
 
@@ -425,6 +570,7 @@ def export_my_data(user, current_sid: str) -> dict:
         "consents": account_service.consents_view(user),
         "signed_in_phones": signed_in_phones(user, current_sid),
         "phone_keys": [device_service.public_view(d) for d in device_service.list_for(user.id)],
+        "trusted_phones": [trusted_phones.public_view(p) for p in trusted_phones.list_live(user.id)],
         "google_linked": db.session.get(GoogleIdentity, user.id) is not None,
     }
     auth_audit.record(E.DATA_EXPORTED, user_id=user.id, email=user.email, session_id=current_sid)

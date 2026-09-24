@@ -48,6 +48,10 @@ class AuthAuditEvent(str, enum.Enum):
     LOGIN_LOCKED = "auth.login_locked"
     LOGIN_RATE_LIMITED = "auth.login_rate_limited"
     LOGIN_UNVERIFIED = "auth.login_unverified"
+    # Two-factor: right password on a phone that isn't trusted yet -> code by email.
+    LOGIN_CODE_REQUIRED = "auth.login_code_required"
+    TRUSTED_PHONE_ADDED = "auth.trusted_phone_added"
+    TRUSTED_PHONE_REVOKED = "auth.trusted_phone_revoked"
     # V2: correct password, right account, WRONG SURFACE -- a business
     # signing in at the supplier web portal. Its own event because it is
     # not a failed sign-in and must not read like one when someone is

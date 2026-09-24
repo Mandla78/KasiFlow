@@ -81,6 +81,13 @@ export class AuthError extends Error {
   }
 }
 
+/**
+ * Sign-in is two-factor: the password, plus either a trusted phone or a
+ * code sent to the email. On a new phone the first step returns a
+ * challenge; the code screen finishes with verifySignIn.
+ */
+export type SignInResult = { kind: 'signed_in'; profile: Profile } | { kind: 'code_required'; challenge: string };
+
 /** Everything the auth screens ask of the server. Mock today, HTTP later. */
 export interface AuthApi {
   createAccount(input: { businessName: string; email: string; password: string; consent: Consent }): Promise<void>;
@@ -89,7 +96,10 @@ export interface AuthApi {
   /** 'new' starts onboarding; 'link' means a password account already uses the email. */
   continueWithGoogle(email: string): Promise<'new' | 'link'>;
   linkGoogle(email: string, password: string): Promise<Profile>;
-  signIn(email: string, password: string): Promise<Profile>;
+  signIn(email: string, password: string): Promise<SignInResult>;
+  /** Second step on a new phone: the code from the email. This phone is trusted afterwards. */
+  verifySignIn(email: string, challenge: string, code: string): Promise<Profile>;
+  resendSignInCode(challenge: string): Promise<void>;
   /** Same answer whether or not the account exists, so nobody can fish for emails. */
   requestPasswordReset(email: string): Promise<void>;
   /** From the reset link: set a new password. */

@@ -1,0 +1,7 @@
+{% extends "_layout.html" %}
+{% block content %}
+<p style="font-size:16px;">Someone is signing in to your account on a new phone. Your Akayza code is:</p>
+<p style="font-size:34px;font-weight:800;letter-spacing:6px;margin:8px 0 16px;">{{ code }}</p>
+<p style="font-size:14px;color:#334155;">Enter it in the app to finish signing in. It expires in {{ minutes }} minutes.</p>
+<p style="font-size:14px;color:#334155;"><strong>Wasn't you?</strong> Don't share this code with anyone. Someone knows your password: open the app and change it now.</p>
+{% endblock %}

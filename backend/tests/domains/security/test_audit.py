@@ -44,15 +44,20 @@ def test_sign_up_and_logins_are_stored(app, client, outbox):
     email = fresh_email()
     sign_up(client, outbox, email)
     client.post("/api/v1/auth/login", json={"email": email, "password": "Wrong2026!"})
-    client.post("/api/v1/auth/login", json={"email": email, "password": PASSWORD})
+    challenge = client.post("/api/v1/auth/login", json={"email": email, "password": PASSWORD}).get_json()["data"]["challenge"]
+    code = re.search(r">(\d{6})<", outbox[-1]["html_body"]).group(1)
+    client.post("/api/v1/auth/login/verify", json={"challenge": challenge, "code": code})
 
     names = [e.event_name for e in events_for(app, email, since)]
     for expected in (
         "auth.register_success",
         "auth.otp_sent",
         "auth.email_verified",
+        "auth.trusted_phone_added",
         "auth.token_created",
         "auth.login_failed",
+        "auth.login_code_required",
+        "auth.otp_verified",
         "auth.login_success",
     ):
         assert expected in names, f"{expected} missing from {names}"

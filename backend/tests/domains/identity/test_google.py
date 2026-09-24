@@ -63,7 +63,7 @@ def test_existing_password_account_is_never_merged_silently(client, fake_google,
     assert ok.status_code == 200
 
     assert google(client).status_code == 200  # Google works now
-    assert client.post("/api/v1/auth/login", json={"email": "nomsa.g@example.com", "password": PASSWORD}).status_code == 200  # and so does the password
+    assert client.post("/api/v1/auth/login", json={"email": "nomsa.g@example.com", "password": PASSWORD}).status_code == 202  # and so does the password
 
 
 def test_pre_hijack_attack_fails(client, fake_google):

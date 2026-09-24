@@ -19,7 +19,7 @@ from src.shared.cache import cache as cache_module  # noqa: E402
 from src.shared.email.email import get_fake_provider  # noqa: E402
 from src.shared.rate_limit.limiter import limiter  # noqa: E402
 
-IDENTITY_TABLES = ["google_identities", "sessions", "devices", "email_codes", "password_resets", "password_credentials", "consents", "users"]
+IDENTITY_TABLES = ["google_identities", "sessions", "trusted_phones", "devices", "email_codes", "password_resets", "password_credentials", "consents", "users"]
 
 
 @pytest.fixture(scope="session")
