@@ -16,6 +16,8 @@ from ..rate_limit import policies
 from ..schemas.auth_schemas import (
     ChangePasswordSchema,
     EmailOnlySchema,
+    GoogleLinkSchema,
+    GoogleSignInSchema,
     LoginSchema,
     PasswordConfirmSchema,
     RegisterSchema,
@@ -141,3 +143,24 @@ def close_account():
 @auth_required
 def export_my_data():
     return success_response(auth_service.export_my_data(current_user(), _sid()))
+
+
+# ------------------------------------------------ continue with Google
+
+
+@api_bp.post("/auth/google")
+@limiter.limit(policies.GOOGLE)
+def google_sign_in():
+    data = load(GoogleSignInSchema(), request.get_json(silent=True))
+    consent = data.get("consent") or {}
+    result = auth_service.google_sign_in(
+        data["id_token"], data.get("business_name"), consent.get("privacy_version"), consent.get("terms_version"), _device(data)
+    )
+    return success_response(result, message="Signed in with Google.")
+
+
+@api_bp.post("/auth/google/link")
+@limiter.limit(policies.GOOGLE_LINK)
+def link_google():
+    data = load(GoogleLinkSchema(), request.get_json(silent=True))
+    return success_response(auth_service.link_google(data["id_token"], data["password"], _device(data)), message="Google linked.")

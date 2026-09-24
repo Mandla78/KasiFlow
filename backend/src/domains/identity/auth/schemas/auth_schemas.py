@@ -62,6 +62,19 @@ class LoginSchema(_Strict):
     device = fields.Nested(DeviceSchema, load_default=None)
 
 
+class GoogleSignInSchema(_Strict):
+    id_token = fields.String(required=True, validate=validate.Length(min=20, max=4096))
+    business_name = fields.String(load_default=None, validate=validate.Length(min=2, max=80))
+    consent = fields.Nested(ConsentSchema, load_default=None)
+    device = fields.Nested(DeviceSchema, load_default=None)
+
+
+class GoogleLinkSchema(_Strict):
+    id_token = fields.String(required=True, validate=validate.Length(min=20, max=4096))
+    password = _password
+    device = fields.Nested(DeviceSchema, load_default=None)
+
+
 class ChangePasswordSchema(_Strict):
     current_password = _password
     new_password = _password

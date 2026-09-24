@@ -23,7 +23,7 @@ from flask import current_app, request
 
 from src.core.base_model import utcnow
 from src.core.exceptions import AccountInactiveError, AccountLockedError, AppError, EmailNotVerifiedError, UnauthorizedError, ValidationError
-from src.domains.identity.accounts.models import AccountStatus
+from src.domains.identity.accounts.models import AccountStatus, SignUpMethod
 from src.domains.identity.accounts.services import account_service
 from src.domains.identity.devices.services import device_service
 from src.extensions import db
@@ -31,8 +31,8 @@ from src.shared.audit.event_types.auth import AuthAuditEvent as E
 from src.shared.email.email import EmailService
 from src.shared.security.security import hash_password, validate_password_complexity, verify_password
 
-from ..models import CodePurpose, EmailCode, PasswordCredential, PasswordReset
-from . import auth_audit, secrets, session_service
+from ..models import CodePurpose, EmailCode, GoogleIdentity, PasswordCredential, PasswordReset
+from . import auth_audit, google_verifier, secrets, session_service
 
 logger = logging.getLogger("akayza.auth")
 
@@ -425,6 +425,110 @@ def export_my_data(user, current_sid: str) -> dict:
         "consents": account_service.consents_view(user),
         "signed_in_phones": signed_in_phones(user, current_sid),
         "phone_keys": [device_service.public_view(d) for d in device_service.list_for(user.id)],
+        "google_linked": db.session.get(GoogleIdentity, user.id) is not None,
     }
     auth_audit.record(E.DATA_EXPORTED, user_id=user.id, email=user.email, session_id=current_sid)
     return data
+
+
+# ---------------------------------------------------- continue with Google
+
+
+def _google_claims(id_token_value: str):
+    try:
+        return google_verifier.verify(id_token_value)
+    except google_verifier.InvalidGoogleToken:
+        auth_audit.record(E.GOOGLE_TOKEN_REJECTED, False, reason="invalid_google_token")
+        raise
+
+
+def google_sign_in(
+    id_token_value: str,
+    business_name: Optional[str],
+    privacy_version: Optional[str],
+    terms_version: Optional[str],
+    device: Optional[DeviceInfo],
+) -> dict:
+    """
+    Continue with Google. Outcomes:
+      * this Google account is already linked       -> signed in
+      * the email has a PASSWORD account             -> 409 GOOGLE_LINK_REQUIRED
+        (never merged silently: the owner proves the password once)
+      * new here (or a sign-up that was never verified) -> needs business name
+        and consent; 422 GOOGLE_SIGNUP_DETAILS_REQUIRED until the app sends them
+    """
+    claims = _google_claims(id_token_value)
+
+    link = GoogleIdentity.query.filter_by(google_sub=claims.sub).first()
+    if link:
+        user = account_service.get(link.user_id)
+        if not user or not user.is_active:
+            raise AccountInactiveError("This account is closed.")
+        result = _tokens(user, device)
+        db.session.commit()
+        auth_audit.record(E.LOGIN_SUCCESS, user_id=user.id, email=user.email, method="google")
+        return result
+
+    user = account_service.find_by_email(claims.email)
+    if user and user.status == AccountStatus.DEACTIVATED.value:
+        raise AccountInactiveError("This account is closed.")
+    if user and user.status == AccountStatus.ACTIVE.value and db.session.get(PasswordCredential, user.id):
+        # Only someone holding a valid Google token for this email sees this.
+        raise AppError(
+            "You already have an account with a password. Enter it once to link Google.",
+            status_code=409,
+            code="GOOGLE_LINK_REQUIRED",
+            data={"email": user.email},
+        )
+
+    if not business_name or not privacy_version or not terms_version:
+        raise AppError(
+            "Name your business and accept the Privacy Policy and Terms to continue.",
+            status_code=422,
+            code="GOOGLE_SIGNUP_DETAILS_REQUIRED",
+            data={"email": claims.email, "name": claims.name},
+        )
+    account_service.check_consent_versions(privacy_version, terms_version)
+
+    claimed = False
+    if user and user.status == AccountStatus.UNVERIFIED.value:
+        # PRE-HIJACK DEFENCE: someone else may have signed up with this email
+        # and set a password, waiting for the owner to verify it. The owner
+        # has now proven the email through Google: that password is deleted.
+        credential = db.session.get(PasswordCredential, user.id)
+        if credential:
+            db.session.delete(credential)
+        EmailCode.query.filter_by(user_id=user.id, used_at=None).update({"used_at": utcnow()})
+        account_service.claim_unverified_with(user, business_name, SignUpMethod.GOOGLE)
+        claimed = True
+    elif not user:
+        user = account_service.create_verified(claims.email, business_name, SignUpMethod.GOOGLE)
+    # (an active account with no password and no Google link can't normally
+    # exist; if it does, the Google-proven email links it below)
+
+    account_service.record_consents(user, privacy_version, terms_version, _ip(), request.headers.get("User-Agent"))
+    db.session.add(GoogleIdentity(user_id=user.id, google_sub=claims.sub, email_at_link=user.email))
+    result = _tokens(user, device)
+    db.session.commit()
+    auth_audit.record(
+        E.REGISTER_SUCCESS, user_id=user.id, email=user.email, method="google",
+        reason="unverified_signup_claimed" if claimed else None,
+        privacy_version=privacy_version, terms_version=terms_version,
+    )
+    return result
+
+
+def link_google(id_token_value: str, password: str, device: Optional[DeviceInfo]) -> dict:
+    """Add Google to an existing password account: the password proves it's theirs."""
+    claims = _google_claims(id_token_value)
+    user = account_service.find_by_email(claims.email)
+    if not user or not user.is_active:
+        raise AppError("There's no account to link. Continue with Google to sign up.", status_code=400, code="NOTHING_TO_LINK")
+    _require_password(user, password, E.LOGIN_FAILED)
+    if GoogleIdentity.query.filter_by(google_sub=claims.sub).first() or db.session.get(GoogleIdentity, user.id):
+        raise AppError("This Google account is already linked.", status_code=409, code="GOOGLE_ALREADY_LINKED")
+    db.session.add(GoogleIdentity(user_id=user.id, google_sub=claims.sub, email_at_link=user.email))
+    result = _tokens(user, device)
+    db.session.commit()
+    auth_audit.record(E.GOOGLE_LINKED, user_id=user.id, email=user.email)
+    return result

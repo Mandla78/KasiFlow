@@ -23,6 +23,8 @@ REFRESH = "30 per minute"
 FORGOT_PASSWORD = "3 per hour"
 RESET_PASSWORD = "5 per hour"
 CHANGE_PASSWORD = "5 per hour"
+GOOGLE = "10 per minute"
+GOOGLE_LINK = "5 per minute"
 CLOSE_ACCOUNT = "3 per hour"
 EXPORT_DATA = "5 per hour"
 # GET /me and POST /logout need a valid token already: no extra limit.
@@ -54,4 +56,6 @@ RATE_LIMIT_AUDIT_EVENTS = {
     "api.forgot_password": AuthAuditEvent.PASSWORD_RESET_REQUEST_RATE_LIMITED,
     "api.reset_password": AuthAuditEvent.PASSWORD_RESET_RATE_LIMITED,
     "api.change_password": AuthAuditEvent.PASSWORD_RESET_RATE_LIMITED,
+    "api.google_sign_in": AuthAuditEvent.LOGIN_RATE_LIMITED,
+    "api.link_google": AuthAuditEvent.LOGIN_RATE_LIMITED,
 }

@@ -85,6 +85,8 @@ class AuthAuditEvent(str, enum.Enum):
     ACCOUNT_ENABLED = "auth.account_enabled"
     ACCOUNT_DISABLED = "auth.account_disabled"
     DATA_EXPORTED = "auth.data_exported"  # POPIA: the user downloaded their data
+    GOOGLE_LINKED = "auth.google_linked"  # Google added to an existing account (password proven)
+    GOOGLE_TOKEN_REJECTED = "auth.google_token_rejected"
     ACCOUNT_DELETED = "auth.account_deleted"
     ACCOUNT_UNLOCKED = "auth.account_unlocked"
     ROLE_CHANGED = "auth.role_changed"

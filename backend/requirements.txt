@@ -33,3 +33,7 @@ tzdata==2026.3
 
 # Validation helpers
 phonenumbers==8.13.55
+
+# Continue with Google: verifies Google ID tokens on the server
+google-auth==2.58.1
+requests==2.34.2

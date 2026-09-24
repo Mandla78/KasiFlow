@@ -126,3 +126,25 @@ def delete_unverified(user: User) -> None:
     from src.extensions import db
 
     db.session.delete(user)
+
+
+def create_verified(email: str, business_name: str, method: SignUpMethod) -> User:
+    """A new account whose email is already proven (e.g. by Google)."""
+    user = user_repository.add(
+        User(
+            email=normalized(email),
+            business_name=business_name.strip(),
+            status=AccountStatus.UNVERIFIED.value,
+            signed_up_with=method.value,
+        )
+    )
+    mark_verified(user)
+    return user
+
+
+def claim_unverified_with(user: User, business_name: str, method: SignUpMethod) -> None:
+    """The real owner of the email (proven by Google) takes over a sign-up
+    that was never verified. Whoever started it proved nothing."""
+    user.business_name = business_name.strip()
+    user.signed_up_with = method.value
+    mark_verified(user)

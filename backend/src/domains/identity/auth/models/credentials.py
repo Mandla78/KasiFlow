@@ -93,3 +93,16 @@ class PasswordReset(db.Model):
     expires_at = db.Column(db.DateTime(timezone=True), nullable=False)
     used_at = db.Column(db.DateTime(timezone=True), nullable=True)
     created_at = db.Column(db.DateTime(timezone=True), nullable=False, default=utcnow)
+
+
+class GoogleIdentity(db.Model):
+    """A Google account linked to a user. Keyed on Google's stable user id
+    ("sub"), never on the email, which can change on Google's side."""
+
+    __tablename__ = "google_identities"
+    __table_args__ = {"schema": "identity"}
+
+    user_id = db.Column(UUID(as_uuid=True), db.ForeignKey("identity.users.id", ondelete="CASCADE"), primary_key=True)
+    google_sub = db.Column(db.String(64), nullable=False, unique=True)
+    email_at_link = db.Column(db.String(254), nullable=False)
+    linked_at = db.Column(db.DateTime(timezone=True), nullable=False, default=utcnow)

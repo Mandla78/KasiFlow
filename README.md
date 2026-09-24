@@ -75,10 +75,37 @@ Commit the migration file with the model change, so everyone else gets it with `
 | `POST /auth/verify-email` | email + 6-digit code (+ optional phone key) → tokens |
 | `POST /auth/resend-code` | always answers "Check your email." |
 | `POST /auth/login` | email + password (+ optional phone key) → tokens |
+| `POST /auth/google` | Google ID token (+ business name and consent for new users) → tokens |
+| `POST /auth/google/link` | Google ID token + password: adds Google to an existing account |
 | `POST /auth/refresh` | refresh token → new tokens (the old refresh token stops working) |
 | `POST /auth/logout` | ends this phone's session immediately |
+| `POST /auth/logout-others` | signs out every other phone |
+| `GET /auth/sessions` | where the account is signed in (no tokens) |
+| `POST /auth/change-password` | current + new password; other phones are signed out |
 | `POST /auth/forgot-password` / `POST /auth/reset-password` | one-use reset link, 30 minutes |
-| `GET /me` | the signed-in account (from the token; no ids in URLs) |
+| `GET /me` | the signed-in account |
+| `GET /me/export` | everything identity holds about you (POPIA) |
+| `POST /me/close-account` | password required; ends all sessions and phone keys |
+
+Every route is rate-limited (`identity/auth/rate_limit/policies.py`) and every action is written to the append-only audit trail (`audit.audit_events`).
+
+### Building a feature? How to use identity
+
+Identity is finished and **sealed**: a test fails if code outside `domains/identity` imports its internals. You only need two things:
+
+```python
+from src.core.decorators import auth_required, current_user
+
+@api_bp.get("/credit-book/customers")
+@auth_required                      # 401 unless signed in with a live session
+def list_customers():
+    user = current_user()           # the signed-in account, from the token
+    return success_response(customer_service.list_for(user.id))   # ALWAYS scope by user.id
+```
+
+- Never take a user id from the URL or body to decide whose data to return: use `current_user().id` (that's how we prevent IDOR).
+- Need a user's details elsewhere? `from src.domains.identity.accounts.services import account_service` → `account_service.get(user_id)` / `account_service.public_view(user)`.
+- Audit your own feature's actions with `src.shared.audit` (publish an event); the audit trail stores it.
 
 **In development the emails aren't really sent** (`MAIL_PROVIDER=fake`). The sign-up code and the reset link are printed in the backend terminal, on a line starting with `[fake email]`.
 

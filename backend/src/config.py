@@ -103,6 +103,11 @@ class BaseConfig:
     PRIVACY_POLICY_VERSION = os.environ.get("PRIVACY_POLICY_VERSION", "0.1-draft")
     TERMS_VERSION = os.environ.get("TERMS_VERSION", "0.1-draft")
 
+    # Continue with Google: the OAuth client IDs our app uses (Android and
+    # web), comma-separated. A Google token is only accepted if it was
+    # issued to one of these. Empty = Google sign-in switched off.
+    GOOGLE_CLIENT_IDS = [c.strip() for c in os.environ.get("GOOGLE_CLIENT_IDS", "").split(",") if c.strip()]
+
     # Mapbox token for address search and reverse geocoding. Server-side
     # only: the app has its own public token for drawing the map.
     MAPBOX_TOKEN = os.environ.get("MAPBOX_TOKEN", "")
