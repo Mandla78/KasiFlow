@@ -11,6 +11,12 @@ import os
 from datetime import timedelta
 from urllib.parse import quote
 
+from src.shared.constants.constants import (
+    DEFAULT_MAIL_MAX_RETRIES,
+    DEFAULT_MAIL_RETRY_DELAYS_SECONDS,
+    DEFAULT_MAIL_TIMEOUT_SECONDS,
+)
+
 # PostgreSQL schemas. These group TABLES (storage, backups, access
 # rights); they are NOT the same thing as the code's domains, and don't
 # have to line up one-to-one. A feature's models say which schema they
@@ -70,8 +76,13 @@ class BaseConfig:
     MAIL_PASSWORD = os.environ.get("MAIL_PASSWORD", "")
     MAIL_DEFAULT_SENDER = os.environ.get("MAIL_DEFAULT_SENDER", "Akayza <no-reply@akayza.co.za>")
     MAIL_REPLY_TO = os.environ.get("MAIL_REPLY_TO", "")
-    MAIL_TIMEOUT = int(os.environ.get("MAIL_TIMEOUT", 10))
-    MAIL_ASYNC = _bool("MAIL_ASYNC", "true")  # send in the background
+
+    # Delivery BEHAVIOUR is decided in code, not per environment: reviewed,
+    # the same on every machine, and not changeable by a stray .env line.
+    MAIL_TIMEOUT = DEFAULT_MAIL_TIMEOUT_SECONDS  # 10 s per SMTP attempt
+    MAIL_MAX_RETRIES = DEFAULT_MAIL_MAX_RETRIES  # 3 attempts
+    MAIL_RETRY_DELAYS = DEFAULT_MAIL_RETRY_DELAYS_SECONDS  # 5, 15, 60 s between attempts
+    MAIL_ASYNC = True  # send in the background; a slow mail server never slows a request
 
     # Sign-in hardening.
     EMAIL_CODE_EXPIRY_MINUTES = int(os.environ.get("EMAIL_CODE_EXPIRY_MINUTES", 15))
