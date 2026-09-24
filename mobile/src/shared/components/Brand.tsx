@@ -8,7 +8,7 @@
 import { StyleSheet, Text, View } from 'react-native';
 import Svg, { Circle, Defs, LinearGradient, Path, Rect, Stop } from 'react-native-svg';
 
-import { brand, fonts } from '@/shared/theme/tokens';
+import { brand, colors, fonts } from '@/shared/theme/tokens';
 
 const TOP = 'M 64 150 C 90 150, 140 100, 180 50 C 205 20, 245 35, 235 70 C 220 120, 160 170, 110 180 Z';
 const BOTTOM = 'M 100 160 C 145 175, 200 215, 225 255 C 240 280, 205 310, 175 290 C 135 260, 90 200, 64 185 Z';
@@ -41,12 +41,12 @@ export function BrandMark({ size = 56 }: { size?: number }) {
   );
 }
 
-/** The wordmark from assets/akayza-images/akayza-svg.svg: "akay" + emerald "za". Pass onDark on navy backgrounds. */
+/** The wordmark: "akay" + "za" in the accent colour. Pass onDark on navy backgrounds. */
 export function Wordmark({ size = 26, onDark = false }: { size?: number; onDark?: boolean }) {
   return (
     <Text style={[styles.word, { fontSize: size, letterSpacing: -size * 0.03 }]}>
       <Text style={{ color: onDark ? brand.white : brand.navy }}>akay</Text>
-      <Text style={{ color: brand.emerald }}>za</Text>
+      <Text style={{ color: colors.accent }}>za</Text>
     </Text>
   );
 }

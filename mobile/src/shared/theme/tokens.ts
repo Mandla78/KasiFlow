@@ -1,16 +1,16 @@
 /**
- * Design tokens, taken from the Akayza logo (assets/akayza-images):
- * navy for text and main actions, emerald for progress and "done", amber
- * only for things that need attention. Clean light background.
+ * Design tokens: navy for text and main actions, blue for the accent
+ * (primary call to action, progress, selection), amber only for things
+ * that need attention. Clean light background.
  *
  * Key names are kept stable so screens don't churn when values change.
  */
 export const colors = {
   ink: '#0F172A', // brand navy: text, primary buttons, headers
   inkSoft: '#1E293B',
-  accent: '#10B981', // brand emerald: progress, selected, success
-  accentDeep: '#059669',
-  accentTint: '#D1FAE5',
+  accent: '#2563EB', // blue: main call to action, progress, selected
+  accentDeep: '#1D4ED8',
+  accentTint: '#DBEAFE',
   marigold: '#F59E0B', // brand amber: attention only (due today, pending)
   marigoldDeep: '#B45309',
   marigoldTint: '#FEF3C7',

@@ -70,20 +70,29 @@ Commit the migration file with the model change, so everyone else gets it with `
 ```powershell
 cd mobile
 npm install
-npx expo start --dev-client
+copy .env.example .env         # public settings only (Mapbox token, API address)
+npm start                      # = npx expo start --dev-client
 ```
 
 1. Install the **Akayza** development build on your phone from the EAS link Mandla shares (Android: allow "install unknown apps").
-2. Open Akayza on the phone and scan the QR code in the terminal. The phone and the laptop must be on the same Wi-Fi. If they can't be, use `npx expo start --dev-client --tunnel`.
+2. Open Akayza on the phone and scan the QR code in the terminal.
 3. Code changes appear on the phone in seconds. A **new build** is only needed when a package with native code is added (then run `eas build --profile development --platform android`).
+
+**The phone can't connect?** By default the phone must be on the **same Wi-Fi** as the PC. Campus, work and public Wi-Fi often block devices from reaching each other, and so does a phone on mobile data. Then use the tunnel, which works from any network:
+
+```powershell
+npm run start:tunnel           # = npx expo start --dev-client --tunnel
+```
+
+The tunnel is a little slower to load, but it always connects. If it still fails, allow Node.js through Windows Firewall when Windows asks.
 
 **Preview in the browser** (quick UI check, no phone needed): `npx expo start --web`, then open http://localhost:8081. Refreshing the page resets the session.
 
-Optional `mobile/.env` (git-ignored):
+**`mobile/.env`** (git-ignored; `.env.example` lists the keys):
+- `EXPO_PUBLIC_MAPBOX_TOKEN`: the public Mapbox token. Without it the map uses OpenStreetMap (dev only).
+- `EXPO_PUBLIC_API_URL`: where the phone finds the backend. `localhost` means the phone itself, so use your PC's IP from `ipconfig` (same Wi-Fi) or a tunnel URL. It's unused until the mocks are switched to the real backend.
 
-```
-EXPO_PUBLIC_MAPBOX_TOKEN=pk....     # public Mapbox token; without it the map uses OpenStreetMap (dev only)
-```
+Restart `npm start` after changing `.env`.
 
 Before you push mobile changes: `npx tsc --noEmit` and `npx expo lint`.
 

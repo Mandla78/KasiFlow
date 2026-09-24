@@ -49,7 +49,7 @@ export function Button({ title, onPress, variant = 'primary', icon, leading, loa
 const variants: Record<Variant, { bg: string; fg: string; border: string }> = {
   primary: { bg: colors.ink, fg: colors.white, border: colors.ink },
   secondary: { bg: colors.white, fg: colors.ink, border: colors.line },
-  accent: { bg: colors.accent, fg: colors.ink, border: colors.accent },
+  accent: { bg: colors.accent, fg: colors.white, border: colors.accent },
 };
 
 const styles = StyleSheet.create({
