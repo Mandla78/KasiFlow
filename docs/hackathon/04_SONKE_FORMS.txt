@@ -1,0 +1,301 @@
+===========================================================================
+SONKE FORMS -- READY TO PASTE
+Draft 24 Sep 2026. NOTE: for the Lean Canvas (B) and SSDLC (C), paste
+the NEWER versions in 06 sections 7 and 8. Use this file for the team
+profile (A) and upload notes (D). (est.) = our estimate: keep the label, or replace it
+with a validated number. Update anything the build changes.
+===========================================================================
+
+
+###########################################################################
+A. TEAM PROFILING  (Edit project overview)
+###########################################################################
+
+TEAM NAME        PR
+LOCATION         Polokwane
+PROJECT NAME     a CODENAME until we present (keep "Akayza" private);
+                 switch to Akayza before Sunday's submission
+CHALLENGE        Brand New
+SECTOR           Fintech & township retail (informal economy, B2B supply)
+
+--- BACKGROUND: What inspired / motivated this project? -------------------
+
+South Africa's township economy is worth about R900 billion a year, and
+spaza shops alone about R180 billion. Yet nearly four in five township
+businesses are unregistered and fewer than 9% can get a bank loan
+(Standard Bank Township Informal Economy Report, 2025). We grew up
+around these shops. They run on cash, WhatsApp and a notebook: the
+owner phones the same wholesaler every week, pays the driver in cash,
+and neither side keeps a record they both agree on.
+
+What pushed us to build: when government opened the R500 million Spaza
+Shop Support Fund, 354 applications failed verification, and only
+R179.6 million had been allocated by May 2026 (DSBD, 29 May 2026). Real
+businesses couldn't prove they were real. We asked what would make
+that proof a side effect of running the shop, instead of paperwork.
+
+--- OVERVIEW: What is the project about? ----------------------------------
+
+Akayza is a free business app for spaza shops (and builders) that
+turns the supplier relationships they already have into digital,
+paid and provable trade.
+
+- Credit book: who owes you, how much, and when they pay.
+- Suppliers: the trader's own suppliers, listed; tap one, see its
+  products, reorder in a few taps. Not a marketplace: traders already
+  know who they buy from.
+- Pay by PayFast (straight to the supplier; Akayza never holds money)
+  or cash on delivery, where BOTH sides type the amount and the match
+  is sealed, even with no signal.
+- My record: a tamper-evident trading history the owner controls and
+  can share by link (and revoke) with a supplier or a funder.
+- Builders: jobs with stages, camera-only stage photos, and a client
+  sign-off link that needs no app.
+
+Suppliers pay a monthly subscription; traders use it free.
+
+--- TECHNOLOGIES ------------------------------------------------------------
+
+- Mobile: React Native + Expo (development build), TypeScript, Expo
+  Router, SQLite (offline store), expo-secure-store (Android Keystore)
+- Backend: Python, Flask, PostgreSQL, SQLAlchemy, JWT auth
+- Payments: PayFast (sandbox), with server-verified payment
+  notifications
+- Media: Cloudinary · Maps: Mapbox · Sign-in: email + Google Sign-In
+- Security: Ed25519 signatures, SHA-256 hash chains, ML-DSA
+  post-quantum signatures (NIST FIPS 204) on sealed records
+- Offline cash confirmation: signed QR codes (Bluetooth as a fallback)
+
+
+###########################################################################
+B. LEAN BUSINESS CANVAS  (due Sat 21:30; has figures)
+###########################################################################
+
+--- THE PROBLEM STATEMENT (max 2 paragraphs) -----------------------------
+
+Spaza shops carry a R180 billion-a-year trade on cash, WhatsApp and a
+notebook. Orders to the same wholesaler are re-agreed by phone every
+week, cash is paid to drivers with no receipt both sides accept, and
+credit to customers lives in a book that gets lost or disputed. Nearly
+four in five township businesses are unregistered and fewer than 9%
+can get a bank loan (Standard Bank, 2025).
+
+Because nothing is recorded, a real business can't prove it's real:
+354 Spaza Shop Support Fund applications failed verification and only
+R179.6m of R500m had been allocated by May 2026 (DSBD). Suppliers
+suffer too: forty WhatsApp chats of orders, and a driver's cash that
+doesn't reconcile.
+
+--- SOLUTION & FEATURES ------------------------------------------------------
+
+Free Android app for spaza owners (and builders):
+- Credit book with WhatsApp receipts
+- Your suppliers, their products, reorder in a few taps
+- Pay by PayFast, or cash confirmed by both sides (works offline)
+- Delivery or collection, with the supplier's address and hours
+- My record: tamper-evident history, shared by link, revocable
+- Builder jobs: stages, photos, client sign-off link
+Suppliers are connected through our backend/API; no new system to
+learn.
+
+--- KEY METRICS -------------------------------------------------------------
+
+Pilot targets, first 6 months (est.):
+- 5 suppliers live, 250 spaza shops active weekly
+- 60% of orders paid by PayFast
+- 80% of cash handovers confirmed by both sides
+- Disputes caught at the door vs discovered later
+- Repeat orders per shop per month (target 4+)
+- Records shared with a funder or supplier (target 50)
+
+--- UNIQUE VALUE PROPOSITION ----------------------------------------------
+
+"Reorder from the suppliers you already trust, pay safely, and build
+proof your business is real, without extra paperwork."
+Not a marketplace: Akayza strengthens the relationships traders
+already have, and every payment becomes evidence both sides agree on.
+
+--- UNFAIR ADVANTAGE ------------------------------------------------------
+
+- Cash confirmed by BOTH parties, sealed and tamper-evident, even
+  offline: no competitor proves a cash handover between two sides.
+- Supplier-led growth: one wholesaler brings its existing ~50 shops.
+- The record belongs to the trader and is post-quantum ready (ML-DSA),
+  so it stays trustworthy for years.
+- Built by a team from the community, with a working platform
+  foundation already in place.
+
+--- CUSTOMER SEGMENTS ------------------------------------------------------
+
+USERS (free): spaza and tuck-shop owners in townships (starting with
+Polokwane/Seshego and Tembisa), aged ~25-60, Android phones,
+turnover ~R20k-R150k/month (est.); builders and small contractors
+(second).
+PAYING CUSTOMERS: independent suppliers and wholesalers / cash-and-
+carries that serve spazas; hardware stores serving builders;
+distributors with ERP systems (integration tier).
+
+--- DISTRIBUTION CHANNELS --------------------------------------------------
+
+- Supplier-led: each wholesaler invites the shops it already serves
+  ("order from us on Akayza"); its drivers and reps onboard shops
+  at delivery.
+- Field agent in the pilot area; WhatsApp community groups; word of
+  mouth between shops.
+- Google Play Store (Android).
+- Partners: DSBD / SEFA (records support fund verification), CPSI,
+  wholesaler associations.
+
+--- COST STRUCTURE (figures) ------------------------------------------------
+
+Monthly running costs (est.):
+- Hosting: server + managed PostgreSQL           R1,500
+- Cloudinary media (paid tier)                   R1,800
+- Email service                                  R400
+- Mapbox (free tier during pilot)                R0
+- Domain, monitoring, misc                       R300
+= Tech ~R4,000 / month
+Once-off: Google Play developer account ~R450.
+
+6-month pilot budget, WE NEED ~R305,000 (est.):
+- Founders' stipends 2 x R15,000 x 6              R180,000
+- Field agent R8,000 x 6                          R48,000
+- Tech R4,000 x 6                                 R24,000
+- Data bundles for 50 pilot traders R100 x 6      R30,000
+- POPIA / legal review                            R15,000
+- Onboarding materials                            R8,000
+
+--- REVENUE STREAMS (figures) ----------------------------------------------
+
+Traders: FREE, always.
+Suppliers pay a monthly subscription (est.):
+- Starter (independent supplier, up to 50 shops)  R299 / month
+- Pro (wholesaler: drivers, cash reconciliation,
+  up to 500 shops)                                R1,499 / month
+- Integration (ERP / API)                         R4,999 / month
+                                                  + R15,000 setup
+Commission: ~1% of each PayFast order (est.), via PayFast split
+payments (Akayza never holds the supplier's money). No commission on
+cash orders.
+Later, with a large trader base: premium trader subscription (~R49/
+month est.; core stays free) + minimal, labelled supplier promotions.
+Payment fees go to PayFast, paid by the supplier (card 3.2% + R2,
+Instant EFT 2.0%, ex VAT). Akayza never holds money.
+Break-even on running costs + a field agent (~R12,000/month): 8 Pro
+suppliers.
+Later: with the trader's consent, verified records for funders and
+licensed lending partners (we never lend).
+
+
+###########################################################################
+C. SSDLC (SECURITY)  (due Sat 12:30; "updated" = fill now, refine Sat)
+###########################################################################
+
+--- SECURITY REQUIREMENTS (RISK ASSESSMENT) -------------------------------
+
+Assets: trader identity and login; credit-book customer names and
+amounts; order and payment records; the sealed trading record;
+delivery addresses; supplier catalogue and prices; signing keys.
+
+Top risks (likelihood x impact):
+1. Account takeover (weak password, stolen phone): HIGH
+2. Tampering with payment history to fake a record: HIGH
+3. One side claiming a different cash amount: HIGH
+4. Fake payment confirmations (spoofed PayFast notification): HIGH
+5. Reading another shop's books or addresses (broken access control):
+   HIGH
+6. Leak of personal data (POPIA): MEDIUM-HIGH
+7. Shared-record links forwarded or guessed: MEDIUM
+
+Requirements: every route role-pinned and owner-checked; passwords
+hashed (bcrypt/argon2), email verified before use; tokens short-lived
+and stored in Android Keystore; money never held by Akayza; payments
+marked PAID only by a verified PayFast notification; records
+append-only, hash-chained and signed; POPIA: minimal data, owner
+controls sharing, deletion closes all links.
+
+--- THREAT MODELLING & DESIGN REVIEW --------------------------------------
+
+STRIDE on the order-to-payment flow:
+- Spoofing: fake PayFast callback -> verify signature, source host,
+  amount against our DB, and post-back validation; idempotent.
+- Tampering: editing an old payment (R2,340 -> R23,400) -> SHA-256 hash
+  chain + Ed25519 signatures; any change breaks the chain (live demo).
+  Server seals also carry ML-DSA (post-quantum).
+- Repudiation: "I paid a different amount" -> both parties type their
+  amount independently; a mismatch becomes a DISPUTE on both records.
+- Information disclosure: object-level checks on every read; shared
+  records show aggregates only, never customer names or addresses;
+  links expire and are revocable, and every view is logged.
+- Denial of service: rate limits on login, codes, uploads and public
+  pages; batch sizes capped.
+- Elevation of privilege: roles fixed at account creation; writable
+  fields whitelisted; the app can only create trader accounts.
+Design review: the public record page and the PayFast receiver run as
+separate processes; the main API is never exposed publicly.
+
+--- DEVELOPMENT (SECURE CODING PRACTICES) ---------------------------------
+
+- OWASP API Security Top 10 as the checklist.
+- Input validated on the server (schemas); the phone's prices are
+  never trusted, since orders are re-priced from the database.
+- Parameterised queries (SQLAlchemy ORM); no string-built SQL.
+- Secrets only in environment files, never committed; separate keys
+  per service (a Akayza-only Cloudinary key), rotated after the event.
+- Passwords hashed; verification codes and reset tokens stored hashed,
+  single-use, short expiry.
+- Private signing keys never leave the phone (Android Keystore).
+- Uploads: images only, size-capped, signed uploads; supplier image
+  links fetched with SSRF protection (https only, no private IPs).
+- Canonical JSON rules so hashes match across TypeScript and Python.
+- Code review on every change; AI assistants used for routine screens
+  only, never for crypto or payment code, and reviewed.
+
+--- SECURITY TESTING --------------------------------------------------------
+
+- Shared test vector: the same hash and signature in TypeScript and
+  Python.
+- Access-control tests with a second account (can't read another
+  shop's books, orders or addresses).
+- Tamper test: edit a sealed payment in the database -> chain break
+  detected and shown.
+- PayFast tests: forged notification, wrong amount, replayed
+  notification -> all rejected.
+- Auth tests: brute-force rate limits, expired and reused codes, reset
+  link reuse.
+- Every route has a declared role (automated test walks all routes).
+- Dependency audit (npm audit / pip-audit) before the demo build.
+
+--- ASSESSMENT & SECURE INTEGRATION ---------------------------------------
+
+- PayFast: sandbox for the demo; server-side signature, IP and amount
+  checks; Akayza never touches card data (PayFast's hosted page).
+- Google Sign-In: ID tokens verified on the server (audience, issuer,
+  expiry, verified email); existing accounts linked only after the
+  password is proven.
+- Cloudinary: signed uploads only, own API key, akayza/ folder.
+- Mapbox and email: tokens kept server-side; free tiers with usage
+  alerts.
+- POPIA: purpose-limited data; customer names stay private to the
+  trader; addresses visible only to that order's supplier; account
+  deletion closes shared links; a privacy notice in the app.
+- Honest limits: "confirmed by both" proves two people stated the
+  same amount, not that the cash was real; two colluding parties can
+  agree on a lie, so patterns over time are flagged.
+- Before real users: a real SMS/email domain setup, secrets rotated,
+  a penetration test, a legal POPIA review, and a security.txt contact.
+
+
+###########################################################################
+D. UPLOAD FILE  (Sun before 09:00: aim for 08:00)
+###########################################################################
+
+  FILE 1  Name: Akayza - Presentation Slides
+          Notes: 14 slides: problem (with data), solution, user
+          journey, architecture, security, data privacy, competitive
+          analysis, business model and figures, go-to-market, TRL 4,
+          impact and ask. Demo video link on the last slide.
+  FILE 2  Name: Akayza - UX Design (screens)
+          Notes: 60 designed screens of the full journey; the demo shows
+          the built subset.
+  Demo video (<90 s): link on the project overview AND in the slides.

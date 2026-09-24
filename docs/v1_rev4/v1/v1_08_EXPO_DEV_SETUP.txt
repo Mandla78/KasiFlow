@@ -1,0 +1,212 @@
+===========================================================================
+V1_08 -- EXPO DEV SETUP
+From an empty folder to the app running on two Android phones
+===========================================================================
+
+Written against Mandla's laptop as checked on Tue 22 Sept:
+    Node 22.23.1, npm 10.9.8                          OK
+    Android SDK at %LOCALAPPDATA%\Android\Sdk          OK
+      (platform android-36.1, build-tools 36.0.0, platform-tools)
+    Android Studio's bundled JDK (jbr)                 OK
+    adb                                  installed but NOT on PATH
+    ANDROID_HOME / JAVA_HOME             NOT set
+    scrcpy, OBS, EAS CLI                 not installed
+
+Risuna: run the same checks on your machine (step 0) and post the
+output in our chat.
+
+
+0. ONE-TIME MACHINE SETUP (Wednesday, 20 minutes)
+---------------------------------------------------------------------------
+
+PowerShell, as your normal user. These persist across restarts:
+
+    setx ANDROID_HOME "$env:LOCALAPPDATA\Android\Sdk"
+    setx JAVA_HOME "C:\Program Files\Android\Android Studio\jbr"
+    $p = [Environment]::GetEnvironmentVariable("Path", "User")
+    [Environment]::SetEnvironmentVariable("Path", "$p;$env:LOCALAPPDATA\Android\Sdk\platform-tools", "User")
+
+    (Do NOT use `setx PATH "$env:PATH;..."`. It copies the system PATH
+    into your user PATH and silently cuts it off at 1024 characters.)
+
+Close and reopen the terminal, then check:
+
+    adb version          -> Android Debug Bridge version 1.0.41
+    java -version        -> openjdk 17 or 21
+
+Tools for the demo (V1_09):
+
+    winget install Genymobile.scrcpy
+    winget install OBSProject.OBSStudio
+
+Optional, cloud builds as a fallback (step 4B):
+
+    npm install -g eas-cli
+    eas login
+
+
+1. THE PHONES (Wednesday, both of us, 10 minutes per phone)
+---------------------------------------------------------------------------
+
+We need TWO physical Android phones on the demo machine. Bluetooth
+cannot be tested in an emulator. Android 8 or newer, 10+ preferred.
+
+On each phone:
+    1. Settings -> About phone -> tap "Build number" 7 times
+    2. Settings -> Developer options:
+         - USB debugging                         ON
+         - Stay awake (while charging)           ON
+         - Install via USB                       ON (Xiaomi/Redmi/Poco)
+         - USB debugging (Security settings)     ON (Xiaomi, for scrcpy input)
+    3. Plug in, then accept the "Allow USB debugging?" prompt, tick "Always"
+    4. On the laptop:  adb devices  -> both serials listed as "device"
+    5. Battery: set Akayza to "Unrestricted" once it is installed, or
+       the OS will throttle Bluetooth scanning on screen-off
+
+Buy/borrow: a powered USB hub or two good data cables. Many cheap
+cables are charge-only and adb won't see the phone. Label the cables.
+
+
+2. CREATE THE APP (Friday 18:00, not before: this is product code)
+---------------------------------------------------------------------------
+
+    cd C:\Users\HP\Desktop
+    npx create-expo-app@latest akayza-mobile --template default@sdk-57
+    cd akayza-mobile
+
+    npx expo install expo-dev-client expo-router expo-sqlite
+    npx expo install expo-secure-store expo-crypto expo-camera
+    npx expo install expo-sharing expo-build-properties
+    npx expo install expo-image-manipulator
+    npx expo install @react-native-community/netinfo
+    npx expo install react-native-paper react-native-svg
+    npx expo install react-native-qrcode-svg
+    npm install @noble/curves @noble/hashes zustand zod axios
+    npm install @tanstack/react-query lucide-react-native
+    npm install react-hook-form @hookform/resolvers
+
+    # Bluetooth: only the option that passed Wednesday's spike
+    npx expo install munim-bluetooth react-native-nitro-modules   (A)
+    # or: npx create-expo-module@latest --local akayza-ble         (B)
+
+`npx expo install` picks the version that matches SDK 57. Use it for
+anything native, and plain npm for pure-JS packages.
+
+
+3. app.json -- THE PARTS THAT MATTER
+---------------------------------------------------------------------------
+
+    {
+      "expo": {
+        "name": "Akayza",
+        "slug": "akayza",
+        "scheme": "akayza",
+        "android": {
+          "package": "za.akayza.app",
+          "permissions": [
+            "BLUETOOTH_SCAN", "BLUETOOTH_ADVERTISE", "BLUETOOTH_CONNECT",
+            "ACCESS_FINE_LOCATION", "CAMERA"
+          ]
+        },
+        "plugins": [
+          "expo-router",
+          "expo-sqlite",
+          "expo-secure-store",
+          ["expo-camera", { "cameraPermission":
+              "Scan a payment code, or photograph a finished job stage." }],
+          ["expo-build-properties", { "android": {
+              "minSdkVersion": 26,
+              "usesCleartextTraffic": true } }],
+          "munim-bluetooth"
+        ]
+      }
+    }
+
+    - usesCleartextTraffic lets the phone call http://localhost:5000
+      through adb reverse (V1_09). It is DEMO ONLY and goes on the
+      production-differences list in V1_05.
+    - ACCESS_FINE_LOCATION is only needed for BLE scans on Android 11
+      and below. Say so in the permission text. We never read GPS.
+    - Do NOT keep "com.anonymous.*" as the package. It shows on screen
+      in some permission prompts.
+
+.env (never committed):
+
+    EXPO_PUBLIC_API_BASE_URL=http://localhost:5000/api/v1
+    EXPO_PUBLIC_USE_MOCK_API=false
+
+
+4. BUILD THE DEV CLIENT AND PUT IT ON BOTH PHONES
+---------------------------------------------------------------------------
+
+A dev client is our own Expo Go with our native modules baked in. You
+REBUILD IT ONLY WHEN A NATIVE DEPENDENCY CHANGES. JS changes hot-reload
+over Metro in seconds.
+
+  4A. LOCAL BUILD (default: fastest once warm, but it uses the laptop)
+
+    npx expo prebuild --platform android --clean
+    npx expo run:android --device        (pick phone 1)
+
+    First build: 10-20 minutes and heavy on CPU. Later ones: 1-3 minutes.
+    WEDNESDAY'S SPIKE BUILD warms the Gradle cache, so Friday's first
+    build is already fast. That's half the reason to do the spike on
+    this laptop.
+
+    Put the same APK on phone 2 without rebuilding:
+
+    adb devices
+    adb -s <PHONE2_SERIAL> install -r android\app\build\outputs\apk\debug\app-debug.apk
+
+  4B. EAS CLOUD BUILD (fallback if the laptop struggles)
+
+    eas build --profile development --platform android
+
+    Install from the QR/link EAS prints. The free tier can queue for a
+    long time on a busy weekend, so do not depend on it after Saturday
+    midday.
+
+
+5. RUN IT
+---------------------------------------------------------------------------
+
+    npx expo start --dev-client
+
+With both phones on USB (V1_09 step 2 sets up adb reverse), open the
+Akayza app on each phone. It connects to Metro at localhost:8081
+through the USB cable. No Wi-Fi is involved.
+
+Every day, in this order:
+    1. start PostgreSQL
+    2. backend:  python app.py          (http://localhost:5000)
+    3. adb reverse for both phones      (V1_09 step 2)
+    4. npx expo start --dev-client
+    5. open the app on both phones
+
+Typecheck before every commit:  npx tsc --noEmit
+
+
+6. THINGS THAT WILL GO WRONG, AND THE FIX
+---------------------------------------------------------------------------
+
+    "adb devices" shows "unauthorized"
+        -> unlock the phone and accept the USB debugging prompt
+
+    App shows a red "Could not connect to development server"
+        -> adb -s <serial> reverse tcp:8081 tcp:8081  (again; it resets
+           whenever the cable is re-plugged)
+
+    Network error calling the API
+        -> adb -s <serial> reverse tcp:5000 tcp:5000; check the backend
+           is up: curl http://localhost:5000/api/v1/health
+
+    Build fails with JAVA_HOME / SDK not found
+        -> step 0 was not picked up. Open a NEW terminal.
+
+    Scan finds nothing
+        -> Bluetooth on, permissions granted, app in the FOREGROUND on
+           both phones, battery saver OFF
+
+    Gradle out of memory / laptop very hot
+        -> close Android Studio and Chrome; the build only needs the
+           CLI. Or use 4B.

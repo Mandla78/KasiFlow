@@ -1,0 +1,88 @@
+===========================================================================
+PLAN 01 -- APP SCREENS AND TABS
+The trader app, page by page against the screens PDF
+===========================================================================
+
+Screens: docs/design/Akayza_Simplified_App_Screens.pdf. Hints, not
+pixel targets.
+
+
+1. TABS
+---------------------------------------------------------------------------
+
+    Home · Account · Suppliers · More
+
+    The driver (cash showcase) opens straight to their one screen
+    instead (PLAN 10). Nobody else sees tabs other than these.
+
+
+2. THE SCREENS
+---------------------------------------------------------------------------
+
+  HOME (p1 spaza, p11 builder)
+    Header: business name, suburb, the one number that matters most
+      spaza    "Customers owe you R340 · 4 customers · R48 due today"
+      builder  "Waiting on clients R12,000 · Walls stage needs sign-off"
+    Two small numbers (spaza: you owe suppliers, cash taken today;
+    builder: active jobs, you owe hardware).
+    Two big buttons (spaza: Credit sale, Order stock; builder: New job,
+    Materials).
+    "Your tools" sheet: one card per chosen tool, with its live line
+    (Credit book, Delivery on its way + Show order pass, My record...).
+    "Add a tool" at the bottom.
+
+  ACCOUNT -- the tools
+    Every tool the trader has turned on, plus "Add a tool". Tools are
+    mini-apps on shared services (p16): one identity, one confirm, one
+    record, one supplier link.
+      Credit book      p2-p3   (spaza default)
+      Order stock      p4      (spaza + builder default)
+      Jobs             p12-p15 (builder default)
+      Daily tally      roadmap (food stall)
+      My record        p5      (always on)
+
+  CREDIT BOOK (p2) -- tabs "Customers owe me" / "I owe suppliers";
+    total, "1 due today"; list with name, what they took, amount, due.
+  NEW CREDIT SALE (p3) -- customer, amount, what they took (optional),
+    pays back on (Today / Friday / Month-end / Pick date), WhatsApp
+    receipt tick, "Customer names stay private to you".
+
+  ORDER STOCK (p4) -- supplier chips, "Order again" list from the last
+    order with +/- quantities, total, payment method, Delivery/Collect,
+    Place order. The full browse is the Suppliers tab (PLAN 08).
+
+  MY RECORD (p5) -- months trading, suppliers bought from regularly,
+    "38 of 41 cash payments confirmed by both sides", legend (confirmed
+    by both / recorded by you), Share my record, "Shared now" list with
+    views and Stop sharing.
+
+  YOUR DELIVERY (p6) -- steps Ordered / Accepted / On its way /
+    Delivered; supplier, driver, amount, method. CASH orders show the
+    ORDER PASS + "Driver scanned it -- confirm cash". PAID orders show
+    "Paid digitally" and no cash step.
+
+  CONFIRM CASH (p7) -> CONFIRMED BY BOTH (p8) / AMOUNTS DON'T MATCH (p9)
+    PLAN 09.
+
+  DRIVER TODAY (p10) -- PLAN 10.
+
+  BUILDER (p11-p15) -- Home; the job with stages (p12); camera-only
+    stage photo (p13); the client SIGN-OFF LINK, a web page with no app
+    needed (p14); HOUSE RECORDS (p15). PLAN 04 s5.
+
+  SUPPLIERS TAB -- PLAN 08. MORE -- profile, addresses, settings, help,
+    log out, dev menu (dev build only).
+
+
+3. ROUTES (a starting point; expect it to change)
+---------------------------------------------------------------------------
+
+    mobile/app/
+      (onboarding)/  welcome, signup, verify-email, business-type, details, tools; signin, forgot-password
+      (tabs)/        index (Home), account, suppliers, more
+      credit/        index, new
+      orders/        [id] (delivery + pass), [id]/confirm-cash
+      suppliers/     [id] (profile + product grid), cart
+      jobs/          [id], [id]/stage-photo
+      record/        index, share
+      (driver)/      today, scan, confirm-cash

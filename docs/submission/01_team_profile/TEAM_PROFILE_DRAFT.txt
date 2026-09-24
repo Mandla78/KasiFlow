@@ -1,0 +1,71 @@
+===========================================================================
+[DRAFT -- changes as we build] EDIT TEAM PROFILE -- paste into Sonke
+Dashboard -> My Team -> Edit Team Profile. Do it now: assessors score
+from Sonke all weekend. Every number below is from a checked source
+(docs/v1_rev4/v1/v1_14_SOURCES.txt).
+===========================================================================
+
+
+TEAM NAME        PR
+LOCATION         Polokwane
+PROJECT NAME     Akayza   (or a codename until Sunday, if you prefer)
+CHALLENGE        Brand New
+SECTOR           Fintech & informal economy (construction and township
+                 retail)
+
+
+--- BACKGROUND: What inspired / motivated this project? ------------------
+
+South Africa's informal economy runs on trust that leaves no trace.
+Construction employs about 1.2 million people, 38% of them informally
+(ILO, 2024), and small and micro contractors now carry more than half
+of the sector's jobs (Business Day, July 2026). Government warns
+homeowners about builders who disappear after payment and tells them
+to keep payment records (Vuk'uzenzele, June 2026). Spaza shops move
+about R180 billion a year inside a R900 billion township economy, yet
+nearly 4 in 5 township businesses are unregistered and fewer than 9%
+can get a bank loan (Standard Bank, 2025).
+
+Payments are cash, agreements are verbal, and records live in
+notebooks and WhatsApp, so real businesses cannot prove they are real.
+When government opened the R500 million Spaza Shop Support Fund, 354
+applications failed verification and only R179.6 million had been
+allocated by May 2026 (DSBD). We are building the tool that turns the
+way informal businesses already work into proof.
+
+
+--- OVERVIEW: What is the project about? ---------------------------------
+
+Akayza is an app for informal traders: builders, spaza shops and
+every hustle. It turns the way they already work into proof.
+
+FOR TRADERS (our users, free): business tools they use every day.
+Builders run jobs in stages, with photo evidence and a sign-off from
+the client. Spaza shops keep a credit book and reorder from the
+suppliers they already buy from. Every payment, by PayFast or in cash
+that both sides confirm on their phones (even without signal), is
+sealed into a tamper-evident record the trader owns, can share by link
+with a client, supplier or funder, and can take back.
+
+FOR SUPPLIERS (our paying customers): wholesalers, regional
+distributors and hardware stores receive orders and confirmed payments
+from the traders they already serve, straight into their own systems
+through our integration API.
+
+Hybrid by design: traders use Akayza free to run their business;
+suppliers pay because their own customers bring them in.
+
+
+--- TECHNOLOGIES: List all the technologies used --------------------------
+
+- Mobile: React Native + Expo (TypeScript), offline-first (SQLite),
+  keys in the Android Keystore
+- Backend: Python + Flask, domain-driven design, PostgreSQL, REST API
+- Sign-in: email verification + Google Sign-In, JWT, PIN / fingerprint
+- Supplier integration API: API keys, signed webhooks (ERP-ready)
+- Payments: PayFast (sandbox), server-verified payment notifications
+- Media: Cloudinary, with malware scanning on every upload
+- Maps: Mapbox
+- Security: Cloudflare (WAF, DDoS protection, TLS); Ed25519 signatures
+  and SHA-256 hash chains for tamper-evident records; ML-DSA
+  post-quantum signatures (NIST FIPS 204) on sealed records

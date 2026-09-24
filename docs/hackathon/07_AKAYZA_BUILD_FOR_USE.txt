@@ -1,0 +1,220 @@
+===========================================================================
+AKAYZA -- BUILD FOR USE: production architecture, security, real costs
+07 (Thu 24 Sep 2026). Connects 05 (why Akayza, the business story) and
+06 (the merged plan of record: scope, demo, Lean Canvas, SSDLC).
+===========================================================================
+
+HOW THE FILES FIT
+  05  WHY: the idea, the problem, the money, the competition. For people.
+  06  WHAT: the plan of record: scope, demo, who builds what, and the
+      Canvas + SSDLC text for Sonke.
+  07  HOW (this file): production-grade architecture, security, and the
+      REAL running costs with sources. It updates 06 where the numbers
+      were estimates.
+
+THE STANCE: "Build for Use" means production-ready, not a prototype. We
+don't hold back: real architecture, real security, real integrations,
+real costs. The only limit is the clock, and the cut list in 06 handles
+that.
+
+
+---------------------------------------------------------------------------
+1. ARCHITECTURE -- DOMAIN-DRIVEN, ONE BACKEND, THREE FRONT DOORS
+---------------------------------------------------------------------------
+
+   Traders (Android)     Suppliers (web / tablet)    Supplier ERPs
+   Expo app              Next.js portal               Integration API
+          \                     |                        /
+           \                    |                       /
+         +---------------- CLOUDFLARE ----------------------+
+         | DNS · TLS · DDoS · WAF · rate limits · bot rules |
+         +---------------------------------------------------+
+                                |
+      +-------------------------+----------------------------+
+      |  API  (Flask, /api/v1, domain-driven)                |
+      |  public pages (own process): record checker,         |
+      |    client sign-off, PayFast notification receiver    |
+      +-------------------------+----------------------------+
+                                |
+          PostgreSQL (one schema per domain) · Cloudinary (media,
+          malware-scanned) · PayFast · Mapbox · email service
+
+  DOMAINS (bounded contexts)  -- backend/src/domains/<area>/<domain>/
+    Each: api/ (thin routes) · services/ (rules) · repositories/ (DB)
+          · models/ · schemas/ (validation). Routes validate -> call a
+          service -> return the standard envelope. Every route pins a
+          role.
+
+    identity      accounts, email + Google sign-in, verification, PIN,
+                  device keys, roles
+    trade         business profile + tools, credit book, suppliers,
+                  catalogue, cart, orders, payments (PayFast + cash)
+    jobs          builder jobs, stages, agreed changes, sign-off links,
+                  house records
+    ledger        sealed events in; chains and signatures verified
+    handshake     both halves of a Cash Handshake -> CONFIRMED or DISPUTE
+    integrity     CHAIN_BREAK, CLOCK_SKEW (PHANTOM_SALES if time)
+    reputation    the track record with plain reasons (never a credit
+                  score, never locks a tool)
+    share         share links, revoke, view log, public checker
+    integration   supplier ERP API: API keys, product/stock push, order
+                  webhooks
+  SHARED (never depends on a domain): core (envelope, errors, base
+    model, decorators), media (Cloudinary + malware scan), email,
+    audit, queue, rate limiting, validation, notifications, geo.
+
+  ENFORCED, NOT JUST WRITTEN: architecture tests read the code and fail
+  the build if one domain reaches into another's internals, as our
+  earlier codebase does. Cheap to add, and strong evidence for
+  "Technical implementation".
+
+  FROM OUR EARLIER CODEBASE (declared in REUSE.md, adapted, renamed):
+    core/ (responses, exceptions, base_model, decorators), extensions
+    pattern, rate limiter, email (with a fake provider for dev), audit,
+    queue, validation, media (Cloudinary provider, upload intents,
+    malware-scan webhook, orphan sweeps), PayFast provider + ITN
+    handling, Mapbox geocoding provider, architecture-test pattern.
+    Everything Akayza-specific is written fresh.
+
+
+---------------------------------------------------------------------------
+2. PRODUCTION SECURITY (on top of 06 section 8's SSDLC)
+---------------------------------------------------------------------------
+
+  CLOUDFLARE IN FRONT OF EVERYTHING PUBLIC
+    - DNS, TLS certificates, unmetered DDoS protection, and the FREE
+      managed WAF ruleset, all on the free plan.
+    - Rate-limiting rules on sign-in, codes and the public pages; bot
+      protection on the record and sign-off pages.
+    - The origin accepts traffic ONLY from Cloudflare (firewall
+      allow-list, or a Cloudflare Tunnel so the server has no open
+      port at all).
+    - Growth: the Pro plan ($20/month billed annually) adds the full
+      managed WAF rules and image optimisation.
+
+  MALWARE SCANNING ON EVERY UPLOAD (the pattern from our earlier code)
+    - Uploads go to Cloudinary with the Perception Point malware-
+      detection add-on turned on.
+    - A new file starts as PENDING and is hidden. Cloudinary's webhook
+      reports the scan result (average ~10 s). APPROVED -> visible;
+      REJECTED -> deleted and logged. A sweep job clears uploads that
+      never finish.
+    - Covers supplier product photos, builders' stage photos and
+      profile images.
+    - A switch in config turns scanning off without a redeploy if the
+      free tier runs out.
+
+  DATA AND OPERATIONS
+    - Secrets in environment variables only; per-service keys (a
+      Akayza-only Cloudinary key); rotated after the event.
+    - Daily database backups (included with managed PostgreSQL); a
+      tested restore.
+    - Error monitoring (Sentry free tier) with no personal data in
+      events.
+    - Audit log of security events (sign-ins, key changes, shares,
+      disputes, payment status).
+    - POPIA: data minimised; the owner controls sharing. For the pilot,
+      hosting in the EU/US region is a cross-border transfer POPIA
+      allows with adequate safeguards; for production we move to AWS
+      Cape Town (af-south-1) so data stays in South Africa.
+
+
+---------------------------------------------------------------------------
+3. REAL RUNNING COSTS (researched 24 Sep 2026; $1 = R16.50)
+---------------------------------------------------------------------------
+
+  PILOT STAGE (first ~3 months, up to a few hundred traders)
+    Hosting: DigitalOcean app server (~$12)          ~R200
+    Managed PostgreSQL, daily backups ($15)          ~R250
+    Cloudflare Free (DNS, TLS, DDoS, basic WAF)       R0
+    Cloudinary Free (25 credits) + malware add-on
+      free tier                                       R0
+    Email: Resend Free (3,000/month, 100/day)         R0
+    Mapbox free tier (50,000 map loads, 50,000
+      static images, 100,000 directions a month)      R0
+    PayFast: no monthly fee (per transaction only)    R0
+    Error monitoring: Sentry free tier                R0
+    Domain (.co.za ~R100/year)                        ~R10
+    ----------------------------------------------------------
+    PILOT TOTAL                                       ~R460 / month
+    Once-off: Google Play developer account ($25)     ~R415
+
+  GROWTH STAGE (thousands of traders, data kept in South Africa)
+    AWS Cape Town app + managed PostgreSQL (est.)     ~R1,500
+    Cloudflare Pro ($20, annual)                      ~R330
+    Cloudinary Plus ($89 annual / $99 monthly)        ~R1,470-R1,630
+    Malware scanning paid tier (price on quote)       TBC
+    Resend Pro ($20, 50,000 emails)                   ~R330
+    Sentry team plan                                  ~R430
+    Mapbox pay-as-you-go beyond the free tier         R0-R500
+    ----------------------------------------------------------
+    GROWTH TOTAL                                      ~R4,000-R4,700 / month
+
+  WHAT THIS MEANS FOR 06
+    - 06 said running costs are ~R4,000/month: that's right for the
+      GROWTH stage. The pilot runs on ~R500/month.
+    - 06's "WhatsApp / SMS codes R1,500" line goes: sign-in is email +
+      Google (free); WhatsApp codes are roadmap.
+    - The pilot budget line "running costs R24,000" (R4,000 x 6) covers
+      the move to growth hosting and paid tiers by month 3-4, with
+      headroom. Keep R300,000 as the ask.
+    - Break-even at growth stage (~R4,700): 4 suppliers on Pro. At
+      pilot stage: 2 suppliers on Starter.
+
+
+---------------------------------------------------------------------------
+4. WHAT WE BUILD, AND IN WHAT ORDER (06 scope + section 15)
+---------------------------------------------------------------------------
+
+  THURSDAY (tonight, local; commit for real once the facilitators
+  confirm or at kick-off)
+    1. Repo layout: backend/ mobile/ web/ docs/
+    2. PostgreSQL akayza_dev with one schema per domain
+    3. Backend skeleton from the earlier libraries: create_app, config,
+       core, health check, architecture tests
+    4. identity domain: email sign-up, verification, login, tokens,
+       device key
+    5. Expo app: router, four tabs, design tokens from the UX PDF
+    6. The canonical-JSON + hash + Ed25519 test vector (TypeScript and
+       Python)
+
+  WEEKEND (06's 15-screen demo path is NEVER CUT)
+    trade (credit book, suppliers, orders, PayFast sandbox) -> ledger
+    + handshake -> share + checker page -> jobs + sign-off -> ML-DSA
+    countersigning
+    THEN, if green: product grid + cart -> integration API -> supplier
+    web portal
+
+  PRODUCTION TOUCHES THAT ARE CHEAP AND SCORE (add as we go)
+    - Cloudflare in front of the demo domain + tunnel for the public
+      pages
+    - Malware-scanned uploads (reused pattern)
+    - Health endpoint + Sentry
+    - Rate limits on every write
+    - Seed data that goes through the real sealing code
+
+
+---------------------------------------------------------------------------
+5. HOUSEKEEPING DONE WITH THIS FILE
+---------------------------------------------------------------------------
+
+  - docs/v1 (revision 3) removed: revision 4 (docs/v1_rev4) is the one
+    we use (protocol, threat model, sources).
+  - docs/demo_data removed: demo data is rebuilt during the build,
+    through the real sealing code.
+  - 06 is the plan of record; 04 keeps only the team-profile text.
+
+  SOURCES (checked 24 Sep 2026)
+    Cloudinary Plus $89/$99: dev.to/nayankyada/cloudinary-pricing-2026
+    Perception Point add-on: cloudinary.com/documentation/
+      perception_point_malware_detection_addon
+    Cloudflare Pro $20 annual / free plan WAF: blog.blazingcdn.com/
+      en-us/cloudflare-pricing-2026-free-pro-business-enterprise-explained
+    DigitalOcean managed Postgres $15; Render ~$13 small app:
+      getdeploying.com/digitalocean-vs-render
+    AWS Cape Town region: cloudprice.net/aws/region/af-south-1
+    Resend free 3,000/month, Pro $20: resend.com/pricing
+    Mapbox free tiers: storerocket.io/learn/mapbox-pricing
+    PayFast fees (no monthly fee): payfast.io/fees
+    USD/ZAR 16.41 on 24 Sep 2026: tradingeconomics.com/south-africa/
+      currency

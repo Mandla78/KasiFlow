@@ -1,0 +1,23 @@
+===========================================================================
+PLAN 06 -- ADDRESSES AND MAPS
+Where a delivery goes; kept small
+===========================================================================
+
+    - Asked at the trader's first DELIVERY order, saved for next time
+      (More -> Addresses).
+    - An address is: text (Mapbox search, or typed) + a pin + a
+      REQUIRED LANDMARK NOTE ("next to the blue container, opposite the
+      taxi rank"). Kasi addresses are weak; the landmark is what the
+      driver uses.
+    - Mapbox search goes through our backend (secret token stays on
+      the server). Our earlier geocoding library is the reference.
+    - The order keeps a COPY of the address; editing it later doesn't
+      change old orders.
+    - The driver's "Navigate" (PDF p10) opens Google Maps / Waze with
+      the pin. We don't build navigation.
+    - Privacy: only the order's supplier/driver sees the full address;
+      a shared record never includes it.
+
+    CUT: Mapbox search -> typed address + landmark.
+    ROADMAP: live driver tracking, route + km + ETA, trader collection
+    directions.

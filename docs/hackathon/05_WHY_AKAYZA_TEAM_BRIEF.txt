@@ -1,0 +1,272 @@
+===========================================================================
+AKAYZA -- WHERE WE STAND (for the team, Thu 24 Sep 2026)
+Read this before deciding to change the idea.
+(est.) = our estimate, to be validated. Other numbers are from checked
+sources (docs/v1_rev4/v1/v1_14_SOURCES.txt).
+===========================================================================
+
+
+1. THE IDEA IN ONE BREATH
+---------------------------------------------------------------------------
+
+Akayza is a business app for spaza shops (builders second). The
+trader runs the business on it: a credit book, stock orders from the
+suppliers they ALREADY buy from (paid by PayFast, or cash both sides
+confirm), and a tamper-evident record of their trading that they own
+and can share to prove the business is real.
+
+THE INSIGHT: informal businesses already know who they buy from. So
+Akayza is NOT a marketplace and doesn't recommend products. It makes
+the existing supplier relationship digital, paid and provable.
+
+WHAT KEEPS TRADERS COMING BACK: the BUSINESS TOOLS. The credit book,
+reordering and the record are useful every day, even before a single
+supplier joins. That daily use is the engine; everything else grows
+from it.
+
+
+2. WHY IT'S A REAL PROBLEM (checked sources, safe for slides)
+---------------------------------------------------------------------------
+
+  - Township economy about R900 billion a year; spazas about R180
+    billion. Nearly 4 in 5 township businesses unregistered; fewer
+    than 9% can get a bank loan. (Standard Bank, 2025)
+  - Spaza Shop Support Fund: 354 applications failed verification;
+    only R179.6m of R500m allocated by May 2026. (DSBD, 29 May 2026)
+    Real businesses can't prove they're real. Akayza's record is
+    that proof.
+  - Informal employment is 19.5% of all jobs. (Stats SA, Q4 2024)
+  - Cash dominates township trade. (several 2025 reports; no single
+    percentage, so we say "dominates")
+
+
+3. WHAT WE BUILD THIS WEEKEND
+---------------------------------------------------------------------------
+
+  ONE ANDROID APP for traders: Home · Account (tools) · Suppliers · More
+    - Sign up with email (or Google); email verified first
+    - Credit book (who owes me, when they pay, WhatsApp receipt)
+    - Suppliers: the trader's suppliers -> products -> cart -> checkout
+      (delivery or collect, supplier address shown) -> PayFast or cash
+    - Cash on delivery: both sides type the amount; a match is sealed,
+      a mismatch becomes a dispute. Works without signal.
+    - My record: sealed history, share by link, revoke; tamper demo
+    - INVITE YOUR SUPPLIER: one tap sends the trader's supplier a
+      WhatsApp invite to join
+  SUPPLIER INTEGRATION (real): an ERP / integration API. The
+    supplier's system pushes products, prices and stock and receives
+    orders (API keys, signed webhooks). Suppliers with no system use a
+    spreadsheet in the same format for now.
+  BONUS: post-quantum signatures (ML-DSA, NIST FIPS 204) on sealed
+    records, for the 5 quantum points.
+
+  Already done: the full plan (docs/plan), a 60-screen UX design
+  (docs/design/Akayza_UX_Design_v0.3.pdf), demo data for 3 suppliers
+  (rebuilt during the build), and drafts of the Lean Canvas, SSDLC and team
+  profile (docs/hackathon/04_SONKE_FORMS.txt).
+
+
+4. HOW SUPPLIERS JOIN -- THREE WAYS
+---------------------------------------------------------------------------
+
+  1. INVITES FROM TRADERS (the easiest): a spaza already uses Akayza
+    for its own tools. It taps "Invite my supplier", and the supplier
+    gets an EMAIL (and/or WhatsApp) from Akayza: "Nomsa's Spaza
+    wants to order from you on Akayza", with two buttons, [Join
+    Akayza] and [Contact us]. The supplier comes in warm, because its
+    own customer asked.
+  2. SALES: we also sell directly to suppliers (wholesalers,
+    distributors, brands), especially the big ones with ERPs, where a
+    sales conversation and an integration are needed anyway.
+  3. SUPPLIER-LED (it compounds): once a supplier is on, it invites
+    the rest of the shops it serves. One wholesaler can bring ~50 shops
+    (est.).
+  PILOT (to start the loop): one wholesaler + its shops, run by us.
+
+  HOW A SUPPLIER RUNS ITS SIDE
+    - Has an ERP / system    -> the integration API. Nothing new to
+                                learn.
+    - Has no system          -> a Akayza SUPPLIER TABLET: an Android
+                                tablet with the supplier app (orders,
+                                products, stock, payments, drivers).
+                                Included on the Pro plan if they want
+                                one (est. tablet cost ~R2,500, recovered
+                                over a 12-month plan).
+    (The tablet app is roadmap; this weekend suppliers are connected
+    through the backend and the integration API.)
+
+
+5. HOW WE MAKE MONEY
+---------------------------------------------------------------------------
+
+  TRADERS -- FREE AT LAUNCH, PRO LATER
+    Free   credit book, ordering, cash confirmation, My record. Always.
+    Pro    ~R49 / month (est.), once we have a large user base:
+           advanced reports, stock count, staff and multiple phones,
+           VAS top-up tools (section 6), priority support.
+
+  SUPPLIERS
+    Starter (independent supplier)       R299 / month (est.)
+    Pro (wholesaler, drivers, tablet)    R1,499 / month (est.)
+    ERP integration                      R4,999 / month + R15,000 setup
+                                         (est.)
+
+  COMMISSION on digital payments: ~1% of each PayFast order (est.),
+    taken through PayFast split payments, so Akayza receives its
+    share without ever holding the supplier's money. PayFast's own fee
+    (card 3.2% + R2, Instant EFT 2.0%, ex VAT) is separate. No
+    commission on cash orders.
+
+  LATER, WITH A LARGE USER BASE
+    - Minimal, clearly labelled supplier promotions for traders. No
+      pop-ups, never selling personal data (POPIA).
+    - VAS partnerships: a share of commission (section 6).
+    - With the trader's consent: verified records for funders and
+      licensed lenders. We never lend.
+
+  COSTS AND THE ASK (researched; see 07 section 3)
+    Running costs: pilot ~R460 / month, growth ~R4,000-R4,700 / month.
+    We ask about R300,000 for a
+    6-month pilot (Polokwane / Seshego and Tembisa): stipends, a field
+    agent, tech, pilot data bundles, a POPIA legal review.
+    Break-even: pilot 2 suppliers on Starter; growth about 4 on Pro.
+
+
+6. VALUE-ADDED SERVICES (VAS) -- RESEARCHED, FOR THE ROADMAP
+---------------------------------------------------------------------------
+
+  WHAT SPAZAS DO TODAY: many already sell airtime, data and
+  electricity through Kazang, Flash or Blu Approved terminals and apps.
+  They work on a prepaid FLOAT: when it runs out, the owner reloads it
+  by bank deposit, EFT, instant EFT (Ozow, on Kazang), a cash deposit
+  at a vendor, or a top-up voucher, and some wholesalers act as Kazang
+  top-up points. So topping up is a trip or a separate app, and none of
+  it shows up in their books.
+
+  THE AKAYZA ANGLE (complement Kazang/Flash, don't fight them)
+    1. TOP UP THE FLOAT INSIDE AKAYZA: when the airtime/electricity
+       float runs low, the trader reloads it from Akayza (like
+       ordering stock from a supplier), through a partnership with the
+       float provider. No trip to the bank, no separate app.
+    2. SELL VAS FROM AKAYZA: airtime, data and electricity sold to a
+       customer straight from the app, through an aggregator API.
+       Aggregators with developer APIs exist: Prepaid24 Corporate API,
+       Powertime VAS, Blu Label Distribution, and Nedbank's VAS API.
+       Akayza earns a share of the commission.
+    3. It counts in the business tools automatically: those sales add
+       to the day's takings on Home, the same way a credit sale lands
+       in the credit book, so the owner sees their real daily numbers
+       without writing anything down.
+  NEXT STEP: ask 3 spaza owners how they reload their float, and how
+  often it runs out. Talk to one aggregator about partner terms.
+  NOT built this weekend: a roadmap slide.
+
+
+7. GROWTH (projection, est.)
+---------------------------------------------------------------------------
+
+                         YEAR 1 (pilot+)   YEAR 2        YEAR 3
+    Active traders       1,000             8,000         30,000
+    Suppliers            15                120           500
+    Supplier subs/month  ~R15,000          ~R120,000     ~R500,000
+    Digital orders/mo    ~R3m              ~R24m         ~R90m
+    1% commission/month  ~R30,000          ~R240,000     ~R900,000
+    Trader Pro (5%)      --                ~R20,000      ~R74,000
+    ------------------------------------------------------------------
+    Monthly revenue      ~R45,000          ~R380,000     ~R1.47m
+  Assumptions (est.): a supplier averages ~R1,000/month across plans;
+  an active trader orders ~R3,000/month digitally; 5% of traders go
+  Pro at R49. Validate in the pilot, and say "projection" on the slide.
+
+
+8. HOW IT STANDS FOR THE COMPETITION
+---------------------------------------------------------------------------
+
+  JUDGING (70 points)
+    Innovation 15     relationship-first, not a marketplace; cash
+                      confirmed by both; owner-held provable record;
+                      trader-led supplier growth
+    Technical 15      working app + API + real PayFast sandbox + ERP
+                      integration API + tamper-evident records
+    Design 10         60 screens designed; clear, calm flow
+    Security 10       SSDLC drafted; threat model; POPIA; we never
+                      hold money
+    Business 15       free for traders, suppliers pay; commission;
+                      Pro tier; VAS roadmap; growth with figures
+    Quantum +5        post-quantum signatures, implemented
+
+  WHAT THEY ASKED FOR, AND US
+    "Would a real user trust and use this?" -> it digitises what
+      traders already do, and the tools are useful from day one.
+    "Less AI reliance" -> no AI at all.
+    "Consumer-facing" -> the trader is the user, on their own phone.
+    "Business sense with figures" -> sections 5 and 7.
+
+  "BUT 96 TEAMS PICKED STREET ECONOMY" -- the worry, and the answer:
+    - Competition exists in every market. The best product wins, and
+      the best SALES wins. That's true on Sunday and after.
+    - Most of them will build something a trader tries once: a
+      directory, a marketplace, a rating page. What makes people KEEP
+      using an app is using it every day for their own business. Our
+      business tools (credit book, reorders, cash confirmed, the
+      record) are that daily habit. The supplier side and the money
+      grow on top of it. That's what they won't have.
+    - We're not even in their challenge: we're on Brand New, judged
+      on the criteria, not against 96 look-alikes.
+  KEEP IT PRIVATE UNTIL WE PRESENT: on Sonke and anywhere public, we
+    use a CODENAME, not "Akayza", and no description of the idea
+    until we're ready. The real name appears on Sunday.
+
+  THE OTHER TEAMS: 96 on Street Economy, 98 on Brand New; many will
+  pitch "an app for informal traders". We lead with what only we do:
+  your existing suppliers (not a marketplace), cash confirmed by both
+  sides, and a record the trader owns.
+  Existing products each do one slice: Spazapp (bulk buying), Kasi
+  App (POS), iKhokha (card payments / POS), Kazang and Flash (VAS
+  float), Kasi Money (banking), HustleCheck (reviews).
+
+
+9. THE HONEST RISKS (and our answers)
+---------------------------------------------------------------------------
+
+  "Will suppliers pay?"          They join because their customers ask
+                                 (trader-led). Still: one real supplier
+                                 conversation before Friday.
+  "Will traders switch from       Free tools that help every day; the
+   WhatsApp and the notebook?"   same supplier, just easier.
+  "Commission on thin margins"   Only on digital; cash stays free; the
+                                 rate is set with suppliers.
+  "Cash confirmation friction"   Optional, one scan; it saves disputes
+                                 and driver cash losses.
+  "Kazang/Flash already there"   We complement them (VAS in the books,
+                                 float top-up), not replace them.
+  "Many similar teams"           Lead with the three things only we do.
+
+
+10. WHY WE SHOULDN'T CHANGE THE IDEA NOW
+---------------------------------------------------------------------------
+
+  - The event starts tomorrow at 16:00. A new idea means a new plan,
+    new designs, new data and new figures in under a day. We already
+    have all of these for Akayza.
+  - The problem has checked numbers; the business has figures and a
+    growth path; security is designed in; the screens exist.
+  - The open question (supplier demand) is answered by a couple of
+    conversations, not by a new idea.
+  If a part still feels wrong, name that part and we fix it tonight,
+  rather than start over.
+
+
+11. WHAT HAPPENS NEXT
+---------------------------------------------------------------------------
+
+  TODAY (Thu)    foundations (backend, app shell, crypto test);
+                 2-3 validation calls (incl. how they reload VAS
+                 float); Sonke profile
+  FRI 15:30      virtual check-in on Sonke · 16:00 kick-off
+  FRI 19:00      problem statement with the mentors
+  SAT 12:30      SSDLC due · 14:00-17:00 war room · 21:30 Lean Canvas
+  SUN 08:00      submit slides + demo video (hard deadline 09:00)
+  SUN 10:00      3-minute sales pitch · 13:30 top 12
+
+  Full details: docs/hackathon/ (event brief, strategy, forms).

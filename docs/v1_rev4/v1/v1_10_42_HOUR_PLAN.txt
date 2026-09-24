@@ -1,0 +1,169 @@
+===========================================================================
+V1_10 -- THE 42-HOUR PLAN
+Friday 18:00 -> Sunday 12:00 (CONFIRM the start time, the submission
+deadline and our pitch slot from the workspace on Wednesday, and shift
+everything below if they differ)
+===========================================================================
+
+"All out, no holding back" is the ambition. This plan is how we get
+there without ending up with ten half-features at hour 40. The scope
+below is big for two people. The spine and the cut list are what
+protect the demo.
+
+
+1. THE SPINE: WORKING BY HOUR 12, HOWEVER UGLY
+---------------------------------------------------------------------------
+
+    business orders stock -> supplier accepts -> delivery ->
+    CASH HANDSHAKE, both phones offline -> both sync ->
+    "CONFIRMED BY BOTH" on both phones
+
+That single flow touches accounts, stock, the ledger, the handshake and
+sync. If it works at H12, everything after it is width.
+
+
+2. THE SPLIT
+---------------------------------------------------------------------------
+
+    MANDLA -- the app, and the trade backend
+      H0-H2    vendor libs/, create_app skeleton, repo, Expo app
+      backend  accounts (OTP with a fake provider, JWT, device key),
+               suppliers + catalogue, stock orders and their transitions
+      mobile   everything: onboarding (role -> business type),
+               businessTypes config, Books, Stock, Market, Proof,
+               supplier tabs, lib/crypto, lib/db, lib/sync, lib/ble
+               (Cash Handshake), the QR fallback
+      demo     OBS scenes, demo_up.ps1, driving the demo, backup videos
+
+    RISUNA -- the proof layer, the books backend, and the story
+      backend  ledger (ingest + verify chains), handshake (attestations,
+               matching, disputes), integrity flags, reputation +
+               reasons, share links + the public checker page, books
+               (order_book, loan_book, jobs with stages), market feed
+               (5 simple queries)
+      scripts  seed_demo.py (THROUGH the sealing code), tamper_demo.py,
+               demo identities
+      pitch    slides, narration, Q&A lead, the security backup slide
+
+    PROPOSED IN REVISION 4, NOT APPLIED (decide together, V1_13 Q2):
+      Risuna carries seven of the ten backend domains plus slides and
+      narration. Moving the market feed (five plain queries) to Mandla,
+      or moving slide work out of Risuna's build hours, would even it
+      out. Mandla's side is heavy too (all of mobile plus the radio),
+      so this is a question for the call, not a change made here.
+
+    THE CONTRACT (docs/CONTRACT.md + the test vector) is written Thursday
+    and frozen at H2. After that nobody waits: Mandla builds screens
+    against the mock seam, and Risuna builds against curl and the seed.
+
+    IF AI CODING ASSISTANTS ARE ALLOWED (ask Wednesday, V1_13 O7): give
+    them self-contained screens (Loan Book list, supplier Customers
+    tab) with a written brief, and review every diff. Never give them the
+    handshake, the crypto or the ledger. Those are what we get
+    questioned on.
+
+
+3. HOUR BY HOUR
+---------------------------------------------------------------------------
+
+  H0-H2    FRI 18:00-20:00   SETUP (both)
+           - repo; libs/ + REUSE.md committed FIRST, alone
+           - create_app boots; GET /api/v1/health -> 200
+           - Expo app created; start the dev-client build in the
+             background
+           - CONTRACT.md + test vector committed
+           GATE: health reachable from both phones via adb reverse
+
+  H2-H8    FRI 20:00-02:00   SPINE, PART 1
+           Mandla  accounts + stock orders (backend); lib/crypto passes
+                   the test vector; lib/db outbox; ugly screens: pick a
+                   supplier, order, accept
+                   IF THE SPIKE FAILED: the Kotlin BLE module comes first
+           Risuna  ledger /events with chain + signature verification,
+                   the test vector in Python; seed suppliers + catalogues
+           GATE H8: an order placed on phone A is accepted on phone B
+
+  H8-H12   SAT 02:00-06:00   SPINE, PART 2
+           Mandla  Cash Handshake: SOLICIT, ACK, match_tag, attestation
+                   upload
+           Risuna  /handshakes: counterparty check, clock check, match ->
+                   CONFIRMED / DISPUTE
+           GATE H12: THE SPINE WORKS. Nothing else starts until it does.
+                     rev 4: the QR handshake COUNTS for this gate
+                     (same attestation, same server path). The radio
+                     is layered on after, so the spine never waits
+                     on it.
+           SLEEP: Risuna 02:00-06:00 if green at H8; Mandla 06:00-10:00
+
+  H12-H20  SAT 06:00-14:00   THE TOOLS
+           Mandla  onboarding with business types + businessTypes.ts;
+                   Loan Book + Order Book screens; the QR handshake
+                   fallback; NetInfo-gated sync
+           Risuna  books backend (orders, loans, jobs + stages);
+                   reputation v1 + reasons; seed_demo.py + demo
+                   identities; CHAIN_BREAK + CLOCK_SKEW
+                   GATE H20 (rev 4): seed_demo.py assertions pass --
+                   every chain verifies, Nomsa at 599, one confirmed
+                   delivery -> 600+
+
+  H20-H28  SAT 14:00-22:00   THE PAYOFF
+           Mandla  Market screen; Proof screen + share; builder job
+                   screen with stages + in-app photos; supplier
+                   Customers tab
+           Risuna  market feed; share links + checker.py (own
+                   process) + revoke +
+                   view log; tamper_demo.py; PHANTOM_SALES;
+                   DISPUTE shown in Proof
+
+  H28-H32  SAT 22:00-02:00   INTEGRATION
+           - the full V1_11 script, twice, over a real call
+           - BACKUP VIDEO #1
+           FEATURE FREEZE AT H32
+
+  H32-H38  SUN 02:00-08:00   SLEEP IN SHIFTS, FIX, POLISH
+           - Mandla 02:00-05:00, Risuna 05:00-08:00
+           - bugs from the run-through only; UI polish; slides final
+
+  H38-H42  SUN 08:00-12:00   REHEARSE AND SUBMIT
+           - three timed rehearsals on a real call
+           - BACKUP VIDEO #2
+           - submit well before the deadline
+
+
+4. THE CUT LIST (drop from the top)
+---------------------------------------------------------------------------
+
+    1. photos on job stages          -> stages without photos
+    2. reseller + food vendor types  -> labels only; spaza + builder full
+    3. Market sections past Reorder, My suppliers, Categories
+    4. type-specific reputation lines
+    5. PHANTOM_SALES live            -> slide
+    6. the judge-opens-it tunnel     -> show the page in our own browser
+    7. supplier Customers tab        -> the Orders tab only
+    8. the Bluetooth radio           -> QR handshake (same server path)
+
+    NEVER CUT:
+      - onboarding by business type (spaza + builder, visibly different)
+      - Loan Book + Order Book, basic
+      - stock order -> accept -> deliver
+      - Cash Handshake (radio or QR), with a live DISPUTE
+      - the tamper demo
+      - Proof + share + revoke
+      - the backup video
+
+
+5. RULES OF THE WEEKEND
+---------------------------------------------------------------------------
+
+    - Commit whenever something works. The history is evidence of what
+      we built this weekend.
+    - Nothing from the earlier product except libs/. No "quick copy" of
+      a screen, at 3am or any other time (V1_07 section 1).
+    - No new dependency after H20 without both of us agreeing.
+    - Native changes mean a dev-client rebuild. Batch them, and none
+      after H28.
+    - A 2-minute call every 4 hours: green, red, what moves to the cut
+      list.
+    - One Gradle build at a time, and Android Studio closed. The laptop
+      has to last 42 hours.
+    - Eat, drink water, sleep the shifts.

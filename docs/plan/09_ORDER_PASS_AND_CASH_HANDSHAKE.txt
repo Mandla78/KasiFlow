@@ -1,0 +1,222 @@
+===========================================================================
+PLAN 09 -- ORDER PASS AND CASH HANDSHAKE (QR FIRST)
+A signed QR for every order, and the handshake over QR, Bluetooth as
+the backup
+===========================================================================
+
+NOW (23 Sep, evening): this is the CASH path only, the showcase for
+suppliers that accept cash (PLAN 05). Digital orders don't need it.
+The screens (PDF p6-p9) have BOTH sides type the amount themselves
+("neither of you sees the other's number first"), i.e. V1_04's MODE
+STATE for orders too. The exact scan order (pass, then amounts) gets
+settled while building; the principles below are what matter.
+
+
+---------------------------------------------------------------------------
+1. THE DECISION (23 September)
+---------------------------------------------------------------------------
+
+    - The PROBLEM stays: cash changes hands with no two-sided record.
+      The supplier can't reconcile the driver's cash; the trader
+      can't prove they paid.
+    - What solves it is TWO PEOPLE INDEPENDENTLY CONFIRMING THE SAME
+      AMOUNT, OFFLINE, AT THE MOMENT OF HANDOVER. Bluetooth was only
+      one way to carry that between phones.
+    - QR carries the same thing, works offline, on every phone with a
+      camera, with no advertising support, pairing or radio
+      permissions. So:
+
+          QR IS THE PRIMARY TRANSPORT.
+          BLUETOOTH IS THE BACKUP / STRETCH (cut list item 1).
+
+    - V1_04's protocol does NOT change: same context key, same
+      SOLICIT / ACK bytes, same attestation, same server checks, same
+      statuses. V1_04 option C (the QR fallback) simply becomes the
+      default, and the radio becomes the fallback.
+    - NEW: the ORDER PASS (s3), from Mandla's idea: a cryptographically
+      signed QR issued for every order.
+
+
+2. EVERY HANDOVER ENDS WITH EXACTLY ONE PROOF
+---------------------------------------------------------------------------
+
+    SITUATION                          PROOF                  SCANS
+    ---------------------------------  ---------------------  -----
+    Order, CASH on delivery/collection CASH HANDSHAKE (s5)    2
+                                       -> proves payment AND
+                                          handover
+    Order, already PAID digitally      ORDER PASS scan (s4)   1
+                                       -> proves handover
+    Collection at a counter            ORDER PASS scan first  1 (+2
+                                       finds the order and      if cash)
+                                       checks the collector;
+                                       then the handshake if
+                                       cash
+    Job stage (builder's client)       SIGN-OFF LINK          0
+                                       (PLAN 02 s4, PDF p14)
+    Loan repayment                     recorded by the trader 0
+                                       (the customer has no
+                                       app this weekend)
+
+    A cash handshake already proves the trader's phone confirmed that
+    order at that moment (it's bound to the order's context key and
+    signed by the counterparty), so a cash delivery does NOT also need
+    a pass scan. Fewer taps at the door.
+
+
+3. THE ORDER PASS -- WHAT IT IS
+---------------------------------------------------------------------------
+
+Issued by the SERVER when the supplier ACCEPTS the order (the amount
+is final then). Shown in the trader's app on the order: "Show this at
+delivery or collection." Stored on the phone, so it works offline.
+
+  THE PASS (signed once, by the server)
+      v              1
+      pass_id        16 random bytes
+      order_id, supplier_id, trader_id
+      trader_pub     the trader's registered device key (32 bytes)
+      amount_cents   the accepted total
+      pay            cash | paid
+      fulfil         delivery | collect
+      exp            expiry (Unix s): accepted + 14 days
+      server_sig     Ed25519 by the SERVER'S PASS KEY over the
+                     canonical bytes above (V1_04 s5 rules)
+
+  THE QR SHOWN (changes every 15 seconds)
+      pass || t || live_sig
+      t         the trader phone's current time (Unix s)
+      live_sig  Ed25519 by the TRADER'S device key over
+                "KF-PASS-v1" || pass_id || t
+
+  WHY THE LIVE SIGNATURE: a plain signed QR can be screenshotted and
+  sent to someone else, who then collects the goods. With the live
+  signature, the code is only valid for 60 seconds and only the
+  trader's own phone (its Keystore key) can make a new one. A
+  screenshot is useless a minute later. (It also closes most of
+  V1_13 Q9's worry about QR screenshots.)
+
+  SIZE: ~300 bytes, binary, base64url in the QR. Error correction M.
+  Screen brightness to max while the pass is shown.
+
+
+4. SCANNING THE PASS (the driver's phone, OFFLINE)
+---------------------------------------------------------------------------
+
+  The driver app checks, with no signal:
+    1. server_sig is valid under the server's PASS PUBLIC KEY (built
+       into the app)
+    2. supplier_id is MY supplier
+    3. exp not passed; pass_id not already used on this phone
+    4. live_sig is valid under trader_pub
+    5. |t - my clock| <= 60 s   (else "Ask them to refresh the code")
+  All good ->  "✓ Order #1042 · Nomsa's Spaza · R2,340 · PAID"
+               or "· CASH -> [ Collect cash ]" (s5)
+
+  For a PAID order the driver taps [ Handed over ]:
+    the driver's phone seals a HANDOVER event, signed with the DRIVER key,
+    that INCLUDES the trader's live_sig and t. So one scan puts BOTH
+    signatures in the record: the trader's phone presented the pass
+    (live_sig) and the driver handed over (driver sig).
+    -> HANDED_OVER, confirmed by both.
+
+  SERVER, ON SYNC: verifies both signatures, that the driver
+  belongs to the supplier and was assigned,
+  the 60 s window, and that pass_id is used ONCE. A second use ->
+  rejected + a PASS_REUSE flag.
+
+
+5. THE CASH HANDSHAKE OVER QR (V1_04, unchanged, QR transport)
+---------------------------------------------------------------------------
+
+    DRIVER (payee)                         TRADER (payer)
+    [ Collect cash ] on order #1042
+    enters the cash counted: R2,340
+    seals the event, shows SOLICIT QR  --> scans it (scan 1)
+                                           ref4 -> order #1042 found
+                                           "Confirm you paid R2,340
+                                            for order #1042?"
+                                           [Confirm] [I paid a
+                                            different amount]
+                                           signs the attestation
+                                           (transport = QR)
+    scans the ACK QR (scan 2)          <-- shows ACK QR
+    match_tag equal?
+      yes -> both: "✓ R2,340 confirmed by both"
+      no  -> both: "✗ Amounts don't match. Sort it out now." DISPUTE
+
+  - Bytes, canonicalisation, signatures, the 60 s window and the
+    statuses are exactly V1_04 s4-s5.
+  - In QR form the ACK MAY also carry the payer's full signed
+    attestation (it fits easily). Then the driver's phone uploads BOTH
+    halves, so the result reaches the supplier even if the trader's
+    phone doesn't sync for days. The amount is on screen only for the
+    person scanning, who is the counterparty anyway.
+  - The trader's phone shows the result as soon as it has shown the
+    ACK and the driver's side confirms; if the trader walks off early,
+    their phone shows the final status on its next sync.
+
+  BLUETOOTH (backup): the same SOLICIT / ACK bytes over advertise +
+  scan (V1_04 s5, s8). A [ Use Bluetooth ] toggle on the handshake
+  screen. Built only after everything on the NEVER CUT list works.
+
+
+6. KEYS
+---------------------------------------------------------------------------
+
+    SERVER PASS KEY   Ed25519, generated once, private half in the
+                      server's .env (never committed), public half in
+                      the app's config. Rotation = new app build
+                      (fine for the weekend; roadmap: a key id in the
+                      pass + a list of valid public keys).
+    TRADER / DRIVER   device keys (PLAN 02 s3)
+    SERVER SEAL KEY   for backend actions (order accepted, PayFast paid). Separate from the
+                      pass key: one key, one job.
+
+
+7. THE RECORD AND PROOF
+---------------------------------------------------------------------------
+
+    CONFIRMATION LEVELS (V1_06, extended)
+      CONFIRMED_BY_BOTH   cash handshake, amounts equal
+      DISPUTE             cash handshake, amounts differ
+      PAID_DIGITALLY      PayFast ITN (PLAN 05)
+      HANDED_OVER         order pass scanned, both signatures
+      SELF_RECORDED       one side only
+
+    PROOF shows, per order: how it was paid, and how it was handed
+    over. A shared record shows counts ("41 deliveries handed over and
+    confirmed by both"), never addresses or customer names.
+
+
+8. OPEN QUESTIONS (freeze Thursday with the contract)
+---------------------------------------------------------------------------
+
+  H1  QR transport weight (V1_13 Q9). The live pass signature doesn't
+      apply to the handshake itself, but both sides still sign within
+      60 s. Proposal: 1.00 for QR, the same as radio, now that QR is
+      the default. Relaying a code live over a video call is still
+      possible; say so (V1_01 s7).
+  H2  HANDED_OVER weight in the reputation (proposal 0.5 of a
+      confirmed payment: it proves delivery, not payment).
+  H3  Pass validity: 14 days after acceptance?
+  H4  Should the trader's phone require a confirm tap before showing
+      the pass ("Show pass for R2,340?"), so a stolen unlocked phone
+      can't be used as easily? Proposal: yes, plus the phone's own
+      screen lock.
+  H5  The test vector (V1_12 Thursday) gains ONE pass: its canonical
+      bytes, server_sig, a live_sig for a fixed t, from published test
+      keys. Checked in TypeScript and Python.
+
+
+9. PLAN AND CUT
+---------------------------------------------------------------------------
+
+    SPINE     order pass (issue + show + scan + HANDED_OVER) and the
+              Cash Handshake over QR, with a live DISPUTE. NEVER CUT.
+    WEDNESDAY in the throwaway spike app: show a ~300-byte QR on one
+              phone, scan it with expo-camera on the other, both in
+              airplane mode: 20/20 reads at arm's length, in normal
+              room light. (Replaces the radio as the spike that
+              matters; the radio spike still runs if there's time.)
+    AFTER     Bluetooth transport, only when the NEVER CUT list works.

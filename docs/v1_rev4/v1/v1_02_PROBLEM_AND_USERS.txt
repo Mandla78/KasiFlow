@@ -1,0 +1,156 @@
+===========================================================================
+V1_02 -- THE PROBLEM, THE USERS AND THE CUSTOMERS
+===========================================================================
+
+
+1. THE PROBLEM
+---------------------------------------------------------------------------
+
+The kasi economy runs on three things: CASH, WHATSAPP AND A NOTEBOOK.
+
+    - Orders to suppliers go by phone call or WhatsApp. Prices get
+      re-agreed every time, and the argument at delivery is one memory
+      against another.
+    - Credit to customers ("I'll pay you Friday") lives in a notebook
+      that gets lost, wet or disputed.
+    - Cash changes hands with no receipt: at the wholesaler's counter,
+      on delivery, in a yard where a homeowner pays a builder's deposit.
+    - At the end of the month the owner doesn't know their own numbers.
+    - And when it matters (a fund, a supplier deciding on terms, a new
+      client choosing a builder) there is nothing to show.
+
+Read the chain backwards and the fix is obvious:
+
+    no access    <- no evidence   <- no record   <- no tool worth using
+                                                    for MY kind of business
+
+Almost everything built for this market attacks the first link
+(scoring, lending, verification visits) or builds a tool for one type
+of business. Akayza attacks the last link, for every type.
+
+
+2. THE EVIDENCE (sources in V1_14; VERIFIED items only on slides)
+---------------------------------------------------------------------------
+
+    - ~R900 billion township economy; nearly 80% of township businesses
+      surveyed unregistered; fewer than 9% with access to bank loans
+      (Standard Bank Township Informal Economy Report, 2025).
+    - Informal employment is 19.5% of total employment (Stats SA, QLFS
+      Q4 2024).
+    - Spaza Shop Support Fund: 354 applications could not proceed after
+      site visits (non-existent businesses, ownership discrepancies,
+      applicant-operator mismatches). Only R179.6m of R500m had been
+      allocated by May 2026.
+    - Builders: government guidance (Vuk'uzenzele, June 2026) warns of
+      rogue builders who "disappear after receiving payment" and tells
+      homeowners to keep payment records.
+    - Small and micro enterprises now employ over half the construction
+      sector, and finance is one of their biggest obstacles (Business
+      Day, July 2026).
+    - Cash still dominates township trade (several 2025 reports), but
+      with no reliable percentage. Say "dominates", not a number.
+
+
+3. THE USERS -- INFORMAL BUSINESSES, BY TYPE
+---------------------------------------------------------------------------
+
+The types we design for this weekend. Each one is a real way of
+working, not a persona:
+
+  SPAZA / TUCK SHOP / GENERAL DEALER -- "Nomsa, Tembisa"
+      Buys stock weekly from a wholesaler. Sells some of it on credit to
+      neighbours. Needs: reorder fast, know who owes what, and confirm
+      cash paid to the wholesaler on delivery.
+
+  BUILDER / TRADESPERSON -- "Sipho, Seshego"
+      Builder, plumber, electrician, tiler, roofer, painter, welder.
+      Takes jobs, collects a deposit and stage payments in cash, and buys
+      materials from a hardware store. Needs: jobs and stages, receipts
+      the client can't argue with, and a record of finished work to win
+      the next client.
+
+  RESELLER / SIDE HUSTLE -- "Lerato, a student in Polokwane"
+      Sells fragrances (or clothes, or airtime) to other students. Buys
+      from a distributor, takes orders on WhatsApp, and half the
+      customers pay later. Needs: who ordered what, who's paid, and
+      what to reorder.
+
+  FOOD VENDOR / STREET TRADER (lighter support this weekend)
+      Daily cash takings, daily stock. Needs: a daily number, and
+      reorders.
+
+What they share is exactly what Akayza's tools are: orders in and
+out, credit given, cash received, stock bought. Only the words and the
+order of the screens differ by type.
+
+
+4. THE CUSTOMERS -- SUPPLIERS (they pay)
+---------------------------------------------------------------------------
+
+  SPAZA WHOLESALER / CASH-AND-CARRY -- "Mahlangu Wholesale"
+      Serves dozens of spazas. Takes orders by phone. Delivers, or the
+      shop collects. Often paid cash on delivery.
+
+  HARDWARE / BUILDING SUPPLY STORE -- "Ndlovu Hardware & Building"
+      Sells to builders daily. Some builders ask for materials on
+      account.
+
+  DISTRIBUTOR -- fragrances, cosmetics, airtime, clothing
+      Serves resellers, often through WhatsApp groups.
+
+What a supplier gets from Akayza:
+    - orders from their existing customers arrive in one list, not
+      forty WhatsApp chats
+    - cash on delivery confirmed by both phones (Cash Handshake), so
+      the driver's cash reconciles
+    - a customer list: who orders, how often, who's gone quiet
+    - (with the business's consent) a customer's record, when deciding
+      whether to offer terms
+    - reach: new businesses of the right type near them, through the
+      Market
+
+Why suppliers pay: those five things replace a phone, a notebook, a
+WhatsApp group and a gut feeling, for their whole customer base.
+
+
+5. HOW IT SPREADS
+---------------------------------------------------------------------------
+
+    SUPPLIER-LED. A wholesaler or hardware store invites its own
+    customers: "order from us on Akayza". One supplier brings dozens
+    of businesses, and each business gets the full toolset free.
+
+    BUSINESS-LED. A builder asks each client to confirm payments. A
+    spaza asks its wholesaler to take orders on Akayza. Each
+    business pulls its counterparties in.
+
+    TYPE-LED. Students sell to students, and builders know builders.
+    The types have their own word of mouth.
+
+
+6. VALIDATION -- BEFORE FRIDAY (V1_12)
+---------------------------------------------------------------------------
+
+Target: 2 spaza owners, 1 builder, 1 student reseller, 1 wholesaler,
+1 hardware store. Voice notes are fine. Ask permission to quote them by
+first name.
+
+ANY BUSINESS
+    1. How do you order stock? How do you pay for it?
+    2. Who owes you money right now? How do you keep track?
+    3. Has a supplier or customer ever disputed what was paid? What
+       happened?
+    4. Have you ever needed to prove your business is real? What did you
+       show?
+    5. If both phones confirmed a cash payment on the spot, would you
+       use it?
+
+SUPPLIERS
+    1. How do your customers order? How many messages a day is that?
+    2. How do you reconcile cash your driver collects on delivery?
+    3. Do you give any customer terms? How do you decide?
+    4. What would you pay for a tool that fixed one of the three above?
+       (Ask it plainly. The answer is the sustainability slide.)
+
+Anything that contradicts the plan goes into V1_13 and changes what we
+say.

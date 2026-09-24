@@ -1,0 +1,81 @@
+===========================================================================
+[DRAFT -- changes as we build] FINAL SUBMISSION -- Sun 27 Sep, HARD deadline 09:00 (aim 08:00)
+Sonke -> SUBMIT FILES. No submission = no pitch, no finale, no prizes.
+===========================================================================
+
+
+---------------------------------------------------------------------------
+WHAT WE UPLOAD
+---------------------------------------------------------------------------
+
+  FILE 1  Name:  Akayza - Presentation Slides
+          Notes: 14 slides: problem with data, solution, user journeys
+                 (builder and spaza), architecture, security, data
+                 privacy, competitive analysis, business model and
+                 figures, go-to-market, TRL, impact and the ask. Demo
+                 video link on the last slide.
+  FILE 2  Name:  Akayza - UX Design
+          Notes: the designed screens of the full journey; the demo
+                 shows the built part.
+  VIDEO   Under 90 seconds. Link on the Sonke project overview AND on
+          the last slide. Unlisted YouTube or Google Drive (set to
+          "anyone with the link"). Test the link in a private window.
+  PROFILE Switch the project name to Akayza and update the overview
+          (01_team_profile) before uploading.
+
+
+---------------------------------------------------------------------------
+THE SLIDES (more than 10; their required items marked *)
+---------------------------------------------------------------------------
+
+   1  Akayza · team PR · one line: "Your business, proven by the
+      people you trade with." · reuse declaration
+   2  * Problem statement justification: chart (R900bn / <9% bank
+      loans / 38% informal construction) + the 354 + a photo
+   3  Who: Bongani the builder and Nomsa the spaza owner; suppliers
+      as customers (hybrid-facing)
+   4  * Solution offering
+   5  * User journey story: Bongani's job from quote to sign-off;
+      Nomsa's week from credit sale to confirmed delivery
+   6  Demo screens (+ video link)
+   7  * Technological architecture: app -> Cloudflare -> domain-
+      driven API -> PostgreSQL; PayFast, Cloudinary (malware scan),
+      Mapbox; integration API for supplier ERPs; sealed records
+   8  * Security considerations: threat model, SSDLC, tamper demo,
+      honest limits
+   9  * Data privacy policies (POPIA): what we collect, why, who sees
+      it, sharing by consent, revoke, deletion, data in SA at scale
+  10  * Competitive analysis
+  11  Business model: traders free (Pro later), suppliers subscribe,
+      ~1% commission, verification fees; real running costs
+  12  * Go-to-market: trader-led invites, sales, supplier-led, pilot
+  13  * Technology Readiness Level: what is built and tested
+  14  Impact + the ask: R300,000 for a 6-month pilot
+  (+ Quantum: post-quantum sealed records, on slide 7 or 8)
+
+
+---------------------------------------------------------------------------
+THE 90-SECOND VIDEO
+---------------------------------------------------------------------------
+
+   0-10   the problem in one line on screen
+  10-30   Bongani: a job stage photographed; the client signs off by
+          link; the payment is confirmed by both
+  30-55   Nomsa: credit sale; order again from her supplier; PayFast
+          (or cash confirmed by both)
+  55-75   her record shared; the checker page shows "record intact";
+          the tamper check trips
+  75-90   "Akayza. Your business, proven by the people you trade
+          with." + the ask
+  Record by Sun ~06:00. Screen-record the phones (scrcpy + OBS).
+
+
+---------------------------------------------------------------------------
+CHECKLIST (Sun 06:00-08:00)
+---------------------------------------------------------------------------
+
+  [ ] Slides exported to PDF (and PPTX) · video uploaded, link tested
+  [ ] Sonke project name + overview updated
+  [ ] Both files uploaded with notes · confirmation screenshot taken
+  [ ] Numbers on slides match docs/v1_rev4/v1/v1_14_SOURCES.txt
+      VERIFIED; estimates say "(est.)" or "projection"

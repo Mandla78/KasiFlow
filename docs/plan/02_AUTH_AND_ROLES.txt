@@ -1,0 +1,123 @@
+===========================================================================
+PLAN 02 -- AUTH AND ACCOUNTS
+Who can sign in, and how
+===========================================================================
+
+
+1. WHO
+---------------------------------------------------------------------------
+
+    trader     signs up in the app (PLAN 03). The only real users.
+    driver     created by the backend seed for the cash showcase;
+               signs in with a phone code; one screen (PLAN 10).
+    supplier   NOT a user. A row in the database, loaded through the
+               backend (PLAN 08). Its "system" is our backend: orders
+               are accepted and cash is recorded there.
+    client     the builder's client. No account: a one-time SIGN-OFF
+               LINK (s4).
+    admin      us, from the terminal (seed, accept orders, verify).
+
+
+2. APP SIGN-IN: EMAIL + PASSWORD (no SMS: SMS costs money, email doesn't)
+---------------------------------------------------------------------------
+
+    POST /auth/signup          { business_name, email, password }
+                               -> account created UNVERIFIED; a 6-digit
+                                  code is emailed
+    POST /auth/verify-email    { email, code } -> verified; tokens issued
+    POST /auth/resend-code     { email }
+    POST /auth/login           { email, password }
+    POST /auth/forgot-password { email }   same answer whether or not the
+                                           email exists
+    POST /auth/reset-password  { token, new_password }
+    POST /auth/refresh, POST /auth/logout
+
+    ORDER (UX PDF v0.2 pages 3-5): business name + email + password +
+    confirm -> verify email -> business type -> your name, area,
+    cellphone (optional) -> pick tools. NOTHING after "verify" is
+    reachable until the email is verified (server-enforced).
+
+    - Passwords: at least 8 characters, hashed with bcrypt/argon2, never
+      logged. Confirm-password is checked in the app only.
+    - Codes: 6 digits, stored hashed, 15 min, 5 tries; reset links one
+      use, 30 min. Rate limited per email and per IP.
+    - EMAIL PROVIDER: a free tier (e.g. Brevo / Resend / Gmail SMTP)
+      behind a provider interface; a FAKE provider for dev prints the
+      code to the backend log. Our earlier mail library is the
+      reference.
+    - Access token short (15 min), refresh token rotating; both in
+      expo-secure-store.
+    - Signing in on a new phone creates a new device key and switches
+      the old one off.
+    - The app can only create TRADERS. Drivers come from the seed, with
+      an email + password we set.
+    - Cellphone is optional profile data (WhatsApp receipts, delivery
+      calls), never a login.
+
+    CONTINUE WITH GOOGLE (UX PDF v0.3, page 5)
+    POST /auth/google { id_token }
+      - The app gets an ID token from Google Sign-In; the SERVER verifies
+        it against Google's keys (audience = our client ID, issuer,
+        expiry, email_verified). Never trust a token the server hasn't
+        checked.
+      - New Google email -> account created as VERIFIED (Google already
+        checked it): no password, no email code. The app then asks for
+        the business name, then the normal steps (type, area, tools).
+      - Email already registered with a password -> NOT merged
+        automatically. The person enters their password once to link
+        Google; after that either way signs in.
+      - Needs Google Cloud OAuth clients (free), set up before Friday:
+          ANDROID client  package za.akayza.app + the SHA-1 of the key
+                          that signs the build we actually install
+          WEB client      its ID goes in the app as webClientId; that's
+                          what makes Google return an ID token, and it's
+                          the audience the server checks
+        We use a DEVELOPMENT BUILD (no Expo Go). SHA-1 of a local dev
+        build: after prebuild, `cd android && ./gradlew signingReport`
+        (debug keystore). If built with EAS instead: `eas credentials`.
+        Each different signing key needs its SHA-1 registered, or Google
+        sign-in fails with DEVELOPER_ERROR.
+
+
+3. DEVICE KEY
+---------------------------------------------------------------------------
+
+    Straight after the first sign-in, the phone makes an Ed25519 key
+    (random bytes from expo-crypto), keeps the private half in the
+    Keystore, and registers the public half with a signed nonce:
+        POST /me/device-key { public_key, proof }
+    Traders and drivers sign what they confirm (cash, stages) with it.
+    One active key per account.
+
+
+4. THE SIGN-OFF LINK (builder's client, PDF p14)
+---------------------------------------------------------------------------
+
+    - 128 random bits, stored only as a hash; ONE use; expires 7 days.
+    - Opens a small web page (served like the public record page, its
+      own process): the stage, the photo, "Cash you paid for this
+      stage", Yes / Not yet.
+    - The client types their own amount; the builder doesn't see it
+      until both are in. Match -> CONFIRMED BY BOTH; differ -> DISPUTE.
+    - Honest limit: a link isn't a signed key. We record that the
+      confirmation came through a link (weighted lower than two
+      signed phones).
+
+
+5. RULES
+---------------------------------------------------------------------------
+
+    - EVERY route pins a role: trader, driver, admin, or public (the
+      record page, the sign-off page, PayFast's notification).
+    - Identity only from the verified token, never from the body.
+    - Object-level checks on every read: a trader sees only their own
+      books, orders and record; a driver only their assigned orders.
+    - Writable profile fields are whitelisted; everything else is
+      rejected.
+
+
+6. OPEN
+---------------------------------------------------------------------------
+
+    - Should the record page and the sign-off page share one small
+      public process? Probably yes.

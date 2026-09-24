@@ -1,0 +1,236 @@
+===========================================================================
+V1_04 -- CASH HANDSHAKE
+Both phones confirm a cash handover, offline, over Bluetooth
+===========================================================================
+
+WHAT IT IS, in one line for the pitch:
+
+    When cash changes hands between two Akayza users, both phones
+    state the amount and sign it on the spot, with no signal. If the
+    amounts differ, both screens say so before anyone walks away.
+
+WHAT IT IS NOT: proof the notes were real, or proof nobody was pushed.
+It's a record of two people agreeing on one amount, at one moment.
+That's far better than nothing, which is all cash leaves today.
+
+It builds on Risuna's Trader Passport spec (22 Sept): salted
+commitments, Ed25519, the 24-byte advertisement and the clock-skew
+rule are Risuna's. It changes the WITNESS from a neighbour to THE
+COUNTERPARTY, and the return path from GATT to connectionless.
+
+
+1. WHERE IT APPEARS
+---------------------------------------------------------------------------
+
+    CONTEXT                          PAYEE (advertises)   PAYER (confirms)
+    -------------------------------  -------------------  ----------------
+    stock order, cash on delivery    supplier / driver    business
+    counter purchase (hardware,      supplier             business
+      cash-and-carry)
+    builder deposit / stage payment  builder              homeowner
+    Loan Book repayment              business             customer (only
+                                                          if on Akayza)
+
+Every handshake belongs to a CONTEXT: an order, a job stage or a loan
+entry that both parties already share in Akayza. That shared context
+is what makes the design below work. A handshake between strangers
+isn't possible, and doesn't need to be.
+
+
+2. WHY CONNECTIONLESS (no GATT)
+---------------------------------------------------------------------------
+
+Research, 22 Sept:
+    - react-native-ble-plx (the standard library) CANNOT advertise, so
+      phone-to-phone is impossible with it alone.
+    - react-native-peripheral is iOS only.
+    - munim-bluetooth (v0.8.1, pre-1.0) claims Android advertising,
+      scanning and a GATT server.
+A GATT connection adds pairing, MTU negotiation and dropped
+connections: three extra ways to fail on a video call. So we use
+ADVERTISE + SCAN only. Each phone broadcasts one small packet, and
+each phone uploads its own signed half later. The server joins them.
+
+
+3. THE SHARED CONTEXT KEY
+---------------------------------------------------------------------------
+
+When an order, job or loan entry is created and accepted, the server
+generates a random 32-byte CONTEXT KEY and syncs it to both parties'
+phones. It never goes over Bluetooth.
+
+It gives us two things:
+    - a short REF the payer's phone can recognise, without the order
+      number going over the air:
+          ref4 = HMAC-SHA256(ctx_key, "ref")[0:4]
+    - an instant, offline MATCH CHECK that an eavesdropper can't
+      brute-force (section 6):
+          match_tag = HMAC-SHA256(ctx_key, commitment12 || amount_cents)[0:8]
+
+
+4. THE FLOW
+---------------------------------------------------------------------------
+
+    PAYEE (e.g. the wholesaler's driver)
+      1. taps "Collect cash" on order #1042 and enters R2,340
+      2. seals the event in their chain: payload includes amount,
+         context, time, sequence, salt
+      3. commitment = SHA-256(salt || canonical_payload)
+      4. advertises HANDSHAKE_SOLICIT for 60 s
+
+    PAYER (e.g. Nomsa)
+      5. Nomsa's phone hears the SOLICIT, matches ref4 to order #1042
+         locally, and prompts:
+            MODE CONFIRM (orders, where the total was already agreed
+            in-app):  "Confirm you paid R2,340 for order #1042?"
+                      [Confirm] [I paid a different amount]
+            MODE STATE (deposits, stage payments, loan repayments):
+                      "How much did you just pay Sipho?"  [R ____ ]
+                      NO PREFILL, so the amount is stated independently
+      6. signs the attestation (section 5) and stores it for upload
+      7. advertises HANDSHAKE_ACK for 10 s, carrying the payer's match_tag
+
+    PAYEE again
+      8. hears the ACK, computes its own match_tag from its amount,
+         and compares:
+            equal     -> both screens: "✓ R2,340 confirmed by both"
+            not equal -> both screens: "✗ Amounts don't match. Sort it
+                         out now." A DISPUTE is recorded on the order.
+      All of this happens offline, in about two seconds.
+
+    LATER, ON SYNC (server)
+      9. verifies both chains and signatures, and checks:
+           - the payer IS the counterparty on that order/job/loan
+             (never just any phone nearby)
+           - |ts_payer - ts_payee| <= 60 s (CLOCK_SKEW otherwise)
+           - amount_payer == amount_payee -> CONFIRMED BY BOTH
+             else -> DISPUTE, both amounts kept, both parties notified
+           - one attestation per commitment; a second is rejected
+           - the transport (radio or QR) is stored with the result
+
+      STATUSES (rev 4):
+           PENDING            only one half has arrived
+           CONFIRMED_BY_BOTH  both halves verify, amounts equal
+           DISPUTE            both halves verify, amounts differ
+           SELF_RECORDED      the payer's half never arrived within
+                              24 h (proposed; V1_13 Q10)
+      A dispute closes only through a new handshake on the same
+      context, or the payee cancelling the collection. The
+      disagreement stays in both histories.
+
+
+5. PACKETS AND SIGNATURES
+---------------------------------------------------------------------------
+
+Legacy advertisement, 31 bytes: flags (3) + manufacturer AD header (2)
++ company ID (2, 0xFFFF = Bluetooth SIG test value) + OUR 24 BYTES.
+No device name is included.
+
+HANDSHAKE_SOLICIT (type 0x4), 24 bytes, sent by the payee:
+    0   2   magic        "KF" (0x4B 0x46)
+    2   1   ver|type     0x14
+    3   12  commitment   SHA-256(salt || payload)[0:12]
+    15  4   ref4         HMAC(ctx_key, "ref")[0:4]
+    19  4   ts_payee     Unix seconds, big-endian
+    23  1   mode         0x01 CONFIRM, 0x02 STATE
+
+HANDSHAKE_ACK (type 0x5), 23 bytes, sent by the payer:
+    0   2   magic        "KF"
+    2   1   ver|type     0x15
+    3   8   commitment   first 8 bytes of the heard commitment
+    11  8   match_tag    HMAC(ctx_key, commitment12 || amount)[0:8]
+    19  4   ts_payer
+
+PAYER'S ATTESTATION (uploaded, never broadcast):
+    msg = "KF-HANDSHAKE-v1" || commitment12 || ref4 || ts_payee ||
+          ts_payer || amount_cents (u64) || decision (1 byte) ||
+          transport (1 byte: 0x01 radio, 0x02 QR)
+    sig = Ed25519(payer_private_key, msg)
+
+    TRANSPORT is new in rev 4. The QR path proves less, because a code
+    can be sent as a screenshot, so the server records which path was
+    used and the two may be weighted differently (V1_13 Q9).
+
+CANONICALISATION: FREEZE ON THURSDAY, OR NOTHING VERIFIES.
+    - JSON, sorted keys, no whitespace, UTF-8 UNESCAPED. In Python:
+          json.dumps(p, sort_keys=True, separators=(",", ":"),
+                     ensure_ascii=False).encode("utf-8")
+      The default (ensure_ascii=True) escapes non-ASCII, so "Cafe" with
+      an accent would hash differently in Python and TypeScript.
+    - money as INTEGER cents; time as integer Unix seconds; no floats
+    - lowercase hex in JSON and the API; the genesis prev_hash is 32
+      zero bytes (64 zeros in hex)
+    - INSIDE EVERY HASH INPUT, prev_hash and salt are RAW BYTES, not hex
+      text. Revision 3 left this open; it's the likeliest silent
+      mismatch. (rev 4)
+    - commitment = SHA-256(salt_bytes || canonical_payload_bytes)
+    - event_hash = SHA-256(prev_hash_bytes || salt_bytes ||
+                           canonical_payload_bytes)
+    - the event signature is Ed25519 over the 32 raw bytes of event_hash
+    - ONE WORKED TEST VECTOR, checked in both the TypeScript and Python
+      tests, from hour 2. It must include a non-ASCII string and a
+      genesis event.
+
+
+6. PRIVACY ON THE RADIO
+---------------------------------------------------------------------------
+
+    - The amount is NEVER broadcast. The salted commitment hides it,
+      because without the salt a listener can't hash R1..R100,000 to
+      find it.
+    - The match_tag is keyed with the context key, so a listener with
+      the commitment still can't brute-force the amount through the
+      tag.
+    - ref4 is keyed too, so the order number never goes over the air.
+      It stays the same for one order and changes between orders.
+    - No names, device names or stable identifiers are broadcast.
+    - What a listener learns: "two phones did a handshake here, now".
+      That's the honest residual, and we state it.
+
+
+7. LIMITS (say them before a judge does)
+---------------------------------------------------------------------------
+
+    - Two people who agree to lie can both type the same false amount.
+      The handshake proves agreement, not truth. Patterns over time
+      catch it: a "supplier" who only ever sells to one business, round
+      numbers every time, sales far above stock bought (V1_05).
+    - Only works when both parties use Akayza. Otherwise the payment
+      is SELF-RECORDED, and weighted lower.
+    - FOREGROUND ONLY this weekend. Both apps must be open.
+    - Some cheap phones can't advertise. Check
+      isMultipleAdvertisementSupported(). BOTH roles advertise (the
+      payer sends the ACK in step 7), so such a phone uses QR for its
+      outgoing packet in either role: as payee it shows the SOLICIT as
+      a QR code, as payer it shows the ACK as one. It can still scan
+      the other side's radio packet. (rev 4: revision 3 said these
+      phones could act as payer over radio. They can't.)
+
+
+8. IMPLEMENTATION OPTIONS
+---------------------------------------------------------------------------
+
+  A. munim-bluetooth + react-native-nitro-modules, IF Wednesday's spike
+     passes: 24 custom bytes, 20/20 received, at 30 cm and at 3 m.
+
+  B. Our own Expo module in Kotlin (~150 lines): BluetoothLeAdvertiser
+     (non-connectable, addManufacturerData(0xFFFF, bytes)) and a
+     BluetoothLeScanner filtered on 0xFFFF, emitting {bytes, rssi} to
+     JS. Written in H2-H8 if A fails.
+
+  C. QR FALLBACK, built regardless: the payee shows the SOLICIT as a
+     QR code, the payer scans it and shows the ACK as a QR code, and
+     the payee scans that. The same bytes and the same server path, so
+     it's our live-demo insurance.
+
+  Android permissions (API 31+): BLUETOOTH_SCAN (neverForLocation),
+  BLUETOOTH_ADVERTISE, BLUETOOTH_CONNECT. API 30 and below: BLUETOOTH,
+  BLUETOOTH_ADMIN, ACCESS_FINE_LOCATION. Emulators can't test any of
+  this, so two real phones are needed from Wednesday.
+
+  RANDOM BYTES (rev 4): keys and salts come from expo-crypto
+  (getRandomBytes). As far as we know, Hermes has no
+  crypto.getRandomValues, which noble's own random helpers call. Either
+  pass expo-crypto bytes in directly, or add the
+  react-native-get-random-values polyfill. The Wednesday spike checks
+  this (V1_12).

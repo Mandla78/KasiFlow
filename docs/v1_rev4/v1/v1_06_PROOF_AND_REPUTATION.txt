@@ -1,0 +1,158 @@
+===========================================================================
+V1_06 -- PROOF AND REPUTATION
+The record a business owns, how much each entry counts, and sharing it
+===========================================================================
+
+This is Risuna's layer (TrustLedger inside Akayza). What follows is a
+proposal adapted from Risuna's scorecard. Risuna owns the final
+weights.
+
+
+1. PROOF: EVERY ENTRY HAS A CONFIRMATION LEVEL
+---------------------------------------------------------------------------
+
+Every Order Book, Loan Book, Stock and Job event is sealed into the
+business's own hash chain. Each one carries how it was confirmed:
+
+    LEVEL                     HOW                                  WEIGHT
+    ------------------------  -----------------------------------  ------
+    SELF-RECORDED             only the business recorded it         0.20
+    CONFIRMED BY THE OTHER    the counterparty confirmed in-app      0.60
+    PARTY                     later (accepted order, approved
+                              stage) but not in person
+    CONFIRMED BY BOTH         Cash Handshake: both parties signed    1.00
+    (HANDSHAKE)               the same amount within 60 s
+
+    rev 4: the label no longer says "in person". The handshake proves
+    agreement at one moment, not that the phones were side by side. A
+    QR handshake may weigh less than a radio one (V1_13 Q9).
+
+    In the app these show as three badges: grey / blue / green-tick.
+    Words beat numbers: "Confirmed by both" says more than "Tier 3".
+
+
+2. REPUTATION (1000 points), AND WHAT IT'S FOR
+---------------------------------------------------------------------------
+
+It's called REPUTATION, never "credit score". It describes a track
+record to someone the business chooses to show it to. No tool in
+Akayza is ever locked by it.
+
+    DIMENSION               RULE                                    MAX
+    ----------------------  --------------------------------------  ----
+    Trading regularity      active weeks with confirmed activity,   200
+                            weighted by confirmation level
+    Consistency             steady weekly activity (CV < 0.40)      100
+    Record longevity        unbroken chain; full marks at 60 days   100
+    Confirmed by others     share of money movements confirmed by   200
+                            the counterparty (levels 2-3)
+    Supplier relationships  distinct verified suppliers, and how    150
+                            long each relationship has lasted
+    Pays suppliers          stock orders paid on delivery / on      150
+    reliably                agreed terms, confirmed by the
+                            supplier
+    Integrity               no active flags or open disputes        100
+                                                                    ----
+                                                                    1000
+
+    FORMULAS (rev 4 proposal). Windows are the last 12 weeks. A "money
+    movement" is any paid, repaid, collected or delivered event.
+
+      Trading regularity   200 x (sum over weeks of: 1 if >= 3 events
+                           that week, times that week's average
+                           confirmation weight) / 12
+      Consistency          CV of weekly money-in over active weeks:
+                           100 at CV <= 0.40, falling linearly to 0 at
+                           CV >= 1.0
+      Record longevity     100 x min(days of unbroken chain, 60) / 60
+      Confirmed by others  200 x share of money movements, BY COUNT, at
+                           levels 2-3. Count, not rands, so size can't
+                           buy points
+      Supplier             75 x min(verified suppliers, 3) / 3
+      relationships        + 75 x min(avg relationship weeks, 12) / 12
+      Pays suppliers       150 x share of delivered stock orders paid on
+      reliably             delivery or on terms, supplier-confirmed;
+                           x n/5 while fewer than 5 orders exist
+      Integrity            100 minus 50 per active flag or open
+                           dispute, floor 0
+
+    TYPE-SPECIFIC ADDITIONS (shown as lines, not extra points, this
+    weekend):
+      builder   jobs completed and signed off by the client; stage
+                photos; verified-client reviews
+      reseller  orders delivered; customers who reorder
+
+    Stages: 0-349 GETTING STARTED · 350-599 ESTABLISHED ·
+            600-799 TRUSTED · 800+ PROVEN
+
+    An ACTIVE flag or an open dispute pauses stage progression until it
+    is resolved. History is never erased.
+
+
+3. EVERY SCORE COMES WITH REASONS
+---------------------------------------------------------------------------
+
+    "You've traded 9 weeks in a row."
+    "71% of your payments were confirmed by the other person."
+    "You've paid Mahlangu Wholesale on delivery 14 times."
+    "Next: ask your customers on credit to use Akayza, so their
+     repayments get confirmed too."
+
+Design rules from both original briefs, kept:
+    - reward consistency and confirmation, never volume. Size is easy to
+      fake; regularity with a second signature is not
+    - never reward borrowing
+
+
+4. SHARING
+---------------------------------------------------------------------------
+
+    Proof -> Share -> choose:
+        [x] reputation + reasons
+        [x] months trading, activity by week
+        [x] suppliers (names, with each supplier's consent flag) and
+            length of relationship
+        [ ] job history with photos (builders)
+      duration: 24 hours / 7 days
+    -> a link, sent on WhatsApp
+
+    THE CHECKER'S PAGE (no login): the summary, confirmation levels,
+    chain status ("intact, verified 2 min ago"), flags in plain words,
+    and one sentence a person can act on:
+        "Trading 9 weeks. 71% of payments confirmed by the other party.
+         Pays 2 suppliers on delivery. Record intact. No open disputes."
+
+    On the owner's phone: "Viewed at 14:32". [Revoke] kills the link
+    immediately.
+
+    NEVER SHARED: Loan Book customer names, individual Loan Book
+    amounts, anything about another business.
+
+
+5. SEED DATA FOR THE DEMO (Risuna)
+---------------------------------------------------------------------------
+
+    - "Nomsa's Spaza" (spaza): 9 weeks; 2 suppliers; ~70% confirmed;
+      14 deliveries paid to Mahlangu Wholesale; reputation 599, ONE
+      point under TRUSTED. (rev 4: at ~680, one more confirmed
+      delivery moves the score by about a point, and nobody on a
+      video call notices. At 599 the live handshake tips her into
+      TRUSTED, and the reason line goes from 14 to 15 deliveries.)
+      seed_demo.py ASSERTS before every rehearsal: every chain
+      verifies, Nomsa is at 599, and one confirmed delivery reaches
+      600+. A weight change can't silently kill the moment.
+    - "Sipho Builders" (builder): 6 jobs, 4 signed off, stage photos,
+      buying from Ndlovu Hardware
+    - "Lerato Scents" (reseller): 5 weeks, a distributor, 30 customers
+    - "Thabo's Tuck Shop": a planted R2,340 -> R23,400 edit for the
+      tamper demo
+    - suppliers: Mahlangu Wholesale, Ndlovu Hardware & Building,
+      a fragrance distributor, each with a seeded catalogue
+
+    GENERATE THE SEED THROUGH THE SAME SEALING CODE the app uses, never
+    by inserting rows. Otherwise the chains won't verify and the demo
+    lies.
+
+    tamper_demo.py edits payload_canonical AND amount_cents, as an
+    attacker with database access would, and has a --restore flag so
+    the demo can be rerun. (rev 4)

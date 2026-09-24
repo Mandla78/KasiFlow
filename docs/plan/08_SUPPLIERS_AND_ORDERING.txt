@@ -1,0 +1,74 @@
+===========================================================================
+PLAN 08 -- SUPPLIERS AND ORDERING
+Suppliers come in through the backend; traders browse and order
+===========================================================================
+
+
+1. SUPPLIERS ARE DATA, NOT USERS
+---------------------------------------------------------------------------
+
+    3-5 suppliers, loaded by a backend script from files (no sign-up,
+    no portal). In production, a supplier's own system would push the
+    same data through our API; that's the pitch ("we integrate with
+    the systems suppliers already run").
+
+    SUPPLIER FIELDS
+      name, logo (image), short description, suburb/area,
+      COLLECTION ADDRESS + pin + opening hours (shown at checkout, on the
+      order review and on "Ready to collect" whenever the trader
+      collects; UX PDF v0.3 page 12),
+      accepts: digital | cash | both   (PLAN 05)
+      cash_limit (if cash), driver phone (if cash), verified: true
+
+    PRODUCT FIELDS
+      the supplier file columns (rebuilt with the loader):
+      name, category, price, unit, quantity, sku, brand, pack size,
+      description, image_1..image_5 (https link or file name)
+
+    The loader validates against the 22 categories (PLAN 04 s4) and the
+    unit list, and reports bad rows instead of failing the whole file.
+
+
+2. THE SUPPLIERS TAB
+---------------------------------------------------------------------------
+
+    LIST       one card per supplier: logo, name, area, what it sells,
+               a "Pays: PayFast / Cash" hint, "Your supplier" tag if
+               the trader has ordered before. Suppliers matching the
+               trader's type come first.
+    SUPPLIER   header (logo, name, about), a category filter, then the
+               products in a 3-column GRID (photo, name, price, unit,
+               [+]). Scrolls; no ranking engine.
+    PRODUCT    tap for the bigger photo(s), pack size, description.
+    CART       items, quantities, total; delivery or collect; payment
+               method (only what the supplier accepts; choose if both);
+               Place order.
+
+    Order stock (PDF p4) is the quick path: "Order again" from the last
+    order with the same supplier.
+
+
+3. ORDERS
+---------------------------------------------------------------------------
+
+    PLACED -> ACCEPTED (by the backend) -> for cash deliveries:
+    ON ITS WAY (driver assigned) -> DELIVERED
+    Digital orders are PAID when PayFast confirms; cash orders are paid
+    when the Cash Handshake confirms (PLAN 09).
+
+    - The server re-prices every order from the database; the phone's
+      prices are never trusted.
+    - Stock goes down on acceptance; a trader can cancel before it.
+    - Every status change is a sealed event on the trader's record.
+
+
+4. DEMO SUPPLIERS (intent; swap freely)
+---------------------------------------------------------------------------
+
+    Mahlangu Wholesale   spaza groceries      digital + cash  (cash demo)
+    Ndlovu Hardware      building materials   digital
+    Glow Distributors    fragrance, phone     digital
+    (+1-2 more if time, e.g. a cold-drinks supplier: digital)
+
+    Demo files: rebuilt during the build. Photos: 1-5
+    per product, as available; category icons fill the gaps.

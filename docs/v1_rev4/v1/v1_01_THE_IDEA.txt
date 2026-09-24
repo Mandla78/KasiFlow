@@ -1,0 +1,155 @@
+===========================================================================
+V1_01 -- THE IDEA
+What Akayza is, why it wins, and how it maps to the themes
+===========================================================================
+
+
+1. THE NAME
+---------------------------------------------------------------------------
+
+AKAYZA. "Kasi" places it in the track in one word. "Flow" is what the
+product does: stock flowing in from suppliers, money flowing in from
+customers, and a record flowing out of both without anyone typing a
+report.
+
+Tagline options (pick one for slide 1):
+    "Every kasi hustle, in flow."
+    "Run your hustle. Keep the proof."
+    "From your supplier to your customer, and proof of both."
+
+Before it goes on a slide: CIPC name search, a trademark search, and
+a Play Store search. The 22 Sept web check found no app called Akayza,
+but nearby names exist ("Kasi App", "Kasi Money", "Kas Flow").
+
+
+2. THE PITCH, IN FOUR SENTENCES
+---------------------------------------------------------------------------
+
+    The kasi economy isn't one business. It's the spaza, the builder, the
+    fruit seller at the rank and the student selling fragrances from a
+    backpack, and every one of them runs on cash, WhatsApp and a
+    notebook.
+
+    Akayza gives each of them the tools for how their kind of business
+    actually works: an Order Book, a Loan Book, ordering from the
+    suppliers they already use, and a Market that shows what's moving
+    around them.
+
+    When cash changes hands between two Akayza users, both phones
+    confirm the amount over Bluetooth, on the spot, with no signal. We
+    call it the Cash Handshake.
+
+    Everything they do builds a record that they own, which proves
+    their business is real to the next supplier, client or fund that
+    asks.
+
+
+3. WHY THIS WINS
+---------------------------------------------------------------------------
+
+The judging frame is "Build for Use": identified users, a validated
+problem, security-by-design, a sustainability plan, measurable impact.
+
+  A. IT'S BUILT FOR THE TYPES, NOT FOR "THE INFORMAL SECTOR"
+     Most apps for this market pick one type (usually the spaza) and
+     treat everyone else as an edge case. Akayza starts with "what kind
+     of business are you?" and arranges the same small set of tools
+     around the answer. A builder sees jobs and stage payments. A spaza
+     sees stock and credit. A reseller sees orders and who still owes.
+     One app, one data model, many ways of working. See V1_03, section 2.
+
+  B. USEFUL WITH ZERO SUPPLIERS, BETTER WITH THEM
+     The Order Book and Loan Book work on day one, alone. Suppliers make
+     it better: ordering, deliveries and the Cash Handshake. Nobody is
+     told "connect a supplier to continue".
+
+  C. SUPPLIERS PAY, BUSINESSES DON'T
+     A clear sustainability answer, and a channel at the same time.
+     A wholesaler that onboards its own spaza customers gets their
+     orders in one place and their payments confirmed. Every supplier
+     brings dozens of businesses with it.
+
+  D. CASH HANDSHAKE: THE LIVE MOMENT
+     Two phones on camera, no signal, both confirming R2,340 on
+     delivery. Then a deliberately wrong amount becomes a dispute live.
+     Then a tampered record breaks its hash chain. A cybersecurity panel
+     remembers that sequence.
+
+  E. THE GOVERNMENT IS ASKING FOR THE RECORD
+     The Spaza Shop Support Fund lost 354 applications to verification
+     failures. Government advice to homeowners hiring builders is to
+     "keep payment records". Akayza is how a cash business produces
+     one. The co-host, the Centre for Public Service Innovation, will
+     recognise both.
+
+
+4. WHAT IT IS NOT
+---------------------------------------------------------------------------
+
+    - Not a lender and not a wallet. We hold no money and grant no
+      credit. A supplier may offer its own customers terms. That's the
+      supplier's decision.
+    - Not a marketplace that invents relationships. It digitises the
+      supplier relationships businesses already have, and helps them
+      find more.
+    - Not bookkeeping for somebody else's benefit. Every tool answers a
+      question the owner already asks: who owes me, what do I owe, what
+      should I reorder.
+
+
+5. HOW IT MAPS TO THE THEMES
+---------------------------------------------------------------------------
+
+    MAIN THEME -- "Build for Use: Igniting Capabilities for Markets"
+        Both sides of a real market, businesses and their suppliers, on
+        phones they already own, working offline where trade happens.
+
+    TRACK -- Kasi and Street Economy
+        Every type in the track, not just one of them.
+
+    SECURITY-BY-DESIGN
+        Role-pinned API, the server trusts no client claim, Ed25519 hash
+        chains, salted Bluetooth commitments, independent amount entry,
+        owner-held data, expiring share links. See V1_05.
+
+    SUSTAINABILITY
+        Free for informal businesses, always. Suppliers pay: a
+        subscription for the supplier tools, clearly labelled sponsored
+        placement in the Market, and (with the business's consent)
+        verified reports when offering terms.
+
+    MEASURABLE IMPACT (pilot metrics)
+        - businesses active weekly, by type
+        - share of cash handovers confirmed by Cash Handshake
+        - disputes raised on the spot vs. discovered later
+        - time from order to delivery; share of orders completed
+        - suppliers offering terms on the strength of a record
+
+    OPEN SOURCE AGENDA (optional; an IP decision, V1_13 Q3)
+
+
+6. THE ROADMAP SLIDE
+---------------------------------------------------------------------------
+
+    - more types: the salon's bookings, the mechanic's job cards, the
+      caterer's event orders
+    - neighbour witnessing: plain cash sales witnessed by nearby
+      Akayza phones, amount hidden (same radio, different packet)
+    - the home record: a homeowner's full build history from their
+      builder's jobs, as evidence for insurers on communal land
+    - USSD / feature-phone path for recording sales
+    - supplier terms and credit, only ever through licensed partners
+
+
+7. WHAT WE DO NOT CLAIM
+---------------------------------------------------------------------------
+
+    - A Cash Handshake proves the two registered counterparties both
+      signed the same amount within 60 seconds of each other. It
+      doesn't prove the notes were real, that nobody was pressured, or
+      that the phones were in the same place: radio packets can be
+      relayed, and a QR code can travel as a screenshot. (rev 4)
+    - A hash chain proves nothing changed after it was sealed, not that
+      it was true when entered.
+    - The reputation describes a track record. It doesn't predict
+      repayment, and there is no outcome data yet.

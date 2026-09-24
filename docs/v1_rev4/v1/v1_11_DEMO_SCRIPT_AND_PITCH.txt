@@ -1,0 +1,187 @@
+===========================================================================
+V1_11 -- THE PITCH AND THE LIVE DEMO
+===========================================================================
+
+This script is for 5:00; confirm the length and Q&A time from the
+workspace. The expected structure is Problem; Solution; TRL 3;
+Technical architecture; User journey (= the live demo); Go-to-market.
+
+
+1. THE SLIDES
+---------------------------------------------------------------------------
+
+  SLIDE 1  AKAYZA -- tagline (V1_01 section 1)
+           Four small photos or icons: spaza · builder · student
+           reseller · food stall. Said out loud at the bottom:
+           "We brought infrastructure libraries we wrote before this
+            weekend -- listed in REUSE.md. Everything on screen was
+            built this weekend."
+
+  SLIDE 2  PROBLEM
+           "Cash. WhatsApp. A notebook."
+           ~R900bn · ~80% unregistered · fewer than 9% with bank loans
+           354 Spaza Fund applications that couldn't be verified
+           "Keep payment records" -- government advice on hiring a
+           builder. Nothing in a cash yard makes one.
+           + one real quote from validation
+
+  SLIDE 3  SOLUTION
+           One app, arranged by business type:
+             Order Book · Loan Book · Stock from your suppliers ·
+             Market · Proof
+           + CASH HANDSHAKE: both phones confirm the cash, offline
+           Free for businesses. Suppliers pay.
+
+  (LIVE DEMO -- the user journey)
+
+  SLIDE 4  ARCHITECTURE + SECURITY
+           The V1_07 diagram. Three lines: role-pinned API, no trust in
+           client claims · Ed25519 hash chains · salted, keyed Bluetooth
+           packets with no amounts on air.
+           The honest-limit sentence, in a box.
+
+  SLIDE 5  TRL 3 + IMPACT
+           WORKS: type-based onboarding, books, ordering, Cash Handshake,
+             disputes, tamper detection, reputation, expiring sharing
+           NOT YET: iOS, background Bluetooth, in-app payments, a pilot
+           WE'LL MEASURE: weekly active businesses by type · % of cash
+             handovers confirmed by both · disputes caught on the spot
+
+  SLIDE 6  GO-TO-MARKET
+           Free for informal businesses, always.
+           Suppliers pay: supplier tools subscription · clearly
+             labelled sponsored placement · consented customer records
+             when offering terms
+           Channel: every supplier onboards its own customers
+             (a wholesaler brings its spazas; a hardware store brings
+             its builders)
+           Roadmap: more types · neighbour witnessing for cash sales ·
+             the home-build record · USSD · terms and credit only via
+             licensed partners
+
+  BACKUP: threat model · where it stops working · the reputation
+          dimensions · demo vs production · the packet layout ·
+          "how is this different?" (section 4)
+
+
+2. THE 5-MINUTE SCRIPT
+---------------------------------------------------------------------------
+
+  0:00  SLIDE 1 (Risuna)
+        "Nomsa runs a spaza in Tembisa. Sipho builds rooms in Seshego.
+         Lerato sells fragrances to other students. Three different
+         businesses, and all three run on cash, WhatsApp and a
+         notebook." + the reuse line.
+
+  0:25  SLIDE 2 (Risuna): the problem. End on the quote.
+
+  0:55  SLIDE 3 (Risuna)
+        "Akayza gives each of them the tools for how their kind of
+         business actually works, connected to the suppliers they
+         already buy from. Let's show you."
+
+  1:10  DEMO -- two phones: Nomsa (spaza) and Mahlangu Wholesale
+        (Mandla drives and narrates the taps)
+
+   1:10  "Nomsa picked 'Spaza' at sign-up, so the home screen
+          leads with who owes money and what to reorder."
+   1:20  LOAN BOOK: Thandi takes bread and milk, R48, pays Friday.
+          A receipt goes out.
+   1:35  REORDER from Mahlangu Wholesale, R2,340. Phone B: accepted.
+   1:55  DELIVERY: both phones to AIRPLANE MODE, Bluetooth back on.
+          Supplier: "Collect cash R2,340". Nomsa: "Confirm you paid
+          R2,340?" -> Confirm. Both screens: ✓ CONFIRMED BY BOTH.
+          "No signal. Two phones. Two signatures."
+   2:20  DISPUTE: a second delivery. Nomsa taps "I paid a different
+          amount", R2,000. Both screens: ✗ AMOUNTS DON'T MATCH.
+          "The argument happens now, at the door, not next month."
+   2:35  Airplane mode off -> sync -> Proof: the green badge. Nomsa's
+          reputation goes from 599 to 600+ and her stage changes to
+          TRUSTED; the reason line now reads "You've paid Mahlangu
+          Wholesale on delivery 15 times." (Seeded for this moment,
+          V1_06 section 5.)
+   2:50  SHARE: link into the meeting chat. "Open it." A judge opens it
+          on their own phone. Nomsa's phone shows it was viewed. REVOKE,
+          and the judge's page dies.
+   3:15  TAMPER: tamper_demo.py changes Thabo's R2,340 to R23,400 in the
+          database. Checker page: CHAIN BROKEN, record frozen.
+   3:30  SAME APP, DIFFERENT HUSTLE: the phones are now Sipho (builder)
+          and Mrs Mokoena (identity switched during slide 3).
+          "Sipho's home shows jobs and the next stage payment, not
+          stock." Stage "walls up", in-app photo. Mrs Mokoena TYPES the
+          amount themselves -- R12,000 -- no prefill. ✓ Confirmed.
+          "The homeowner's receipt. The builder's track record. Same
+          handshake."
+
+  4:00  SLIDE 4 (Risuna): architecture + the honest-limit box
+  4:30  SLIDES 5-6 (Risuna): what works, what we'll measure, who pays
+  4:50  CLOSE (Mandla)
+        "Nobody opens Akayza to build a record. They open it to know
+         who owes them, to order stock, to get paid without an
+         argument. The record is what's left behind -- and for most of
+         them it's the first proof they've ever had."
+  5:00  END
+
+
+3. IF WE GET 7 MINUTES
+---------------------------------------------------------------------------
+
+    + Lerato (reseller) onboarding: a third home screen, +30 s
+    + the supplier's Customers tab: "who's gone quiet", +30 s
+    + PHANTOM_SALES flag live, +40 s
+    Add demo, never talking.
+
+
+4. Q&A -- ANSWERS READY
+---------------------------------------------------------------------------
+
+  "How is this different from Spazapp, Kasi App, HustleCheck...?"
+      They each pick one slice: buying stock for spazas, a POS, or
+      reviews. Akayza is arranged per business type, it's useful with
+      zero suppliers (Order Book and Loan Book stand alone), it
+      connects the suppliers a business ALREADY uses, and the Cash
+      Handshake gives cash a record that both sides confirm, offline.
+
+  "Why would suppliers pay?"
+      Orders from their existing customers in one list instead of
+      forty WhatsApp chats; cash on delivery that reconciles; knowing
+      who's gone quiet. We asked [validation supplier], who said
+      [quote]. Put the real answer here after the calls.
+
+  "Why business types? Isn't that just labels?"
+      The data model is shared on purpose, so it's cheap to support many
+      types. But what's on the home screen, what things are called and
+      which templates exist is the difference between a tool someone
+      uses and one they abandon. A builder doesn't have "orders", they
+      have jobs with stages.
+
+  "Can't two people just agree to lie in the handshake?"
+      Yes. It proves agreement, not truth. Patterns catch collusion over
+      time: a supplier with one customer, identical round amounts,
+      sales far above stock bought. It's still a long way better than
+      cash with no record at all.
+
+  "What if the customer doesn't have Akayza?"
+      The business records it anyway, and it counts as self-recorded:
+      still useful to them, and weighted lower. The handshake is for
+      handovers between two users, and suppliers are always users.
+
+  "Is this a credit score? Do you lend?"
+      No. It's a reputation the business owns and chooses to share. We
+      hold no money and grant no credit. A supplier may offer its own
+      customers terms, and anything more goes through licensed
+      partners.
+
+  "POPIA?"
+      Owner-held records, scoped and expiring share links, every view
+      logged, Loan Book customers never shared, no location tracking.
+
+  "What did you build this weekend?"
+      REUSE.md lists the libraries and where they came from. The git
+      history shows everything else committed after Friday 18:00.
+
+  "Why Android only? Battery? Feature phones?"
+      Android is what our users carry (say this only if validation
+      confirms it). iOS limits background Bluetooth, so it needs its own
+      design. Advertising for 60 seconds per handshake costs very
+      little battery. A USSD path for recording sales is on the roadmap.

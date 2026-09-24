@@ -1,0 +1,199 @@
+===========================================================================
+V1_07 -- ARCHITECTURE AND STACK
+The Akayza repository, its domains, and every library we bring in
+===========================================================================
+
+
+1. AKAYZA IS SEPARATE. THE RULES THAT KEEP IT SEPARATE
+---------------------------------------------------------------------------
+
+    - A NEW repository, created Friday 18:00, named akayza.
+    - Only the LIBRARIES in section 4 come across, in ONE labelled commit,
+      listed in REUSE.md with their source.
+    - NO product code is copied: no screens, services, feed logic,
+      ranking, demand logic, matching or verification designs. Akayza's
+      Order Book, Loan Book, ordering and Market are written fresh this
+      weekend, to this plan, and they are deliberately simpler.
+    - No shared database, no shared deployment, no shared accounts, no
+      shared API.
+    - The earlier product's name appears nowhere in the Akayza
+      repository, including commit messages and comments.
+
+Why this matters more than before: Akayza now has the same KIND of
+tools (books, supplier ordering, a feed). Similar features are fine.
+Copied code is not. It would blur what's ours from before and what's
+jointly built at the event. See V1_13 R6.
+
+
+2. THE SHAPE
+---------------------------------------------------------------------------
+
+    +------------------------------------------------------------------+
+    |  PHONE (Android, Expo) -- one app, two roles                     |
+    |   BUSINESS: Home · Market · Books · Stock · Proof                  |
+    |   SUPPLIER: Orders · Customers · Catalogue · Proof                 |
+    |   local: SQLite (events, outbox), Keystore key, BLE handshake    |
+    +-------------------------------+----------------------------------+
+                                    | HTTPS, JSON envelope, JWT
+    +-------------------------------v----------------------------------+
+    |  API (Flask + PostgreSQL)                                        |
+    |   accounts     users, roles, business_type, device keys, OTP     |
+    |   books        order_book, loan_book (and jobs with stages)      |
+    |   suppliers    profiles, service area, catalogue, verified flag  |
+    |   stock        orders business -> supplier, status transitions  |
+    |   market       the feed: 5 simple sections                       |
+    |   ledger       ingest sealed events, verify chains (TrustLedger) |
+    |   handshake    attestations, matching, disputes                  |
+    |   integrity    flags: CHAIN_BREAK, CLOCK_SKEW, PHANTOM_SALES ... |
+    |   reputation   score + reasons                                   |
+    |   share        links, view log, revoke, public checker page      |
+    +------------------------------------------------------------------+
+
+
+3. THE REPOSITORY
+---------------------------------------------------------------------------
+
+    akayza/
+    ├── README.md
+    ├── REUSE.md                 every reused library, where it came
+    │                            from, the source commit hash
+    ├── libs/                    vendored in ONE commit
+    ├── backend/
+    │   ├── app.py
+    │   ├── checker.py           public checker page ONLY: own process,
+    │   │                        own port, read-only DB user (rev 4)
+    │   ├── src/__init__.py      create_app()
+    │   ├── src/domains/
+    │   │   ├── accounts/  books/  suppliers/  stock/  market/
+    │   │   ├── ledger/  handshake/  integrity/  reputation/  share/
+    │   ├── migrations/
+    │   ├── scripts/             seed_demo.py, tamper_demo.py
+    │   └── tests/               incl. test_vector.py, test_idor.py
+    ├── mobile/
+    │   ├── app/
+    │   │   ├── (onboarding)/    role -> business type -> phone OTP
+    │   │   ├── (business)/(tabs)/  home, market, books, stock, proof
+    │   │   └── (supplier)/(tabs)/  orders, customers, catalogue, proof
+    │   └── src/
+    │       ├── config/businessTypes.ts   labels, tab order, templates
+    │       ├── lib/crypto/  lib/ble/  lib/db/  lib/sync/
+    │       ├── features/    books, stock, market, handshake, proof
+    │       └── theme/  components/  services/api/
+    └── docs/
+        ├── CONTRACT.md          endpoints + JSON + test vector
+        └── HANDSHAKE.md         V1_04, cleaned up
+
+Each domain uses the same layout: api/ (routes: validate -> service ->
+envelope), services/ (logic, raises AppError), repositories/,
+models/, schemas/. Routes are thin, and every route pins a role.
+
+
+4. WHAT COMES IN AS LIBRARIES (declared)
+---------------------------------------------------------------------------
+
+Domain-agnostic infrastructure only. None of it knows what a spaza,
+builder or supplier is.
+
+  BACKEND
+    core/responses.py    {success, message, data | errors, code} envelope
+    core/exceptions.py   AppError hierarchy with stable codes
+    core/base_model.py   id + timestamps
+    core/decorators.py   ADAPT: the original imports its old user model
+                         in five places (checked 22 Sept). Rewrite the
+                         lookups against accounts/.
+    extensions pattern   unbound db / migrate / jwt / ma
+    rate limiter         Flask-Limiter wrapper + JSON 429s. Delete one
+                         lazy import of an old policy module.
+    audit/               typed audit events
+    idempotency/         re-sent offline batches land once
+    queue/               background writes (wrap worker threads in an
+                         app context; they have none)
+    validation/          shared validators
+
+  MOBILE (copied once, then owned by Akayza)
+    services/api/apiClient.ts   Axios: unwraps the envelope, attaches
+                                the token, throws a typed ApiError
+    services/storage/secureStorage.ts
+    theme/                      react-native-paper theme tokens
+    the mock-API seam pattern   every screen demos with no backend
+
+  CHECKED AND NOT USABLE: the old receipts/signing.py is a stub (all
+  "not implemented"). Signing is written fresh in lib/crypto.
+
+
+5. MOBILE STACK
+---------------------------------------------------------------------------
+
+Base: Expo SDK 57 · React Native 0.86 · React 19 · TypeScript. These are
+versions we already know work together, so there's no upgrade risk
+mid-weekend.
+
+    expo-router, expo-dev-client       routing; a dev build (Expo Go
+                                       can't load BLE modules)
+    react-native-paper, lucide-react-native, react-native-svg
+    @tanstack/react-query, zustand, axios, zod, react-hook-form
+    expo-sqlite                        the local event store + outbox
+    expo-secure-store                  Ed25519 private key (Keystore)
+    expo-crypto                        random bytes for keys + salts;
+                                       noble's own RNG may need a
+                                       polyfill on Hermes (V1_04 s8)
+    @noble/curves, @noble/hashes       Ed25519, SHA-256, HMAC in pure JS
+    @react-native-community/netinfo    real connectivity, gates sync
+    munim-bluetooth +                  BLE advertise + scan (IF the spike
+      react-native-nitro-modules       passes; else our Kotlin module)
+    expo-camera                        QR fallback, job-stage photos
+    react-native-qrcode-svg            show QR codes
+    expo-image-manipulator             shrink photos before upload
+    expo-sharing / Linking             share links to WhatsApp
+    expo-build-properties              Android SDK levels, cleartext
+                                       for the demo only
+
+    NOT: react-native-ble-plx (can't advertise), any blockchain, Expo Go.
+
+
+6. BACKEND STACK
+---------------------------------------------------------------------------
+
+    Python 3.12+, Flask 3.1, Flask-SQLAlchemy 3.1 / SQLAlchemy 2.0,
+    Alembic via Flask-Migrate, Flask-JWT-Extended, marshmallow 4,
+    Flask-Limiter 4, psycopg2, PostgreSQL.
+    NEW: cryptography (Ed25519 verify), hmac/hashlib (stdlib),
+    Jinja2 for the one public checker page.
+
+    STORAGE RULE (rev 4): never recompute a hash from a jsonb column.
+    PostgreSQL's jsonb reorders keys and normalises numbers, so the
+    stored JSON no longer matches what was signed. Keep the exact
+    canonical bytes in a BYTEA column (payload_canonical); the jsonb
+    copy is for queries only.
+
+    THE CHECKER PAGE (rev 4) runs as its own small Flask process
+    (checker.py) on its own port, with a read-only database user and
+    ONE route, /s/<token>. The tunnel points at it, never at the API
+    (V1_09 section 4). Share tokens are 128 random bits, stored only as
+    SHA-256 hashes, so a database leak exposes no working link.
+
+    Photos: stored on the API server's disk under /media for the demo,
+    each file's SHA-256 sealed in the event. Cloud storage is roadmap.
+
+
+7. THE CONTRACT (frozen Thursday)
+---------------------------------------------------------------------------
+
+    AUTH      POST /auth/otp/request · POST /auth/otp/verify
+              POST /me/device-key
+    PROFILE   GET/PATCH /me  (business_type, suburb; supplier: area)
+    BOOKS     GET/POST /books/orders · /books/loans · /books/jobs
+              POST /books/loans/<id>/payments
+    SUPPLIERS GET /suppliers/<id> · GET /suppliers/<id>/catalogue
+    STOCK     POST /stock/orders · POST /stock/orders/<id>/accept|
+              decline|deliver|complete  (role-pinned per transition)
+    MARKET    GET /market/feed
+    LEDGER    POST /events  (batch of sealed events)
+    HANDSHAKE POST /handshakes  (batch of payer attestations, each with
+              its transport byte; rev 4)
+    PROOF     GET /me/proof · GET /me/reputation
+    SHARE     POST /me/shares · DELETE /me/shares/<id> ·
+              GET /me/shares/<id>/views (rev 4) ·
+              GET /s/<token> (served by checker.py)
+
+    All under /api/v1 except the public /s/<token>.

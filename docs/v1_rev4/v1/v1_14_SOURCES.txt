@@ -1,0 +1,115 @@
+===========================================================================
+V1_14 -- SOURCES
+Every number we might say out loud, and where it comes from
+===========================================================================
+
+RULE: a number goes on a slide ONLY if it's in the VERIFIED section.
+
+
+VERIFIED (checked 22 September 2026)
+---------------------------------------------------------------------------
+
+  SPAZA SHOP SUPPORT FUND -- 354 applications could not proceed after
+  site visits/verification (non-existent businesses, ownership
+  discrepancies, applicant-operator inconsistencies); 2,369 approved;
+  R179.6m of R500m allocated by end of May 2026. DSBD briefing,
+  29 May 2026.
+    - https://www.sanews.gov.za/south-africa/government-approves-r1796-million-spaza-shop-support
+    - https://www.citizen.co.za/news/south-africa/r179-6m-approved-spaza-shop-fail-compliance-checks/
+    - https://www.timeslive.co.za/news/south-africa/2026-05-31-only-r1796m-of-r500m-spaza-shop-fund-allocated-as-licensing-hurdles-stall-applications/
+    - https://www.gov.za/news/media-statements/small-business-development-and-trade-industry-and-competition-update-spaza
+
+  TOWNSHIP ECONOMY -- ~R900bn; nearly 80% of surveyed township
+  businesses unregistered; fewer than 9% with bank-loan access; spaza
+  segment ~R180bn a year. Standard Bank Township Informal Economy
+  Report (research March-May 2025).
+    - https://www.moneyweb.co.za/news/south-africa/four-in-five-township-businesses-unregistered-as-economy-nears-r1trn/
+    - https://www.forbesafrica.com/current-affairs/2025/10/17/despite-their-critical-importance-most-township-businesses-in-south-africa-remain-unregistered-report-finds
+    - https://dailyinvestor.com/retail/63998/south-africas-hidden-r900-billion-economy-booming/
+
+  INFORMAL EMPLOYMENT -- 19.5% of total employment, Q4 2024 (Stats SA).
+    - https://www.statssa.gov.za/?p=18255
+    - https://www.statssa.gov.za/?p=19240
+
+  ROGUE BUILDERS -- government guidance: poor workmanship, unfinished
+  homes, builders who disappear after payment; homeowners told to
+  use registered builders and keep payment records; NHBRC fines up to
+  R25,000 per charge, and deregistration published in the Gazette.
+  Vuk'uzenzele, June 2026.
+    - https://www.vukuzenzele.gov.za/how-protect-your-home-investment-rogue-builders
+
+  SMALL CONTRACTORS -- small and micro enterprises now over 50% of
+  construction employment; finance access a top obstacle. Business
+  Day, 16 July 2026.
+    - https://www.businessday.co.za/companies/2026-07-16-construction-sector-wanes-as-small-contractors-become-biggest-employers/
+
+  CONSTRUCTION WORKFORCE -- construction employs about 1.2 million
+  people (7.8% of total employment); 62% work formally and 38%
+  informally, "although it is likely that the number of informal
+  workers is higher" (data as of Q3 2022). ILO, "A market systems
+  analysis of the construction sector in South Africa" (Nov 2024).
+  Checked 24 Sep 2026.
+    - https://www.ilo.org/sites/default/files/2025-02/MSA%20Report%20South%20Africa.pdf
+
+  CASH DOMINATES (qualitative, no percentage)
+    - https://businesstech.co.za/news/finance/839918/cash-is-still-king-in-south-africas-r900-billion-hidden-economy/
+    - https://scrolla.africa/cash-still-rules-south-africas-r900-billion-township-economy/
+
+
+NOT VERIFIED -- do not use
+---------------------------------------------------------------------------
+
+  "Cash is over 56% of retail volume" (Trader Passport spec). The only
+  "56%" we found is an older claim that 56% of informal retailers have
+  NO BANK ACCOUNT (Supply Chain Lab blog, 2020), which is a different
+  statistic, is dated, and has no primary source.
+  "90% of South Africans cash-build homes" and "11.54% of homes insured"
+  (IOL Property). No attributed source.
+  Anything about Android's share among our users, unless our own
+  validation calls back it up.
+
+
+THE LANDSCAPE (for the "how are you different?" answer, not for slides)
+---------------------------------------------------------------------------
+
+  Spazapp: bulk buying for spazas from large suppliers
+    - https://www.news24.com/business/Tech/spazapp-aims-for-a-cape-expansion-drive-20171208
+  BFA Global, Digital Spazas programme
+    - https://bfaglobal.com/our-work/digital-spazas-digitizing-and-connecting-informal-spaza-shops-in-south-africas-townships/
+  Kasi App (POS + inventory) · Kasi Money (banking for hustlers) ·
+  HustleCheck (reviews) · Kasi Hustlers (marketplace)
+    - https://www.kasiapp.co.za/
+    - https://kasi.money/
+    - https://www.hustlecheck.co.za/
+    - https://play.google.com/store/apps/details?id=za.co.tekroots.kasihustlers
+
+  Each takes one slice. None arranges tools by business type, connects
+  the suppliers a business already uses, and confirms cash between the
+  two sides.
+
+
+TECHNICAL SOURCES (for our decisions)
+---------------------------------------------------------------------------
+
+  react-native-ble-plx: no peripheral/advertising
+    - https://github.com/dotintent/react-native-ble-plx
+  react-native-peripheral: iOS only
+    - https://github.com/petrbela/react-native-peripheral
+  munim-bluetooth: Android advertising + scan + GATT server, Nitro,
+  Expo plugin; npm 0.8.1 (updated 19 Sept 2026)
+    - https://github.com/munimtechnologies/munim-bluetooth
+  scrcpy: USB mirroring, multiple devices, --show-touches
+    - https://github.com/Genymobile/scrcpy
+
+
+OUR OWN DOCUMENTS THIS BUILDS ON
+---------------------------------------------------------------------------
+
+  - TrustLedger GKHack26 team brief, 19 Sept 2026 (R. Mahani)
+  - Joint project brief, 19 Sept 2026
+  - TrustLedger Trader Passport technical spec, 22 Sept 2026
+  - Akayza Proof Layer technical spec, 22 Sept 2026 (R. Mahani):
+    ledger, handshake verification, integrity, reputation formulas,
+    sharing. Folded into this set as revision 4.
+  - GKHack26_Problem_and_Solution.txt ("KasiMarket"), 21 Sept 2026.
+    Superseded by this set.

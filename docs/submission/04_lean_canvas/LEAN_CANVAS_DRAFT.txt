@@ -1,0 +1,108 @@
+===========================================================================
+[DRAFT -- changes as we build] LEAN BUSINESS CANVAS (due Sat 21:30) -- PASTE INTO SONKE
+Source of truth for pasting (moved here from 06). (est.) = estimate.
+===========================================================================
+
+7. LEAN BUSINESS CANVAS -- PASTE INTO SONKE (due Sat 21:30)
+---------------------------------------------------------------------------
+
+  THE PROBLEM STATEMENT
+    South Africa's township economy turns over about R900 billion a
+    year, R180 billion of it through spaza shops, yet nearly 4 in 5
+    township businesses are unregistered and fewer than 9% can get a
+    bank loan (Standard Bank, 2025). Trade happens in cash, credit to
+    customers lives in notebooks, and orders and payments happen on
+    WhatsApp, so nothing a trader does leaves proof. When government
+    opened the R500 million Spaza Shop Support Fund, 354 applications
+    failed verification and only R179.6 million had been allocated by
+    May 2026 (DSBD, 29 May 2026). Real businesses cannot prove they
+    are real.
+
+    The same gap costs owners every day. Construction employs about
+    1.2 million people, 38% of them informally (ILO, 2024), and
+    builders and homeowners argue over changes and payments that were
+    only ever agreed by word of mouth. Credit given to spaza customers
+    is tracked from memory, and cash handed to a supplier's counter or
+    driver has no receipt both sides agree on.
+    [add lived experience + validation calls]
+
+  SOLUTION & FEATURES
+    Akayza is an Android app for informal traders: builders, spaza
+    shops and every hustle. Traders use it free; suppliers pay.
+    - Credit book: who owes me, repayments, WhatsApp receipts.
+    - Order again from the suppliers I already use; collect or send my
+      runner with a one-time pass; pay cash or PayFast.
+    - Cash Handshake: both phones confirm the amount in seconds, even
+      offline. A mismatch becomes a dispute, never a silent loss.
+    - Builders: jobs in stages, changes agreed with one tap, stages
+      signed off by the homeowner with photos.
+    - My record: a sealed, tamper-evident history the owner shares by
+      link for a set time and can revoke. Reputation with plain
+      reasons -- not a credit score.
+    - Sign in with email or Google, then a PIN or fingerprint.
+
+  UNIQUE VALUE PROPOSITION
+    Your business, proven by the people you trade with. Every cash or
+    digital payment confirmed by both sides is sealed into a record the
+    owner holds, so a shop or builder can show a funder, supplier or
+    client real proof of trading -- without a bank account, a
+    marketplace, or giving their data away.
+
+  UNFAIR ADVANTAGE
+    Proof is designed in, not added on: per-phone signing keys, a
+    two-party cash handshake that works offline, hash-chained records
+    re-verified on every view, and post-quantum (ML-DSA) sealed roots.
+    Cash counts the same as digital, so cash traders are not
+    penalised. Our team already won LP Dev DataQuest 2026 with a
+    tamper-evident decision ledger, and we have a researched
+    60-screen design and real build footage from a township house.
+
+  CUSTOMER SEGMENTS
+    HYBRID-FACING: traders are our users; suppliers are our customers.
+    Users (free): township builders and small contractors (and the
+    homeowners they build for); spaza owners in townships (pilot: Tembisa and
+    Seshego, Polokwane), Android smartphone, cash-based, buying from
+    2-5 regular suppliers.
+    Payers: wholesalers and distributors serving those shops
+    (subscriptions); development-finance programmes, fund
+    administrators and licensed lenders checking records a trader has
+    chosen to share (verification fees).
+
+  KEY METRICS
+    6-month pilot (est.): 1 wholesaler + 50 shops, 20 builders;
+    70% of pilot users active weekly; 60% of cash payments confirmed by
+    both sides; 3 funders or programmes checking shared records; zero
+    unresolved chain breaks.
+    Year 1 (est.): 1,000 active traders, 15 suppliers, ~R55,000 monthly
+    revenue.
+
+  DISTRIBUTION CHANNELS
+    Trader-led: "Invite my supplier" sends the supplier a WhatsApp or
+    email invite from its own customer.
+    Supplier-led: one wholesaler onboards the shops it already serves
+    (~50 shops, est.).
+    A field agent at the wholesaler's counter during the pilot.
+    Every shared record link carries Akayza to funders and clients.
+    Download from Google Play; later, spaza and builder associations.
+
+  COST STRUCTURE
+    Running: pilot ~R460/month (DigitalOcean app R200, managed
+    PostgreSQL R250, domain R10; Cloudflare, Cloudinary media + malware
+    scanning, email, maps and monitoring on free tiers). Growth
+    ~R4,000-R4,700/month (AWS Cape Town hosting + database R1,500,
+    Cloudinary Plus R1,630, Cloudflare Pro R330, email R330, monitoring
+    R430). Once-off: Google Play R415.
+    Pilot ask: R300,000 for 6 months (builder stipends R96,000; field
+    agent R60,000; running costs R24,000; pilot data bundles R60,000;
+    POPIA legal review R30,000; test devices and contingency R30,000).
+    Break-even: pilot 2 suppliers on Starter; growth about 4 on Pro.
+
+  REVENUE STREAMS
+    Free for traders and builders, always, for the core tools.
+    Suppliers: Starter R299/month; Pro R1,499/month; ERP integration
+    R4,999/month + R15,000 setup (later).
+    ~1% commission on PayFast orders via split payments (none on cash).
+    Verification: ~R50 per record check by a funder or lender, with the
+    owner's consent each time; programme licences for fund
+    administrators.
+    Later: trader Pro at R49/month; share of VAS commission.

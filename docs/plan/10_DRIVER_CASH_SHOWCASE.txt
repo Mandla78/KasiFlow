@@ -1,0 +1,30 @@
+===========================================================================
+PLAN 10 -- DRIVER (CASH SHOWCASE)
+The second phone that makes "confirmed by both" possible for cash
+===========================================================================
+
+    Only exists for suppliers that accept cash. Seeded by the backend
+    (a name, an email + password, their supplier). Signs in, has
+    a device key, sees ONE screen (PDF p10).
+
+  TODAY (p10)
+      Deliveries: order number, trader, suburb, amount, "Cash".
+        [Navigate] opens Google Maps / Waze with the pin + landmark.
+        [Scan pass] opens the camera.
+      Collections at the counter.
+      [Scan an order pass]
+
+  AT THE DOOR
+      scan the trader's ORDER PASS -> the order opens (checked offline)
+      -> type the cash counted -> the Cash Handshake (PLAN 09)
+      -> Confirmed by both, or Amounts don't match.
+
+  WHAT A DRIVER CAN'T DO: browse, order, see anyone's books. Only
+  orders assigned to them.
+
+  ROADMAP (not this weekend): live tracking of the driver for the
+  trader, route + km + ETA, supplier staff management.
+
+  DEMO: the driver's phone is our second phone. Say on screen that the
+  driver account was set up by the backend, as a supplier's system
+  would.

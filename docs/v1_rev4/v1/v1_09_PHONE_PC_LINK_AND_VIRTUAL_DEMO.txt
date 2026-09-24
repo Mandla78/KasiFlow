@@ -1,0 +1,241 @@
+===========================================================================
+V1_09 -- LINKING THE PHONES TO THE PC, AND DEMOING OVER A VIDEO CALL
+===========================================================================
+
+The problem: we are virtual. The judges see a video feed, not a table.
+Our wow moment is physical (two phones near each other) and our
+product is a phone app. So the job is to get BOTH phone screens, live,
+into the call, crisp enough to read an amount. The whole thing must
+survive bad Wi-Fi.
+
+The answer, in one line: BOTH PHONES ON USB TO ONE LAPTOP. ADB REVERSE
+FOR THE NETWORK, SCRCPY FOR THE SCREENS, OBS TO COMPOSE, AND THE
+MEETING APP SHARES OBS.
+
+
+1. THE TOPOLOGY
+---------------------------------------------------------------------------
+
+    +-----------------------------  Mandla's laptop  -----------------+
+    |                                                                 |
+    |  PostgreSQL --- Flask API :5000 --- Metro :8081                 |
+    |                     ^                  ^                        |
+    |          adb reverse| (USB)            | adb reverse (USB)      |
+    |                     |                  |                        |
+    |  scrcpy "Nomsa" <---+-- PHONE A        |                        |
+    |  scrcpy "Supplier"<------ PHONE B -----+                        |
+    |  browser: checker page (localhost:5000/s/...)                   |
+    |                                                                 |
+    |  OBS: [phone A] [phone B] [checker page] [webcam] [slides]      |
+    |    |                                                            |
+    |    +--> share OBS window in the meeting app --> JUDGES          |
+    +-----------------------------------------------------------------+
+                PHONE A  <~~~~ Bluetooth ~~~~>  PHONE B
+                (side by side on the desk, 30 cm apart)
+
+WHY USB AND NOT WI-FI:
+    - adb reverse makes "localhost:5000" and "localhost:8081" on the
+      phone reach the laptop THROUGH THE CABLE. There is no LAN IP to
+      find, no router isolating clients, and nothing breaks if the
+      Wi-Fi changes.
+    - scrcpy over USB has ~35-70 ms latency and doesn't depend on Wi-Fi.
+    - The meeting app is then the ONLY thing using the internet.
+    - It makes the OFFLINE moment real (section 5).
+
+
+2. BRING-UP, EVERY TIME (scripted: demo_up.ps1)
+---------------------------------------------------------------------------
+
+    adb devices -l
+      -> note the two serials. Put them in the script once:
+         $A = "R58M123ABC"   # Nomsa, spaza (business)
+         $B = "2a3b4c5d"     # Mahlangu Wholesale (supplier)
+
+    adb -s $A reverse tcp:8081 tcp:8081
+    adb -s $A reverse tcp:5000 tcp:5000
+    adb -s $B reverse tcp:8081 tcp:8081
+    adb -s $B reverse tcp:5000 tcp:5000
+
+    scrcpy -s $A --window-title "Nomsa - spaza" --max-size 1280 `
+           --show-touches --stay-awake --no-audio
+    scrcpy -s $B --window-title "Mahlangu - supplier" --max-size 1280 `
+           --show-touches --stay-awake --no-audio
+
+    --show-touches draws a dot wherever a finger lands. Judges watching
+    a video see WHAT was tapped, which is essential when they can't see
+    your hand.
+
+adb reverse RESETS WHEN A CABLE IS RE-PLUGGED. If an app suddenly
+can't reach the server, re-run the four reverse lines first.
+
+
+3. OBS: ONE SCENE PER BEAT
+---------------------------------------------------------------------------
+
+Sources: two "Window Capture" (the scrcpy windows), one "Window
+Capture" (the browser with the checker page), "Video Capture Device"
+(webcam), and an image or window source for slides.
+
+    SCENE 1  SLIDES        slides full, webcam small in a corner
+    SCENE 2  TWO PHONES    phone A left, phone B right, both large,
+                           each labelled with a text source
+                           ("Nomsa · spaza", "Mahlangu Wholesale · supplier"),
+                           webcam small
+    SCENE 3  PHONE + WEB   phone A left, checker page right
+    SCENE 4  TAMPER        terminal (tamper_demo.py) + checker page
+
+Switch scenes with hotkeys (F1-F4), not the mouse.
+
+INTO THE CALL, TWO WAYS. Test both on the actual platform once the
+workspace invite says which one it is (Zoom / Teams / Meet / Discord):
+    (a) OBS "Fullscreen Projector" on a second monitor, and SHARE THAT
+        SCREEN. Usually the sharpest, because screen share is encoded
+        for text.
+    (b) OBS "Start Virtual Camera", and pick "OBS Virtual Camera" as the
+        camera. This always works, but webcam encoding blurs small text.
+    Default to (a). Keep (b) one click away.
+
+Set OBS to 1920x1080, 30 fps. In the meeting app, turn on "optimise
+for video" only if (a) looks choppy when switching scenes.
+
+
+4. THE CHECKER PAGE: LET A JUDGE OPEN IT THEMSELVES
+---------------------------------------------------------------------------
+
+The strongest virtual moment we have: drop the share link in the
+meeting chat, a judge opens it on THEIR OWN phone, and a few seconds
+later we revoke it and their page dies.
+
+To make localhost reachable for that, and only for that, run a
+temporary public tunnel:
+
+    winget install Cloudflare.cloudflared
+    cloudflared tunnel --url http://localhost:5001     # checker.py ONLY
+
+It prints an https://<random>.trycloudflare.com address. No account
+is needed. The share-link generator uses that address as its base URL
+(PUBLIC_BASE_URL in the backend .env).
+
+SECURITY NOTE, and say it if asked: the tunnel reaches ONLY the
+checker page process (checker.py, port 5001). It has one route,
+/s/<token>, and a read-only database user. The API on port 5000 is
+never exposed to the internet. The data is synthetic, and the tunnel
+is closed right after. Start it just before the demo, and stop it
+after. (rev 4: revision 3 tunnelled the whole API, and a cybersecurity
+panel would ask why.)
+
+
+5. THE OFFLINE MOMENT, HONESTLY
+---------------------------------------------------------------------------
+
+On camera: pull down BOTH phones' quick settings and turn on AIRPLANE
+MODE, then turn BLUETOOTH back on. A delivery yard has no signal, and
+the handshake must work with neither side online. Android allows Bluetooth in
+airplane mode and remembers the choice. The judges see the airplane
+icon on the mirrored screen.
+
+Why the demo keeps working: USB is not a network interface. adb,
+scrcpy and Metro keep running over the cable while the phone genuinely
+has no internet.
+
+THE ONE IMPLEMENTATION RULE THIS DEPENDS ON: sync must be gated on
+NetInfo's isInternetReachable, NOT on "did the request succeed". Over
+adb reverse, a request to localhost:5000 would succeed even in
+airplane mode, and the app would sync while claiming to be offline.
+That would quietly falsify the demo. Gate it properly and the app is
+honestly offline. Then airplane mode off -> NetInfo fires -> sync ->
+the checker page updates on screen.
+
+
+6. RESETTING BETWEEN RUN-THROUGHS
+---------------------------------------------------------------------------
+
+    python scripts/seed_demo.py --reset
+
+and, in the app's hidden dev menu, "Use demo identity: Nomsa / Mahlangu / Sipho / Mokoena".
+
+WHY A DEMO IDENTITY IS NEEDED (catch this early): the seeded nine weeks
+must be signed with the SAME private key phone A uses, or the chain
+breaks at the first live entry. A key generated in the phone's Keystore
+can't be exported to the seed script. So for the demo only:
+seed_demo.py generates the demo keypairs, and the app's dev menu
+loads the demo private key and pulls the chain head (last sequence
+number + hash) from the server. Label it DEMO in the UI, and list it
+on the production-differences slide. Real users' keys never leave the
+phone.
+
+
+6B. THE SECOND BUSINESS TYPE WITHOUT A THIRD PHONE
+---------------------------------------------------------------------------
+
+The builder segment (V1_11) needs a builder and a homeowner. We don't
+need two more phones for it: switch demo identities in the dev menu,
+with phone A becoming "Sipho Builders" and phone B "Mrs Mokoena". It
+takes about 5 seconds and happens off camera, during slide 4. The home
+screen visibly rearranges itself for a builder, which is the point of
+the segment.
+
+If a THIRD phone is available, give it the builder permanently. That's
+one more scrcpy window and one more pair of adb reverse lines, and it
+removes a live identity switch from the demo. It's better, but not
+required.
+
+
+7. THE BACKUP VIDEO: NON-NEGOTIABLE
+---------------------------------------------------------------------------
+
+Record the full demo with OBS (Start Recording) on Saturday night and
+again Sunday morning after the final rehearsal. Keep the file open in
+a player, paused at 0:00, on the second monitor.
+
+If anything fails live: "The radio doesn't love video calls, so here
+is the run from this morning." Then play it, and carry on narrating.
+Judges forgive a fallback. They don't forgive two minutes of silence.
+
+Also: put one screenshot per beat into the slides as a third line of
+defence.
+
+
+8. PRE-DEMO CHECKLIST (30 minutes before)
+---------------------------------------------------------------------------
+
+    PHONES
+    [ ] both at 100%, and charging through the hub
+    [ ] Do Not Disturb ON (no WhatsApp pop-ups on a mirrored screen)
+    [ ] notification shade cleared
+    [ ] plain wallpaper, normal font size, brightness max
+    [ ] Bluetooth ON, battery saver OFF, Akayza "Unrestricted"
+    [ ] demo identities loaded; seed reset done; one test sale OK;
+        tamper_demo.py --restore run
+    [ ] phones 30 cm apart, screens up, not touching metal
+
+    LAPTOP
+    [ ] Windows Focus Assist / Do Not Disturb ON
+    [ ] close WhatsApp Desktop, email, anything that pops up
+    [ ] PostgreSQL, API, checker.py, Metro, both scrcpy windows, OBS
+        all running
+    [ ] adb reverse re-run for both phones
+    [ ] cloudflared running against port 5001 (checker.py, NOT the
+        API); PUBLIC_BASE_URL set; checker page loads
+    [ ] backup video loaded and paused
+    [ ] power cable in
+
+    CALL
+    [ ] joined 10 min early, screen share tested with the organisers
+    [ ] internet: ethernet or a DEDICATED hotspot (not the demo phones)
+    [ ] Risuna on the call, slides in sync, knows the cue lines
+    [ ] one person drives (Mandla: phones and OBS), one narrates
+        and fields Q&A (Risuna). Decide this, don't improvise it.
+
+
+9. IF THE BLUETOOTH MISBEHAVES LIVE
+---------------------------------------------------------------------------
+
+In order, and never more than 20 seconds on each:
+    1. bring both apps to the foreground, and move the phones closer
+    2. toggle Bluetooth off/on on phone B
+    3. switch to the QR HANDSHAKE (V1_04, section 8C): the payer scans
+       the payee's code, then the payee scans the payer's reply, all on
+       camera. Same attestation and server path; the server records
+       that it went by QR. Say: "Same handshake, different wire."
+    4. play the backup video

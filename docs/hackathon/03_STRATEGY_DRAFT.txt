@@ -1,0 +1,287 @@
+===========================================================================
+GKHack26 -- STRATEGY DRAFT (market, business, pitch, plan)
+Draft 24 Sep 2026. Every number marked (A) is OUR ASSUMPTION: say so,
+or validate it before it goes on a slide. Unmarked numbers are in
+docs/v1_rev4/v1/v1_14_SOURCES.txt VERIFIED.
+===========================================================================
+
+
+1. THREE CALLS TO MAKE TODAY
+---------------------------------------------------------------------------
+
+  A. THE CHALLENGE: STAY ON "BRAND NEW".
+     Street Economy is about CONSUMERS discovering and trusting street
+     vendors (customer engagement). Akayza strengthens the trader's
+     SUPPLIER relationship and proves the business is real. It's a
+     better fit for Brand New, which is judged purely on the criteria.
+     Update the Sonke project overview (the email still says "CHANGE
+     THIS"). The trader IS the consumer of the app, which answers
+     "consumer-facing".
+
+  B. THE BUILD WINDOW IS ~41 HOURS, NOT 48.
+     Fri 16:00 kick-off -> Sun 09:00 hard submission, and the slides
+     and video must be done BEFORE 09:00. Take away keynotes, the
+     mentor session, workshops, war room, form deadlines and sleep,
+     and it's about 27 working hours each (~54 person-hours) against
+     our ~63-hour estimate. The builder flow moves to "if time",
+     shown with the design screens otherwise.
+
+  C. THE ORGANISERS SAY "START BUILDING TO TRL 4."
+     Our "no code before Friday" rule assumed pre-building wasn't
+     allowed. Their own email says start building. Your call: starting
+     the boring parts today (backend skeleton from our libraries, app
+     shell, the crypto test vector) buys back the missing hours. If we
+     do, keep the commit history honest.
+
+
+2. PROBLEM STATEMENT (mentor session Fri 19:00; max 2 paragraphs)
+---------------------------------------------------------------------------
+
+  South Africa's township economy is worth about R900 billion a year,
+  and spaza shops alone about R180 billion. Yet nearly four in five
+  township businesses are unregistered and fewer than 9% can get a
+  bank loan (Standard Bank Township Informal Economy Report, 2025).
+  The trade runs on cash, WhatsApp and a notebook: a spaza reorders
+  from the same wholesaler every week by phone, pays the driver in
+  cash, and neither side gets a record both of them agree on.
+
+  Without a record, a real business can't prove it exists. When
+  government opened the R500 million Spaza Shop Support Fund, 354
+  applications failed verification after site visits, and only
+  R179.6 million had been allocated by May 2026 (DSBD, 29 May 2026).
+  [ONE LINE OF LIVED EXPERIENCE HERE: a spaza owner or supplier from
+  our validation calls, first name + permission.]
+
+
+3. THE OFFER, IN ONE BREATH
+---------------------------------------------------------------------------
+
+  Akayza is the free business app for spaza shops (and builders):
+  a credit book, one-tap reorders from the suppliers they ALREADY buy
+  from, paid by PayFast or confirmed-by-both cash, and a record the
+  owner owns and can share to prove the business is real.
+
+  The insight: informal businesses already know who they buy from.
+  We don't build a marketplace or recommend products; we make the
+  existing supplier relationship digital, paid and provable.
+
+
+4. BUSINESS MODEL -- TRADERS FREE, SUPPLIERS PAY
+---------------------------------------------------------------------------
+
+  WHO PAYS    (A = assumption; validate with one supplier call)
+    Supplier Starter    R299 / month (A)   independent supplier, up to
+                                           50 trader customers
+    Supplier Pro        R1,499 / month (A) wholesaler: drivers, cash
+                                           reconciliation, up to 500
+                                           customers
+    Integration         R4,999 / month + R15,000 setup (A)
+                                           ERP / API, big distributors
+    Traders             FREE, always
+
+  WHY A SUPPLIER PAYS: orders from existing customers in one list
+  instead of forty WhatsApp chats; payments confirmed (PayFast, or
+  cash confirmed by both, so the driver's cash reconciles); a clear
+  picture of who orders and who has gone quiet.
+
+  MONEY FLOW: PayFast pays the supplier directly. Akayza never holds
+  money, so it's not a payment service. The supplier pays PayFast's
+  own fees: card 3.2% + R2, Instant EFT 2.0% (min R2), ex VAT
+  (payfast.io/fees, checked 24 Sep 2026).
+
+  COMMISSION: ~1% of each digital (PayFast) order (est.), via PayFast
+  SPLIT PAYMENTS, so Akayza receives its share without holding the
+  supplier's money. Cash orders: no commission.
+  PHASE 2 (large trader base): trader premium subscription (~R49/month
+  est.; core stays free) and minimal, labelled supplier promotions.
+  ERP INTEGRATION is built this weekend (API keys + product/stock push
+  + order webhook), not only a slide. See 05_WHY_AKAYZA_TEAM_BRIEF.
+
+  LATER (roadmap, not revenue claims): with the trader's consent,
+  verified records for funders and suppliers offering terms, through
+  licensed partners only. We never lend.
+
+
+5. COST STRUCTURE AND THE ASK
+---------------------------------------------------------------------------
+
+  RUNNING COSTS PER MONTH (A)
+    Hosting: server + managed PostgreSQL          R1,500
+    Cloudinary (paid tier once past free)         R1,800
+    Email service (free tier -> small paid)       R0-R400
+    Mapbox (free tier covers a pilot)             R0
+    Domain, monitoring, misc                      R300
+    ---------------------------------------------------------
+    TECH                                          ~R4,000 / month
+    Once-off: Google Play developer account ~R450
+
+  THE ASK: ~R300,000 FOR A 6-MONTH PILOT (A)
+    Founders' stipends  2 x R15,000 x 6           R180,000
+    Field agent (onboarding in Tembisa) R8,000 x 6 R48,000
+    Tech (6 x R4,000)                              R24,000
+    Pilot data bundles for 50 traders R100 x 6     R30,000
+    POPIA / legal review                           R15,000
+    Onboarding materials                           R8,000
+    ---------------------------------------------------------
+    TOTAL                                          R305,000
+
+  BREAK-EVEN ON RUNNING COSTS: tech + one field agent is ~R12,000 a
+  month, which is 8 wholesalers on Pro (A).
+
+
+6. GO-TO-MARKET -- SUPPLIER-LED
+---------------------------------------------------------------------------
+
+  PHASE 1 (6-week pilot, Tembisa): 1 wholesaler + the ~50 spazas it
+    already delivers to; 1 hardware store + 10 builders. The supplier
+    brings its own customers; each spaza gets the app free.
+  PHASE 2: 10 wholesalers across Ekurhuleni.
+  PHASE 3: API integrations with distributors that run ERPs.
+  PARTNERS TO APPROACH: DSBD / SEFA (records make fund verification
+    cheaper: the 354), CPSI (co-host), wholesaler associations.
+  PILOT METRICS: weekly active traders · share of orders paid by
+    PayFast · share of cash handovers confirmed by both · disputes
+    caught at the door vs later · repeat orders per trader.
+
+
+7. COMPETITIVE ANALYSIS (for the slide)
+---------------------------------------------------------------------------
+
+    Spazapp              bulk buying for spazas from big suppliers
+    Kasi App             POS + inventory for the shop
+    Kasi Money           banking for hustlers
+    HustleCheck          reviews of informal businesses
+    BFA Digital Spazas   programme to digitise and connect spazas
+    WhatsApp + notebook  what traders actually use today (the real
+                         competitor)
+
+  WHAT ONLY AKAYZA DOES: connects the suppliers a trader ALREADY
+  uses (no marketplace), confirms cash between the two sides, and
+  gives the owner a sealed record they control. Free for traders.
+  (Sources: V1_14 "The landscape".)
+
+
+8. HOW WE SCORE ON EACH CRITERION
+---------------------------------------------------------------------------
+
+    Innovation 15   relationship-first (not a marketplace); cash
+                    confirmed by both; owner-held provable record
+    Technical 15    working app + API + PayFast sandbox + sealed
+                    records + tamper demo; libraries for scale
+    Design 10       the UX PDF (60 screens); one number leads each
+                    screen; offline states
+    Security 10     SSDLC form; threat model (V1_05); POPIA; privacy
+                    slide; no money held; role-pinned API
+    Business 15     suppliers pay; figures above; supplier-led GTM
+    Quantum +5      see section 9
+
+
+9. THE QUANTUM BONUS (5 points we can actually earn)
+---------------------------------------------------------------------------
+
+  THE REAL REASON: a trader's record must stay trustworthy for years.
+  A future quantum computer could forge today's Ed25519 signatures,
+  so an old record could be faked. SHA-256 hashing stays safe.
+
+  OUTLINE (2 points): "Records are post-quantum ready: hybrid
+    signatures, Ed25519 + ML-DSA (NIST FIPS 204)."
+  IMPLEMENT (the rest): the SERVER's seal on each record event is
+    signed twice, Ed25519 + ML-DSA-65. The public record page shows
+    "post-quantum signature verified". Library: @noble/post-quantum
+    (MIT, supports ML-DSA per FIPS 204; pure JS, not constant-time,
+    which is fine for verifying public records). Phones keep Ed25519
+    this weekend; roadmap: phone-side hybrid.
+  COST: about 2-3 hours. Do it after the must-haves, never before.
+
+
+10. THE 3-MINUTE SALES PITCH
+---------------------------------------------------------------------------
+
+    0:00  PROBLEM (20 s): R900bn cash economy, no records; 354 Spaza
+          Fund applications failed verification. One lived line.
+    0:20  OFFER (30 s): free app for spazas; reorder from YOUR
+          suppliers; pay by PayFast or cash confirmed by both; a
+          record you own.
+    0:50  DEMO (50 s): Nomsa reorders from Mahlangu -> PayFast ->
+          paid; a cash delivery confirmed by both; her record shared.
+    1:40  WHY US (20 s): not a marketplace; the only one that proves
+          cash between both sides; post-quantum-ready records.
+    2:00  MONEY (40 s): suppliers pay R299 / R1,499 a month; we never
+          hold money; running cost ~R4k/month; WE NEED R300k for a
+          6-month Tembisa pilot; break-even at 8 wholesalers.
+    2:40  CLOSE (20 s): "Every kasi hustle, in flow."
+
+
+11. SLIDES (more than 10; order follows their list)
+---------------------------------------------------------------------------
+
+     1  Akayza + team + reuse line
+     2  Problem statement justification (chart: R900bn / <9% loans;
+        the 354; a photo)
+     3  Who: Nomsa the spaza owner; Mahlangu the supplier (+ builder)
+     4  Solution offering
+     5  User journey story (Nomsa's week, from the UX PDF screens)
+     6  Demo screens / video link
+     7  Technological architecture (app -> API -> PayFast, Cloudinary,
+        Mapbox, email; sealed record; post-quantum seal)
+     8  Security considerations (threat model, OWASP API, SSDLC)
+     9  Data privacy policies (POPIA: what we keep, who sees it,
+        delete, share and revoke)
+    10  Competitive analysis
+    11  Business model + figures
+    12  Go-to-market + pilot metrics
+    13  Technology Readiness Level: TRL 4 (validated in the lab:
+        end-to-end on real phones with the PayFast sandbox)
+    14  Impact + the ask (R300k)
+
+
+12. DEMO VIDEO (under 90 s; recorded by Sun ~06:00)
+---------------------------------------------------------------------------
+
+    0-10   the problem, one line on screen
+    10-40  Nomsa: Suppliers -> Mahlangu -> reorder -> PayFast sandbox
+           -> "Paid"
+    40-60  a cash delivery: order pass -> both type R2,340 ->
+           "Confirmed by both"
+    60-80  My record -> share -> viewed; the tamper check
+    80-90  "Akayza. Every kasi hustle, in flow." + ask
+
+
+13. WORK BREAKDOWN AND THE WEEKEND (the email asks for a WBS)
+---------------------------------------------------------------------------
+
+  FRI 17:30-24:00  M: app shell, auth (email), Suppliers list + grid
+                   R: backend from libs, auth API, supplier loader,
+                      seed data
+                   19:00-20:00 BOTH: problem statement with mentors
+                   23:59 progress update
+  SAT 00:00-06:00  M: cart, checkout, PayFast page, orders
+                   R: orders API, PayFast ITN, ledger / sealed events
+                   (sleep in shifts: R 02-06, M 06-10)
+  SAT 06:00-12:30  M: Home, credit book
+                   R: record + share page + tamper; SSDLC (due 12:30)
+                   11:00 one of us at DevLabs
+  SAT 12:30-17:00  cash path (pass, confirm, driver) · WAR ROOM slot
+  SAT 17:00-23:00  M: record screen, polish; R: Lean Canvas (due
+                   21:30), post-quantum seal if green
+                   20:00 presentations session
+                   23:00 FEATURE FREEZE · 23:59 progress update
+  SUN 00:00-06:00  demo war room (00-02); record the demo video;
+                   slides final; one full rehearsal
+  SUN 06:00-09:00  SUBMIT BY 08:00 (not 08:59); sleep an hour
+  SUN 10:00        3-minute pitch · 13:30 top 12 (5 min + Q&A)
+
+
+14. BEFORE FRIDAY 15:30
+---------------------------------------------------------------------------
+
+  [ ] Sonke: project overview (challenge, one-liner, tech tools)
+  [ ] Validation: at least ONE supplier and ONE spaza owner call ->
+      the lived-experience line + "would you pay R299 / R1,499?"
+  [ ] Accounts: PayFast sandbox, Google OAuth clients, email service,
+      Cloudinary Akayza key, Mapbox token
+  [ ] Draft SSDLC answers from V1_05 (due Sat 12:30)
+  [ ] Draft Lean Canvas from sections 4-6 (due Sat 21:30)
+  [ ] Slide skeleton (section 11)
+  [ ] Decide call C (start building today or not)
+  [ ] Machines, phones, cables, OBS test (V1_08, V1_09)

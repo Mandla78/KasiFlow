@@ -1,0 +1,44 @@
+===========================================================================
+PLAN 03 -- SIGN-UP
+Traders sign up with email; drivers only sign in
+===========================================================================
+
+Screens: docs/design/Akayza_UX_Design_v0.2.pdf, pages 3-5.
+
+  TRADER
+    1. Welcome          [Get started] · I already have an account
+    2. Create account   business name, email, password, confirm password
+                        (step 1 of 4)
+    3. Verify email     6-digit code from the email; resend; wrong email?
+                        (step 2). NOTHING below is reachable until
+                        this is done.
+    4. Business type    Spaza / shop · Builder / trade · Another hustle
+                        (step 3; sets Home and default tools; changeable)
+    5. About you        your name, area, cellphone (optional, never a
+                        login) (step 4)
+    6. Pick your tools  pre-picked for the type; My record always on
+    7. Home             with one first-time card
+    (The device key is made right after verification, no screen.)
+
+    The delivery address is asked at the first delivery order.
+
+  OR: CONTINUE WITH GOOGLE (on Create account and Sign in)
+    Google account picker -> "Name your business" (email already
+    verified by Google, no password, no code) -> business type -> about
+    you -> tools. If the email already has a password account: enter
+    the password once to link Google.
+
+  SIGNING BACK IN
+    Google, or email + password · Forgot password -> reset link by
+    email (one use, 30 min; same answer whether or not the email
+    exists).
+    Signing in on a new phone makes a new device key; the old phone's
+    key stops working.
+
+  DRIVER (cash showcase)
+    Seeded with an email + password; signs in, lands on Today.
+
+  DEMO
+    Seeded identities can skip sign-up through the dev menu. The
+    business-type screen must work live: "Nomsa picked Spaza, so her
+    Home leads with who owes her."

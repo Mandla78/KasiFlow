@@ -1,0 +1,133 @@
+===========================================================================
+V1_13 -- RISKS AND OPEN QUESTIONS
+===========================================================================
+
+
+1. RISKS, WORST FIRST
+---------------------------------------------------------------------------
+
+  R1  SCOPE. Four business types, two roles, books, ordering, a feed,
+      Bluetooth, proof and sharing, built by two people in 42 hours.
+      Mitigation: the H12 spine gate; spaza + builder are the only FULL
+      types (the rest are labels); the Market is five plain queries; a
+      strict cut list (V1_10 section 4). "All out" means the ambition is
+      big, not that the cut list is ignored.
+
+  R2  BLUETOOTH DOESN'T WORK PHONE-TO-PHONE WITH OUR STACK
+      Mitigation: Wednesday's spike; option B (own Kotlin module); the QR
+      handshake is built regardless and uses the same server path.
+
+  R3  THE LIVE DEMO FAILS ON THE CALL
+      Mitigation: USB-only topology, a scripted bring-up, three
+      rehearsals on a real call, two backup videos, screenshots in the
+      slides.
+
+  R4  CANONICALISATION MISMATCH between TypeScript and Python
+      Mitigation: one hand-computed test vector in both test suites from
+      H2. Integer cents, sorted keys, no whitespace. rev 4:
+      ensure_ascii=False in Python; raw bytes for prev_hash and salt
+      inside hashes; a non-ASCII string and a genesis event in the
+      vector; and never hash from a jsonb column (V1_07 section 6).
+
+  R5  REUSED LIBRARIES ARE QUESTIONED OR DISALLOWED
+      Mitigation: ask Wednesday; declare on slide one and in REUSE.md;
+      keep libs/ small. If the answer is strict, drop it: the libraries
+      save hours, not the entry.
+
+  R6  AKAYZA AND OUR EARLIER PRODUCT BLUR TOGETHER
+      This is new with revision 3, and it's the one to take seriously.
+      Akayza now has the same KINDS of tools as our earlier product:
+      an Order Book, a Loan Book, supplier ordering, a feed and a
+      supplier-pays model. Doing similar things is fine. The risks are:
+        - code or designs copied across at 3am, which makes part of our
+          earlier product joint work with the hackathon entry
+        - the IP position document was written for "KasiMarket". It
+          should now say exactly what Akayza is, who owns what after
+          Sunday, and that the earlier product's roadmap, algorithms and
+          documents are NOT contributed
+        - a judge or sponsor later treating the two as one product
+      Mitigation: V1_07 section 1's rules; REUSE.md; the libraries in
+      one commit; Akayza's features built fresh and deliberately
+      simpler; the IP document updated and agreed with Risuna BEFORE
+      Friday (V1_12 Thursday). Mandla decides how far the similarity
+      should go. This file only names the risk.
+
+  R7  THE NAME
+      Nearby names exist ("Kasi App", "Kasi Money", "Kas Flow").
+      Mitigation: CIPC, trademark and Play Store checks on Thursday,
+      with an alternate ready.
+
+  R8  "SUPPLIERS PAY" WITH NO SUPPLIER TO SAY SO
+      Mitigation: at least one supplier validation call before Friday,
+      and quote them on slide 6. Without that it's an assumption, and we
+      should call it one.
+
+  R9  JUDGES HEAR "REPUTATION" AS "CREDIT" -> NCA QUESTIONS
+      Mitigation: never say "credit score"; "we don't lend" is on slide 6;
+      terms and credit only via licensed partners, on the roadmap.
+
+  R10 THE LAPTOP (Gradle + Postgres + Metro + OBS + the call)
+      Mitigation: build early and rarely; close Android Studio; EAS
+      cloud build as a fallback; test the full load on Friday afternoon.
+
+  R11 FATIGUE. The sleep shifts are in the plan. Take them.
+
+  R12 OVERCLAIMING THE HANDSHAKE (rev 4)
+      A judge who knows radio will say BLE packets can be relayed, and
+      a QR code can be sent as a screenshot. If we've claimed "same
+      place", we lose the room. Mitigation: we claim agreement within
+      60 s, never presence (V1_01 section 7); the transport is recorded;
+      Q9 decides whether QR weighs less.
+
+
+2. OPEN QUESTIONS -- FOR US
+---------------------------------------------------------------------------
+
+  Q1  The demo's two types: spaza + builder (proposed)?
+  Q2  Split as in V1_10, or swap anything? rev 4 proposes moving the
+      market feed to Mandla, or slide work out of Risuna's build hours
+      (V1_10 section 2). Mandla's side is heavy too; decide together.
+  Q3  Open-source the Cash Handshake protocol spec for the Open Source
+      Agenda theme? It's an IP decision.
+  Q4  Checker page: DECIDED (rev 4). Flask/Jinja as its own process,
+      checker.py, so the tunnel never touches the API.
+  Q5  Reputation weights: DECIDED (rev 4). V1_06's weights, with the
+      formulas now in V1_06 section 2. Tune at H12-H20 only if the seed
+      assertions fail.
+  Q6  Phantom-sales markup bands: 3 bands for the weekend (airtime ~5%,
+      packaged groceries ~20-30%, building materials ~15-25%), each
+      labelled as an assumption?
+  Q7  The supplier subscription: a price point to name on slide 6, or
+      "per supplier, per month" with no number until validated?
+  Q8  After Sunday: what happens to the Akayza repo and brand? This
+      belongs in the IP document (R6).
+  Q9  QR handshake weight: 1.00 like the radio, or 0.80? The QR path
+      proves less, since a screenshot can travel. Proposal: 0.80.
+      (rev 4)
+  Q10 Pending timeout: a payer half that never arrives becomes
+      SELF_RECORDED after 24 hours? Proposal: yes. (rev 4)
+
+
+3. OPEN QUESTIONS -- FOR THE ORGANISERS (V1_12, Wednesday)
+---------------------------------------------------------------------------
+
+  O1  Reusing our own pre-existing libraries: allowed? declared how?
+  O2  Submission licence terms
+  O3  A merged team on one golden ticket
+  O4  Pitch: live or pre-recorded? length? Q&A?
+  O5  The platform for the pitch
+  O6  The deadline, and what gets submitted
+  O7  AI coding assistants: allowed? must they be declared?
+
+
+4. BEFORE A REAL USER TOUCHES AKAYZA (for the record)
+---------------------------------------------------------------------------
+
+    - a registered Bluetooth SIG company ID (replacing 0xFFFF)
+    - background handshake (foreground service), with battery measured
+    - Play Integrity / device attestation
+    - real OTP provider; secrets rotated; demo identities removed
+    - legal review: POPIA; NCA the moment any partner offers terms
+    - supplier verification beyond a manual flag
+    - a pilot: 1 wholesaler + its spazas, 1 hardware store + its builders,
+      6 weeks, measuring the V1_11 slide 5 metrics

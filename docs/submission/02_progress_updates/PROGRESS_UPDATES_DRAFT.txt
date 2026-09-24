@@ -1,0 +1,33 @@
+===========================================================================
+[DRAFT -- changes as we build] PROGRESS UPDATES -- Fri 23:59 and Sat 23:59 (midnight updates are key)
+Short, concrete, with substance. Mentors read these and reply.
+===========================================================================
+
+TEMPLATE
+  Milestone:   what now works end to end (one line)
+  Built:       3-5 bullets, each a thing a user can do
+  Proof:       a screenshot or 20-second clip if possible
+  Next:        what we build before the next update
+  Need help:   one specific question for mentors (or "none")
+
+
+#1 -- FRIDAY 23:59 (draft; update with what really works)
+  Milestone:   Foundations running: backend, database and the app
+               shell talk to each other.
+  Built:       - sign-up with email verification and login
+               - domain-driven backend with one schema per domain
+               - app with Home, Account, Suppliers and More tabs
+               - signing test passes in both TypeScript and Python
+  Next:        credit book, suppliers and ordering, PayFast sandbox
+  Need help:   [e.g. PayFast sandbox split payments: supported?]
+
+
+#2 -- SATURDAY 23:59 (draft)
+  Milestone:   A trader orders from a supplier and pays; the payment is
+               sealed into their record; tampering is detected.
+  Built:       - credit book, order again, PayFast sandbox payment
+               - cash confirmed by both sides (and a dispute)
+               - builder job stages with client sign-off
+               - shareable record with a public checker page
+  Next:        polish, demo video, slides, rehearsal
+  Need help:   [pitch feedback on our ask and pricing]

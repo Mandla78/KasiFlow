@@ -1,0 +1,137 @@
+===========================================================================
+V1_05 -- SECURITY AND THREATS
+Security-by-design, for a panel that leans cybersecurity
+===========================================================================
+
+THE SENTENCE WE SAY FIRST:
+
+    "A hash chain proves a record wasn't changed after it was sealed.
+     It doesn't prove the record was true when entered. The Cash
+     Handshake adds a second person who says the same number. Here is
+     where even that stops working."
+
+
+1. THREAT MODEL
+---------------------------------------------------------------------------
+
+    THREAT                        WHAT STOPS IT                       DEMO?
+    ----------------------------  ----------------------------------  -----
+    Editing an old payment        hash chain: every later link        LIVE
+    (R2,340 -> R23,400)           breaks -> CHAIN_BREAK, record
+                                  frozen
+
+    Deleting an entry             unique sequence per entity; a gap
+                                  breaks the chain
+
+    Backdating (phone clock       the payer's phone signs with its
+    set back)                     OWN clock; >60 s apart ->
+                                  CLOCK_SKEW
+
+    One side claiming a           Cash Handshake: two independent      LIVE
+    different amount              amounts; a mismatch -> DISPUTE, on
+                                  the spot, on both screens
+
+    A stranger's phone            the co-signer must be THE
+    "confirming" a payment        counterparty on that order, job
+                                  or loan; any other key is ignored
+
+    Relayed radio packets, or a   we claim agreement within 60 s,
+    QR code sent as a screenshot  never presence; the transport is
+    (rev 4)                       recorded; QR may weigh less
+                                  (V1_13 Q9)
+
+    Two parties colluding         patterns: a supplier that serves
+    (fake supplier, fake          only one business, identical round
+    client)                       amounts, sales far above stock
+                                  bought, instant confirmations;
+                                  suppliers verified by us (manual,
+                                  this weekend)
+
+    Inflated sales                stock bought vs. sales claimed, via
+    ("phantom sales")             a per-category markup band, rolling
+                                  30 days -> PHANTOM_SALES. Stock
+                                  bought = supplier-confirmed
+                                  deliveries AND self-recorded counter
+                                  purchases; otherwise everyone who
+                                  also shops off-platform is flagged.
+                                  Spaza, reseller and food vendor
+                                  only; builders are skipped, since a
+                                  stage payment is mostly labour
+                                  (rev 4)
+
+    Fake reviews                  only a client with confirmed
+                                  payments on that job can review
+
+    Stolen phone / cloned key     private key in Android Keystore
+                                  (expo-secure-store); one active
+                                  device key; server-side revoke +
+                                  new chain segment
+
+    Radio eavesdropping           no amounts on air; salted
+                                  commitment; keyed ref and
+                                  match_tag (V1_04 section 6)
+
+    Checker sees too much         scoped, expiring, revocable links;
+                                  aggregates only; every view logged
+                                  to the owner
+
+    Broken object-level access    identity from the verified token
+    (seeing another shop's        only; every read filtered by
+    books)                        owner; participants-only on orders
+
+
+2. THE API: OWASP API SECURITY TOP 10
+---------------------------------------------------------------------------
+
+    API1  object-level auth       owner/participant checks on every
+                                  order, job, loan and proof read.
+                                  Tested with a second account.
+    API2  authentication          short-lived JWTs; phone OTP with a
+                                  fake provider for the demo; device
+                                  key registered at signup
+    API3  property-level auth     schemas whitelist writable fields;
+                                  status, tier, flags, score and
+                                  verified are never client-writable
+    API4  resource consumption    rate limits on every write and on
+                                  the public share page; batch sizes
+                                  capped; paging clamped server-side
+    API5  function-level auth     EVERY route pins a role: business,
+                                  supplier, or the public share page
+    API6  sensitive flows         share-link creation and handshake
+                                  uploads rate-limited
+    API8  misconfiguration        no debug in the demo build; CORS
+                                  locked down
+    API9  inventory               one versioned API, /api/v1
+    API10 unsafe consumption      every client signature re-verified;
+                                  client-sent tiers ignored
+
+THE RULE UNDER ALL OF IT: THE SERVER BELIEVES NOTHING THE PHONE CLAIMS
+ABOUT TRUST. The phone sends signed facts. The server decides tiers,
+flags, disputes and scores.
+
+
+3. POPIA
+---------------------------------------------------------------------------
+
+    - Each business owns its record and shares only what it chooses,
+      for as long as it chooses. It can revoke at any time.
+    - Loan Book customers: a name or nickname and amounts, kept inside
+      the business's own account. They never appear in a shared record
+      or to a supplier.
+    - Suppliers see what their own customers do WITH THEM (orders,
+      payments), and nothing else without consent.
+    - No location tracking. Suppliers set a service area; businesses
+      set a suburb. We never read GPS in the background.
+    - Account deletion closes share links immediately.
+
+
+4. DEMO BUILD vs. PRODUCTION (backup slide)
+---------------------------------------------------------------------------
+
+    - Bluetooth company ID 0xFFFF (test value)
+    - seed data is synthetic and labelled as such
+    - demo identities load keys from a dev menu (V1_09 section 6)
+    - cleartext HTTP over adb reverse; a temporary public tunnel to
+      the checker page process ONLY, never the API (V1_09 section 4)
+    - supplier verification is manual (an admin flag)
+    - secrets in a local .env, rotated after the event

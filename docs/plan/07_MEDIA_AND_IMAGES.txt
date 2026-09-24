@@ -1,0 +1,183 @@
+===========================================================================
+PLAN 07 -- MEDIA AND IMAGES
+Product images and job photos, with Cloudinary, using our own library
+===========================================================================
+
+
+1. WHAT IT'S FOR
+---------------------------------------------------------------------------
+
+    PRODUCT IMAGES   the supplier's product grid (PLAN 08) and
+                     Order stock
+    JOB PHOTOS       a builder's stage photos (V1_03 flow C), taken
+                     in-app with the camera, never from the gallery
+    PROFILE IMAGE    a supplier's logo / a trader's shop photo
+                     (optional)
+
+This replaces V1_07 s6: "Photos: stored on the API server's disk under
+/media for the demo ... Cloud storage is roadmap." Cloud storage is now
+Cloudinary.
+
+WHY IT MATTERS FOR THE KASI: data costs money. Cloudinary serves every
+image resized for the screen and in the smallest format the phone
+supports (f_auto, q_auto). A product-grid thumbnail is a few KB, not a
+3 MB photo. Say it in the pitch if asked about data.
+
+
+2. THE LIBRARY (declared)
+---------------------------------------------------------------------------
+
+    Our existing Cloudinary library comes in with libs/, in the same
+    ONE labelled commit, listed in REUSE.md (V1_07 s1, s4).
+
+    Check before it comes across:
+      [ ] it knows nothing about the earlier product (models, folder
+          names, upload presets named after it). ADAPT if it does.
+      [ ] signed uploads, or unsigned presets? We want SIGNED (s4).
+      [ ] backend, mobile, or both
+      [ ] no hard-coded cloud name, key or secret. All from .env.
+    FILL IN: source repo + path, commit hash.
+
+
+3. TWO KINDS OF IMAGE, TWO LEVELS OF PRIVACY
+---------------------------------------------------------------------------
+
+    KIND             WHO SEES IT                 CLOUDINARY TYPE
+    ---------------  --------------------------  ---------------------
+    Product image    everyone on the app         upload (public URL)
+    Profile image    everyone on the app         upload (public URL)
+    Job photo        the builder, the client on  authenticated
+                     that job, and a Proof link  (signed URLs that
+                     the builder chose to share  expire, 1 hour)
+
+    Job photos show the inside of someone's home. They are NEVER
+    public URLs. Our server hands out a short-lived signed URL only
+    to someone allowed to see that job (API1, object-level auth).
+
+    FOLDERS: akayza/products/<supplier_id>/,
+             akayza/jobs/<job_id>/, akayza/profiles/<user_id>/
+
+
+4. UPLOADING -- SIGNED, DIRECT, SMALL
+---------------------------------------------------------------------------
+
+    1. The phone shrinks the photo first (expo-image-manipulator:
+       longest side 1600 px, JPEG 0.8). This also re-encodes the
+       image, which should drop EXIF data, including GPS. VERIFY this
+       on Wednesday with a photo taken with location on.
+    2. The phone computes SHA-256 of the EXACT bytes it will upload.
+    3. App -> POST /media/sign { kind, owner_ref, sha256 }
+       The server checks the caller may upload there (a builder to
+       their own job, a supplier to their own products), then returns
+       an upload signature: timestamp, folder, public_id, type,
+       allowed formats, max size, signature.
+       The Cloudinary API SECRET never leaves the server.
+    4. The phone uploads straight to Cloudinary with that signature.
+       It doesn't go through our API, so a slow upload doesn't tie up
+       Flask.
+    5. App -> POST /media/confirm { public_id, sha256 }
+       The server asks Cloudinary for the asset (Admin API), checks it
+       exists, is in the right folder, and is the right type and size,
+       then saves the media row.
+
+  UPLOAD RULES (enforced by the signature, the upload preset, and
+  re-checked in confirm):
+      formats jpg, png, webp · max 5 MB · images only · one per
+      signature · signature valid 10 minutes
+
+  JOB PHOTOS AND THE SEALED RECORD
+      The stage event seals the photo's sha256 (step 2) and its
+      public_id. The checker can later fetch the ORIGINAL from
+      Cloudinary and re-hash it, so a swapped photo breaks the proof.
+      Cloudinary keeps the original untouched and transforms only on
+      delivery, but VERIFY that no incoming transformation is set on
+      the preset, or the hashes won't match.
+
+
+5. PRODUCT IMAGES THIS WEEKEND
+---------------------------------------------------------------------------
+
+    Suppliers have no upload screen. Product photos come in with the
+    supplier's data through the BACKEND LOADER (PLAN 08): each product's
+    image_1..image_5 is an https link or a file name; the loader
+    fetches or reads each one and uploads it to Cloudinary under
+    akayza/products/<supplier>/. 1-5 photos per product, most 1-2.
+    A product with no photo shows its category icon.
+
+    Displaying: the app builds the URL from public_id + a named
+    transformation:
+        t_thumb   200x200, c_fill, f_auto, q_auto   (product grid)
+        t_card    600 wide, f_auto, q_auto          (product page)
+    Named transformations mean the app can't ask for a 4000-px
+    original and burn someone's data.
+
+    Images are cached on the phone, so the product grid doesn't
+    re-download them every time.
+
+
+6. BACKEND
+---------------------------------------------------------------------------
+
+  A new domain, media/ (routes -> service -> repository, V1_07 s3):
+
+    POST /media/sign          @role("trader")
+    POST /media/confirm       @role("trader")
+    GET  /media/<id>/url      @role("trader")
+         -> a signed, expiring URL for job photos, if the caller may
+            see that job; 404 otherwise, not 403, so it doesn't reveal
+            the photo exists
+
+  TABLE media
+      id, owner_id, kind, public_id, sha256, bytes, format,
+      width, height, job_stage_id | product_id | null, created_at
+
+  Account deletion deletes the person's images from Cloudinary too
+  (V1_05 s3).
+
+
+7. APP
+---------------------------------------------------------------------------
+
+    - mobile/src/lib/media/   shrink, hash, sign, upload, confirm
+    - Upload OFFLINE: a job photo taken with no signal is stored
+      locally with its hash, sealed in the stage event straight away,
+      and uploaded by the sync outbox later. The hash in the event is
+      already fixed, so a late upload proves the same thing.
+    - Nothing new that's native: expo-image-manipulator, expo-camera
+      and expo-crypto are already in V1_08. Uploading is a plain HTTPS
+      POST.
+
+
+8. OPEN QUESTIONS
+---------------------------------------------------------------------------
+
+  C1  Does our library do signed uploads? If it only does unsigned
+      presets, adapt it. An unsigned preset lets anyone who reads the
+      app bundle upload to our account.
+  C2  Job-photo URL lifetime: 1 hour for the app. And for a shared
+      Proof link: the link's own expiry, or never show photos to a
+      checker? Proposal: a checker sees that "4 stage photos are
+      sealed", not the photos themselves.
+  C3  DECIDED 23 Sep: the existing Cloudinary account, with a NEW
+      API key pair made just for Akayza and everything under a
+      akayza/ folder. The earlier product's key never goes near
+      Akayza. After the event the Akayza key is revoked.
+  C4  Photos per product: 1 to 5, most products 1-2, to keep
+      Cloudinary usage low. The import enforces the max of 5.
+
+
+9. PLAN AND CUT LIST
+---------------------------------------------------------------------------
+
+    WHEN      with the supplier loader: seed the
+              demo images; the product grid shows them.
+              CSV image_url fetch: after the CSV import itself works.
+              H20-H28: job photo upload (with the builder's job
+              screen).
+    CUT LIST  job photos are already cut item 1 (V1_10 s4). Product
+              images fall back to a category icon if Cloudinary is
+              down; the product grid never shows a broken image.
+    WEDNESDAY a NEW Cloudinary account for Akayza; cloud name, key
+              and secret in .env; one signed upload preset, images
+              only, 5 MB, no incoming transformation; t_thumb and
+              t_card set up.

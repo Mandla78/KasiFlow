@@ -1,0 +1,151 @@
+===========================================================================
+PLAN 04 -- BUSINESS TYPES AND SUPPLIER KINDS
+The table behind mobile/src/config/businessTypes.ts, and the matching
+===========================================================================
+
+One business_type on the trader's profile. It decides the WORDS, what
+HOME shows, and the ORDER of the tools inside ACCOUNT. It never changes
+the data model and never hides a tool (V1_03 s2).
+
+Spaza and builder are FULL this weekend. Reseller and food vendor are
+labels + Home only (cut list item 5).
+
+
+---------------------------------------------------------------------------
+1. TRADER TYPES
+---------------------------------------------------------------------------
+
+  KEY          spaza              builder            reseller           food_vendor
+  -----------  -----------------  -----------------  -----------------  -----------------
+  Label        Spaza / shop       Builder / trade    Selling /          Food / street
+                                                     reselling          stall
+  Order Book   "Orders"           "Jobs"             "Orders"           "Sales"
+    called
+  Account      1 Loan Book        1 Jobs             1 Orders           1 Sales
+    tile order 2 Stock            2 Stock            2 Loan Book        2 Stock
+               3 Orders           3 Loan Book        3 Stock            3 Loan Book
+               4 Proof            4 Proof            4 Proof            4 Proof
+  Home cards   1 Owed to me today 1 Active jobs      1 Orders to        1 Today's takings
+               2 Reorder from     2 Next stage          deliver         2 Stock to buy
+                 my wholesaler      payment due      2 Who still owes     tomorrow
+               3 Supplier         3 Materials from     me
+                 picks              my hardware      3 Reorder from
+                                    store              distributor
+  Templates    reorder list,      job with stages:   WhatsApp-style     daily tally
+               credit sale        deposit,           order, pay-later
+                                  milestones, final
+  Suppliers    wholesale /        hardware           fragrance and      wholesale /
+    first in   groceries          (building          phone accessory    groceries
+    the tab                       categories)        distributors
+  Full this    YES                YES                labels + Home      labels + Home
+    weekend?
+
+  For all types, Home also shows "Delivery on its way" (with Show
+  order pass for cash orders) when there is one (PDF p1).
+
+
+---------------------------------------------------------------------------
+2. THE SHAPE IN CODE
+---------------------------------------------------------------------------
+
+    type BusinessType = 'spaza' | 'builder' | 'reseller' | 'food_vendor';
+    type ToolKey = 'creditBook' | 'orderStock' | 'jobs' | 'dailyTally' | 'record';
+
+    interface BusinessTypeConfig {
+      label: string;                 // sign-up tile
+      icon: string;                  // lucide icon name
+      orderBookLabel: string;        // "Orders" | "Jobs" | "Sales"
+      defaultTools: ToolKey[];       // ON at sign-up; trader can change
+      homeCards: HomeCardKey[];      // Home, top to bottom
+      templates: TemplateKey[];
+      categoriesFirst: Category[];   // Suppliers tab ordering (s4)
+    }
+
+    export const BUSINESS_TYPES: Record<BusinessType, BusinessTypeConfig>
+
+    - An unknown type from the server falls back to 'spaza' with a
+      warning. It never crashes.
+    - The server keeps its own list of allowed keys and rejects
+      anything else (422).
+
+
+---------------------------------------------------------------------------
+3. TOOLS ARE CHOSEN, TYPES ONLY SET THE DEFAULTS (PDF p1, p11, p16)
+---------------------------------------------------------------------------
+
+  The business type picks which tools are ON at sign-up and what Home
+  leads with. The trader can add or remove tools any time ("Add a
+  tool"). The table in s1 is the DEFAULT, not a lock.
+
+    spaza        Credit book, Order stock, My record
+    builder      Jobs, Order stock (Materials), My record
+    reseller     Credit book, Order stock, My record
+    food_vendor  Daily tally (roadmap), Order stock, My record
+
+
+---------------------------------------------------------------------------
+4. PRODUCT CATEGORIES -- IMPORTANT (23 September)
+---------------------------------------------------------------------------
+
+WHY THIS MATTERS: our earlier work was built spaza-first, so its
+categories were spaza categories (16 of them, with one catch-all
+"Hardware & General"). Akayza serves builders and resellers too, so
+the category list had to grow. It's the list the Suppliers tab,
+the supplier data files and the Suppliers tab depend on, so it
+FREEZES THURSDAY with the contract.
+
+  COUNT: 22 categories (was 16).
+    KEPT (14)     Food & Grocery, Beverages, Snacks & Confectionery,
+                  Bakery, Dairy & Chilled, Fresh Produce, Meat & Frozen,
+                  Household & Cleaning, Personal Care, Baby & Family,
+                  Packaging & Disposable, Stationery & School,
+                  Clothing & Apparel, Other
+    NEW (8)       Building Materials, Plumbing, Electrical,
+                  Tools & Hardware, Paint & Finishes      (builders)
+                  Fragrances & Beauty, Phone Accessories  (resellers)
+                  Airtime & Electricity                   (spaza)
+    REPLACED (2)  "Hardware & General" -> the five building categories
+                  "Electronics & Accessories" -> Phone Accessories
+
+  THE FULL LIST, with codes, examples and who buys each:
+    (the full list is in this section; the import guide and template
+    are rebuilt with the supplier loader during the build)
+
+  WHAT DEPENDS ON IT
+    - Category filter inside a supplier's product grid (PLAN 08):
+      hide a category with no products.
+    - The Suppliers tab and the Home cards: each trader type shows its
+      categories FIRST:
+        spaza        the 12 grocery categories + Fragrances & Beauty,
+                     Phone Accessories
+        food_vendor  Food & Grocery, Beverages, Bakery, Fresh Produce,
+                     Meat & Frozen, Packaging & Disposable
+        builder      the 5 building categories
+        reseller     Fragrances & Beauty, Clothing & Apparel,
+                     Phone Accessories, Stationery & School
+      (Every trader can still browse every category.)
+    - The backend's supplier/product loader validates against it.
+    - A fallback ICON per category (22 lucide icons) for any product
+      without a photo, so the product grid never shows a broken image.
+
+  DEMO COVERAGE: the three demo suppliers fill 17 of the 22.
+    Empty in the demo: Bakery, Fresh Produce, Airtime & Electricity,
+    Stationery & School, Other. Their chips stay hidden, which is
+    correct behaviour, not a gap.
+
+
+---------------------------------------------------------------------------
+5. BUILDER TOOLS (PDF p11-p15) -- second priority after spaza
+---------------------------------------------------------------------------
+
+  JOB WITH STAGES (p12): client, total, stages (deposit / walls / roof /
+    final) each with an amount and a status; "Paid and confirmed R5,000
+    of R38,000".
+  STAGE PHOTO (p13): camera only, never the gallery; time-stamped; the
+    photo's hash is sealed in the stage event.
+  SIGN-OFF LINK (p14): sent to the client on WhatsApp; no app needed;
+    the client types the cash they paid; one use, 7 days (PLAN 02 s4).
+  HOUSE RECORDS (p15): each house's stages as a record the builder can
+    share. Stages captured live are "Both" (photo + sign-off); stages
+    IMPORTED from WhatsApp are "By you", date unknown, because
+    WhatsApp strips the date. We say that on the screen.

@@ -1,0 +1,410 @@
+===========================================================================
+AKAYZA -- MERGED PLAN v0.6 (for the team, Thu 24 Sep 2026)
+Mandla's brief (05) + UX changes v0.4 + Proof Layer spec, in one plan.
+(est.) = our estimate, to be validated. Other numbers are from checked
+sources (docs/v1_rev4/v1/v1_14_SOURCES.txt).
+===========================================================================
+
+Sections 7 and 8 are written to paste straight into Sonke (Lean Canvas
+and SSDLC). Everything else is for us.
+
+
+0. WHAT CHANGED FROM BRIEF 05, AND WHY
+---------------------------------------------------------------------------
+
+  KEPT FROM 05: the idea, the checked sources, supplier pricing tiers,
+  the VAS research, the competitor list, the risk answers, "we never
+  lend", "no AI". That is the business case, and it is strong.
+
+  CHANGED:
+    1. PITCH LEADS WITH PROOF, NOT TOOLS. Our best fact is the Spaza
+       Fund: real businesses can't prove they're real. The tools keep
+       traders coming back; the proof is why a judge buys.
+    2. SCOPE = v0.4's 15-SCREEN DEMO PATH. No product grid, no
+       browsing, no ERP API, no supplier tablet this weekend. Ordering
+       is "order again from your suppliers", collection first.
+    3. BUILDERS ARE CO-LEAD, not second. It's the part no other team
+       has, and we have real build footage.
+    4. SIGN-IN = CELLPHONE NUMBER, WhatsApp code, then PIN/fingerprint.
+       Google and email stay as other ways.
+    5. VERIFICATION FEES ARE A REVENUE LINE NOW, not "later". It is the
+       revenue that matches our own problem statement.
+    6. BREAK-EVEN FIXED. R4,000/month running costs = about 3 suppliers
+       on Pro (3 x R1,499 = R4,497), or 14 on Starter. Not 8 on Pro.
+    7. QUANTUM CLAIM MADE HONEST. Phones sign with Ed25519 (ML-DSA is
+       not practical inside Expo/Hermes this weekend). The server
+       countersigns every chain root and every share snapshot with
+       ML-DSA. We say "post-quantum sealed records", not "post-quantum
+       everywhere".
+    8. NO PRODUCT CODE BEFORE KICKOFF until the facilitators confirm
+       the rules. Thursday = docs, design, test vectors on paper,
+       validation calls.
+
+
+1. THE IDEA IN ONE BREATH
+---------------------------------------------------------------------------
+
+  Akayza gives spaza shops and township builders a record of their
+  business that the people they trade with have confirmed, and that
+  they own. They run the business on it every day: a credit book,
+  "order again" from the suppliers they already use, and cash handed
+  over that BOTH sides confirm on their phones, even without signal.
+  Every payment and every signed-off building stage is sealed into a
+  tamper-evident record the owner can share by link and take back.
+
+  ONE LINE FOR THE PITCH:
+    "Your business, proven by the people you trade with."
+
+  WHAT IT IS NOT: not a marketplace, not a credit score, not a lender.
+  Cash confirmed by both sides counts the same as digital payment.
+
+
+2. WHY IT'S A REAL PROBLEM (checked sources, safe for slides)
+---------------------------------------------------------------------------
+
+  - Township economy about R900 billion a year; spazas about R180
+    billion. Nearly 4 in 5 township businesses unregistered; fewer
+    than 9% can get a bank loan. (Standard Bank, 2025)
+  - Spaza Shop Support Fund: 354 applications failed verification;
+    only R179.6m of R500m allocated by May 2026. (DSBD, 29 May 2026)
+  - Informal employment is 19.5% of all jobs. (Stats SA, Q4 2024)
+  - Cash dominates township trade. (several 2025 reports; no single
+    percentage, so we say "dominates")
+  - LIVED EXPERIENCE: a family house build, photographed at every
+    stage, where changes and payments were agreed by word of mouth.
+    [Rinsuna to confirm what can be said and shown.]
+  - VALIDATION CALLS: [add what 2-3 spaza owners and 1 supplier said
+    before Friday 19:00 -- mentors will ask]
+
+
+3. WHAT WE BUILD THIS WEEKEND
+---------------------------------------------------------------------------
+
+  THE DEMO PATH (15 screens from v0.3/v0.4, nothing else)
+     1. Sign in (phone)          9. Amounts don't match (dispute)
+     2. Home -- spaza           10. Job with stages
+     3. Home -- builder         11. Stage photo
+     4. Credit sale             12. Client sign-off (web)
+     5. Credit book             13. House records
+     6. Checkout -- collect     14. My record + share
+     7. Ready to collect/runner 15. Viewer / checker page (web)
+     8. Confirm cash
+
+  BACKEND (Proof Layer spec, frozen Thursday)
+    ledger      sealed events in; every chain and signature verified
+    handshake   joins both halves of a Cash Handshake: CONFIRMED BY
+                BOTH or DISPUTE
+    integrity   CHAIN_BREAK and CLOCK_SKEW (PHANTOM_SALES if time)
+    reputation  the 1,000-point track record with plain reasons
+    share       share links, revoke, view log, public checker page
+    trade       accounts, credit book, suppliers, orders, PayFast
+                sandbox (one normal payment; split payment shown as
+                configuration unless the sandbox supports it)
+    jobs        builder jobs, stages, agreed changes, sign-off
+
+  QUANTUM (+5): ML-DSA (NIST FIPS 204) via liboqs-python on the server.
+    Each chain's root hash and each share snapshot is countersigned;
+    the checker page shows "Ed25519 verified / ML-DSA verified".
+
+  CUT TO THE ROADMAP SLIDE (say it, don't build it)
+    product browsing, "More near you", delivery maps, driver app,
+    ERP integration API, supplier tablet, VAS top-up, real BLE mesh
+    between neighbours, on-device ML-DSA.
+
+  CUT ORDER IF TIME RUNS SHORT (from the spec)
+    PHANTOM_SALES live -> slide; public tunnel -> own browser; view
+    log. NEVER CUT: ledger, handshake verification, tamper demo,
+    share + revoke.
+
+  ONLY SHOW WHAT WE REALLY BUILD: if a screen says "secure chip",
+  "refreshes every 15 seconds" or "time and place sealed", we must be
+  able to explain how it works. Otherwise it goes on the roadmap.
+
+
+4. THE DEMO
+---------------------------------------------------------------------------
+
+  50-SECOND DEMO (sales room)
+    0-10s   Nomsa records a R40 credit sale; it lands in her credit
+            book.
+    10-25s  Her runner Sbu collects stock with a one-time pass. Cash
+            R2,340: both phones confirm -> green "Confirmed by both".
+            Her record crosses into "Trusted" (seeded at 599 -> 600).
+    25-35s  She shares her record; the link opens on a phone: reasons,
+            "Record intact, verified just now".
+    35-45s  Tamper: R2,340 changed to R23,400 in the database. Refresh
+            -> "Record frozen". (tamper_demo.py, --restore after)
+    45-50s  Builder: a stage signed off by the homeowner, sealed.
+
+  5-MINUTE FINALE: same flow, slower, plus the dispute screen, the
+  builder's portfolio link, revoke, and the ML-DSA check.
+
+  Seed rules (spec section 8): every seeded event goes through the real
+  sealing code; seed_demo.py asserts chains verify and Nomsa sits at
+  599 before every rehearsal. All demo data is labelled synthetic.
+
+
+5. HOW WE MAKE MONEY
+---------------------------------------------------------------------------
+
+  TRADERS AND BUILDERS -- FREE AT LAUNCH, PRO LATER
+    Free   credit book, ordering, cash confirmation, jobs, My record.
+           Always. No tool is ever locked by the reputation.
+    Pro    ~R49 / month (est.), later: reports, stock count, staff and
+           multiple phones, VAS tools, priority support.
+
+  SUPPLIERS
+    Starter (independent supplier)       R299 / month (est.)
+    Pro (wholesaler, drivers)            R1,499 / month (est.)
+    ERP integration (later)              R4,999 / month + R15,000 setup
+                                         (est.)
+
+  COMMISSION: ~1% of each PayFast order (est.), through PayFast split
+    payments, so we never hold anyone's money. PayFast's own fee (card
+    3.2% + R2, Instant EFT 2.0%, ex VAT) is separate. None on cash.
+
+  VERIFICATION (NEW -- the revenue that matches the problem)
+    Funders, programmes and licensed lenders pay to check a record the
+    trader CHOSE to share with them: ~R50 per verified record check
+    (est.), or a programme licence for fund administrators. The trader
+    never pays for this and must consent every time. We never lend and
+    never sell data.
+
+  COSTS (researched 24 Sep 2026, $1 = R16.50; details in 07 section 3)
+    Pilot stage: ~R460 / month (DigitalOcean app + managed PostgreSQL;
+      Cloudflare, Cloudinary, email, Mapbox, Sentry on free tiers).
+    Growth stage: ~R4,000-R4,700 / month (AWS Cape Town for data in SA,
+      Cloudflare Pro, Cloudinary Plus, Resend Pro, Sentry).
+    No WhatsApp/SMS costs: sign-in is email + Google.
+    Break-even: pilot 2 suppliers on Starter; growth ~4 on Pro.
+
+  THE ASK: R300,000 for a 6-month pilot (est.)
+      2 builder stipends (R8,000 x 2 x 6)        R96,000
+      1 field agent (R10,000 x 6)                R60,000
+      running costs (R4,000 x 6)                 R24,000
+      pilot data bundles (100 traders, R100/mo)  R60,000
+      POPIA legal review                         R30,000
+      test devices + contingency                 R30,000
+                                          total R300,000
+    Pilot sites: Polokwane / Seshego and Tembisa. One wholesaler and
+    its shops, plus builders in the same areas.
+
+  GROWTH (projection, est. -- say "projection" on the slide)
+                         YEAR 1 (pilot+)   YEAR 2        YEAR 3
+    Active traders       1,000             8,000         30,000
+    Suppliers            15                120           500
+    Supplier subs/month  ~R15,000          ~R120,000     ~R500,000
+    Digital orders/mo    ~R3m              ~R24m         ~R90m
+    1% commission/month  ~R30,000          ~R240,000     ~R900,000
+    Trader Pro (5%)      --                ~R20,000      ~R74,000
+    Record checks/month  200 (~R10,000)    2,000         8,000
+                                           (~R100,000)   (~R400,000)
+    ------------------------------------------------------------------
+    Monthly revenue      ~R55,000          ~R480,000     ~R1.87m
+  Assumptions (est.): a supplier averages ~R1,000/month across plans;
+  an active trader orders ~R3,000/month digitally; 5% go Pro at R49;
+  record checks at ~R50. Validate all of it in the pilot.
+
+
+6. WHERE WE STAND IN THE COMPETITION
+---------------------------------------------------------------------------
+
+  JUDGING (65 + 5 bonus)
+    Innovation 15   cash confirmed by BOTH sides, offline; a record the
+                    owner holds and shares; builders' agreed changes;
+                    not a marketplace
+    Technical 15    working app + verified ledger + handshake + share
+                    page + PayFast sandbox + tamper demo that trips live
+    Design 10       v0.3's design language; phone-number sign-in;
+                    collection first; runner pass
+    Security 10     SSDLC (section 8); honest limits; checker page
+                    isolated; we never hold money
+    Business 15     suppliers pay, traders free; commission;
+                    verification fees; figures and a costed ask
+    Quantum +5      ML-DSA countersigned roots, implemented
+
+  THE THEME: "Would a real user trust and use this?" -> it digitises
+  what traders and builders already do, and trust is the product.
+
+  COMPETITORS, EACH DOING ONE SLICE: Spazapp (bulk buying), Kasi App
+  (POS), iKhokha (card payments / POS), Kazang and Flash (VAS float),
+  Kasi Money (banking), HustleCheck (reviews). None gives the owner a
+  record confirmed by the other party.
+
+  CHALLENGE: registered on Brand New. Top 3 is overall, so uptake
+  numbers matter little. Ask at kickoff whether special prizes are per
+  challenge; if so, consider Street Economy.
+
+
+---------------------------------------------------------------------------
+7. LEAN BUSINESS CANVAS -- MOVED
+---------------------------------------------------------------------------
+
+  Paste-ready text now lives in docs/submission/04_lean_canvas/LEAN_CANVAS_DRAFT.txt
+
+
+---------------------------------------------------------------------------
+8. SSDLC -- MOVED
+---------------------------------------------------------------------------
+
+  Paste-ready text now lives in docs/submission/03_ssdlc/SSDLC_DRAFT.txt
+
+
+9. DECK CHECKLIST (submit Sun 08:00, hard deadline 09:00)
+---------------------------------------------------------------------------
+
+  More than 10 slides for the submission; a short cut for the 3-minute
+  pitch.
+    [ ] Problem statement with charts and pictures
+    [ ] Solution offering
+    [ ] User journey story (Nomsa's day; Bongani's job)
+    [ ] Technological architecture
+    [ ] Competitive analysis
+    [ ] Data privacy policies
+    [ ] TRL 3 evidence (measured: chains verify, tamper trips, handshake
+        confirms and disputes)
+    [ ] Go-to-market strategy
+    [ ] Business model with figures + the ask
+    [ ] Roadmap (everything we cut)
+    [ ] Demo video link (under 90 seconds)
+  Pitch order: problem (20s) -> offer -> cost and ask -> why us ->
+  demo (50s).
+
+
+10. WHO BUILDS WHAT (rebalanced)
+---------------------------------------------------------------------------
+
+  The spec gave the proof side 7 of 10 backend domains plus the pitch.
+  With the marketplace cut, rebalance:
+
+  MANDLA -- app and trade
+    Expo app: the 15 screens, email + Google sign-in, PIN, keystore signing,
+    Cash Handshake on the phone (QR first, radio if time), trade
+    domains (accounts, credit book, suppliers, orders, PayFast sandbox),
+    WhatsApp runner pass.
+
+  RINSUNA -- proof and pitch
+    ledger, handshake server, integrity, reputation, share + checker
+    page, jobs/stages backend, ML-DSA countersigning, seed_demo.py,
+    tamper_demo.py, SSDLC, Lean Canvas, deck and pitch lead.
+
+  TOGETHER: the contract freeze (section 11), integration at H28, the
+  demo video, rehearsals.
+
+
+11. DECISIONS TO FREEZE TONIGHT
+---------------------------------------------------------------------------
+
+  - This file replaces 05 and v0.3 as the plan of record.
+  - Canonicalisation (spec section 2) and the shared test vector.
+  - Event types; one context key per job STAGE (not per job).
+  - QR handshake weighs 0.80, radio 1.00.
+  - A missing payer half becomes self-recorded after 24 hours.
+  - Checker page in Flask + Jinja, its own process.
+  - Reputation formulas as in the spec; markup bands labelled as
+    assumptions.
+  - A one-paragraph ownership note: what is joint (Akayza, the proof
+    layer, the builder flow) and what stays Mandla's (TruConnect and
+    its concepts). 50/50 on anything the hackathon wins.
+
+
+12. HOUSEKEEPING BEFORE KICKOFF
+---------------------------------------------------------------------------
+
+  [ ] Sonke Team Centre still says "CHANGE THIS" -- set the codename
+      and a real one-paragraph description now. Assessors score from
+      Sonke all weekend; a blank profile costs us.
+  [ ] Ask the facilitators: may we use prior code/libraries if
+      declared? Are special prizes per challenge?
+  [ ] Declare prior work in the README: TruConnect libraries (if used),
+      msIndex ledger pattern.
+  [ ] Midnight progress updates on Fri and Sat -- with substance.
+  [ ] PayFast sandbox account ready; check whether it supports split
+      payments.
+  [ ] 2-3 spaza calls + 1 supplier call before Fri 19:00.
+
+
+13. TIMELINE (the earlier time wins wherever the documents disagree)
+---------------------------------------------------------------------------
+
+  FRI 15:30   virtual check-in on Sonke (don't skip) -- 16:00 kick-off
+  FRI 19:10   problem statement with mentors
+  FRI 23:59   progress update #1
+  SAT 11:00   DevLabs -- split up
+  SAT 12:30   SSDLC due (section 8)
+  SAT 14:00   war room (12 min with panel)
+  SAT 20:00   "Presentations enlightenment" -- attend
+  SAT 21:30   Lean Canvas due (section 7)
+  SAT 23:59   progress update #2
+  SUN 00:00   Demo war rooms (pitch coaching) -- attend
+  SUN 08:00   submit slides + demo video (hard deadline 09:00)
+  SUN 10:00   3-minute sales pitch
+  SUN 13:15   be ready for the top 12
+
+
+14. THE HONEST RISKS (and our answers)
+---------------------------------------------------------------------------
+
+  "Will suppliers pay?"          They join because their customers ask
+                                 (trader-led). One real supplier call
+                                 before Friday.
+  "Will traders switch from       Free tools that help every day; the
+   WhatsApp and the notebook?"   same suppliers, just easier.
+  "Is the record true?"          We say exactly what it proves: not
+                                 changed after sealing, and confirmed
+                                 by the other party. Not more.
+  "Commission on thin margins"   Only on digital; cash stays free.
+  "Cash confirmation friction"   A few seconds, optional; it prevents
+                                 disputes and driver cash losses.
+  "Kazang/Flash already there"   We complement them (roadmap).
+  "Many similar teams"           Lead with what only we do: confirmed
+                                 by both, owned by the trader, builders.
+  "Too much to build"            15 screens; cut order in section 3.
+
+
+15. MERGED DECISIONS v0.6 (Mandla's direction + this plan, 24 Sep)
+---------------------------------------------------------------------------
+
+  AGREED AS WRITTEN ABOVE
+    - Pitch leads with PROOF ("Your business, proven by the people you
+      trade with"); the business tools are why traders STAY.
+    - Builders co-lead (real build footage, nobody else has it).
+    - Verification fees are a revenue line now.
+    - Break-even on running costs: ~3 suppliers on Pro (R4,000 /
+      R1,499). With a field agent added (~R12,000/month): ~8.
+    - Honest quantum claim: phones Ed25519; the server countersigns
+      chain roots and share snapshots with ML-DSA. On Windows,
+      liboqs-python needs the liboqs C library built; if that fights
+      us, a pure-Python ML-DSA or a tiny @noble/post-quantum signer
+      does the same job.
+    - Budget, pilot sites, canvas and SSDLC text: section 7 and 8
+      versions are the ones we paste.
+
+  MERGED (both ideas, one plan)
+    1. SCOPE. The 15-screen demo path is NEVER CUT. On top, in this
+       order, only once it works:
+         a. Supplier product GRID + cart (already designed; small).
+         b. ERP INTEGRATION API, minimal: API keys, product/stock push,
+            order webhook, demoed by a script playing the supplier's
+            system. Earns technical + business points.
+         c. SUPPLIER WEB PORTAL (orders, products, stock): the thing a
+            supplier TABLET runs later. If time is short, it's shown
+            as design screens and stays on the roadmap with the tablet.
+    2. ARCHITECTURE: DOMAIN-DRIVEN DESIGN. The spec's domains become
+       the structure: identity, trade (credit book, suppliers, orders,
+       payments), jobs, ledger, handshake, integrity, reputation,
+       share, integration. Each: api / services / repositories /
+       models / schemas.
+    3. SIGN-IN. Email + Google now (free, and already designed). After
+       sign-up, a 4-digit PIN or fingerprint unlocks the app (local,
+       free). Phone number + WhatsApp code moves to the roadmap: it
+       costs per message and needs WhatsApp Business approval.
+    4. USERS FIRST, THEN CUSTOMERS: we're hybrid-facing. The trader app
+       is the product; the supplier side exists to serve it.
+
+  NEEDS BOTH OF US TO DECIDE
+    - STARTING BEFORE KICKOFF. The organisers' email says "start
+      building to TRL 4", so pre-building is expected. Mandla's
+      proposal: start the foundations today. If we do, commit normally
+      with real dates (nothing to hide, since it's allowed).
+    - The ownership note (section 11, last point).

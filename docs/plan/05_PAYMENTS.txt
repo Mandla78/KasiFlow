@@ -1,0 +1,81 @@
+===========================================================================
+PLAN 05 -- PAYMENTS
+Each supplier accepts digital, cash, or both; the trader chooses
+===========================================================================
+
+
+1. WHO ACCEPTS WHAT
+---------------------------------------------------------------------------
+
+    Every supplier has  accepts = ["digital"] | ["cash"] | ["digital","cash"]
+    set in the backend with the supplier (PLAN 08).
+
+    MOST suppliers take DIGITAL only (a supplier with its own system
+    rarely wants cash). SOME take BOTH. At checkout the trader sees only
+    the methods that supplier accepts; if there are two, they choose.
+
+    Demo intent: two suppliers digital only, one (Mahlangu Wholesale)
+    both, so the demo can show a PayFast order AND the cash path.
+
+    PAYFAST IS ONLY FOR ORDERING FROM SUPPLIERS. The credit book
+    (a customer paying the trader back) is CASH ONLY, recorded by the
+    trader. No PayFast links for credit repayments.
+
+
+2. DIGITAL -- PAYFAST (the one that earns the credit)
+---------------------------------------------------------------------------
+
+    1. Trader places the order, method "Pay now".
+    2. App -> POST /payments/payfast/checkout {order_id}. The SERVER
+       builds and signs the PayFast fields from the order in the
+       database. Keys and passphrase never reach the phone.
+    3. The PayFast sandbox page opens in an in-app browser; a sandbox
+       test card pays.
+    4. PayFast -> our notification receiver (ITN). Checked:
+       signature, source, amount == our order, post-back validation,
+       idempotent, COMPLETE only. Then the order is PAID.
+    5. The app doesn't trust the browser's return; it waits for the
+       order to show PAID.
+    6. The supplier's system is told (for the demo: our backend IS the
+       supplier's system; roadmap: a webhook to theirs).
+    -> the record shows PAID DIGITALLY.
+
+    The receiver runs as its own small public process; the main API is
+    never exposed. VERIFY PayFast's sandbox URLs, signature rules and
+    notification hosts against their docs and our earlier provider
+    library.
+
+    Akayza never holds money: it goes to the supplier's PayFast
+    merchant (demo: one sandbox merchant).
+
+
+3. CASH -- THE SHOWCASE
+---------------------------------------------------------------------------
+
+    Only for suppliers that accept cash. Capped per order (R3,000
+    proposed; the demo's R2,340 fits); above it, only digital is
+    offered.
+
+    Flow (PDF p6-p10, PLAN 09 + 10):
+      order placed "Pay cash on delivery" -> backend accepts and
+      assigns the seeded driver -> trader shows the ORDER PASS ->
+      driver scans it -> both type the cash amount -> CONFIRMED BY
+      BOTH, or AMOUNTS DON'T MATCH -> dispute.
+
+    Why keep it when suppliers go digital: it shows the judges how
+    Akayza proves cash, which is how most of the kasi still pays.
+
+
+4. ORDER ACCEPTANCE
+---------------------------------------------------------------------------
+
+    No supplier screen, so the backend accepts: automatically for the
+    demo (or an admin command), adjusting nothing. Accept assigns the
+    supplier's driver for cash deliveries.
+
+
+5. OPEN
+---------------------------------------------------------------------------
+
+    - The cash limit number (R3,000?).
+    - Reputation weight of PAID DIGITALLY vs a cash handshake.

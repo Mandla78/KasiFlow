@@ -1,0 +1,43 @@
+Sonke workspace, as seen Thu 24 Sep 2026 (copied from the dashboard).
+
+Geekulcha Annual Hackathon 2026
+Starts on Fri, 25 Sep 2026 16:00 and ends on Sun, 27 Sep 2026 16:00.
+
+Team: PR (2 people)
+LEAN BUSINESS CANVAS: not filled
+SSDLC (Security): not filled
+SUBMIT NOW: no files yet. Deadline Sun, 27 Sep 2026 09:00AM
+Teams: up to 151 participating · Mentors: 15 · Judges: 0 listed
+
+CHALLENGE UPTAKE
+  Brand New 98 · Street Economy 96 · Localised Self-Learning 61 ·
+  Gov Innovation Platform 53 · GeoTech for Impact 39 ·
+  Train Journey Mapper 24 · Blockchain for Impact Use 20 ·
+  Open Source Agenda 18
+
+CHALLENGES (short)
+  Street Economy: street vendors face low customer engagement; build
+    solutions that help people DISCOVER, TRUST and SUPPORT informal
+    traders.
+  Brand New: your own challenge, aligned with the judging criteria;
+    meaningful impact, creativity, technical excellence.
+  Open Source Agenda: showcase SA open-source innovation.
+  Blockchain for Impact Use: commercially viable blockchain use cases.
+  Gov Innovation Platform · Train Journey Mapper · Localised
+  Self-Learning · GeoTech for Impact (agriculture/mining).
+
+KEY EVENT UPDATES
+  - Submission deadline Sun 27 Sep 09:00.
+  - Workshops day 2, 11:00-12:00: everyone attends; teams under 5
+    pick the most relevant.
+  - Workspace closed to non-selected participants.
+
+WHAT TO DO (from the organisers)
+  - Read the instructions; answer what is required.
+  - Make the judging criteria your friend.
+  - Know what's out there; what sets you apart.
+  - Make it make business sense with estimated figures: what you'll
+    spend on and what you'll charge your users.
+
+Full guidelines, submission list, pitch flow and judging criteria:
+see 00_EVENT_BRIEF.txt and GKHack26_Programme.pdf.

@@ -1,0 +1,132 @@
+===========================================================================
+V1_12 -- TASKS BEFORE FRIDAY
+Tuesday 22 -> Friday 25 September
+===========================================================================
+
+THE RULE THIS WEEK: PREPARE, DON'T BUILD. Akayza's product code
+starts Friday 18:00, in the new repository. This week is for deciding,
+validating, setting up machines and testing one library.
+
+The Bluetooth spike is a THROWAWAY test of a third-party library. Its
+code does not go into the Akayza repository.
+
+
+TUESDAY 22 (tonight)
+---------------------------------------------------------------------------
+
+  BOTH
+  [ ] read V1_00, V1_03, V1_04, V1_10
+  [ ] 30-minute call: confirm Akayza, the demo's two types (spaza +
+      builder), and the split
+
+  MANDLA
+  [ ] machine setup: V1_08 step 0 (env vars, scrcpy, OBS)
+  [ ] find a SECOND Android phone for the week and the weekend (a third
+      is a bonus, V1_09 section 6B)
+  [ ] message the validation list (V1_02 section 6): 2 spaza owners,
+      1 builder, 1 student reseller, 1 wholesaler, 1 hardware store
+
+
+WEDNESDAY 23 -- workspace invite day
+---------------------------------------------------------------------------
+
+  ADMIN (whoever sees it first posts it in our chat)
+  [ ] start time, submission deadline, pitch slot + length, Q&A length
+  [ ] platform for the pitch (Zoom / Teams / Meet / Discord), which
+      decides V1_09 section 3
+  [ ] what's submitted: repo link? video? deck?
+  [ ] the full challenge list
+  [ ] ASK IN WRITING if the workspace doesn't answer it:
+        1. reusing our own pre-existing infrastructure libraries:
+           allowed, and how should we declare it?
+        2. does submitting grant anyone a licence to the entry?
+        3. can our merged two-person team enter on the golden ticket?
+        4. are AI coding assistants allowed during the build?
+
+  MANDLA -- BLUETOOTH SPIKE (2-3 hours, throwaway, outside any repo)
+  [ ] throwaway Expo SDK 57 app + munim-bluetooth +
+      react-native-nitro-modules; dev build; install on both phones
+  [ ] phone 1 advertises 24 fixed bytes (manufacturer 0xFFFF)
+  [ ] phone 2 scans, filters 0xFFFF, prints bytes + RSSI
+  [ ] the REVERSE too: phone 2 advertises, phone 1 hears (the ACK path)
+  [ ] PASS = 20/20 exact at 30 cm, then at 3 m, with both phones in
+      airplane mode + Bluetooth on
+  [ ] post the result: option A (munim-bluetooth) or B (our own Kotlin
+      module)
+  [ ] (rev 4) on BOTH phones, log isMultipleAdvertisementSupported().
+      A phone that says false needs QR for its outgoing packet in
+      EITHER role (V1_04 section 7)
+  [ ] (rev 4) in the same throwaway app, make an Ed25519 key with
+      @noble/curves from expo-crypto bytes and sign one message. If
+      noble's own random helpers throw on Hermes, we learn it now, not
+      at H2 (V1_04 section 8)
+  [ ] side effect: this warms the Gradle cache for Friday
+
+  RISUNA
+  [ ] machine setup (V1_08 step 0), PostgreSQL, Python 3.12+
+  [x] review V1_04 (the handshake) and V1_06 (proof + reputation), and
+      mark disagreements (done: revision 4)
+  [x] the checker page: Flask/Jinja, as its own process, checker.py
+      (decided, rev 4)
+
+
+THURSDAY 24
+---------------------------------------------------------------------------
+
+  BOTH -- THE CONTRACT (the most important thing this week)
+  [ ] docs/CONTRACT.md as a document: every endpoint in V1_07 section 7,
+      the JSON shapes, the event types, the stock-order status
+      transitions and which role may make each one
+  [ ] the canonicalisation rules (V1_04 section 5) + ONE hand-computed
+      test vector (payload, salt, prev_hash, ctx_key, amount ->
+      event_hash, commitment12, ref4, match_tag, signature from a
+      published test key)
+  [ ] (rev 4) the vector includes a non-ASCII string, a genesis event,
+      and raw bytes (not hex text) for prev_hash and salt inside every
+      hash input
+  [ ] the businessTypes table: for spaza, builder, reseller and food
+      vendor, the labels, tab order and templates (V1_03 section 2)
+  [ ] freeze: confirmation levels, the 60 s window, flag names, the
+      reputation dimensions AND their formulas (V1_06 section 2), the
+      transport byte, the pending timeout (V1_13 Q9, Q10)
+
+  NAME
+  [ ] CIPC name search, trademark search and Play Store search for
+      "Akayza"; check that the domain / social handles are free. If
+      it's blocked, pick an alternate NOW, not on Saturday.
+
+  VALIDATION
+  [ ] at least 3 conversations done, including ONE SUPPLIER. The
+      supplier's answer to "what would you pay for?" is slide 6.
+  [ ] quotes written down, with first names and permission
+
+  PITCH
+  [ ] slide skeleton (V1_11), with the problem numbers from V1_14
+      VERIFIED only
+
+  HARDWARE
+  [ ] two good data cables tested with `adb devices`, a powered USB hub,
+      chargers
+  [ ] a second monitor for the OBS projector, or plan to share a window
+  [ ] internet for the call that ISN'T the demo phones
+
+
+FRIDAY 25 -- before 18:00
+---------------------------------------------------------------------------
+
+  [ ] sleep in. The first night runs to 06:00.
+  [ ] both machines: git, Node, Python, PostgreSQL, adb, scrcpy, OBS
+  [ ] test call: share an OBS scene with a scrcpy window, full quality
+  [ ] reread V1_10 section 3 (H0-H2)
+  [ ] 17:45: on the call, ready
+
+
+MUST NOT HAPPEN THIS WEEK
+---------------------------------------------------------------------------
+
+  - Akayza product code written before Friday 18:00
+  - anything copied from the earlier product except the declared libs/
+  - the earlier product's name in anything a judge will see
+  - "community" as a feature name
+  - any sentence implying we're here for prizes
+  - a statistic on a slide that isn't in V1_14 VERIFIED

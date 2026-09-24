@@ -1,0 +1,76 @@
+===========================================================================
+[DRAFT -- changes as we build] SSDLC -- SECURITY (due Sat 12:30) -- PASTE INTO SONKE
+Source of truth for pasting (moved here from 06). (est.) = estimate.
+===========================================================================
+
+8. SSDLC -- PASTE INTO SONKE (due Sat 12:30)
+---------------------------------------------------------------------------
+
+  SECURITY REQUIREMENTS (RISK ASSESSMENT)
+    Assets: owners' books (credit book names and amounts), sealed
+    records, per-phone signing keys, share links, payment data.
+    Main risks: fabricated or edited records; malicious file uploads;
+    automated attacks on sign-in and public pages; a stolen phone
+    used to confirm cash; a runner or driver pocketing cash;
+    leaked customer debts; share links forwarded or leaked; fake
+    payment notifications; phone clocks set back; colluding accounts.
+    Requirements: the server trusts nothing a phone claims about trust
+    -- phones send signed facts, the server decides confirmation,
+    flags and disputes. We never hold money (PayFast). POPIA: consent
+    for every share, data minimisation, customers' names never leave
+    the owner's books. The reputation is not a credit score and never
+    locks a tool.
+
+  THREAT MODELLING & DESIGN REVIEW
+    Spoofing: per-phone Ed25519 key in the Android keystore; a new
+    phone switches the old key off; a new SIM changes nothing.
+    Tampering: every event hash-chained (SHA-256) and signed;
+    re-verified on every record view; any break freezes the record.
+    Repudiation: cash confirmed by BOTH parties' signatures, within
+    60 seconds of each other; a mismatch is kept as a dispute.
+    Information disclosure: amounts never broadcast in the clear
+    (salted commitment + HMAC match tag); share links are 128-bit
+    tokens stored only as hashes; the owner chooses what a link shows.
+    Denial of service: offline-first -- the app records without
+    signal and syncs later; duplicate uploads are ignored.
+    Elevation of privilege: every API route pins a role; identity
+    comes only from the verified token; object-level checks on every
+    record read.
+    Honest limits: a hash chain proves a record was not changed after
+    sealing, not that it was true when entered. A handshake proves both
+    parties signed the same amount, not that the notes were real.
+
+  DEVELOPMENT (SECURE CODING PRACTICES)
+    One canonical JSON rule and a shared test vector in Python and
+    TypeScript; money as integer cents; hashes over stored canonical
+    bytes, never over database JSON. Parameterised queries only.
+    Secrets from environment variables with no fallback defaults; debug
+    mode off outside local machines. Input validation on every
+    endpoint; rate limits on sign-in codes and PIN attempts. Pinned
+    dependencies. Secret scanning before every push. All AI-assisted
+    code is reviewed by a team member before merge.
+
+  SECURITY TESTING
+    Cross-language test vector (with a non-ASCII string and a genesis
+    event); signature, chain-link and hash checks with deliberately
+    broken events; replayed and duplicate uploads; clock-skew cases;
+    IDOR test (a second account cannot read another's record or
+    shares); expired and revoked share links; sign-in code brute force;
+    tamper_demo.py as an automated test; dependency audit (pip-audit,
+    npm audit) and secret scan.
+
+  ASSESSMENT & SECURE INTEGRATION
+    Cloudflare sits in front of every public endpoint: TLS, DDoS
+    protection, managed WAF rules, rate limits and bot rules; the
+    origin accepts traffic only from Cloudflare. Every upload is
+    scanned for malware (Cloudinary + Perception Point) and stays
+    hidden until approved. The public checker page runs as its own process with read-only
+    database access and a single route; only it is exposed through the
+    tunnel -- the API is not reachable from the internet. PayFast
+    payment notifications validated (signature, amount, server
+    confirmation) before an order is marked paid. Stolen phone: the
+    key is revoked server-side and a new chain segment starts. Chain
+    breaks are cleared only by manual review. Post-quantum: the server
+    countersigns chain roots and share snapshots with ML-DSA (NIST
+    FIPS 204). Before any real launch: POPIA legal review, external
+    penetration test, encryption of context keys at rest.

@@ -1,0 +1,38 @@
+# --- secrets: never commit ---
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.jks
+*.keystore
+credentials.json
+google-services.json
+
+# --- Python ---
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.pytest_cache/
+.coverage
+htmlcov/
+*.egg-info/
+
+# --- Node / Expo ---
+node_modules/
+.expo/
+dist/
+web-build/
+*.tsbuildinfo
+mobile/android/
+mobile/ios/
+
+# --- OS / editors ---
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# --- local tooling ---
+.claude/

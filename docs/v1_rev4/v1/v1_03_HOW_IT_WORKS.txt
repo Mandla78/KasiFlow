@@ -1,0 +1,150 @@
+===========================================================================
+V1_03 -- HOW IT WORKS
+The tools, how each business type sees them, and the core flows
+===========================================================================
+
+
+1. ONE SET OF TOOLS
+---------------------------------------------------------------------------
+
+    ORDER BOOK   what customers ordered from me: who, what, how much,
+                 paid or not. For a builder, a JOB with stages lives
+                 here.
+    LOAN BOOK    credit I gave: who took what, what they've paid back,
+                 what's still out, and a receipt I can send.
+    STOCK        ordering from my suppliers: place, supplier accepts,
+                 delivered, paid. Also stock bought for cash at a
+                 counter.
+    MARKET       the feed: my suppliers' stock, what I usually reorder,
+                 suppliers near me, what businesses like mine are
+                 buying.
+    PROOF        my record, sealed and tamper-evident: what's been
+                 confirmed by the other party, and a link I can share.
+    CASH         Bluetooth confirmation of a cash handover between two
+    HANDSHAKE    Akayza users (V1_04). It isn't a tab. It appears
+                 wherever cash changes hands.
+
+    SUPPLIER SIDE: incoming orders, customers, catalogue, cash
+                   collected (Cash Handshake), and Proof.
+
+
+2. BUSINESS TYPES: SAME TOOLS, ARRANGED DIFFERENTLY
+---------------------------------------------------------------------------
+
+Onboarding asks one question: "What kind of business do you run?" The
+answer sets the WORDS, the ORDER OF THE TABS and a few TEMPLATES. It
+never changes the data model and never locks a tool. Every type can
+reach every tool.
+
+    TYPE          HOME SHOWS                  ORDER BOOK IS   TEMPLATES
+    ------------  --------------------------  --------------  -------------
+    Spaza /       money owed to me today;     "Orders"        reorder list,
+    general shop  reorder from my wholesaler;                 credit sale
+                  Market
+    Builder /     active jobs, next stage     "Jobs"          job with
+    tradesperson  payment due; materials                      stages:
+                  from my hardware store                      deposit,
+                                                              milestones,
+                                                              final
+    Reseller /    orders waiting to deliver;  "Orders"        WhatsApp-
+    side hustle   who still owes me;                          style order,
+                  reorder from distributor                    pay-later
+    Food vendor   today's takings; stock to   "Sales"         daily tally
+                  buy tomorrow
+
+Why this is the point: THE INFORMAL ECONOMY HAS TYPES. A tool shaped for
+a spaza is wrong for a builder, and a builder's tool is wrong for a
+student. Every type gets one app with its own vocabulary.
+
+Implementation: a single `business_type` on the profile, and a config
+map in the app (labels, tab order, templates). About 150 lines. It's
+the cheapest high-impact feature in the whole plan.
+
+
+3. THE CORE FLOWS
+---------------------------------------------------------------------------
+
+  FLOW A -- ORDER STOCK, PAY CASH ON DELIVERY  (spaza <-> wholesaler)
+    1. Nomsa reorders from Mahlangu Wholesale (from the Market or the
+       reorder list). Order #KF-1042, R2,340.
+    2. The wholesaler accepts on their phone, possibly adjusting
+       quantities, with a reason from a fixed list.
+    3. Delivery. The driver's phone (the supplier account) taps
+       "Collect cash R2,340". CASH HANDSHAKE: Nomsa's phone asks "Confirm
+       you paid R2,340 for order #1042?" -> Confirm / "I paid a different
+       amount". Both phones seal it, offline.
+    4. Both sync later. The order is complete, and the payment is
+       CONFIRMED BY BOTH.
+
+  FLOW B -- CREDIT SALE AND REPAYMENT  (any business <-> its customer)
+    1. Loan Book: "Thandi took bread and milk, R48, pays Friday".
+       A receipt goes by SMS/WhatsApp.
+    2. Friday, Thandi pays cash:
+         - Thandi has Akayza: CASH HANDSHAKE, and both confirm R48.
+         - Thandi doesn't (the usual case): Nomsa records it, and it stays
+           SELF-RECORDED. Still useful to Nomsa, and honestly weighted
+           lower in Nomsa's Proof.
+
+  FLOW C -- A JOB WITH STAGES  (builder <-> homeowner, builder <-> hardware)
+    1. Sipho creates a job: "Room extension, Mokoena, R38,000", with
+       stages: deposit R5,000 / walls R12,000 / roof R12,000 /
+       final R9,000. It's sent to the client, who accepts in Akayza.
+    2. Deposit in cash: CASH HANDSHAKE, and here the client TYPES THE
+       AMOUNT THEMSELVES (no prefill; V1_04 section 4). Both say R5,000.
+       Confirmed.
+    3. Materials: at Ndlovu Hardware, the store records the sale to
+       Sipho's account (Flow A's counter version) and tags the job.
+    4. Each stage: Sipho takes a photo IN THE APP (camera only, never
+       the gallery). The client approves on their phone, and the stage
+       payment is handshaken.
+    5. Finish: the client signs off and leaves a review. Only a client
+       with confirmed payments can review, so reviews can't be bought
+       from strangers.
+
+  FLOW D -- SHARE PROOF
+    Proof -> "Share my record" -> choose what to include and for how
+    long -> a link on WhatsApp. The checker sees a one-page summary,
+    with no login. The owner sees every view and can revoke it.
+    (V1_06)
+
+
+4. THE MARKET (the feed), KEPT SIMPLE THIS WEEKEND
+---------------------------------------------------------------------------
+
+Five sections, each a plain query. There is no ranking engine this
+weekend, and we say so if asked:
+
+    1. Categories (chips): browse stock by category
+    2. Reorder: products from my last orders
+    3. My suppliers: the suppliers I already buy from
+    4. Near me: suppliers of MY TYPE's stock within reach
+       (hardware for builders, wholesalers for spazas)
+    5. Sponsored: one card, clearly labelled SPONSORED, never mixed in
+
+Rules: a section with fewer than 3 items isn't shown. Silence is
+better than a half-empty rail. Unknown section types are skipped by
+the app, never crashed on.
+
+
+5. OFFLINE
+---------------------------------------------------------------------------
+
+    - Order Book, Loan Book and Cash Handshake work fully offline. Each
+      event is sealed and signed on the phone and kept in SQLite.
+    - Ordering from a supplier needs a connection to SEND, but can be
+      drafted offline.
+    - Sync runs when NetInfo says the internet is reachable. Every event
+      carries its hash as an idempotency key.
+    - The Market needs data. Images and stock come from the server, and
+      that's fine.
+
+
+6. NOT THIS WEEKEND
+---------------------------------------------------------------------------
+
+    - payments through the app (cash only; digital payment is roadmap)
+    - any lending, advance or credit product
+    - iOS (Android only)
+    - supplier catalogue editing (seeded catalogues only)
+    - ranking beyond simple ordering in the Market
+    - background Bluetooth (foreground only)

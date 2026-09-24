@@ -1,0 +1,82 @@
+===========================================================================
+[DRAFT -- changes as we build] PITCH -- war room (Sat), 3-minute sale (Sun 10:00), 5-minute finale
+===========================================================================
+
+
+---------------------------------------------------------------------------
+WAR ROOM -- Sat 14:00-17:00, 12 minutes with a panel
+---------------------------------------------------------------------------
+
+  Purpose: say what we're building and get guidance on scope. Bring:
+    - 60-second summary (the first two blocks of the 3-minute pitch)
+    - what works so far (show it on a phone)
+    - our scope and cut list (06): ask "is this the right scope?"
+    - two questions: pricing (would you buy at R299 / R1,499?) and the
+      ask (is R300,000 credible?)
+  Write down every piece of advice; it goes into the slides.
+
+
+---------------------------------------------------------------------------
+ROUND 1 -- 3-MINUTE SALES PITCH (Sun 10:00-12:30)
+"Pay full prize, pay half, or not buying."
+---------------------------------------------------------------------------
+
+  0:00  PROBLEM (20 s)
+        "Bongani builds rooms in Seshego. Nomsa runs a spaza in
+        Tembisa. Both run real businesses on cash, WhatsApp and a
+        notebook, so neither can prove it. 38% of construction workers
+        are informal. When government opened the Spaza Shop Support
+        Fund, 354 applications failed verification."
+  0:20  OFFER (30 s)
+        "Akayza is a free app for informal traders. Builders run jobs
+        in stages that the client signs off. Spaza shops keep a credit
+        book and reorder from the suppliers they already use. Every
+        payment, by PayFast or cash that both sides confirm, is sealed
+        into a record the trader owns and can share."
+  0:50  DEMO (50 s)
+        stage sign-off -> confirmed by both -> record shared ->
+        tamper check trips
+  1:40  WHY US (20 s)
+        "Not a marketplace: we connect the suppliers traders already
+        trust. The only record confirmed by the other party, working
+        offline, and post-quantum sealed."
+  2:00  MONEY + ASK (40 s)
+        "Traders use it free. Suppliers pay R299 to R1,499 a month, plus
+        about 1% on digital orders; funders pay to verify a record the
+        trader chose to share. Running costs are about R460 a month in
+        the pilot. We need R300,000 for a 6-month pilot in Polokwane and
+        Tembisa."
+  2:40  CLOSE (20 s)
+        "Your business, proven by the people you trade with. Are you
+        buying?"
+
+
+---------------------------------------------------------------------------
+TOP 12 -- 5 MINUTES (mostly demo) + 3 MINUTES Q&A (Sun 13:30)
+---------------------------------------------------------------------------
+
+  0:00-0:40  problem + who (Bongani, Nomsa, their suppliers)
+  0:40-3:40  LIVE DEMO: builder stage + client sign-off; spaza credit
+             sale; order again + PayFast; cash confirmed by both + the
+             dispute; record shared + revoked; tamper check trips;
+             ML-DSA "verified"
+  3:40-4:30  business: who pays, costs, the ask
+  4:30-5:00  close + roadmap (supplier tablet, VAS, WhatsApp sign-in)
+
+  LIKELY QUESTIONS (have one-line answers ready)
+    - "Will suppliers pay?"            -> invites from their own
+                                          customers + our sales;
+                                          [validation quote]
+    - "Is the record true?"            -> not changed after sealing,
+                                          and confirmed by the other
+                                          party. Nothing more.
+    - "Why not a marketplace?"         -> traders already know who
+                                          they buy from
+    - "How do you handle cash?"        -> both sides type the amount;
+                                          a mismatch is a dispute
+    - "POPIA?"                         -> owner consents to every
+                                          share; names never leave
+                                          the books; data in SA at
+                                          scale
+    - "Why quantum?"                   -> records must stay provable
+                                          for years

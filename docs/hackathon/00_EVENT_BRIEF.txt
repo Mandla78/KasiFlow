@@ -1,0 +1,115 @@
+===========================================================================
+GKHack26 -- EVENT BRIEF (the facts, from the organisers)
+===========================================================================
+
+Sources: GKHack26_Programme.pdf (exported Thu 24 Sep 2026 11:13), the
+Sonke workspace text, the selection email. Copies of both texts are in
+01_SONKE_WORKSPACE.txt and 02_SELECTION_EMAIL.txt.
+
+
+---------------------------------------------------------------------------
+US
+---------------------------------------------------------------------------
+
+    Team name     PR  (2 members: Mandla Baloyi, Risuna Mahani)
+    Selected      yes, out of 151 teams
+    Participation VIRTUAL: Sonke (NEED HELP button) + Jitsi calls with
+                  mentors (links in calendar invites)
+    Challenge     currently BRAND NEW (98 teams). The email's "WHAT YOU
+                  ARE BUILDING FOR USE" still says "CHANGE THIS": update
+                  the project overview on Sonke.
+    Sonke status  Lean Business Canvas: NOT FILLED · SSDLC: NOT FILLED ·
+                  Files: NONE
+
+
+---------------------------------------------------------------------------
+THE REAL TIMELINE (SAST)  -- the build window is ~41 h, not 48 or 72
+---------------------------------------------------------------------------
+
+  FRI 25 SEP
+    15:30        join the virtual opening call; press VIRTUAL CHECK-IN
+                 on Sonke (very important)
+    16:00        KICK-OFF (keynotes until 17:30)
+    17:30        hack-away
+    19:00-20:00  mentors: PROBLEM STATEMENT, max 2 paragraphs, real
+                 data from a credible source + lived experience
+    23:59        PROGRESS UPDATE on Sonke (midnight updates are key)
+
+  SAT 26 SEP
+    11:00-12:00  DevLabs workshops: the team must be represented
+    12:30        DEADLINE: SSDLC (security) form on Sonke
+    14:00-17:00  WAR ROOM: 12 minutes with a panel (allocation by email)
+    20:00-20:45  "Presentations enlightenment": what, when, how
+    21:30        DEADLINE: LEAN BUSINESS CANVAS on Sonke, with FIGURES
+                 (e.g. R50/month fee; what hosting costs)
+    23:59        PROGRESS UPDATE
+
+  SUN 27 SEP
+    00:00-02:00  Demo war rooms (pitch + showcase guidance)
+    09:00        FINAL SUBMISSION (hard): no submission = no pitch,
+                 no finale, no prizes
+    10:00-12:30  ROUND 1: 3-minute SALES PITCH ("pay full prize / pay
+                 half / not buying")
+    13:30-15:00  TOP 12: 5 minutes (mostly demo) + 3 minutes Q&A
+    15:10        winners
+
+
+---------------------------------------------------------------------------
+WHAT TO SUBMIT BY SUN 09:00
+---------------------------------------------------------------------------
+
+  SLIDES, MORE THAN 10, including:
+    [ ] Problem statement justification, with charts and pictures
+    [ ] Solution offering
+    [ ] User journey story
+    [ ] Technological architecture
+    [ ] Competitive analysis
+    [ ] Data privacy policies
+    [ ] Technology Readiness Level (brief says TRL 3; email says build
+        to TRL 4)
+    [ ] Go-to-market strategy
+    [ ] Team members, security considerations, impact
+  [ ] DEMO VIDEO, UNDER 90 SECONDS: link on the Sonke project overview
+      or in a slide
+  Also on Sonke: [ ] SSDLC (Sat 12:30) [ ] Lean Business Canvas (Sat
+  21:30) [ ] progress updates (Fri + Sat 23:59)
+
+
+---------------------------------------------------------------------------
+THE 3-MINUTE SALES PITCH (their pro tip)
+---------------------------------------------------------------------------
+
+    ~20 s  the problem, backed by real / lived evidence
+           what we offer, how it works, what's coming
+           HOW MUCH IT COSTS and HOW MUCH WE NEED NOW (sum of costs)
+           why we stand out from the others
+    ~50 s  quick demo
+
+
+---------------------------------------------------------------------------
+JUDGING (70 points)
+---------------------------------------------------------------------------
+
+    15  Innovation and creativity   new, or improves an existing one?
+                                    impact on intended users?
+    15  Technical implementation    fit for purpose? does it work?
+                                    fit for scale? efficient?
+    10  Usability and design        easy, appealing, easy flow, usable
+                                    tomorrow?
+    10  Security and ethics         risks + mitigation, policies,
+                                    considerate?
+    15  Business and presentation   sound business case, market
+                                    potential, "are you buying?"
+     5  BONUS: quantum tech         quantum integration outlined (2)?
+                                    implemented and integrated?
+
+
+---------------------------------------------------------------------------
+FROM THE SELECTION EMAIL (preparation needs)
+---------------------------------------------------------------------------
+
+    - Make the solution CONSUMER-FACING.
+    - Sense of reality: LESS AI RELIANCE. (Akayza uses no AI. Good.)
+    - Create a WORK BREAKDOWN STRUCTURE.
+    - "Start building your solution to TRL 4."
+    - Theme: BUILD FOR USE: "Would a real user trust and use this?"
