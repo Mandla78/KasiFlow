@@ -50,6 +50,7 @@ export default function More() {
       <Card style={styles.group}>
         <ListRow icon="bell" title="Notifications" />
         <ListRow icon="lock" title="Security" subtitle="Phones, password, your data" onPress={() => router.push('/informal-business/security')} />
+        <ListRow icon="credit-card" title="Payment cards" subtitle="Test mode" onPress={() => router.push('/informal-business/payment-cards')} />
         <ListRow icon="globe" title="Language" subtitle="English" />
         <ListRow icon="refresh-cw" title="Data saver" subtitle="On" last />
       </Card>
