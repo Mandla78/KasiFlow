@@ -27,6 +27,9 @@ class RevokeReason:
     PASSWORD_RESET = "password_reset"
     NEW_DEVICE = "new_device"
     REFRESH_REUSE = "refresh_reuse"
+    PASSWORD_CHANGE = "password_change"
+    OTHERS_SIGNED_OUT = "others_signed_out"
+    ACCOUNT_CLOSED = "account_closed"
 
 
 def _issue(user_id: uuid.UUID, sid: uuid.UUID) -> tuple[str, str, str]:
@@ -94,3 +97,23 @@ def revoke_all(user_id: uuid.UUID, reason: str, device_id: Optional[uuid.UUID] =
         revoke(s, reason)
         count += 1
     return count
+
+
+def revoke_all_except(user_id: uuid.UUID, keep_sid: str, reason: str) -> int:
+    """Sign out every other phone, keep this one."""
+    keep = get(keep_sid)
+    count = 0
+    for s in Session.query.filter_by(user_id=user_id, revoked_at=None).all():
+        if keep is None or s.id != keep.id:
+            revoke(s, reason)
+            count += 1
+    return count
+
+
+def live_for(user_id: uuid.UUID) -> list[Session]:
+    now = utcnow()
+    return (
+        Session.query.filter(Session.user_id == user_id, Session.revoked_at.is_(None), Session.expires_at > now)
+        .order_by(Session.last_used_at.desc())
+        .all()
+    )

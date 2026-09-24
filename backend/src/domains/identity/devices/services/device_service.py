@@ -81,3 +81,26 @@ def register(
     db.session.add(device)
     db.session.flush()
     return device, previous_id
+
+
+def revoke_all(user_id: uuid.UUID) -> int:
+    """Switch off every phone key of a user (account closed)."""
+    count = 0
+    for d in Device.query.filter_by(user_id=user_id, revoked_at=None).all():
+        d.revoked_at = utcnow()
+        count += 1
+    return count
+
+
+def list_for(user_id: uuid.UUID) -> list[Device]:
+    return Device.query.filter_by(user_id=user_id).order_by(Device.created_at.desc()).all()
+
+
+def public_view(device: Device) -> dict:
+    return {
+        "id": str(device.id),
+        "platform": device.platform,
+        "label": device.label,
+        "registered_at": device.created_at.isoformat(),
+        "active": device.revoked_at is None,
+    }

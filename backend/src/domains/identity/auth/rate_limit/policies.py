@@ -22,6 +22,9 @@ RESEND_CODE = "3 per 15 minutes"
 REFRESH = "30 per minute"
 FORGOT_PASSWORD = "3 per hour"
 RESET_PASSWORD = "5 per hour"
+CHANGE_PASSWORD = "5 per hour"
+CLOSE_ACCOUNT = "3 per hour"
+EXPORT_DATA = "5 per hour"
 # GET /me and POST /logout need a valid token already: no extra limit.
 
 
@@ -50,4 +53,5 @@ RATE_LIMIT_AUDIT_EVENTS = {
     "api.refresh": AuthAuditEvent.REFRESH_RATE_LIMITED,
     "api.forgot_password": AuthAuditEvent.PASSWORD_RESET_REQUEST_RATE_LIMITED,
     "api.reset_password": AuthAuditEvent.PASSWORD_RESET_RATE_LIMITED,
+    "api.change_password": AuthAuditEvent.PASSWORD_RESET_RATE_LIMITED,
 }

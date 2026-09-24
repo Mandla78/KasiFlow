@@ -6,6 +6,8 @@ from __future__ import annotations
 import base64
 import re
 
+import pytest
+
 from cryptography.hazmat.primitives.asymmetric.ed25519 import Ed25519PrivateKey
 from cryptography.hazmat.primitives.serialization import Encoding, PublicFormat
 
@@ -255,3 +257,27 @@ def test_verification_emails_are_capped_per_address(client, outbox):
     for _ in range(10):
         client.post("/api/v1/auth/resend-code", json={"email": EMAIL})
     assert len(outbox) == 6
+
+
+# ------------------------------------------------------------ transport
+
+
+def test_every_response_has_security_headers(client):
+    r = client.get("/api/v1/health")
+    assert r.headers["Cache-Control"] == "no-store"
+    assert r.headers["X-Content-Type-Options"] == "nosniff"
+    assert r.headers["X-Frame-Options"] == "DENY"
+
+
+def test_oversized_request_is_refused(client):
+    r = client.post("/api/v1/auth/login", data="x" * (1024 * 1024 + 10), content_type="application/json")
+    assert r.status_code == 413 and r.get_json()["code"] == "PAYLOAD_TOO_LARGE"
+
+
+def test_weak_secret_refused_at_start_up(monkeypatch):
+    from src.config import get_config
+
+    monkeypatch.setenv("SECRET_KEY", "short")
+    monkeypatch.setenv("JWT_SECRET_KEY", "y" * 64)
+    with pytest.raises(RuntimeError, match="at least 32 characters"):
+        get_config("development")

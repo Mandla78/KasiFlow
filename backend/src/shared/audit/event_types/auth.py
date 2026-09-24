@@ -68,6 +68,8 @@ class AuthAuditEvent(str, enum.Enum):
     PASSWORD_RESET_SUCCESS = "auth.password_reset_success"
     PASSWORD_RESET_FAILED = "auth.password_reset_failed"
     PASSWORD_RESET_EXPIRED = "auth.password_reset_expired"
+    PASSWORD_CHANGED = "auth.password_changed"  # signed-in change (knows the old one)
+    PASSWORD_CHANGE_FAILED = "auth.password_change_failed"
 
     # --- Tokens ---
     TOKEN_CREATED = "auth.token_created"
@@ -82,6 +84,7 @@ class AuthAuditEvent(str, enum.Enum):
     # --- Account administration (no publisher yet -- see module docstring) ---
     ACCOUNT_ENABLED = "auth.account_enabled"
     ACCOUNT_DISABLED = "auth.account_disabled"
+    DATA_EXPORTED = "auth.data_exported"  # POPIA: the user downloaded their data
     ACCOUNT_DELETED = "auth.account_deleted"
     ACCOUNT_UNLOCKED = "auth.account_unlocked"
     ROLE_CHANGED = "auth.role_changed"

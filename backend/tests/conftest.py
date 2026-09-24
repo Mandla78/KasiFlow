@@ -17,6 +17,7 @@ from src import create_app  # noqa: E402
 from src.extensions import db  # noqa: E402
 from src.shared.cache import cache as cache_module  # noqa: E402
 from src.shared.email.email import get_fake_provider  # noqa: E402
+from src.shared.rate_limit.limiter import limiter  # noqa: E402
 
 IDENTITY_TABLES = ["sessions", "devices", "email_codes", "password_resets", "password_credentials", "consents", "users"]
 
@@ -40,6 +41,8 @@ def clean(app):
     # Per-address email limits live in memory for the whole run; each test
     # starts with fresh counters (the limit itself is tested separately).
     cache_module.cache.clear()
+    # Limits off by default; tests/domains/identity/test_rate_limits.py turns them on.
+    limiter.enabled = False
     yield
     with app.app_context():
         db.session.remove()

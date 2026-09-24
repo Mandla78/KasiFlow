@@ -56,6 +56,9 @@ class BaseConfig:
     JWT_SECRET_KEY = os.environ.get("JWT_SECRET_KEY", "")
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     SQLALCHEMY_ENGINE_OPTIONS = {"pool_pre_ping": True}
+    # Requests are small JSON; photos go straight to the media provider.
+    # Anything bigger is refused before it is read (413).
+    MAX_CONTENT_LENGTH = 1 * 1024 * 1024
 
     # Tokens: short access, rotating refresh (PLAN 02).
     JWT_ACCESS_TOKEN_EXPIRES = timedelta(minutes=int(os.environ.get("JWT_ACCESS_TOKEN_EXPIRES_MINUTES", 15)))
@@ -122,7 +125,9 @@ class TestingConfig(BaseConfig):
     JWT_ACCESS_TOKEN_EXPIRES = timedelta(minutes=5)
     MAIL_PROVIDER = "fake"
     MAIL_ASYNC = False  # send inline so tests can read the fake outbox
-    RATELIMIT_ENABLED = False
+    # Limiter storage must exist so rate-limit tests can switch it on;
+    # tests/conftest.py turns limiting OFF for every other test.
+    RATELIMIT_ENABLED = True
 
 
 class ProductionConfig(BaseConfig):
@@ -146,6 +151,10 @@ def get_config(env_name: str | None = None):
         missing = [k for k in ("SECRET_KEY", "JWT_SECRET_KEY") if not os.environ.get(k)]
         if missing:
             raise RuntimeError(f"Missing required settings: {', '.join(missing)}. Copy .env.example to .env.")
+        # A short signing secret can be brute-forced, letting anyone forge tokens.
+        weak = [k for k in ("SECRET_KEY", "JWT_SECRET_KEY") if len(os.environ.get(k, "")) < 32]
+        if weak:
+            raise RuntimeError(f"These secrets must be at least 32 characters: {', '.join(weak)}.")
     if env_name == "production":
         # The fake provider prints sign-up codes into the logs: never in production.
         if os.environ.get("MAIL_PROVIDER", "fake") == "fake":

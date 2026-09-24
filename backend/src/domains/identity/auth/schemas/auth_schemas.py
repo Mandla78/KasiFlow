@@ -62,6 +62,15 @@ class LoginSchema(_Strict):
     device = fields.Nested(DeviceSchema, load_default=None)
 
 
+class ChangePasswordSchema(_Strict):
+    current_password = _password
+    new_password = _password
+
+
+class PasswordConfirmSchema(_Strict):
+    password = _password
+
+
 class ResetPasswordSchema(_Strict):
     token = fields.String(required=True, validate=validate.Length(min=20, max=100))
     password = _password

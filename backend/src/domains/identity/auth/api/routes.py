@@ -8,13 +8,16 @@ from flask import request
 from flask_jwt_extended import get_jwt, jwt_required
 
 from src.api import api_bp
+from src.core.decorators import auth_required, current_user
 from src.core.responses import success_response
 from src.shared.rate_limit.limiter import limiter
 
 from ..rate_limit import policies
 from ..schemas.auth_schemas import (
+    ChangePasswordSchema,
     EmailOnlySchema,
     LoginSchema,
+    PasswordConfirmSchema,
     RegisterSchema,
     ResetPasswordSchema,
     VerifyEmailSchema,
@@ -92,3 +95,49 @@ def reset_password():
     data = load(ResetPasswordSchema(), request.get_json(silent=True))
     auth_service.reset_password(data["token"], data["password"])
     return success_response({}, message="Password changed. Sign in with your new password.")
+
+
+# ----------------------------------------------------- account security
+# Signed-in only. The user and the current session come from the token.
+
+
+def _sid() -> str:
+    return get_jwt().get("sid", "")
+
+
+@api_bp.get("/auth/sessions")
+@auth_required
+def signed_in_phones():
+    return success_response({"sessions": auth_service.signed_in_phones(current_user(), _sid())})
+
+
+@api_bp.post("/auth/logout-others")
+@auth_required
+def logout_others():
+    ended = auth_service.sign_out_other_phones(current_user(), _sid())
+    return success_response({"signed_out": ended}, message="Signed out of your other phones.")
+
+
+@api_bp.post("/auth/change-password")
+@limiter.limit(policies.CHANGE_PASSWORD)
+@auth_required
+def change_password():
+    data = load(ChangePasswordSchema(), request.get_json(silent=True))
+    ended = auth_service.change_password(current_user(), _sid(), data["current_password"], data["new_password"])
+    return success_response({"signed_out": ended}, message="Password changed. Your other phones were signed out.")
+
+
+@api_bp.post("/me/close-account")
+@limiter.limit(policies.CLOSE_ACCOUNT)
+@auth_required
+def close_account():
+    data = load(PasswordConfirmSchema(), request.get_json(silent=True))
+    auth_service.close_account(current_user(), _sid(), data["password"])
+    return success_response({}, message="Your account is closed.")
+
+
+@api_bp.get("/me/export")
+@limiter.limit(policies.EXPORT_DATA)
+@auth_required
+def export_my_data():
+    return success_response(auth_service.export_my_data(current_user(), _sid()))

@@ -98,3 +98,16 @@ def public_view(user: User) -> dict:
         "signed_up_with": user.signed_up_with,
         "email_verified": user.email_verified_at is not None,
     }
+
+
+def deactivate(user: User) -> None:
+    """Closed by its owner. Personal data is removed later by the retention
+    job, keeping only what the law requires (see the Privacy Policy)."""
+    user.status = AccountStatus.DEACTIVATED.value
+
+
+def consents_view(user: User) -> list[dict]:
+    return [
+        {"document": c.document, "version": c.version, "accepted_at": c.accepted_at.isoformat()}
+        for c in user_repository.consents_for(user.id)
+    ]

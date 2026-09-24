@@ -22,6 +22,7 @@ def create_app(env_name: str | None = None) -> Flask:
     _register_blueprints(app)
     _register_listeners(app)
     _register_error_handlers(app)
+    _register_security_headers(app)
     _register_cli(app)
 
     # The master scheduler (src/master_scheduler) starts here once the
@@ -97,6 +98,10 @@ def _register_error_handlers(app: Flask) -> None:
             data=error.data,
         )
 
+    @app.errorhandler(413)
+    def handle_too_large(_error):
+        return error_response(message="That request is too large.", status_code=413, code="PAYLOAD_TOO_LARGE")
+
     @app.errorhandler(404)
     def handle_not_found(_error):
         return error_response(message="Resource not found", status_code=404, code="NOT_FOUND")
@@ -109,6 +114,21 @@ def _register_error_handlers(app: Flask) -> None:
     def handle_internal_error(error):
         app.logger.exception("Unhandled server error: %s", error)
         return error_response(message="Internal server error", status_code=500, code="INTERNAL_ERROR")
+
+
+def _register_security_headers(app: Flask) -> None:
+    """Headers on every response. The API returns JSON with tokens and
+    personal data: nothing may be cached, sniffed as another type, or framed."""
+
+    @app.after_request
+    def _headers(response):
+        response.headers["X-Content-Type-Options"] = "nosniff"
+        response.headers["X-Frame-Options"] = "DENY"
+        response.headers["Referrer-Policy"] = "no-referrer"
+        response.headers["Cache-Control"] = "no-store"
+        response.headers["Pragma"] = "no-cache"
+        response.headers.pop("Server", None)
+        return response
 
 
 def _register_cli(app: Flask) -> None:

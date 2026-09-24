@@ -340,3 +340,91 @@ def reset_password(token: str, new_password: str) -> None:
     db.session.commit()
     auth_audit.record(E.PASSWORD_RESET_SUCCESS, user_id=user.id, email=user.email)
     auth_audit.record(E.TOKEN_REVOKED, user_id=user.id, email=user.email, reason="password_reset", sessions_ended=ended)
+
+
+# -------------------------------------------------------- account security
+# Every function here acts on the SIGNED-IN user only (from the token);
+# none takes a user id from the request, so there is nothing to swap.
+
+
+def _require_password(user, password: str, failed_event) -> PasswordCredential:
+    """Re-check the password before a sensitive action. Wrong guesses count
+    toward the same lockout as sign-in."""
+    credential = db.session.get(PasswordCredential, user.id)
+    if not credential:
+        raise AppError("This account has no password. Sign in with Google instead.", status_code=400, code="NO_PASSWORD")
+    now = utcnow()
+    if credential.locked_until and credential.locked_until > now:
+        raise AccountLockedError("Too many attempts. Try again in a few minutes.")
+    if not verify_password(password, credential.password_hash):
+        credential.failed_attempts += 1
+        if credential.failed_attempts >= current_app.config["LOGIN_MAX_FAILED_ATTEMPTS"]:
+            credential.locked_until = now + timedelta(minutes=current_app.config["LOGIN_LOCKOUT_MINUTES"])
+            credential.failed_attempts = 0
+        db.session.commit()
+        auth_audit.record(failed_event, False, user_id=user.id, email=user.email, reason="wrong_password")
+        raise AppError("That password is incorrect.", status_code=400, code="WRONG_PASSWORD")
+    credential.failed_attempts = 0
+    return credential
+
+
+def change_password(user, current_sid: str, current_password: str, new_password: str) -> int:
+    credential = _require_password(user, current_password, E.PASSWORD_CHANGE_FAILED)
+    _check_password_rule(new_password)
+    if verify_password(new_password, credential.password_hash):
+        raise ValidationError("Choose a new password, not your current one.", code="PASSWORD_UNCHANGED")
+    credential.password_hash = hash_password(new_password)
+    credential.changed_at = utcnow()
+    ended = session_service.revoke_all_except(user.id, current_sid, session_service.RevokeReason.PASSWORD_CHANGE)
+    db.session.commit()
+    auth_audit.record(E.PASSWORD_CHANGED, user_id=user.id, email=user.email, session_id=current_sid, other_sessions_ended=ended)
+    return ended
+
+
+def sign_out_other_phones(user, current_sid: str) -> int:
+    ended = session_service.revoke_all_except(user.id, current_sid, session_service.RevokeReason.OTHERS_SIGNED_OUT)
+    db.session.commit()
+    auth_audit.record(E.LOGOUT_ALL_DEVICES, user_id=user.id, email=user.email, session_id=current_sid, sessions_ended=ended)
+    return ended
+
+
+def signed_in_phones(user, current_sid: str) -> list[dict]:
+    """Where the account is signed in. Never tokens, never raw IPs."""
+    current = session_service.get(current_sid)
+    devices = {d.id: d for d in device_service.list_for(user.id)}
+    out = []
+    for s in session_service.live_for(user.id):
+        d = devices.get(s.device_id)
+        out.append(
+            {
+                "id": str(s.id),
+                "this_phone": current is not None and s.id == current.id,
+                "signed_in_at": s.created_at.isoformat(),
+                "last_used_at": s.last_used_at.isoformat(),
+                "platform": d.platform if d else None,
+                "label": d.label if d else None,
+            }
+        )
+    return out
+
+
+def close_account(user, current_sid: str, password: str) -> None:
+    _require_password(user, password, E.ACCOUNT_DISABLED)
+    account_service.deactivate(user)
+    ended = session_service.revoke_all(user.id, session_service.RevokeReason.ACCOUNT_CLOSED)
+    keys = device_service.revoke_all(user.id)
+    db.session.commit()
+    auth_audit.record(E.ACCOUNT_DISABLED, user_id=user.id, email=user.email, session_id=current_sid, sessions_ended=ended, device_keys_revoked=keys)
+
+
+def export_my_data(user, current_sid: str) -> dict:
+    """POPIA: everything identity holds about the signed-in user."""
+    data = {
+        "account": account_service.public_view(user)
+        | {"created_at": user.created_at.isoformat(), "last_login_at": user.last_login_at.isoformat() if user.last_login_at else None},
+        "consents": account_service.consents_view(user),
+        "signed_in_phones": signed_in_phones(user, current_sid),
+        "phone_keys": [device_service.public_view(d) for d in device_service.list_for(user.id)],
+    }
+    auth_audit.record(E.DATA_EXPORTED, user_id=user.id, email=user.email, session_id=current_sid)
+    return data
