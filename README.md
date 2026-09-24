@@ -82,6 +82,8 @@ Commit the migration file with the model change, so everyone else gets it with `
 
 **In development the emails aren't really sent** (`MAIL_PROVIDER=fake`). The sign-up code and the reset link are printed in the backend terminal, on a line starting with `[fake email]`.
 
+**Real email:** set `MAIL_PROVIDER=smtp` and the `MAIL_*` settings in `backend/.env` (any SMTP relay: Brevo, SendGrid, Amazon SES…; see `.env.example`). Production refuses to start with the fake provider or missing mail settings. Every email has an HTML and a plain-text version (`src/shared/email/templates/*.html` + `*.txt`).
+
 ## 3. Mobile
 
 ```powershell

@@ -8,10 +8,10 @@ from Sonke all weekend. Every number below is from a checked source
 
 TEAM NAME        PR
 LOCATION         Polokwane
-PROJECT NAME     Akayza   (or a codename until Sunday, if you prefer)
+PROJECT NAME     akayza
 CHALLENGE        Brand New
-SECTOR           Fintech & informal economy (construction and township
-                 retail)
+SECTOR           (optional, left blank) -- we're an ecosystem: traders,
+                 suppliers and later funders. If one must be picked: Other.
 
 
 --- BACKGROUND: What inspired / motivated this project? ------------------
@@ -75,5 +75,6 @@ serve and keep the traders who already buy from them.
 - Supplier integration API: API keys and signed webhooks (in progress)
 - Media: Cloudinary, with malware scanning on every upload (in progress)
 - Records: SHA-256 hash chains for tamper-evident history (in progress)
-- Hosting and protection: Cloudflare (WAF, DDoS protection, TLS)
-  (in progress)
+- Hosting and protection: Cloudflare Tunnel, so the API is reached
+  over HTTPS without opening any port on the server; Cloudflare WAF
+  and DDoS protection once it runs on our own domain (in progress)

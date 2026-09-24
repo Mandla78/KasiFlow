@@ -57,9 +57,21 @@ class BaseConfig:
     JWT_TOKEN_LOCATION = ["headers"]
     JWT_HEADER_TYPE = "Bearer"
 
-    # Email ("fake" prints codes to the log; a real provider later).
+    # Email. "fake" keeps emails in memory and prints them to the log
+    # (development and tests only). "smtp" sends through any SMTP relay
+    # (Brevo, SendGrid, Amazon SES, Mailgun, Gmail...): swapping providers
+    # is only these settings, never code.
     MAIL_PROVIDER = os.environ.get("MAIL_PROVIDER", "fake")
+    MAIL_SERVER = os.environ.get("MAIL_SERVER", "")
+    MAIL_PORT = int(os.environ.get("MAIL_PORT", 587))
+    MAIL_USE_TLS = _bool("MAIL_USE_TLS", "true")  # STARTTLS, port 587
+    MAIL_USE_SSL = _bool("MAIL_USE_SSL", "false")  # implicit TLS, port 465
+    MAIL_USERNAME = os.environ.get("MAIL_USERNAME", "")
+    MAIL_PASSWORD = os.environ.get("MAIL_PASSWORD", "")
     MAIL_DEFAULT_SENDER = os.environ.get("MAIL_DEFAULT_SENDER", "Akayza <no-reply@akayza.co.za>")
+    MAIL_REPLY_TO = os.environ.get("MAIL_REPLY_TO", "")
+    MAIL_TIMEOUT = int(os.environ.get("MAIL_TIMEOUT", 10))
+    MAIL_ASYNC = _bool("MAIL_ASYNC", "true")  # send in the background
 
     # Sign-in hardening.
     EMAIL_CODE_EXPIRY_MINUTES = int(os.environ.get("EMAIL_CODE_EXPIRY_MINUTES", 15))
@@ -123,4 +135,11 @@ def get_config(env_name: str | None = None):
         missing = [k for k in ("SECRET_KEY", "JWT_SECRET_KEY") if not os.environ.get(k)]
         if missing:
             raise RuntimeError(f"Missing required settings: {', '.join(missing)}. Copy .env.example to .env.")
+    if env_name == "production":
+        # The fake provider prints sign-up codes into the logs: never in production.
+        if os.environ.get("MAIL_PROVIDER", "fake") == "fake":
+            raise RuntimeError("MAIL_PROVIDER=fake is not allowed in production. Configure an SMTP provider.")
+        mail_missing = [k for k in ("MAIL_SERVER", "MAIL_USERNAME", "MAIL_PASSWORD", "MAIL_DEFAULT_SENDER") if not os.environ.get(k)]
+        if mail_missing:
+            raise RuntimeError(f"Missing email settings for production: {', '.join(mail_missing)}.")
     return config

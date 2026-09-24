@@ -17,10 +17,11 @@ import smtplib
 import time
 from abc import ABC, abstractmethod
 from email.message import EmailMessage
+from email.utils import formatdate, make_msgid, parseaddr
 from typing import Optional
 
 from flask import current_app
-from jinja2 import Environment, FileSystemLoader, select_autoescape
+from jinja2 import Environment, FileSystemLoader, TemplateNotFound, select_autoescape
 
 from src.shared.cache.cache import check_rate_limit
 from src.shared.constants.constants import (
@@ -45,6 +46,8 @@ logger = logging.getLogger("akayza.email")
 
 _TEMPLATE_DIR = os.path.join(os.path.dirname(__file__), "templates")
 _jinja_env = Environment(loader=FileSystemLoader(_TEMPLATE_DIR), autoescape=select_autoescape(["html"]))
+# Plain-text twins are not HTML-escaped (they are never rendered as HTML).
+_text_env = Environment(loader=FileSystemLoader(_TEMPLATE_DIR), autoescape=False)
 
 
 # ------------------------------------------------------------------------
@@ -99,16 +102,23 @@ class SMTPEmailProvider(EmailProvider):
         password: str,
         default_sender: str,
         timeout: int,
+        use_ssl: bool = False,
+        reply_to: Optional[str] = None,
     ):
         self._host = host
         self._port = port
         self._use_tls = use_tls
+        self._use_ssl = use_ssl
         self._username = username
         self._password = password
         self._default_sender = default_sender
+        self._reply_to = reply_to
         self._timeout = timeout
 
     def _connect(self) -> smtplib.SMTP:
+        # Port 465 providers use implicit TLS (SMTP_SSL); port 587 uses STARTTLS.
+        if self._use_ssl:
+            return smtplib.SMTP_SSL(self._host, self._port, timeout=self._timeout)
         server = smtplib.SMTP(self._host, self._port, timeout=self._timeout)
         if self._use_tls:
             server.starttls()
@@ -121,7 +131,14 @@ class SMTPEmailProvider(EmailProvider):
         message["Subject"] = subject
         message["From"] = self._default_sender
         message["To"] = to
-        message.set_content(text_body or "This email requires an HTML-capable email client to view.")
+        if self._reply_to:
+            message["Reply-To"] = self._reply_to
+        # Date and Message-ID: missing ones are a common spam signal.
+        message["Date"] = formatdate(localtime=False)
+        sender_domain = parseaddr(self._default_sender)[1].rpartition("@")[2] or None
+        message["Message-ID"] = make_msgid(domain=sender_domain)
+        # Plain text first, HTML as the alternative: every client can read it.
+        message.set_content(text_body or "Please open this email in an app that shows HTML.")
         message.add_alternative(html_body, subtype="html")
 
         try:
@@ -156,7 +173,7 @@ class FakeEmailProvider(EmailProvider):
         self.sent_emails.append({"to": to, "subject": subject, "html_body": html_body, "text_body": text_body})
         # Development only (MAIL_PROVIDER=fake): show the email in the
         # backend log so codes and links can be used without a mail server.
-        plain = re.sub(r"<[^>]+>", " ", html_body)
+        plain = text_body or re.sub(r"<[^>]+>", " ", html_body)
         plain = re.sub(r"\s+", " ", plain).strip()
         logger.info("[fake email] to=%s subject=%r :: %s", mask_email(to), subject, plain)
 
@@ -195,12 +212,25 @@ def _resolve_provider() -> EmailProvider:
         password=current_app.config["MAIL_PASSWORD"],
         default_sender=current_app.config["MAIL_DEFAULT_SENDER"],
         timeout=current_app.config.get("MAIL_TIMEOUT", DEFAULT_MAIL_TIMEOUT_SECONDS),
+        use_ssl=current_app.config.get("MAIL_USE_SSL", False),
+        reply_to=current_app.config.get("MAIL_REPLY_TO") or None,
     )
 
 
 def _render_template(template_name: str, context: dict) -> str:
     template = _jinja_env.get_template(template_name)
     return template.render(**context)
+
+
+def _render_text(template_name: str, context: dict) -> Optional[str]:
+    """The plain-text twin (verify_email.html -> verify_email.txt), if it
+    exists. Every email should have one: text-only clients and spam
+    filters both look for it."""
+    text_name = template_name.rsplit(".", 1)[0] + ".txt"
+    try:
+        return _text_env.get_template(text_name).render(**context)
+    except TemplateNotFound:
+        return None
 
 
 def _send_with_retry(
@@ -212,11 +242,12 @@ def _send_with_retry(
     destination_masked: str,
     max_retries: int,
     retry_delays: list,
+    text_body: Optional[str] = None,
 ) -> None:
     for attempt in range(1, max_retries + 1):
         try:
             with Timer() as timer:
-                provider.send(to, subject, html_body)
+                provider.send(to, subject, html_body, text_body)
             metrics.record_send_duration(timer.elapsed_seconds)
             metrics.record_sent(template_name)
             log_email_sent(destination_masked, template_name, timer.elapsed_seconds)
@@ -262,6 +293,7 @@ class EmailService:
 
         try:
             html_body = _render_template(template_name, context)
+            text_body = _render_text(template_name, context)
         except Exception:  # noqa: BLE001 - template errors must not break the caller
             logger.exception("Failed to render email template %s", template_name)
             return
@@ -285,7 +317,7 @@ class EmailService:
 
         def _job() -> None:
             _send_with_retry(
-                provider, to, subject, html_body, template_name, destination_masked, max_retries, retry_delays
+                provider, to, subject, html_body, template_name, destination_masked, max_retries, retry_delays, text_body
             )
 
         if is_async:

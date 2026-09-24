@@ -1,0 +1,6 @@
+Your Akayza code is: {{ code }}
+
+Enter it in the app to confirm your email. It expires in {{ minutes }} minutes.
+If you didn't sign up, ignore this email.
+
+-- Akayza. We will never ask for your password.
