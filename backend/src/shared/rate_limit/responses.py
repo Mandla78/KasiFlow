@@ -25,10 +25,11 @@ from __future__ import annotations
 import logging
 from typing import Optional
 
-from flask import Flask, jsonify, request
+from flask import Flask, request
 from flask_jwt_extended import get_jwt_identity
 from flask_limiter.errors import RateLimitExceeded
 
+from src.core.responses import error_response
 from src.shared.audit import audit as shared_audit
 from src.shared.audit.audit_types import AuditEventNameType
 
@@ -121,14 +122,15 @@ def handle_rate_limit_exceeded(error: RateLimitExceeded):
         except Exception:  # noqa: BLE001 -- see docstring: auditing must never break the 429 response
             logger.exception("failed to record rate-limit audit event for endpoint=%s", request.endpoint)
 
-    response = jsonify({
-        "error": "rate_limit_exceeded",
-        "message": "Too many requests. Please try again later.",
-        "retry_after": retry_after,
-    })
-    response.status_code = 429
+    # Same envelope as every other error, so the app handles 429 like the rest.
+    response, status = error_response(
+        message="Too many attempts. Please wait a moment and try again.",
+        status_code=429,
+        code="RATE_LIMITED",
+        data={"retry_after_seconds": retry_after},
+    )
     response.headers["Retry-After"] = str(retry_after)
-    return response
+    return response, status
 
 
 def register(app: Flask) -> None:

@@ -37,8 +37,8 @@ def _issue(user_id: uuid.UUID, sid: uuid.UUID) -> tuple[str, str, str]:
     return access, refresh, jti
 
 
-def start(user_id: uuid.UUID, device_id: Optional[uuid.UUID]) -> dict:
-    """A new signed-in session. Returns the tokens for the app."""
+def start(user_id: uuid.UUID, device_id: Optional[uuid.UUID]) -> tuple[dict, uuid.UUID]:
+    """A new signed-in session. Returns (tokens for the app, session id)."""
     sid = uuid.uuid4()
     access, refresh, jti = _issue(user_id, sid)
     db.session.add(
@@ -52,7 +52,7 @@ def start(user_id: uuid.UUID, device_id: Optional[uuid.UUID]) -> dict:
             user_agent=(request.headers.get("User-Agent") or "")[:300] or None,
         )
     )
-    return {"access_token": access, "refresh_token": refresh, "token_type": "Bearer"}
+    return {"access_token": access, "refresh_token": refresh, "token_type": "Bearer"}, sid
 
 
 def get(sid: str) -> Optional[Session]:

@@ -27,12 +27,12 @@ from src.domains.identity.accounts.models import AccountStatus
 from src.domains.identity.accounts.services import account_service
 from src.domains.identity.devices.services import device_service
 from src.extensions import db
-from src.shared.audit import audit
+from src.shared.audit.event_types.auth import AuthAuditEvent as E
 from src.shared.email.email import EmailService
 from src.shared.security.security import hash_password, validate_password_complexity, verify_password
 
 from ..models import CodePurpose, EmailCode, PasswordCredential, PasswordReset
-from . import secrets, session_service
+from . import auth_audit, secrets, session_service
 
 logger = logging.getLogger("akayza.auth")
 
@@ -72,7 +72,7 @@ def _check_password_rule(password: str) -> None:
         )
 
 
-def _send_code(user) -> None:
+def _send_code(user, resent: bool = False) -> None:
     """Replace any unused code with a fresh one and email it."""
     now = utcnow()
     EmailCode.query.filter_by(user_id=user.id, purpose=CodePurpose.VERIFY_EMAIL.value, used_at=None).update({"used_at": now})
@@ -95,6 +95,7 @@ def _send_code(user) -> None:
         rate_limit_max=6,
         rate_limit_window_seconds=3600,
     )
+    auth_audit.record(E.OTP_RESENT if resent else E.OTP_SENT, user_id=user.id, email=user.email, purpose="verify_email")
 
 
 def _tokens(user, device: Optional[DeviceInfo]) -> dict:
@@ -104,9 +105,14 @@ def _tokens(user, device: Optional[DeviceInfo]) -> dict:
         device_id = registered.id
         if previous_id:
             # The old phone is switched off: its sessions end now.
-            session_service.revoke_all(user.id, session_service.RevokeReason.NEW_DEVICE, device_id=previous_id)
+            ended = session_service.revoke_all(user.id, session_service.RevokeReason.NEW_DEVICE, device_id=previous_id)
+            auth_audit.record(
+                E.TOKEN_REVOKED, user_id=user.id, email=user.email, device_id=previous_id,
+                reason="new_device", sessions_ended=ended, new_device_id=str(device_id),
+            )
     account_service.record_login(user)
-    tokens = session_service.start(user.id, device_id)
+    tokens, sid = session_service.start(user.id, device_id)
+    auth_audit.record(E.TOKEN_CREATED, user_id=user.id, email=user.email, session_id=sid, device_id=device_id)
     return {**tokens, "user": account_service.public_view(user)}
 
 
@@ -133,8 +139,11 @@ def register(business_name: str, email: str, password: str, privacy_version: str
         )
         logger.info("register_existing_account user_id=%s", user.id)
         db.session.commit()
+        # Stored for investigators; never shown to whoever tried.
+        auth_audit.record(E.REGISTER_FAILED, False, user_id=user.id, email=user.email, reason="email_already_registered", owner_notified=True)
         return
 
+    resumed = bool(user)
     if user:  # never verified: the earlier attempt proved nothing, start over
         account_service.restart_unverified(user, business_name)
         credential = db.session.get(PasswordCredential, user.id)
@@ -147,19 +156,26 @@ def register(business_name: str, email: str, password: str, privacy_version: str
     account_service.record_consents(user, privacy_version, terms_version, _ip(), request.headers.get("User-Agent"))
     _send_code(user)
     db.session.commit()
+    auth_audit.record(
+        E.REGISTER_RESUMED if resumed else E.REGISTER_SUCCESS, user_id=user.id, email=user.email,
+        privacy_version=privacy_version, terms_version=terms_version,
+    )
 
 
 def resend_code(email: str) -> None:
     """Same answer whether or not there is anything to resend."""
     user = account_service.find_by_email(email)
     if user and user.status == AccountStatus.UNVERIFIED.value:
-        _send_code(user)
+        _send_code(user, resent=True)
         db.session.commit()
 
 
 def verify_email(email: str, code: str, device: Optional[DeviceInfo]) -> dict:
     user = account_service.find_by_email(email)
     if not user or user.status != AccountStatus.UNVERIFIED.value:
+        auth_audit.record(
+            E.EMAIL_VERIFICATION_FAILED, False, user_id=user.id if user else None, email=email, reason="no_pending_verification"
+        )
         raise InvalidCodeError(GENERIC_CODE_ERROR)
 
     now = utcnow()
@@ -169,20 +185,26 @@ def verify_email(email: str, code: str, device: Optional[DeviceInfo]) -> dict:
         .first()
     )
     if not record or record.expires_at <= now:
+        auth_audit.record(E.EMAIL_VERIFICATION_EXPIRED, False, user_id=user.id, email=user.email, reason="no_valid_code")
         raise InvalidCodeError(GENERIC_CODE_ERROR)
 
     if not secrets.matches((code or "").strip(), record.code_hash):
         record.attempts += 1
-        if record.attempts >= current_app.config["EMAIL_CODE_MAX_ATTEMPTS"]:
+        burnt = record.attempts >= current_app.config["EMAIL_CODE_MAX_ATTEMPTS"]
+        if burnt:
             record.used_at = now  # burnt: ask for a new code
         db.session.commit()
+        auth_audit.record(
+            E.OTP_EXPIRED if burnt else E.OTP_FAILED, False, user_id=user.id, email=user.email,
+            reason="too_many_attempts" if burnt else "wrong_code", attempts=record.attempts,
+        )
         raise InvalidCodeError(GENERIC_CODE_ERROR)
 
     record.used_at = now
     account_service.mark_verified(user)
     result = _tokens(user, device)
     db.session.commit()
-    logger.info("email_verified user_id=%s", user.id)
+    auth_audit.record(E.EMAIL_VERIFIED, user_id=user.id, email=user.email)
     return result
 
 
@@ -195,7 +217,7 @@ def login(email: str, password: str, device: Optional[DeviceInfo]) -> dict:
 
     if not user or not credential:
         verify_password(password, _DUMMY_HASH)  # same time as a real check
-        audit.log_login_failed(email, _ip())
+        auth_audit.record(E.LOGIN_FAILED, False, email=email, reason="no_account")
         raise UnauthorizedError(GENERIC_LOGIN_ERROR, code="INVALID_CREDENTIALS")
 
     now = utcnow()
@@ -203,6 +225,7 @@ def login(email: str, password: str, device: Optional[DeviceInfo]) -> dict:
 
     if credential.locked_until and credential.locked_until > now:
         if correct:  # only the real owner learns about the lock
+            auth_audit.record(E.LOGIN_BLOCKED, False, user_id=user.id, email=user.email, reason="account_locked")
             raise AccountLockedError("Too many attempts. Try again in a few minutes, or reset your password.")
         raise UnauthorizedError(GENERIC_LOGIN_ERROR, code="INVALID_CREDENTIALS")
 
@@ -211,9 +234,9 @@ def login(email: str, password: str, device: Optional[DeviceInfo]) -> dict:
         if credential.failed_attempts >= current_app.config["LOGIN_MAX_FAILED_ATTEMPTS"]:
             credential.locked_until = now + timedelta(minutes=current_app.config["LOGIN_LOCKOUT_MINUTES"])
             credential.failed_attempts = 0
-            audit.log_login_locked_out(email, _ip())
+            auth_audit.record(E.LOGIN_LOCKED, False, user_id=user.id, email=user.email, reason="too_many_failed_passwords")
         else:
-            audit.log_login_failed(email, _ip())
+            auth_audit.record(E.LOGIN_FAILED, False, user_id=user.id, email=user.email, reason="wrong_password", attempts=credential.failed_attempts)
         db.session.commit()
         raise UnauthorizedError(GENERIC_LOGIN_ERROR, code="INVALID_CREDENTIALS")
 
@@ -223,15 +246,16 @@ def login(email: str, password: str, device: Optional[DeviceInfo]) -> dict:
     if user.status == AccountStatus.UNVERIFIED.value:
         _send_code(user)
         db.session.commit()
-        audit.log_login_blocked_unverified(email, _ip())
+        auth_audit.record(E.LOGIN_UNVERIFIED, False, user_id=user.id, email=user.email, reason="email_not_verified")
         raise EmailNotVerifiedError("Confirm your email first. We've sent you a new code.")
     if not user.is_active:
         db.session.commit()
+        auth_audit.record(E.LOGIN_BLOCKED, False, user_id=user.id, email=user.email, reason="account_closed")
         raise AccountInactiveError("This account is closed.")
 
     result = _tokens(user, device)
     db.session.commit()
-    audit.log_login_success(str(user.id), _ip())
+    auth_audit.record(E.LOGIN_SUCCESS, user_id=user.id, email=user.email)
     return result
 
 
@@ -242,8 +266,14 @@ def refresh(sid: str, jti: str) -> dict:
     tokens = session_service.rotate(session, jti)
     db.session.commit()
     if tokens is None:
+        # An OLD refresh token came back: someone kept a copy. Session killed.
         logger.warning("refresh_token_reuse session_id=%s user_id=%s", session.id, session.user_id)
+        auth_audit.record(
+            E.TOKEN_REVOKED, False, user_id=session.user_id, session_id=session.id, device_id=session.device_id,
+            reason="refresh_token_reuse",
+        )
         raise UnauthorizedError("Please sign in again.", code="SESSION_ENDED")
+    auth_audit.record(E.TOKEN_REFRESHED, user_id=session.user_id, session_id=session.id, device_id=session.device_id)
     return tokens
 
 
@@ -252,6 +282,7 @@ def logout(sid: str) -> None:
     if session:
         session_service.revoke(session, session_service.RevokeReason.LOGOUT)
         db.session.commit()
+        auth_audit.record(E.LOGOUT, user_id=session.user_id, session_id=session.id, device_id=session.device_id)
 
 
 # --------------------------------------------------------- password reset
@@ -261,6 +292,8 @@ def forgot_password(email: str) -> None:
     """Same answer for everyone. Only a real account gets an email."""
     user = account_service.find_by_email(email)
     if not user or user.status == AccountStatus.DEACTIVATED.value or not db.session.get(PasswordCredential, user.id):
+        # Stored so repeated probing of unknown emails can be spotted; the caller sees nothing.
+        auth_audit.record(E.PASSWORD_RESET_REQUESTED, False, email=email, reason="no_eligible_account")
         return
 
     now = utcnow()
@@ -278,7 +311,8 @@ def forgot_password(email: str) -> None:
         rate_limit_max=3,
         rate_limit_window_seconds=3600,
     )
-    audit.log_password_reset_requested(user.email)
+    auth_audit.record(E.PASSWORD_RESET_REQUESTED, user_id=user.id, email=user.email)
+    auth_audit.record(E.PASSWORD_RESET_TOKEN_CREATED, user_id=user.id, email=user.email, expires_in_minutes=minutes)
 
 
 def reset_password(token: str, new_password: str) -> None:
@@ -286,6 +320,8 @@ def reset_password(token: str, new_password: str) -> None:
     now = utcnow()
     reset = PasswordReset.query.filter_by(token_hash=secrets.digest(token or "")).first()
     if not reset or reset.used_at is not None or reset.expires_at <= now:
+        reason = "unknown_token" if not reset else ("already_used" if reset.used_at else "expired")
+        auth_audit.record(E.PASSWORD_RESET_FAILED, False, user_id=reset.user_id if reset else None, reason=reason)
         raise AppError(GENERIC_RESET_ERROR, status_code=400, code="INVALID_RESET_LINK")
 
     credential = db.session.get(PasswordCredential, reset.user_id)
@@ -300,6 +336,7 @@ def reset_password(token: str, new_password: str) -> None:
     credential.locked_until = None
     # The link arrived by email, so the address is proven.
     account_service.mark_verified(user)
-    session_service.revoke_all(user.id, session_service.RevokeReason.PASSWORD_RESET)
+    ended = session_service.revoke_all(user.id, session_service.RevokeReason.PASSWORD_RESET)
     db.session.commit()
-    audit.log_password_reset_completed(str(user.id))
+    auth_audit.record(E.PASSWORD_RESET_SUCCESS, user_id=user.id, email=user.email)
+    auth_audit.record(E.TOKEN_REVOKED, user_id=user.id, email=user.email, reason="password_reset", sessions_ended=ended)

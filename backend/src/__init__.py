@@ -20,6 +20,7 @@ def create_app(env_name: str | None = None) -> Flask:
     _register_extensions(app)
     _register_models()
     _register_blueprints(app)
+    _register_listeners(app)
     _register_error_handlers(app)
     _register_cli(app)
 
@@ -62,6 +63,18 @@ def _register_models() -> None:
     from src.domains.identity.accounts import models as _accounts  # noqa: F401
     from src.domains.identity.auth import models as _auth  # noqa: F401
     from src.domains.identity.devices import models as _devices  # noqa: F401
+    # audit schema: the append-only audit trail
+    from src.domains.security.audit import models as _audit  # noqa: F401
+
+
+def _register_listeners(app: Flask) -> None:
+    """Subscribers to shared events: the audit trail stores every audit event."""
+    from src.domains.security.audit.services import audit_service
+    from src.shared.rate_limit import responses as rate_limit_responses
+    from src.domains.identity.auth.rate_limit.policies import RATE_LIMIT_AUDIT_EVENTS
+
+    audit_service.register(app)
+    rate_limit_responses.register_audit_events(RATE_LIMIT_AUDIT_EVENTS)
 
 
 def _register_blueprints(app: Flask) -> None:
