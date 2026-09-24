@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { ActivityIndicator, Pressable, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
+import { GOOGLE_READY, USE_MOCK_AUTH } from '@/constants/config';
 import { authApi } from '@/features/auth/api/authApi';
 import { useSession } from '@/features/auth/session/SessionProvider';
 import { colors, fonts, radius } from '@/shared/theme/tokens';
@@ -23,6 +24,27 @@ export default function GooglePicker() {
   // Set when coming from Create account, where the box was ticked.
   const { consent } = useLocalSearchParams<{ consent?: string }>();
   const [picked, setPicked] = useState<string | null>(null);
+
+  // Real backend, but Google isn't set up in the app yet (next build):
+  // say so plainly instead of showing a fake account picker.
+  if (!USE_MOCK_AUTH && !GOOGLE_READY) {
+    return (
+      <View style={styles.backdrop}>
+        <Pressable style={{ flex: 1 }} onPress={() => router.back()} accessibilityLabel="Close" />
+        <SafeAreaView edges={['bottom']} style={styles.sheet}>
+          <View style={styles.handle} />
+          <View style={styles.header}>
+            <FontAwesome name="google" size={18} color="#4285F4" />
+            <Text style={styles.title}>Google sign-in is coming soon</Text>
+          </View>
+          <Text style={styles.foot}>For now, create your account with your email and a password.</Text>
+          <Pressable onPress={() => router.back()} style={styles.account}>
+            <Text style={styles.name}>Use my email instead</Text>
+          </Pressable>
+        </SafeAreaView>
+      </View>
+    );
+  }
 
   async function pick(name: string, email: string) {
     setPicked(email);

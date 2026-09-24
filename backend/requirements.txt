@@ -37,3 +37,6 @@ phonenumbers==8.13.55
 # Continue with Google: verifies Google ID tokens on the server
 google-auth==2.58.1
 requests==2.34.2
+
+# Browser preview of the app (development only; phones don't use CORS)
+Flask-Cors==6.0.5

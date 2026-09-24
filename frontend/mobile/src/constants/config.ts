@@ -15,5 +15,14 @@ export const SLOGAN = 'Keep it in the kasi.';
  */
 export const MAPBOX_PUBLIC_TOKEN: string = process.env.EXPO_PUBLIC_MAPBOX_TOKEN ?? '';
 
-/** Where the backend lives. Unused until the mock APIs are swapped out. */
+/** Where the backend lives (on a phone: your PC's IP, not localhost). */
 export const API_BASE_URL: string = process.env.EXPO_PUBLIC_API_URL ?? 'http://localhost:5000/api/v1';
+
+/**
+ * Sign-in against the real backend (false) or the mock (true, the default).
+ * Only identity is wired so far; onboarding and suppliers stay mocked.
+ */
+export const USE_MOCK_AUTH: boolean = process.env.EXPO_PUBLIC_USE_MOCK_API !== 'false';
+
+/** Google sign-in in the app needs a native module + client IDs (next build). */
+export const GOOGLE_READY = false;

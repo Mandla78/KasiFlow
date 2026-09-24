@@ -122,6 +122,9 @@ class BaseConfig:
 
 class DevelopmentConfig(BaseConfig):
     DEBUG = True
+    # The Expo web preview runs in a browser at another origin. Phones don't
+    # need CORS; production allows no browser origins at all.
+    CORS_ORIGINS = [o.strip() for o in os.environ.get("CORS_ORIGINS", "http://localhost:8081").split(",") if o.strip()]
     SQLALCHEMY_DATABASE_URI = _database_uri()
 
 

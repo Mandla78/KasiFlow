@@ -51,6 +51,12 @@ def _register_extensions(app: Flask) -> None:
     limiter.init_app(app)
     rate_limit_responses.register(app)
 
+    # Only where configured (development's web preview); never in production.
+    if app.config.get("CORS_ORIGINS"):
+        from flask_cors import CORS
+
+        CORS(app, resources={r"/api/*": {"origins": app.config["CORS_ORIGINS"]}}, supports_credentials=False)
+
 
 def _register_models() -> None:
     """Import every feature's models so they're in SQLAlchemy's metadata

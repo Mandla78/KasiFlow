@@ -140,6 +140,12 @@ The tunnel is a little slower to load, but it always connects. If it still fails
 
 Restart `npm start` after changing `.env`.
 
+**Testing sign-in against the real backend on your phone:**
+1. Start the backend: `cd backend`, `.\.venv\Scripts\Activate.ps1`, `python app.py`. If Windows asks, allow Python on private and public networks.
+2. In `frontend/mobile/.env`: `EXPO_PUBLIC_USE_MOCK_API=false` and `EXPO_PUBLIC_API_URL=http://<your PC's IPv4 from ipconfig>:5000/api/v1`.
+3. Restart `npm start` and open the app. Sign up; the 6-digit code appears in the **backend** terminal as `[fake email]` (until real email is configured).
+4. Google sign-in and the phone's signing key come with the next dev build.
+
 Before you push mobile changes: `npx tsc --noEmit` and `npx expo lint`.
 
 ---

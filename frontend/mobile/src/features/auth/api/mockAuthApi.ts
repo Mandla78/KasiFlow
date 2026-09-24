@@ -65,4 +65,15 @@ export const mockAuthApi: AuthApi = {
   async requestPasswordReset() {
     await wait();
   },
+
+  async resetPassword(_token, password) {
+    await wait();
+    if (!isStrongPassword(password)) {
+      throw new AuthError('WEAK_PASSWORD', 'Use 8 to 64 characters with a capital letter, a small letter, a number and a special character.');
+    }
+  },
+
+  async logout() {
+    await wait(100);
+  },
 };

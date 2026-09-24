@@ -73,7 +73,8 @@ export type Profile = {
 
 export class AuthError extends Error {
   constructor(
-    public code: 'INVALID_CODE' | 'INVALID_CREDENTIALS' | 'EMAIL_TAKEN' | 'WEAK_PASSWORD',
+    /** The server's stable code, e.g. INVALID_CODE, WEAK_PASSWORD, RATE_LIMITED, NETWORK. */
+    public code: string,
     message: string,
   ) {
     super(message);
@@ -91,4 +92,8 @@ export interface AuthApi {
   signIn(email: string, password: string): Promise<Profile>;
   /** Same answer whether or not the account exists, so nobody can fish for emails. */
   requestPasswordReset(email: string): Promise<void>;
+  /** From the reset link: set a new password. */
+  resetPassword(token: string, password: string): Promise<void>;
+  /** End this phone's session on the server. */
+  logout(): Promise<void>;
 }

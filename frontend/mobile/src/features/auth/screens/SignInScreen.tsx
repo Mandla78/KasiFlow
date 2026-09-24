@@ -13,7 +13,7 @@ import { useSession } from '@/features/auth/session/SessionProvider';
 import { colors, fonts } from '@/shared/theme/tokens';
 
 export default function SignIn() {
-  const { signedIn } = useSession();
+  const { signedIn, startEmailSignUp } = useSession();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
@@ -30,6 +30,12 @@ export default function SignIn() {
     try {
       signedIn(await authApi.signIn(email.trim().toLowerCase(), password));
     } catch (e) {
+      if (e instanceof AuthError && e.code === 'EMAIL_NOT_VERIFIED') {
+        // Right password, email never confirmed: the server just sent a new code.
+        startEmailSignUp('', email.trim().toLowerCase());
+        router.push('/verify-email');
+        return;
+      }
       setError(e instanceof AuthError ? e.message : 'Something went wrong. Try again.');
     } finally {
       setBusy(false);

@@ -16,6 +16,9 @@ import { createContext, ReactNode, useContext, useEffect, useMemo, useState } fr
 
 import { BUSINESS_TYPES, BusinessType, defaultCategories, ToolKey, TradeKey } from '@/constants/businessTypes';
 
+import { setSessionEndedHandler } from '@/shared/api/client';
+
+import { authApi } from '../api/authApi';
 import { consentNow, emptyProfile } from '../profile';
 import { CipcStatus, Profile } from '../types';
 
@@ -28,6 +31,32 @@ export type SessionState = { status: Status; profile: Profile };
 const STORAGE_KEY = 'akayza.session.v4';
 
 const initialState: SessionState = { status: 'signedOut', profile: emptyProfile };
+
+// The last profile on this phone, so signing back in restores onboarding
+// answers (they live on the phone until the business-profile API exists).
+const LAST_PROFILE_KEY = 'akayza.lastProfile.v1';
+
+async function loadLastProfile(): Promise<Profile | null> {
+  try {
+    const raw = await SecureStore.getItemAsync(LAST_PROFILE_KEY);
+    return raw ? (JSON.parse(raw) as Profile) : null;
+  } catch {
+    return null;
+  }
+}
+
+async function saveLastProfile(profile: Profile) {
+  try {
+    await SecureStore.setItemAsync(LAST_PROFILE_KEY, JSON.stringify(profile));
+  } catch {
+    // not fatal
+  }
+}
+
+/** Has this account finished onboarding (type, pin, what they buy)? */
+function isOnboarded(p: Profile): boolean {
+  return !!p.businessType && !!p.location && p.categories.length > 0;
+}
 
 type SessionContextValue = SessionState & {
   loaded: boolean;
@@ -79,7 +108,15 @@ export function SessionProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     if (loaded) save(state);
+    if (loaded && state.status === 'active') saveLastProfile(state.profile);
   }, [state, loaded]);
+
+  // The server ended this session (signed out elsewhere, password changed,
+  // new phone): go back to the landing screen.
+  useEffect(() => {
+    setSessionEndedHandler(() => setState(initialState));
+    return () => setSessionEndedHandler(null);
+  }, []);
 
   const value = useMemo<SessionContextValue>(() => {
     const patch = (p: Partial<Profile>, status?: Status) =>
@@ -126,12 +163,26 @@ export function SessionProvider({ children }: { children: ReactNode }) {
           return { ...s, profile: { ...s.profile, registration: { ...s.profile.registration, cipc: { number, ...result } } } };
         }),
       finishOnboarding: () => patch({}, 'active'),
-      signedIn: (profile) => setState({ status: 'active', profile }),
-      signOut: () => setState(initialState),
+      signedIn: (profile) => {
+        // Same account on this phone before? Restore its onboarding answers.
+        loadLastProfile().then((last) => {
+          const merged = last && last.email === profile.email ? { ...last, ...pickServerFields(profile) } : profile;
+          setState({ status: isOnboarded(merged) ? 'active' : 'onboarding', profile: merged });
+        });
+      },
+      signOut: () => {
+        authApi.logout(); // ends the session on the server; local sign-out never waits for it
+        setState(initialState);
+      },
     };
   }, [state, loaded]);
 
   return <SessionContext.Provider value={value}>{children}</SessionContext.Provider>;
+}
+
+/** What the server is the source of truth for. */
+function pickServerFields(p: Profile): Partial<Profile> {
+  return { email: p.email, businessName: p.businessName, signedUpWith: p.signedUpWith, consent: p.consent };
 }
 
 export function useSession() {

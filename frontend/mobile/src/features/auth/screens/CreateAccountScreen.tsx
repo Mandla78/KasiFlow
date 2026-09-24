@@ -24,6 +24,8 @@ export default function CreateAccount() {
   const [touched, setTouched] = useState(false);
   const [busy, setBusy] = useState(false);
   const [serverError, setServerError] = useState('');
+  const [passwordServerError, setPasswordServerError] = useState('');
+  const [formError, setFormError] = useState('');
   const [agreed, setAgreed] = useState(false);
   const [consentError, setConsentError] = useState(false);
 
@@ -53,7 +55,10 @@ export default function CreateAccount() {
       startEmailSignUp(businessName.trim(), email.trim().toLowerCase());
       router.push('/verify-email');
     } catch (e) {
-      setServerError(e instanceof AuthError ? e.message : 'Something went wrong. Try again.');
+      const message = e instanceof AuthError ? e.message : 'Something went wrong. Try again.';
+      if (e instanceof AuthError && e.code === 'WEAK_PASSWORD') setPasswordServerError(message);
+      else if (e instanceof AuthError && e.code === 'EMAIL_TAKEN') setServerError(message);
+      else setFormError(message); // network, too many attempts, outdated app...
     } finally {
       setBusy(false);
     }
@@ -64,6 +69,7 @@ export default function CreateAccount() {
       back
       footer={
         <>
+          {formError ? <Text style={styles.formError}>{formError}</Text> : null}
           <ConsentCheckbox
             checked={agreed}
             onChange={(v) => {
@@ -127,11 +133,14 @@ export default function CreateAccount() {
           label="Password"
           password
           value={password}
-          onChangeText={setPassword}
+          onChangeText={(v) => {
+            setPassword(v);
+            setPasswordServerError('');
+          }}
           autoComplete="new-password"
           returnKeyType="next"
           onSubmitEditing={() => confirmRef.current?.focus()}
-          error={touched ? errors.password : ''}
+          error={touched ? errors.password || passwordServerError : passwordServerError}
         />
       </View>
       <TextField
@@ -151,6 +160,7 @@ export default function CreateAccount() {
 
 const styles = StyleSheet.create({
   alt: { alignItems: 'center', paddingVertical: 4 },
+  formError: { fontFamily: fonts.medium, fontSize: 13, color: colors.garnet, textAlign: 'center' },
   altText: { fontFamily: fonts.body, fontSize: 13, color: colors.textMuted },
   altLink: { fontFamily: fonts.bold, color: colors.ink },
 });
