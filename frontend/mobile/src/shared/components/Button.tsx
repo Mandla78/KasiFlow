@@ -4,7 +4,7 @@ import { ActivityIndicator, Pressable, StyleSheet, Text, View } from 'react-nati
 
 import { colors, fonts, radius, sizes } from '@/shared/theme/tokens';
 
-type Variant = 'primary' | 'secondary' | 'accent';
+type Variant = 'primary' | 'secondary' | 'accent' | 'danger';
 
 type Props = {
   title: string;
@@ -50,6 +50,7 @@ const variants: Record<Variant, { bg: string; fg: string; border: string }> = {
   primary: { bg: colors.ink, fg: colors.white, border: colors.ink },
   secondary: { bg: colors.white, fg: colors.ink, border: colors.line },
   accent: { bg: colors.accent, fg: colors.white, border: colors.accent },
+  danger: { bg: colors.garnet, fg: colors.white, border: colors.garnet },
 };
 
 const styles = StyleSheet.create({

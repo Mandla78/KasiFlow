@@ -1,4 +1,5 @@
 import { Feather } from '@expo/vector-icons';
+import { router } from 'expo-router';
 import { StyleSheet, Text, View } from 'react-native';
 
 import { Card, ListRow } from '@/shared/components/Parts';
@@ -48,7 +49,7 @@ export default function More() {
       <Overline>App</Overline>
       <Card style={styles.group}>
         <ListRow icon="bell" title="Notifications" />
-        <ListRow icon="lock" title="Security" subtitle="App lock · this phone's key" />
+        <ListRow icon="lock" title="Security" subtitle="Phones, password, your data" onPress={() => router.push('/informal-business/security')} />
         <ListRow icon="globe" title="Language" subtitle="English" />
         <ListRow icon="refresh-cw" title="Data saver" subtitle="On" last />
       </Card>
