@@ -10,7 +10,7 @@ from __future__ import annotations
 from typing import Any, Optional
 
 from src.shared.audit.audit import publish
-from src.shared.audit.audit_types import AuditCategory, AuditDomain, AuditEvent, AuditSeverity, AuditStatus
+from src.shared.audit.audit_types import ActorType, AuditCategory, AuditDomain, AuditEvent, AuditSeverity, AuditStatus
 from src.shared.audit.event_types.auth import AuthAuditEvent
 
 # Default severity when an event fails; successes are "info".
@@ -41,6 +41,7 @@ def record(
     session_id: Optional[Any] = None,
     device_id: Optional[Any] = None,
     severity: Optional[AuditSeverity] = None,
+    actor_type: ActorType = ActorType.USER,
     **metadata: Any,
 ) -> None:
     publish(
@@ -51,6 +52,7 @@ def record(
             category=_CATEGORY.get(event, AuditCategory.AUTHENTICATION),
             severity=severity or (AuditSeverity.INFO if ok else _FAILURE_SEVERITY.get(event, AuditSeverity.LOW)),
             module="identity.auth",
+            actor_type=actor_type,
             user_id=str(user_id) if user_id else None,
             email=email,
             failure_reason=reason,

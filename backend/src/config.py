@@ -107,6 +107,9 @@ class BaseConfig:
     # only: the app has its own public token for drawing the map.
     MAPBOX_TOKEN = os.environ.get("MAPBOX_TOKEN", "")
 
+    # Background jobs (clean-ups). Off in tests, which call jobs directly.
+    SCHEDULER_ENABLED = True
+
     # Rate limiting (in-memory for dev; Redis in production).
     RATELIMIT_STORAGE_URI = os.environ.get("RATELIMIT_STORAGE_URI", "memory://")
     RATELIMIT_HEADERS_ENABLED = True
@@ -125,6 +128,7 @@ class TestingConfig(BaseConfig):
     JWT_ACCESS_TOKEN_EXPIRES = timedelta(minutes=5)
     MAIL_PROVIDER = "fake"
     MAIL_ASYNC = False  # send inline so tests can read the fake outbox
+    SCHEDULER_ENABLED = False
     # Limiter storage must exist so rate-limit tests can switch it on;
     # tests/conftest.py turns limiting OFF for every other test.
     RATELIMIT_ENABLED = True

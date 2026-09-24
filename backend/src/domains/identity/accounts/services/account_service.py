@@ -111,3 +111,18 @@ def consents_view(user: User) -> list[dict]:
         {"document": c.document, "version": c.version, "accepted_at": c.accepted_at.isoformat()}
         for c in user_repository.consents_for(user.id)
     ]
+
+
+def unverified_older_than(cutoff) -> list[User]:
+    """Sign-ups whose email was never confirmed, created before `cutoff`."""
+    return User.query.filter(User.status == AccountStatus.UNVERIFIED.value, User.created_at < cutoff).all()
+
+
+def delete_unverified(user: User) -> None:
+    """Hard delete (cascades to its credentials, codes and consents). Only
+    for never-verified sign-ups: a real account is closed, not deleted."""
+    if user.status != AccountStatus.UNVERIFIED.value:
+        raise ValueError("Only unverified sign-ups can be deleted this way.")
+    from src.extensions import db
+
+    db.session.delete(user)

@@ -25,10 +25,11 @@ def create_app(env_name: str | None = None) -> Flask:
     _register_security_headers(app)
     _register_cli(app)
 
-    # The master scheduler (src/master_scheduler) starts here once the
-    # first feature that owns a job has its tables:
-    #     from src.master_scheduler import trigger
-    #     trigger.start(app)
+    # Background jobs (identity clean-up, idempotency sweep). Not in tests.
+    if app.config.get("SCHEDULER_ENABLED"):
+        from src.master_scheduler import trigger
+
+        trigger.start(app)
 
     logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(name)s: %(message)s")
     app.logger.info("Akayza backend ready (env=%s)", env_name or "development")
