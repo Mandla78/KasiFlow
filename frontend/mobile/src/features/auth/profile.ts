@@ -63,6 +63,11 @@ export function demoProfile(email: string, signedUpWith: Profile['signedUpWith']
 }
 
 /** Short area name for headers ("Tembisa"), from the confirmed location. */
+/** The verified badge: only CIPC's word counts (active company, and the user is a director). */
+export function isVerified(profile: Profile): boolean {
+  return profile.registration.cipc?.status === 'verified';
+}
+
 export function areaOf(profile: Profile): string {
   return profile.location?.suburb || profile.location?.city || '';
 }

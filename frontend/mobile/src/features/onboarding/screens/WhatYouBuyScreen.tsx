@@ -1,3 +1,4 @@
+import { router } from 'expo-router';
 import { useState } from 'react';
 
 import { defaultCategories } from '@/constants/businessTypes';
@@ -23,7 +24,7 @@ const RESTOCK: SelectOption<NN<'restock'>>[] = [
 ];
 
 /** Step 4, the last: what the trader buys. It feeds the supplier engine behind the Suppliers tab. */
-export default function WhatYouBuyScreen() {
+export default function WhatYouBuyScreen({ editing = false }: { editing?: boolean }) {
   const { profile, updateProfile, finishOnboarding } = useSession();
   const suggested = profile.businessType ? defaultCategories(profile.businessType, profile.trade) : [];
   const [categories, setCategories] = useState<CategoryCode[]>(profile.categories.length ? profile.categories : suggested);
@@ -47,6 +48,7 @@ export default function WhatYouBuyScreen() {
     setTouched(true);
     if (Object.values(errors).some(Boolean)) return;
     updateProfile({ categories, buying: b });
+    if (editing) return router.back();
     finishOnboarding();
   }
 
@@ -59,7 +61,8 @@ export default function WhatYouBuyScreen() {
         'How often you restock helps us remind you at the right time. Suppliers never see it.',
       ]}
       primaryLabel="Open my business"
-      onPrimary={next}>
+      onPrimary={next}
+      editing={editing}>
       <SelectField<CategoryCode>
         multiple
         label="What do you buy for your business?"

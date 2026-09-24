@@ -6,7 +6,7 @@ import { Card, ListRow } from '@/shared/components/Parts';
 import { Screen } from '@/shared/components/Screen';
 import { Overline } from '@/shared/components/Text';
 import { TopBar } from '@/shared/components/TopBar';
-import { areaOf } from '@/features/auth/profile';
+import { areaOf, isVerified } from '@/features/auth/profile';
 import { BUSINESS_TYPES } from '@/constants/businessTypes';
 import { useSession } from '@/features/auth/session/SessionProvider';
 import { colors, fonts, radius } from '@/shared/theme/tokens';
@@ -20,15 +20,25 @@ export default function More() {
 
   return (
     <Screen tab>
-      <TopBar initial={profile.businessName[0] ?? 'K'} title="More" subtitle={profile.businessName} />
+      <TopBar
+        verified={isVerified(profile)}
+        onAvatarPress={() => router.push('/informal-business/business')} initial={profile.businessName[0] ?? 'K'} title="More" subtitle={profile.businessName} />
 
-      <Card onPress={() => {}}>
+      <Card onPress={() => router.push('/informal-business/business')}>
         <View style={styles.profile}>
           <View style={styles.avatar}>
             <Text style={styles.avatarText}>{(profile.ownerName[0] ?? 'K').toUpperCase()}</Text>
           </View>
           <View style={{ flex: 1 }}>
-            <Text style={styles.name}>{profile.ownerName}</Text>
+            <View style={styles.nameRow}>
+              <Text style={styles.name}>{profile.ownerName}</Text>
+              {isVerified(profile) ? (
+                <View style={styles.verified}>
+                  <Feather name="check-circle" size={12} color={colors.accentDeep} />
+                  <Text style={styles.verifiedText}>Verified</Text>
+                </View>
+              ) : null}
+            </View>
             <Text style={styles.sub}>
               {profile.businessName} · {areaOf(profile)}
             </Text>
@@ -41,7 +51,12 @@ export default function More() {
       <Overline>Business</Overline>
       {profile.registration.cipc ? <CipcStatusCard cipc={profile.registration.cipc} businessName={profile.businessName} /> : null}
       <Card style={styles.group}>
-        <ListRow icon="shopping-bag" title="Business profile" subtitle={profile.businessType ? BUSINESS_TYPES[profile.businessType].label : 'Not set'} />
+        <ListRow
+          icon="shopping-bag"
+          title="Business profile"
+          subtitle={profile.businessType ? `${BUSINESS_TYPES[profile.businessType].label} · edit your sign-up answers` : 'Not set'}
+          onPress={() => router.push('/informal-business/business')}
+        />
         <ListRow icon="map-pin" title="Delivery addresses" subtitle="Shop · Home" />
         <ListRow icon="grid" title="Tools" subtitle={`${toolsOn} on`} last />
       </Card>
@@ -70,6 +85,9 @@ const styles = StyleSheet.create({
   avatar: { width: 50, height: 50, borderRadius: radius.md, backgroundColor: colors.ink, alignItems: 'center', justifyContent: 'center' },
   avatarText: { fontFamily: fonts.display, fontSize: 20, color: colors.white },
   name: { fontFamily: fonts.bold, fontSize: 16, color: colors.text },
+  nameRow: { flexDirection: 'row', alignItems: 'center', gap: 8 },
+  verified: { flexDirection: 'row', alignItems: 'center', gap: 4, backgroundColor: colors.accentTint, borderRadius: 999, paddingVertical: 2, paddingHorizontal: 8 },
+  verifiedText: { fontFamily: fonts.bold, fontSize: 11.5, color: colors.accentDeep },
   sub: { fontFamily: fonts.body, fontSize: 12.5, color: colors.textMuted, marginTop: 1 },
   group: { paddingVertical: 4 },
   version: { fontFamily: fonts.body, fontSize: 11.5, color: colors.textFaint, textAlign: 'center' },

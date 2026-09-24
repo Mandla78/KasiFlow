@@ -1,9 +1,10 @@
+import { router } from 'expo-router';
 import { Feather } from '@expo/vector-icons';
 import { useEffect, useState } from 'react';
 import { ActivityIndicator, Pressable, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
 
 import { CategoryCode, categoryByCode } from '@/constants/categories';
-import { areaOf } from '@/features/auth/profile';
+import { areaOf, isVerified } from '@/features/auth/profile';
 import { useSession } from '@/features/auth/session/SessionProvider';
 import { Screen } from '@/shared/components/Screen';
 import { Overline } from '@/shared/components/Text';
@@ -56,6 +57,8 @@ export default function SuppliersScreen() {
   return (
     <Screen tab>
       <TopBar
+        verified={isVerified(profile)}
+        onAvatarPress={() => router.push('/informal-business/business')}
         initial={profile.businessName[0] ?? 'A'}
         title="Suppliers"
         subtitle={areaOf(profile) ? `Near ${areaOf(profile)}` : undefined}

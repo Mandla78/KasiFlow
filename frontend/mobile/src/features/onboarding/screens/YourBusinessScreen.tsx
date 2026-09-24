@@ -23,7 +23,7 @@ const YEARS_OPTIONS: { value: YearsTrading; label: string }[] = [
 ];
 
 /** Step 1: what the business is and who runs it. */
-export default function YourBusinessScreen() {
+export default function YourBusinessScreen({ editing = false }: { editing?: boolean }) {
   const { profile, updateProfile, setBusinessType, setTrade } = useSession();
   const [ownerName, setOwnerName] = useState(profile.ownerName);
   const [years, setYears] = useState<YearsTrading | null>(profile.yearsTrading);
@@ -45,6 +45,7 @@ export default function YourBusinessScreen() {
     setTouched(true);
     if (Object.values(errors).some(Boolean)) return;
     updateProfile({ ownerName: ownerName.trim(), yearsTrading: years, cellphone: cellphone.trim() });
+    if (editing) return router.back();
     router.push('/registration');
   }
 
@@ -57,7 +58,8 @@ export default function YourBusinessScreen() {
         'How long you have been trading is shown to suppliers as a simple badge. It helps them trust a new customer.',
         'Your cellphone is optional and only used for delivery calls and WhatsApp receipts, never to sign in or for marketing. We never ask for your ID number.',
       ]}
-      onPrimary={next}>
+      onPrimary={next}
+      editing={editing}>
       <SelectField<BusinessType>
         label="What type of business do you run?"
         options={TYPE_OPTIONS}

@@ -6,6 +6,7 @@ import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { IconTile } from '@/shared/components/Parts';
 import { Screen } from '@/shared/components/Screen';
 import { Body, Overline, Title } from '@/shared/components/Text';
+import { isVerified } from '@/features/auth/profile';
 import { TopBar } from '@/shared/components/TopBar';
 import { formatRand } from '@/shared/lib/money';
 import { accountMonth, toolLines } from '../mock';
@@ -30,7 +31,9 @@ export default function Account() {
 
   return (
     <Screen tab>
-      <TopBar initial={profile.businessName[0] ?? 'K'} title="Account" subtitle={profile.businessName} />
+      <TopBar
+        verified={isVerified(profile)}
+        onAvatarPress={() => router.push('/informal-business/business')} initial={profile.businessName[0] ?? 'K'} title="Account" subtitle={profile.businessName} />
       <View style={{ gap: 6 }}>
         <Title>Your tools</Title>
         <Body>Tap a tool to open it. Add the ones your business needs.</Body>

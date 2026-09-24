@@ -38,7 +38,7 @@ function cipcFormatError(n: string): string {
  * official API, so we don't collect them. The screen says nothing about
  * how or when the number is checked; that happens on the backend.
  */
-export default function RegistrationScreen() {
+export default function RegistrationScreen({ editing = false }: { editing?: boolean }) {
   const { profile, updateProfile, setCipcResult } = useSession();
   const reg = profile.registration;
 
@@ -66,6 +66,7 @@ export default function RegistrationScreen() {
         .then((r) => setCipcResult(cipcNumber, r))
         .catch(() => setCipcResult(cipcNumber, { status: 'unavailable', checkedAt: new Date().toISOString() }));
     }
+    if (editing) return router.back();
     router.push('/where-you-are');
   }
 
@@ -79,7 +80,8 @@ export default function RegistrationScreen() {
         'We only ask about the business, never for ID numbers or documents about you.',
       ]}
       onPrimary={save}
-      onSkip={() => router.push('/where-you-are')}>
+      onSkip={() => router.push('/where-you-are')}
+      editing={editing}>
       <SelectField<Setup> label="How is your business set up?" options={SETUP_OPTIONS} value={setup} onChange={setSetup} />
       {setup === 'cipc' ? (
         <TextField

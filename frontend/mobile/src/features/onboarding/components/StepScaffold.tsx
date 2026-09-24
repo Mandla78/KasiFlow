@@ -11,6 +11,9 @@
  *
  * Step one has no back: behind it is account creation, and a flow you can
  * reverse out of drops you somewhere you've already finished.
+ *
+ * EDITING (More -> Business profile): the same screens, one at a time. No
+ * step count, a plain back, "Save changes", and no skip.
  */
 import { router } from 'expo-router';
 import { ReactNode } from 'react';
@@ -37,14 +40,25 @@ type Props = {
   error?: string;
   /** "Skip for now", on the optional step only. */
   onSkip?: () => void;
+  /** Opened from Business profile to change one answer, not as part of sign-up. */
+  editing?: boolean;
 };
 
-export function StepScaffold({ step, title, why, children, primaryLabel = 'Continue', onPrimary, primaryDisabled, busy, error, onSkip }: Props) {
+export function StepScaffold({ step, title, why, children, primaryLabel = 'Continue', onPrimary, primaryDisabled, busy, error, onSkip, editing }: Props) {
   const index = STEPS.findIndex((s) => s.id === step);
+  if (editing) {
+    primaryLabel = 'Save changes';
+    onSkip = undefined;
+  }
 
   return (
     <SafeAreaView style={styles.safe}>
       <KeyboardAvoidingView style={{ flex: 1 }} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
+        {editing ? (
+          <View style={styles.header}>
+            <BackButton onPress={() => router.back()} />
+          </View>
+        ) : (
         <View style={styles.header}>
           <View style={styles.headRow}>
             {index > 0 ? (
@@ -62,6 +76,7 @@ export function StepScaffold({ step, title, why, children, primaryLabel = 'Conti
             ))}
           </View>
         </View>
+        )}
 
         <ScrollView contentContainerStyle={styles.content} keyboardShouldPersistTaps="handled" showsVerticalScrollIndicator={false}>
           <View style={styles.titleRow}>

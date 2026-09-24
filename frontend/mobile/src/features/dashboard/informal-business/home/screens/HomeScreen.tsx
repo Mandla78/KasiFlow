@@ -10,7 +10,7 @@ import { Overline } from '@/shared/components/Text';
 import { TopBar } from '@/shared/components/TopBar';
 import { formatRand } from '@/shared/lib/money';
 import { builderHome, builderToday, spazaHome, spazaToday, TodayItem } from '../mock';
-import { areaOf } from '@/features/auth/profile';
+import { areaOf, isVerified } from '@/features/auth/profile';
 import { useSession } from '@/features/auth/session/SessionProvider';
 import { colors, fonts, radius } from '@/shared/theme/tokens';
 
@@ -30,6 +30,8 @@ export default function Home() {
   return (
     <Screen tab>
       <TopBar
+        verified={isVerified(profile)}
+        onAvatarPress={() => router.push('/informal-business/business')}
         initial={profile.businessName[0] ?? 'K'}
         title={profile.businessName}
         subtitle={`${kind}${areaOf(profile)}`}

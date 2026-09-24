@@ -8,7 +8,7 @@ import { AddressPickerField } from '@/shared/location-picker/components/AddressP
 import { StepScaffold } from '../components/StepScaffold';
 
 /** Step 3: where the business is (a pin the trader confirms). Delivery addresses come later, with orders. */
-export default function WhereYouAreScreen() {
+export default function WhereYouAreScreen({ editing = false }: { editing?: boolean }) {
   const { profile, updateProfile } = useSession();
   const isBuilder = profile.businessType === 'builder';
   const [place, setPlace] = useState<Place | null>(profile.location);
@@ -20,6 +20,7 @@ export default function WhereYouAreScreen() {
     setTouched(true);
     if (placeError) return;
     updateProfile({ location: place });
+    if (editing) return router.back();
     router.push('/what-you-buy');
   }
 
@@ -31,7 +32,8 @@ export default function WhereYouAreScreen() {
         'Your pin is how we find suppliers who deliver to you, and how drivers find your door. Township addresses are often hard to find, so the pin matters more than the street name.',
         'Suppliers only see your area, and your address when you order from them.',
       ]}
-      onPrimary={next}>
+      onPrimary={next}
+      editing={editing}>
       <AddressPickerField
         label={isBuilder ? 'Your base or yard' : 'Your shop'}
         value={place}

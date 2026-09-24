@@ -9,15 +9,29 @@ type Props = {
   title: string;
   subtitle?: string;
   action?: { icon: ComponentProps<typeof Feather>['name']; label: string; onPress: () => void; dot?: boolean };
+  /** A small blue tick on the avatar (CIPC-verified business). */
+  verified?: boolean;
+  /** Tapping the avatar opens the business profile. */
+  onAvatarPress?: () => void;
 };
 
 /** Tab screens' top bar: the business and one action (usually the bell). */
-export function TopBar({ initial, title, subtitle, action }: Props) {
+export function TopBar({ initial, title, subtitle, action, verified, onAvatarPress }: Props) {
   return (
     <View style={styles.row}>
-      <View style={styles.avatar}>
+      <Pressable
+        onPress={onAvatarPress}
+        disabled={!onAvatarPress}
+        accessibilityRole={onAvatarPress ? 'button' : undefined}
+        accessibilityLabel={verified ? 'Business profile, verified' : 'Business profile'}
+        style={styles.avatar}>
         <Text style={styles.initial}>{initial.toUpperCase()}</Text>
-      </View>
+        {verified ? (
+          <View style={styles.tick}>
+            <Feather name="check" size={9} color={colors.white} />
+          </View>
+        ) : null}
+      </Pressable>
       <View style={{ flex: 1 }}>
         <Text style={styles.title} numberOfLines={1}>
           {title}
@@ -38,6 +52,19 @@ const styles = StyleSheet.create({
   row: { flexDirection: 'row', alignItems: 'center', gap: 12 },
   avatar: { width: 38, height: 38, borderRadius: radius.sm, backgroundColor: colors.ink, alignItems: 'center', justifyContent: 'center' },
   initial: { fontFamily: fonts.display, fontSize: 16, color: colors.white },
+  tick: {
+    position: 'absolute',
+    right: -4,
+    bottom: -4,
+    width: 16,
+    height: 16,
+    borderRadius: 8,
+    backgroundColor: colors.accent,
+    borderWidth: 2,
+    borderColor: colors.porcelain,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
   title: { fontFamily: fonts.display, fontSize: 19, color: colors.ink },
   subtitle: { fontFamily: fonts.body, fontSize: 12, color: colors.textMuted },
   action: {
