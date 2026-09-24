@@ -43,6 +43,21 @@ def test_smtp_message_has_text_html_and_delivery_headers(monkeypatch):
     assert types == ["text/plain", "text/html"]
 
 
+def test_codes_never_reach_the_logs(client, outbox, caplog):
+    """Sign-up codes go to the inbox only: not the log, at any level."""
+    import logging
+    import re
+
+    caplog.set_level(logging.DEBUG)
+    client.post(
+        "/api/v1/auth/register",
+        json={"business_name": "Log Spaza", "email": "logs@example.com", "password": "Spaza2026!",
+              "consent": {"privacy_version": "0.1-draft", "terms_version": "0.1-draft"}},
+    )
+    code = re.search(r">(\d{6})<", outbox[-1]["html_body"]).group(1)
+    assert code not in caplog.text
+
+
 def test_production_refuses_fake_email(monkeypatch):
     monkeypatch.setenv("SECRET_KEY", "x" * 64)
     monkeypatch.setenv("JWT_SECRET_KEY", "y" * 64)

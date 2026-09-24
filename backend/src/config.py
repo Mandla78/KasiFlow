@@ -66,11 +66,11 @@ class BaseConfig:
     JWT_TOKEN_LOCATION = ["headers"]
     JWT_HEADER_TYPE = "Bearer"
 
-    # Email. "fake" keeps emails in memory and prints them to the log
-    # (development and tests only). "smtp" sends through any SMTP relay
-    # (Brevo, SendGrid, Amazon SES, Mailgun, Gmail...): swapping providers
-    # is only these settings, never code.
-    MAIL_PROVIDER = os.environ.get("MAIL_PROVIDER", "fake")
+    # Email. "smtp" (the default) sends through any SMTP relay (Gmail today;
+    # Brevo, SendGrid, Amazon SES, Mailgun later): swapping providers is only
+    # these settings, never code. "fake" keeps emails in memory for the
+    # tests and sends nothing; codes are never written to any log.
+    MAIL_PROVIDER = os.environ.get("MAIL_PROVIDER", "smtp")
     MAIL_SERVER = os.environ.get("MAIL_SERVER", "")
     MAIL_PORT = int(os.environ.get("MAIL_PORT", 587))
     MAIL_USE_TLS = _bool("MAIL_USE_TLS", "true")  # STARTTLS, port 587
@@ -171,8 +171,8 @@ def get_config(env_name: str | None = None):
         if weak:
             raise RuntimeError(f"These secrets must be at least 32 characters: {', '.join(weak)}.")
     if env_name == "production":
-        # The fake provider prints sign-up codes into the logs: never in production.
-        if os.environ.get("MAIL_PROVIDER", "fake") == "fake":
+        # The fake provider sends nothing: never in production.
+        if os.environ.get("MAIL_PROVIDER", "smtp") == "fake":
             raise RuntimeError("MAIL_PROVIDER=fake is not allowed in production. Configure an SMTP provider.")
         mail_missing = [k for k in ("MAIL_SERVER", "MAIL_USERNAME", "MAIL_PASSWORD", "MAIL_DEFAULT_SENDER") if not os.environ.get(k)]
         if mail_missing:
