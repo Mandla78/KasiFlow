@@ -26,13 +26,16 @@ Source of truth for pasting (moved here from 06). (est.) = estimate.
     phone switches the old key off; a new SIM changes nothing.
     Tampering: every event hash-chained (SHA-256) and signed;
     re-verified on every record view; any break freezes the record.
-    Repudiation: cash confirmed by BOTH parties' signatures, within
-    60 seconds of each other; a mismatch is kept as a dispute.
+    Repudiation: actions are signed with the phone's registered key
+    (proof of possession at registration) and audit-logged; a payment
+    counts as confirmed only when our server has verified the payment
+    provider's signed notification.
     Information disclosure: amounts never broadcast in the clear
     (salted commitment + HMAC match tag); share links are 128-bit
     tokens stored only as hashes; the owner chooses what a link shows.
-    Denial of service: offline-first -- the app records without
-    signal and syncs later; duplicate uploads are ignored.
+    Denial of service: rate limits on every auth route, capped input
+    sizes, Cloudflare in front; idempotency keys make retries safe
+    (a repeated request is never processed twice).
     Elevation of privilege: every API route pins a role; identity
     comes only from the verified token; object-level checks on every
     record read.
@@ -70,7 +73,5 @@ Source of truth for pasting (moved here from 06). (est.) = estimate.
     payment notifications validated (signature, amount, server
     confirmation) before an order is marked paid. Stolen phone: the
     key is revoked server-side and a new chain segment starts. Chain
-    breaks are cleared only by manual review. Post-quantum: the server
-    countersigns chain roots and share snapshots with ML-DSA (NIST
-    FIPS 204). Before any real launch: POPIA legal review, external
+    breaks are cleared only by manual review. Before any real launch: POPIA legal review, external
     penetration test, encryption of context keys at rest.

@@ -168,7 +168,7 @@ that.
 
   THURSDAY (tonight, local; commit for real once the facilitators
   confirm or at kick-off)
-    1. Repo layout: backend/ mobile/ web/ docs/
+    1. Repo layout: backend/ frontend/mobile/ (web/ later) docs/
     2. PostgreSQL akayza_dev with one schema per domain
     3. Backend skeleton from the earlier libraries: create_app, config,
        core, health check, architecture tests

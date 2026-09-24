@@ -7,7 +7,7 @@ import re
 
 import bcrypt
 
-# THE PASSWORD RULE, identical to mobile/src/shared/lib/validation.ts
+# THE PASSWORD RULE, identical to frontend/mobile/src/shared/lib/validation.ts
 # (passwordRules). The server must never be more permissive than the app,
 # or a request that bypasses the app could set a weaker password than the
 # screen promised. Change both together.

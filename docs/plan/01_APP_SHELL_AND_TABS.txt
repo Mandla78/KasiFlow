@@ -77,7 +77,7 @@ pixel targets.
 3. ROUTES (a starting point; expect it to change)
 ---------------------------------------------------------------------------
 
-    mobile/app/
+    frontend/mobile/app/
       (onboarding)/  welcome, signup, verify-email, business-type, details, tools; signin, forgot-password
       (tabs)/        index (Home), account, suppliers, more
       credit/        index, new

@@ -67,6 +67,20 @@ class BaseConfig:
     LOGIN_MAX_FAILED_ATTEMPTS = int(os.environ.get("LOGIN_MAX_FAILED_ATTEMPTS", 5))
     LOGIN_LOCKOUT_MINUTES = int(os.environ.get("LOGIN_LOCKOUT_MINUTES", 15))
 
+    # Password reset links (one use).
+    PASSWORD_RESET_EXPIRY_MINUTES = int(os.environ.get("PASSWORD_RESET_EXPIRY_MINUTES", 30))
+    # Where the reset link opens: the app's deep link.
+    PASSWORD_RESET_URL = os.environ.get("PASSWORD_RESET_URL", "akayza://reset-password")
+
+    # The legal document versions a new account must accept. Must match the
+    # app's content/legal files; bump both when a document changes.
+    PRIVACY_POLICY_VERSION = os.environ.get("PRIVACY_POLICY_VERSION", "0.1-draft")
+    TERMS_VERSION = os.environ.get("TERMS_VERSION", "0.1-draft")
+
+    # Mapbox token for address search and reverse geocoding. Server-side
+    # only: the app has its own public token for drawing the map.
+    MAPBOX_TOKEN = os.environ.get("MAPBOX_TOKEN", "")
+
     # Rate limiting (in-memory for dev; Redis in production).
     RATELIMIT_STORAGE_URI = os.environ.get("RATELIMIT_STORAGE_URI", "memory://")
     RATELIMIT_HEADERS_ENABLED = True
@@ -84,6 +98,7 @@ class TestingConfig(BaseConfig):
     SQLALCHEMY_DATABASE_URI = os.environ.get("TEST_DATABASE_URL") or _database_uri("POSTGRES_TEST_DB", "akayza_test")
     JWT_ACCESS_TOKEN_EXPIRES = timedelta(minutes=5)
     MAIL_PROVIDER = "fake"
+    MAIL_ASYNC = False  # send inline so tests can read the fake outbox
     RATELIMIT_ENABLED = False
 
 

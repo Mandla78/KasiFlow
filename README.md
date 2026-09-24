@@ -7,9 +7,11 @@ An app for informal businesses (builders and trades, spaza shops, other small bu
 Team PR · GKHack26. Plans and submission drafts are in [`docs/`](docs/).
 
 ```
-backend/   Flask + PostgreSQL API (domains -> features, migrations)
-mobile/    Expo / React Native app (development build, not Expo Go)
-docs/      plan, design, hackathon and submission drafts
+backend/          Flask + PostgreSQL API (domains -> features, migrations)
+frontend/
+  mobile/         Expo / React Native app (development build, not Expo Go)
+  (web/ later)
+docs/             plan, design, hackathon and submission drafts
 ```
 
 ---
@@ -65,10 +67,25 @@ flask db upgrade
 
 Commit the migration file with the model change, so everyone else gets it with `flask db upgrade`.
 
+### Auth API (`/api/v1`)
+
+| Route | What it does |
+|---|---|
+| `POST /auth/register` | business name, email, password, consent versions. Always answers "Check your email." |
+| `POST /auth/verify-email` | email + 6-digit code (+ optional phone key) → tokens |
+| `POST /auth/resend-code` | always answers "Check your email." |
+| `POST /auth/login` | email + password (+ optional phone key) → tokens |
+| `POST /auth/refresh` | refresh token → new tokens (the old refresh token stops working) |
+| `POST /auth/logout` | ends this phone's session immediately |
+| `POST /auth/forgot-password` / `POST /auth/reset-password` | one-use reset link, 30 minutes |
+| `GET /me` | the signed-in account (from the token; no ids in URLs) |
+
+**In development the emails aren't really sent** (`MAIL_PROVIDER=fake`). The sign-up code and the reset link are printed in the backend terminal, on a line starting with `[fake email]`.
+
 ## 3. Mobile
 
 ```powershell
-cd mobile
+cd frontend/mobile
 npm install
 copy .env.example .env         # public settings only (Mapbox token, API address)
 npm start                      # = npx expo start --dev-client
@@ -88,7 +105,7 @@ The tunnel is a little slower to load, but it always connects. If it still fails
 
 **Preview in the browser** (quick UI check, no phone needed): `npx expo start --web`, then open http://localhost:8081. Refreshing the page resets the session.
 
-**`mobile/.env`** (git-ignored; `.env.example` lists the keys):
+**`frontend/mobile/.env`** (git-ignored; `.env.example` lists the keys):
 - `EXPO_PUBLIC_MAPBOX_TOKEN`: the public Mapbox token. Without it the map uses OpenStreetMap (dev only).
 - `EXPO_PUBLIC_API_URL`: where the phone finds the backend. `localhost` means the phone itself, so use your PC's IP from `ipconfig` (same Wi-Fi) or a tunnel URL. It's unused until the mocks are switched to the real backend.
 
@@ -101,7 +118,7 @@ Before you push mobile changes: `npx tsc --noEmit` and `npx expo lint`.
 ## Trying the app (everything is mocked until the backend is wired)
 
 - **Email code:** any 6 digits work. `000000` shows the error.
-- **Password rule:** 8–64 characters, with a capital letter, a small letter, a number and a special character. The same rule is enforced in `mobile/src/shared/lib/validation.ts` and `backend/src/shared/security/security.py`.
+- **Password rule:** 8–64 characters, with a capital letter, a small letter, a number and a special character. The same rule is enforced in `frontend/mobile/src/shared/lib/validation.ts` and `backend/src/shared/security/security.py`.
 - **Address search:** type any address. The first result is what you typed.
 - **CIPC numbers:** the check runs in the background, and the result shows on the **More** tab. Enter the name "Nomsa Dlamini" at step 1 so the director match can work.
 
@@ -133,7 +150,7 @@ master_scheduler/  background jobs
 migrations/    Alembic: the only way the database changes
 ```
 
-**Mobile** (`mobile/src/`): see [`mobile/README.md`](mobile/README.md).
+**Mobile** (`frontend/mobile/src/`): see [`frontend/mobile/README.md`](frontend/mobile/README.md).
 
 ```
 app/           routes only (each file re-exports a screen)
@@ -156,6 +173,7 @@ content/       Privacy Policy and Terms of Use (drafts)
 
 ## Troubleshooting
 
+- **The phone is stuck on "Connecting to the development server" or says "Failed to connect":** turn off any **VPN on the phone** first. A VPN hides the local network. Then check the phone and PC are on the same Wi-Fi, or use `npm run start:tunnel`.
 - **The phone shows old code:** stop Metro and run `npx expo start --dev-client --clear`.
 - **"Cannot find native module …" on the phone:** your dev build is older than a newly added native package. Install the latest build.
 - **Port 8081 already in use:** another Metro server is running. Close it, or answer "yes" to use another port.

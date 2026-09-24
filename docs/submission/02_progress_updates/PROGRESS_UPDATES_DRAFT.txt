@@ -25,8 +25,11 @@ TEMPLATE
 #2 -- SATURDAY 23:59 (draft)
   Milestone:   A trader orders from a supplier and pays; the payment is
                sealed into their record; tampering is detected.
-  Built:       - credit book, order again, PayFast sandbox payment
-               - cash confirmed by both sides (and a dispute)
+  Built:       - sign-up (4 steps) with background CIPC check, and
+                 suppliers near you (matched by distance + categories)
+               - secure sign-in: verified email, rotating tokens, one
+                 trusted phone per account
+               - credit book, order again, PayFast sandbox payment
                - builder job stages with client sign-off
                - shareable record with a public checker page
   Next:        polish, demo video, slides, rehearsal

@@ -51,7 +51,6 @@ THE SLIDES (more than 10; their required items marked *)
   12  * Go-to-market: trader-led invites, sales, supplier-led, pilot
   13  * Technology Readiness Level: what is built and tested
   14  Impact + the ask: R300,000 for a 6-month pilot
-  (+ Quantum: post-quantum sealed records, on slide 7 or 8)
 
 
 ---------------------------------------------------------------------------
@@ -60,13 +59,13 @@ THE 90-SECOND VIDEO
 
    0-10   the problem in one line on screen
   10-30   Bongani: a job stage photographed; the client signs off by
-          link; the payment is confirmed by both
-  30-55   Nomsa: credit sale; order again from her supplier; PayFast
-          (or cash confirmed by both)
+          link
+  30-55   Nomsa: credit sale; suppliers near her; order stock and pay
+          in the app (confirmed by the payment provider)
   55-75   her record shared; the checker page shows "record intact";
           the tamper check trips
-  75-90   "Akayza. Your business, proven by the people you trade
-          with." + the ask
+  75-90   "Akayza: keep it in the kasi. Run your business today, get
+          funded tomorrow." + the ask
   Record by Sun ~06:00. Screen-record the phones (scrcpy + OBS).
 
 

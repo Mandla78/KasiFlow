@@ -24,6 +24,6 @@ def health():
         return error_response(message="Database unavailable", status_code=503, code="DB_UNAVAILABLE")
 
 
-# Each feature's routes attach to api_bp by being imported here, e.g.
-#     from src.domains.identity.accounts.api import routes  # noqa: E402,F401
-# None yet: routes arrive with the features.
+# Each feature's routes attach to api_bp by being imported here.
+from src.domains.identity.accounts.api import routes as _accounts_routes  # noqa: E402,F401
+from src.domains.identity.auth.api import routes as _auth_routes  # noqa: E402,F401

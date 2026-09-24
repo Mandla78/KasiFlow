@@ -34,11 +34,19 @@ def create_app(env_name: str | None = None) -> Flask:
 
 
 def _register_extensions(app: Flask) -> None:
+    from src.shared.rate_limit import responses as rate_limit_responses
+    from src.shared.rate_limit.limiter import limiter
+
     db.init_app(app)
     migrate.init_app(app, db)
     jwt.init_app(app)
+    from src.domains.identity.auth.services import jwt_callbacks
+
+    jwt_callbacks.register(jwt)
     ma.init_app(app)
     bcrypt.init_app(app)
+    limiter.init_app(app)
+    rate_limit_responses.register(app)
 
 
 def _register_models() -> None:
@@ -50,6 +58,10 @@ def _register_models() -> None:
     """
     # Infrastructure (platform schema)
     from src.shared.idempotency import models  # noqa: F401
+    # identity schema: accounts, auth, devices
+    from src.domains.identity.accounts import models as _accounts  # noqa: F401
+    from src.domains.identity.auth import models as _auth  # noqa: F401
+    from src.domains.identity.devices import models as _devices  # noqa: F401
 
 
 def _register_blueprints(app: Flask) -> None:

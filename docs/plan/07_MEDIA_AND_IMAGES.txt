@@ -138,7 +138,7 @@ supports (f_auto, q_auto). A product-grid thumbnail is a few KB, not a
 7. APP
 ---------------------------------------------------------------------------
 
-    - mobile/src/lib/media/   shrink, hash, sign, upload, confirm
+    - frontend/mobile/src/lib/media/   shrink, hash, sign, upload, confirm
     - Upload OFFLINE: a job photo taken with no signal is stored
       locally with its hash, sealed in the stage event straight away,
       and uploaded by the sync outbox later. The hash in the event is

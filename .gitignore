@@ -25,8 +25,8 @@ node_modules/
 dist/
 web-build/
 *.tsbuildinfo
-mobile/android/
-mobile/ios/
+frontend/mobile/android/
+frontend/mobile/ios/
 
 # --- OS / editors ---
 .DS_Store

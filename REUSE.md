@@ -19,6 +19,6 @@ The reused code was adapted: the product name was replaced, and imports of TruCo
 | `backend/src/shared/rate_limit/` | `src/domains/security/rate_limit/` | Flask-Limiter wrapper with JSON 429 responses |
 | `backend/src/shared/cache/`, `logging/`, `monitoring/`, `security/`, `validation/`, `helpers/`, `constants/`, `notifications/`, `scheduling/` | `src/shared/...` | small shared utilities |
 | `backend/tests/architecture/test_finance_boundaries.py` | `tests/architecture/` | fails the build if finance imports a domain |
-| `mobile/src/shared/location-picker/` | `frontend/mobile/src/features/dashboard/shared/location-picker/` | address search + fixed-centre-pin map in a WebView (Mapbox GL JS), reverse geocode only pre-fills editable fields. Adapted: our components instead of react-native-paper, an OpenStreetMap fallback when no token is set, a web (iframe) version |
+| `frontend/mobile/src/shared/location-picker/` | `frontend/mobile/src/features/dashboard/shared/location-picker/` | address search + fixed-centre-pin map in a WebView (Mapbox GL JS), reverse geocode only pre-fills editable fields. Adapted: our components instead of react-native-paper, an OpenStreetMap fallback when no token is set, a web (iframe) version |
 
 Coming later, with the features that need them: media and malware scanning (Cloudinary), the PayFast provider and payment notifications, the backend Mapbox geocoding proxy. Each gets a row here when it's copied.

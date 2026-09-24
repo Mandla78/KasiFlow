@@ -24,22 +24,27 @@ ROUND 1 -- 3-MINUTE SALES PITCH (Sun 10:00-12:30)
   0:00  PROBLEM (20 s)
         "Bongani builds rooms in Seshego. Nomsa runs a spaza in
         Tembisa. Both run real businesses on cash, WhatsApp and a
-        notebook, so neither can prove it. 38% of construction workers
+        notebook, so neither has a history a funder can trust. 38% of
+        construction workers
         are informal. When government opened the Spaza Shop Support
         Fund, 354 applications failed verification."
   0:20  OFFER (30 s)
-        "Akayza is a free app for informal traders. Builders run jobs
-        in stages that the client signs off. Spaza shops keep a credit
-        book and reorder from the suppliers they already use. Every
-        payment, by PayFast or cash that both sides confirm, is sealed
-        into a record the trader owns and can share."
+        "Akayza is a free app that helps informal businesses run
+        better today and get funded tomorrow. Builders run jobs in
+        stages that the client signs off. Spaza shops use a credit book
+        and order stock from their suppliers, and see suppliers near
+        them who sell what they buy. Payments made in the app are
+        confirmed by the payment provider, and records can't be quietly
+        changed, so the history holds up."
   0:50  DEMO (50 s)
-        stage sign-off -> confirmed by both -> record shared ->
-        tamper check trips
+        sign-up (4 steps) -> suppliers near you -> builder stage
+        sign-off -> order + digital payment confirmed -> tamper check
+        trips
   1:40  WHY US (20 s)
-        "Not a marketplace: we connect the suppliers traders already
-        trust. The only record confirmed by the other party, working
-        offline, and post-quantum sealed."
+        "Not a marketplace: we connect traders with the suppliers they
+        already trust, and suppliers get orders straight into their own
+        systems. Security is built in: verified sign-in, one trusted
+        phone per account, verified payments, tamper-evident records."
   2:00  MONEY + ASK (40 s)
         "Traders use it free. Suppliers pay R299 to R1,499 a month, plus
         about 1% on digital orders; funders pay to verify a record the
@@ -47,8 +52,8 @@ ROUND 1 -- 3-MINUTE SALES PITCH (Sun 10:00-12:30)
         the pilot. We need R300,000 for a 6-month pilot in Polokwane and
         Tembisa."
   2:40  CLOSE (20 s)
-        "Your business, proven by the people you trade with. Are you
-        buying?"
+        "Akayza: keep it in the kasi. Run your business today, get
+        funded tomorrow. Are you buying?"
 
 
 ---------------------------------------------------------------------------
@@ -56,10 +61,10 @@ TOP 12 -- 5 MINUTES (mostly demo) + 3 MINUTES Q&A (Sun 13:30)
 ---------------------------------------------------------------------------
 
   0:00-0:40  problem + who (Bongani, Nomsa, their suppliers)
-  0:40-3:40  LIVE DEMO: builder stage + client sign-off; spaza credit
-             sale; order again + PayFast; cash confirmed by both + the
-             dispute; record shared + revoked; tamper check trips;
-             ML-DSA "verified"
+  0:40-3:40  LIVE DEMO: sign-up + CIPC check; suppliers near you;
+             builder stage + client sign-off; spaza credit sale; order
+             + digital payment confirmed by the provider; record shared
+             + revoked; tamper check trips
   3:40-4:30  business: who pays, costs, the ask
   4:30-5:00  close + roadmap (supplier tablet, VAS, WhatsApp sign-in)
 

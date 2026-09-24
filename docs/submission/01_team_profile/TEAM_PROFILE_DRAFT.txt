@@ -27,45 +27,53 @@ nearly 4 in 5 township businesses are unregistered and fewer than 9%
 can get a bank loan (Standard Bank, 2025).
 
 Payments are cash, agreements are verbal, and records live in
-notebooks and WhatsApp, so real businesses cannot prove they are real.
-When government opened the R500 million Spaza Shop Support Fund, 354
-applications failed verification and only R179.6 million had been
-allocated by May 2026 (DSBD). We are building the tool that turns the
-way informal businesses already work into proof.
+notebooks and WhatsApp, so real businesses cannot show a history that
+funders can trust. When government opened the R500 million Spaza Shop
+Support Fund, 354 applications failed verification and only R179.6
+million had been allocated by May 2026 (DSBD). We are building an app
+that helps informal businesses run better every day, and over time
+builds the verified business history they need to access financing.
 
 
 --- OVERVIEW: What is the project about? ---------------------------------
 
-Akayza is an app for informal traders: builders, spaza shops and
-every hustle. It turns the way they already work into proof.
+Akayza is an app for informal businesses: builders and trades, spaza
+shops and other small businesses. It helps them run their business day
+to day and prepares them for financing in the future.
 
 FOR TRADERS (our users, free): business tools they use every day.
 Builders run jobs in stages, with photo evidence and a sign-off from
-the client. Spaza shops keep a credit book and reorder from the
-suppliers they already buy from. Every payment, by PayFast or in cash
-that both sides confirm on their phones (even without signal), is
-sealed into a tamper-evident record the trader owns, can share by link
-with a client, supplier or funder, and can take back.
+the client. Spaza shops use tools such as a credit book, and order
+stock from their suppliers. Akayza shows each trader the suppliers
+near them who sell what they buy. Payments made in the app are
+confirmed directly by the payment provider, and the trader's records
+are tamper-evident, so their history holds up when they show it to a
+client, supplier or funder.
 
-FOR SUPPLIERS (our paying customers): wholesalers, regional
-distributors and hardware stores receive orders and confirmed payments
-from the traders they already serve, straight into their own systems
-through our integration API.
+FOR SUPPLIERS (our customers): wholesalers, distributors and hardware
+stores receive orders and payments from traders straight into their
+own systems through our integration API, and strengthen their
+relationship with the traders who buy from them.
 
-Hybrid by design: traders use Akayza free to run their business;
-suppliers pay because their own customers bring them in.
+Hybrid by design: traders are our users, and they use Akayza free to
+run their business. Suppliers are our customers: Akayza helps them
+serve and keep the traders who already buy from them.
 
 
 --- TECHNOLOGIES: List all the technologies used --------------------------
 
-- Mobile: React Native + Expo (TypeScript), offline-first (SQLite),
-  keys in the Android Keystore
-- Backend: Python + Flask, domain-driven design, PostgreSQL, REST API
-- Sign-in: email verification + Google Sign-In, JWT, PIN / fingerprint
-- Supplier integration API: API keys, signed webhooks (ERP-ready)
-- Payments: PayFast (sandbox), server-verified payment notifications
-- Media: Cloudinary, with malware scanning on every upload
-- Maps: Mapbox
-- Security: Cloudflare (WAF, DDoS protection, TLS); Ed25519 signatures
-  and SHA-256 hash chains for tamper-evident records; ML-DSA
-  post-quantum signatures (NIST FIPS 204) on sealed records
+- Mobile: React Native + Expo (TypeScript), Expo Router; secrets in
+  the phone's secure storage (Android Keystore)
+- Backend: Python + Flask, domain-driven design, PostgreSQL with
+  versioned migrations, REST API
+- Sign-in: email verification, JWT with rotating refresh tokens,
+  bcrypt, rate limiting, account lockout; Google Sign-In (in progress)
+- Device security: an Ed25519 key per phone, with proof of possession
+- Maps and location: Mapbox (address search and map pin)
+- Payments: PayFast (sandbox) with server-verified payment
+  notifications (in progress)
+- Supplier integration API: API keys and signed webhooks (in progress)
+- Media: Cloudinary, with malware scanning on every upload (in progress)
+- Records: SHA-256 hash chains for tamper-evident history (in progress)
+- Hosting and protection: Cloudflare (WAF, DDoS protection, TLS)
+  (in progress)

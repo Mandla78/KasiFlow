@@ -12,6 +12,7 @@ from __future__ import annotations
 
 import logging
 import os
+import re
 import smtplib
 import time
 from abc import ABC, abstractmethod
@@ -153,6 +154,11 @@ class FakeEmailProvider(EmailProvider):
 
     def send(self, to: str, subject: str, html_body: str, text_body: Optional[str] = None) -> None:
         self.sent_emails.append({"to": to, "subject": subject, "html_body": html_body, "text_body": text_body})
+        # Development only (MAIL_PROVIDER=fake): show the email in the
+        # backend log so codes and links can be used without a mail server.
+        plain = re.sub(r"<[^>]+>", " ", html_body)
+        plain = re.sub(r"\s+", " ", plain).strip()
+        logger.info("[fake email] to=%s subject=%r :: %s", mask_email(to), subject, plain)
 
     def check_connection(self) -> bool:
         return True

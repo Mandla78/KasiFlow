@@ -1,6 +1,6 @@
 ===========================================================================
 PLAN 04 -- BUSINESS TYPES AND SUPPLIER KINDS
-The table behind mobile/src/config/businessTypes.ts, and the matching
+The table behind frontend/mobile/src/config/businessTypes.ts, and the matching
 ===========================================================================
 
 One business_type on the trader's profile. It decides the WORDS, what

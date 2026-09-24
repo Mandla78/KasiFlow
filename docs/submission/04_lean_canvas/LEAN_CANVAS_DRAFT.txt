@@ -27,13 +27,14 @@ Source of truth for pasting (moved here from 06). (est.) = estimate.
     [add lived experience + validation calls]
 
   SOLUTION & FEATURES
-    Akayza is an Android app for informal traders: builders, spaza
-    shops and every hustle. Traders use it free; suppliers pay.
+    Akayza is an Android app for informal businesses: builders and
+    trades, spaza shops and other small businesses. Traders use it
+    free; suppliers pay.
     - Credit book: who owes me, repayments, WhatsApp receipts.
     - Order again from the suppliers I already use; collect or send my
-      runner with a one-time pass; pay cash or PayFast.
-    - Cash Handshake: both phones confirm the amount in seconds, even
-      offline. A mismatch becomes a dispute, never a silent loss.
+      runner with a one-time pass; pay in the app or cash on delivery.
+    - Suppliers near you: matched by distance and the categories the
+      trader buys, each with the reasons it was picked.
     - Builders: jobs in stages, changes agreed with one tap, stages
       signed off by the homeowner with photos.
     - My record: a sealed, tamper-evident history the owner shares by
@@ -42,18 +43,19 @@ Source of truth for pasting (moved here from 06). (est.) = estimate.
     - Sign in with email or Google, then a PIN or fingerprint.
 
   UNIQUE VALUE PROPOSITION
-    Your business, proven by the people you trade with. Every cash or
-    digital payment confirmed by both sides is sealed into a record the
-    owner holds, so a shop or builder can show a funder, supplier or
-    client real proof of trading -- without a bank account, a
+    Run your business today, get funded tomorrow. Everyday tools (jobs,
+    credit book, stock orders from nearby suppliers) build a business
+    history the owner holds: digital payments confirmed by the payment
+    provider and records that can't be quietly changed, which a shop or
+    builder can show a funder, supplier or client -- without a
     marketplace, or giving their data away.
 
   UNFAIR ADVANTAGE
-    Proof is designed in, not added on: per-phone signing keys, a
-    two-party cash handshake that works offline, hash-chained records
-    re-verified on every view, and post-quantum (ML-DSA) sealed roots.
-    Cash counts the same as digital, so cash traders are not
-    penalised. Our team already won LP Dev DataQuest 2026 with a
+    Trust is designed in, not added on: verified sign-in, one trusted
+    phone per account with its own signing key, payments verified with
+    the payment provider, and hash-chained records re-verified on every
+    view. Suppliers are matched by distance and what traders actually
+    buy, not by who pays for ads. Our team already won LP Dev DataQuest 2026 with a
     tamper-evident decision ledger, and we have a researched
     60-screen design and real build footage from a township house.
 
