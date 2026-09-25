@@ -2,6 +2,7 @@ import { router, useLocalSearchParams } from 'expo-router';
 import { useEffect, useState } from 'react';
 import { ActivityIndicator, StyleSheet, Text, View } from 'react-native';
 
+import { isVerified } from '@/features/auth/profile';
 import type { Place } from '@/features/auth/types';
 import { useSession } from '@/features/auth/session/SessionProvider';
 import { Button } from '@/shared/components/Button';
@@ -14,6 +15,7 @@ import { colors, fonts, radius } from '@/shared/theme/tokens';
 
 import { clearCart, estimatedTotal, useCart } from '../../cart/lib/cartStore';
 import { ordersApi } from '../../orders/api/ordersApi';
+import { cashLimitFor } from '../../orders/lib/cashPolicy';
 import { Fulfilment, OrderError, PaymentMethod } from '../../orders/types';
 import { supplierApi } from '../../suppliers/api/supplierApi';
 import type { Supplier } from '../../suppliers/types';
@@ -27,6 +29,9 @@ const TITLES = ['How you get it', 'How you pay', 'Check and place your order'];
  * Checkout in three steps: 1 delivery or collection (and where to),
  * 2 how to pay, 3 review and place. The server prices the order again when
  * it's placed; what's shown here is the estimate.
+ * Paying: digital (card / instant EFT) is recommended and goes on to the
+ * secure payment step. Cash shows only if the supplier takes it, and only
+ * verified businesses can use it, up to the limit (../../orders/lib/cashPolicy).
  */
 export default function CheckoutScreen() {
   const { supplierId } = useLocalSearchParams<{ supplierId: string }>();
@@ -47,9 +52,10 @@ export default function CheckoutScreen() {
       setSupplier(s);
       // Defaults from what the trader told us at sign-up.
       setFulfilment(s.delivers && profile.buying.fulfilment !== 'collect' ? 'delivery' : s.collect ? 'collect' : 'delivery');
-      setPayment(s.payfast && profile.buying.payment !== 'cash' ? 'in_app' : s.cash ? 'cash' : 'in_app');
+      // Digital is the default: it's tracked and safest for both sides.
+      setPayment(s.payfast ? 'in_app' : 'cash');
     });
-  }, [supplierId, profile.buying.fulfilment, profile.buying.payment]);
+  }, [supplierId, profile.buying.fulfilment]);
 
   if (!supplier || !fulfilment || !payment) {
     return (
@@ -63,7 +69,11 @@ export default function CheckoutScreen() {
   const free = supplier.freeDeliveryOverCents !== null && subtotal >= supplier.freeDeliveryOverCents;
   const deliveryFee = fulfilment === 'delivery' && !free ? supplier.deliveryFeeCents : 0;
   const total = subtotal + deliveryFee;
-  const overCashLimit = supplier.cashLimitCents !== null && total > supplier.cashLimitCents;
+  const cashLimit = cashLimitFor(supplier);
+  const verified = isVerified(profile);
+  const overCashLimit = cashLimit !== null && total > cashLimit;
+  const cashAllowed = cashLimit !== null && verified && !overCashLimit;
+  const cashTitle = fulfilment === 'collect' ? 'Cash when you collect' : 'Cash on delivery';
   const businessAddress = profile.location ? formatPlace(profile.location) : '';
   const deliveryAddress = where === 'other' && otherPlace ? formatPlace(otherPlace) : businessAddress;
   const hours = supplier.hours.map((h) => `${h.days} ${h.open}-${h.close}`).join(', ');
@@ -71,8 +81,8 @@ export default function CheckoutScreen() {
   const stepError =
     step === 1 && fulfilment === 'delivery' && where === 'other' && !otherPlace
       ? 'Set the delivery address, or choose your business address.'
-      : step === 2 && payment === 'cash' && overCashLimit
-        ? `Cash only up to ${formatRand(supplier.cashLimitCents ?? 0)} per order. Pay in the app instead.`
+      : step === 2 && payment === 'cash' && !cashAllowed
+        ? "Cash isn't available for this order. Choose digital payment."
         : '';
 
   function back() {
@@ -94,7 +104,8 @@ export default function CheckoutScreen() {
       });
       clearCart(supplier.id);
       router.dismissAll();
-      router.push(`/informal-business/orders/${order.id}`);
+      // Digital: on to the secure payment step. Cash: the order, waiting for the supplier.
+      router.push(order.status === 'awaiting_payment' ? `/informal-business/pay/${order.id}` : `/informal-business/orders/${order.id}`);
     } catch (e) {
       setError(e instanceof OrderError ? e.message : "Couldn't place the order. Check your connection and try again.");
       setBusy(false);
@@ -105,7 +116,7 @@ export default function CheckoutScreen() {
     step < 3 ? (
       <Button title="Continue" onPress={() => !stepError && setStep(step + 1)} disabled={!!stepError} />
     ) : (
-      <Button title={`Place order · ${formatRand(total)}`} onPress={place} loading={busy} />
+      <Button title={payment === 'in_app' ? `Place order and pay · ${formatRand(total)}` : `Place order · ${formatRand(total)}`} onPress={place} loading={busy} />
     );
 
   return (
@@ -156,26 +167,30 @@ export default function CheckoutScreen() {
         <View style={{ gap: 8 }}>
           <OptionCard
             icon="credit-card"
-            title="Pay in the app"
-            line={supplier.payfast ? 'Card or instant EFT on a secure payment page' : "This supplier doesn't take payment in the app"}
+            title="Digital payment"
+            badge={supplier.payfast ? 'Recommended' : undefined}
+            line={supplier.payfast ? 'Card or instant EFT on a secure payment page' : "This supplier doesn't take digital payment"}
             selected={payment === 'in_app'}
             disabled={!supplier.payfast}
             onPress={() => setPayment('in_app')}
           />
-          <OptionCard
-            icon="dollar-sign"
-            title={fulfilment === 'collect' ? 'Cash when you collect' : 'Cash on delivery'}
-            line={
-              !supplier.cash
-                ? "This supplier doesn't take cash"
-                : overCashLimit
-                  ? `Cash only up to ${formatRand(supplier.cashLimitCents ?? 0)} per order`
-                  : 'You and the supplier both confirm the amount'
-            }
-            selected={payment === 'cash'}
-            disabled={!supplier.cash || overCashLimit}
-            onPress={() => setPayment('cash')}
-          />
+          {/* No cash option at all when the supplier doesn't take cash. */}
+          {cashLimit !== null ? (
+            <OptionCard
+              icon="dollar-sign"
+              title={cashTitle}
+              line={
+                !verified
+                  ? 'For verified businesses only. Get verified in your Business profile.'
+                  : overCashLimit
+                    ? `This supplier accepts cash up to ${formatRand(cashLimit)} per order`
+                    : `This supplier accepts cash up to ${formatRand(cashLimit)}. They accept the order first.`
+              }
+              selected={payment === 'cash'}
+              disabled={!cashAllowed}
+              onPress={() => setPayment('cash')}
+            />
+          ) : null}
         </View>
       ) : null}
 
@@ -184,7 +199,11 @@ export default function CheckoutScreen() {
           <Card style={{ gap: 10 }}>
             <Summary label={fulfilment === 'collect' ? 'Collect at' : 'Deliver to'} value={fulfilment === 'collect' ? `${supplier.address} (${hours})` : deliveryAddress} onEdit={() => setStep(1)} />
             <View style={styles.rule} />
-            <Summary label="Pay" value={payment === 'in_app' ? 'In the app (secure payment page)' : fulfilment === 'collect' ? 'Cash when you collect' : 'Cash on delivery'} onEdit={() => setStep(2)} />
+            <Summary
+              label="Pay"
+              value={payment === 'in_app' ? 'Digital payment: you pay on the next screen' : `${cashTitle}, once ${supplier.name} accepts the order`}
+              onEdit={() => setStep(2)}
+            />
           </Card>
           <Card style={{ gap: 10 }}>
             {lines.map((l) => (

@@ -1,7 +1,9 @@
 import type { Order, OrderStatus, PaymentStatus } from '../types';
 
+/** Where the order is now (the tag on an order). */
 export const STATUS_LABEL: Record<OrderStatus, string> = {
-  placed: 'Placed',
+  awaiting_payment: 'Waiting for payment',
+  placed: 'Waiting for the supplier',
   accepted: 'Accepted',
   out_for_delivery: 'On its way',
   ready_for_collection: 'Ready to collect',
@@ -11,10 +13,17 @@ export const STATUS_LABEL: Record<OrderStatus, string> = {
   cancelled: 'Cancelled',
 };
 
+/** A step on the timeline, once it has happened. */
+export const STEP_LABEL: Record<OrderStatus, string> = {
+  ...STATUS_LABEL,
+  placed: 'Sent to the supplier',
+  accepted: 'Accepted by the supplier',
+};
+
 export const PAYMENT_LABEL: Record<PaymentStatus, string> = {
   unpaid: 'Not paid yet',
-  paid: 'Paid in the app',
-  cash_due: 'Cash on delivery',
+  paid: 'Paid',
+  cash_due: 'Cash to pay',
   confirmed_by_both: 'Cash confirmed by both',
   disputed: "Amounts don't match",
   refunded: 'Refunded',
@@ -26,6 +35,11 @@ export function stepsFor(o: Order): OrderStatus[] {
   return o.fulfilment === 'collect'
     ? ['placed', 'accepted', 'ready_for_collection', 'collected']
     : ['placed', 'accepted', 'out_for_delivery', 'delivered'];
+}
+
+/** The trader can still cancel: the supplier hasn't accepted yet. */
+export function canCancel(o: Order): boolean {
+  return o.status === 'awaiting_payment' || o.status === 'placed';
 }
 
 export function isActive(o: Order): boolean {

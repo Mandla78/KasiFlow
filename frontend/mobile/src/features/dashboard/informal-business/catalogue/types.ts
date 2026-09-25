@@ -16,6 +16,8 @@ export type Product = {
   /** e.g. "24 x 500 ml", "50 kg" */
   packSize: string;
   priceCents: Cents;
+  /** The usual price when the product is on sale (shown crossed out); null = not on sale. */
+  compareAtPriceCents: Cents | null;
   vatIncluded: boolean;
   stock: StockLevel;
   minQty: number;

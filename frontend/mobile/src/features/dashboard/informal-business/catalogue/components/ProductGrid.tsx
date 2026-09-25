@@ -34,7 +34,14 @@ export function ProductGrid({
         return (
           <Pressable key={p.id} onPress={() => onOpen(p)} style={[styles.cell, { width: cell }]} accessibilityLabel={`${p.name}, ${formatRand(p.priceCents)}`}>
             <View>
-              <ProductImage url={p.images[0] ?? null} category={p.category} size={cell} />
+              <View style={out && styles.dim}>
+                <ProductImage url={p.images[0] ?? null} category={p.category} size={cell} />
+              </View>
+              {p.compareAtPriceCents && !out ? (
+                <View style={styles.saleBadge}>
+                  <Text style={styles.saleText}>Sale</Text>
+                </View>
+              ) : null}
               {out ? (
                 <View style={styles.outBadge}>
                   <Text style={styles.outText}>Out of stock</Text>
@@ -56,7 +63,8 @@ export function ProductGrid({
             <Text style={styles.pack} numberOfLines={1}>
               {p.packSize}
             </Text>
-            <Text style={styles.price}>{formatRand(p.priceCents)}</Text>
+            <Text style={[styles.price, p.compareAtPriceCents ? styles.salePrice : null]}>{formatRand(p.priceCents)}</Text>
+            {p.compareAtPriceCents ? <Text style={styles.was}>{formatRand(p.compareAtPriceCents)}</Text> : null}
           </Pressable>
         );
       })}
@@ -80,6 +88,11 @@ const styles = StyleSheet.create({
   },
   addOn: { backgroundColor: colors.accent },
   qty: { fontFamily: fonts.bold, fontSize: 13, color: colors.white },
+  dim: { opacity: 0.45 },
+  saleBadge: { position: 'absolute', left: 6, top: 6, backgroundColor: colors.garnet, borderRadius: radius.pill, paddingHorizontal: 7, paddingVertical: 1 },
+  saleText: { fontFamily: fonts.bold, fontSize: 10.5, color: colors.white },
+  salePrice: { color: colors.garnet },
+  was: { fontFamily: fonts.body, fontSize: 11.5, color: colors.textMuted, textDecorationLine: 'line-through' },
   outBadge: { position: 'absolute', left: 6, bottom: 6, backgroundColor: colors.white, borderRadius: radius.pill, paddingHorizontal: 8, paddingVertical: 2 },
   outText: { fontFamily: fonts.bold, fontSize: 10.5, color: colors.garnet },
   name: { fontFamily: fonts.semibold, fontSize: 12.5, lineHeight: 16, color: colors.text, marginTop: 4 },

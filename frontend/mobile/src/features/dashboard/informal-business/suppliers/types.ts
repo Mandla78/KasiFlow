@@ -20,8 +20,12 @@ export type SupplierMatch = {
   cash: boolean;
   delivers: boolean;
   minOrderCents: number;
-  /** Plain-language reasons shown on the card: why this supplier. */
+  /** Plain-language reasons (shown on the supplier's page, not the card). */
   reasons: string[];
+  /** Delivers to the trader, or close enough to collect. */
+  withinReach: boolean;
+  verified: boolean;
+  logoUrl: string | null;
   /** A heads-up that doesn't exclude the supplier (e.g. minimum order). */
   caution?: string;
   score: number;
@@ -59,8 +63,13 @@ export type Supplier = {
   minOrderCents: number;
   categories: CategoryCode[];
   logoUrl: string | null;
+  verified: boolean;
+  /** Why we suggest them to this trader (same reasons as the engine's). */
+  reasons: string[];
+  caution?: string;
 };
 
 export interface SupplierApi {
-  get(id: string): Promise<Supplier>;
+  /** `trader` is who's asking. The real API reads it from the session; the mock needs it passed. */
+  get(id: string, trader?: MatchInput): Promise<Supplier>;
 }

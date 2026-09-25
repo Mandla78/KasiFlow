@@ -9,6 +9,7 @@ import { Screen } from '@/shared/components/Screen';
 import { Overline } from '@/shared/components/Text';
 import { TopBar } from '@/shared/components/TopBar';
 import { formatRand } from '@/shared/lib/money';
+import { useUnreadCount } from '../../notifications/lib/notificationStore';
 import { builderHome, builderToday, spazaHome, spazaToday, TodayItem } from '../mock';
 import { areaOf, isVerified } from '@/features/auth/profile';
 import { useSession } from '@/features/auth/session/SessionProvider';
@@ -23,6 +24,7 @@ const TINTS = {
 /** The number that matters most, two quick actions, then only what needs attention today. */
 export default function Home() {
   const { profile } = useSession();
+  const unread = useUnreadCount();
   const builder = profile.businessType === 'builder';
   const today = builder ? builderToday : spazaToday;
   const kind = builder ? 'Builder · ' : '';
@@ -36,7 +38,7 @@ export default function Home() {
         initial={profile.businessName[0] ?? 'K'}
         title={profile.businessName}
         subtitle={`${kind}${areaOf(profile)}`}
-        action={{ icon: 'bell', label: 'Notifications', dot: true, onPress: () => router.push('/informal-business/notifications') }}
+        action={{ icon: 'bell', label: 'Notifications', dot: unread > 0, onPress: () => router.push('/informal-business/notifications') }}
       />
 
       <LinearGradient colors={['#1E293B', colors.ink]} style={styles.hero}>

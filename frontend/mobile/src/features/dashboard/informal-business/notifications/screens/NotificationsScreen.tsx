@@ -1,28 +1,39 @@
 import { Feather } from '@expo/vector-icons';
+import { router } from 'expo-router';
 import { Fragment } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { Pressable, StyleSheet, Text, View } from 'react-native';
 
 import { Card, IconTile } from '@/shared/components/Parts';
 import { BackButton, Screen } from '@/shared/components/Screen';
 import { Overline } from '@/shared/components/Text';
-import { notifications } from '../mock';
+import { ago, groupOf, markAllRead, markRead, useNotifications } from '../lib/notificationStore';
 import { colors, fonts } from '@/shared/theme/tokens';
 
-/** Deliveries, payments, who pays today, record views. */
+/** Orders, deliveries, payments, who pays today, record views. */
 export default function Notifications() {
+  const notifications = useNotifications();
   return (
     <Screen>
       <View style={styles.header}>
         <BackButton />
         <Text style={styles.title}>Notifications</Text>
-        <Text style={styles.markAll}>Mark all read</Text>
+        <Text style={styles.markAll} onPress={markAllRead} accessibilityRole="button">
+          Mark all read
+        </Text>
       </View>
       {notifications.map((n, i) => {
         // A group heading above the first notification of each group.
-        const showGroup = i === 0 || notifications[i - 1].group !== n.group;
+        const group = groupOf(n.at);
+        const showGroup = i === 0 || groupOf(notifications[i - 1].at) !== group;
         return (
           <Fragment key={n.id}>
-            {showGroup ? <Overline>{n.group}</Overline> : null}
+            {showGroup ? <Overline>{group}</Overline> : null}
+            <Pressable
+              disabled={!n.href && !n.unread}
+              onPress={() => {
+                markRead(n.id);
+                if (n.href) router.push(n.href as never);
+              }}>
             <Card style={n.unread ? styles.unread : undefined}>
               <View style={styles.row}>
                 <IconTile
@@ -33,10 +44,11 @@ export default function Notifications() {
                 <View style={{ flex: 1, gap: 3 }}>
                   <Text style={styles.nTitle}>{n.title}</Text>
                   <Text style={styles.nBody}>{n.body}</Text>
-                  <Text style={styles.nWhen}>{n.when}</Text>
+                  <Text style={styles.nWhen}>{ago(n.at)}</Text>
                 </View>
               </View>
             </Card>
+            </Pressable>
           </Fragment>
         );
       })}

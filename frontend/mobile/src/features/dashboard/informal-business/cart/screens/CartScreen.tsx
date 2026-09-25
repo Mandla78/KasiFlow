@@ -14,7 +14,7 @@ import { ProductImage } from '../../catalogue/components/ProductImage';
 import { supplierApi } from '../../suppliers/api/supplierApi';
 import type { Supplier } from '../../suppliers/types';
 import { QuantityStepper } from '../components/QuantityStepper';
-import { estimatedTotal, setLine, useCart } from '../lib/cartStore';
+import { estimatedTotal, itemCount, setLine, useCart } from '../lib/cartStore';
 
 /** One supplier's cart: lines, quantities, the minimum order, the estimated total. */
 export default function CartScreen() {
@@ -27,6 +27,7 @@ export default function CartScreen() {
   }, [supplierId]);
 
   const total = estimatedTotal(lines);
+  const count = itemCount(lines);
   const short = supplier ? Math.max(0, supplier.minOrderCents - total) : 0;
 
   if (!lines.length) {
@@ -46,11 +47,20 @@ export default function CartScreen() {
     <Screen
       back
       footer={
-        <Button
-          title={short > 0 ? `Add ${formatRand(short)} more to order` : 'Continue to checkout'}
-          disabled={short > 0 || !supplier}
-          onPress={() => router.push(`/informal-business/checkout/${supplierId}`)}
-        />
+        <>
+          {/* Fixed, so the total is always in view however long the cart is. */}
+          <View style={styles.totals}>
+            <Text style={styles.totalLabel}>
+              Estimated total · {count} {count === 1 ? 'item' : 'items'}
+            </Text>
+            <Text style={styles.total}>{formatRand(total)}</Text>
+          </View>
+          <Button
+            title={short > 0 ? `Add ${formatRand(short)} more to order` : 'Continue to checkout'}
+            disabled={short > 0 || !supplier}
+            onPress={() => router.push(`/informal-business/checkout/${supplierId}`)}
+          />
+        </>
       }>
       <View style={{ gap: 4 }}>
         <Title>Your cart</Title>
@@ -75,10 +85,6 @@ export default function CartScreen() {
         ))}
       </Card>
 
-      <View style={styles.totals}>
-        <Text style={styles.totalLabel}>Estimated total</Text>
-        <Text style={styles.total}>{formatRand(total)}</Text>
-      </View>
       {supplier && short > 0 ? (
         <View style={styles.note}>
           <Feather name="info" size={14} color={colors.marigoldDeep} />

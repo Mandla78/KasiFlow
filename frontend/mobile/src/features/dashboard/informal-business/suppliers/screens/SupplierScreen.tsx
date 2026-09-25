@@ -1,13 +1,17 @@
 import { Feather } from '@expo/vector-icons';
 import { router, useLocalSearchParams } from 'expo-router';
-import { ComponentProps, useEffect, useState } from 'react';
-import { ActivityIndicator, StyleSheet, Text, TextInput, View } from 'react-native';
+import { ComponentProps, useEffect, useMemo, useState } from 'react';
+import { ActivityIndicator, KeyboardAvoidingView, Platform, Pressable, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { CategoryCode } from '@/constants/categories';
-import { Screen } from '@/shared/components/Screen';
+import { useSession } from '@/features/auth/session/SessionProvider';
+import { Button } from '@/shared/components/Button';
+import { BackButton, Screen } from '@/shared/components/Screen';
+import { Sheet } from '@/shared/components/Sheet';
 import { Overline } from '@/shared/components/Text';
 import { formatRand } from '@/shared/lib/money';
-import { colors, fonts, radius } from '@/shared/theme/tokens';
+import { colors, fonts, radius, sizes, space } from '@/shared/theme/tokens';
 
 import { catalogueApi } from '../../catalogue/api/catalogueApi';
 import { CategoryChips } from '../../catalogue/components/CategoryChips';
@@ -17,26 +21,45 @@ import type { Product } from '../../catalogue/types';
 import { CartBar } from '../../cart/components/CartBar';
 import { setLine, useCart } from '../../cart/lib/cartStore';
 import { toCartLine } from '../../cart/lib/fromProduct';
+import { cashLimitFor } from '../../orders/lib/cashPolicy';
 import { supplierApi } from '../api/supplierApi';
+import { ConnectButton } from '../components/ConnectButton';
+import { SupplierAvatar } from '../components/SupplierAvatar';
+import { VerifiedBadge } from '../components/VerifiedBadge';
+import { useConnect } from '../lib/useConnect';
 import type { Supplier } from '../types';
 
 type IconName = ComponentProps<typeof Feather>['name'];
 
-/** One supplier: who they are, how they sell, and their products in a grid. */
+/**
+ * One supplier. Their name stays at the top and the search + categories
+ * stay pinned while the products scroll. How they sell (delivery, address,
+ * payment, minimum, hours) is one line here and in full behind ⓘ.
+ * Ordering needs a connection: + asks to connect first.
+ */
 export default function SupplierScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
+  const { profile } = useSession();
+  const { isConnected, ask, sheet } = useConnect();
   const [supplier, setSupplier] = useState<Supplier | null>(null);
   const [products, setProducts] = useState<Product[] | null>(null);
   const [failed, setFailed] = useState(false);
   const [category, setCategory] = useState<CategoryCode | 'all'>('all');
   const [search, setSearch] = useState('');
   const [open, setOpen] = useState<Product | null>(null);
+  const [about, setAbout] = useState(false);
   const cart = useCart(id ?? '');
+
+  const place = profile.location;
+  const trader = useMemo(
+    () => (place ? { place, categories: profile.categories, buying: profile.buying } : undefined),
+    [place, profile.categories, profile.buying],
+  );
 
   useEffect(() => {
     if (!id) return;
-    supplierApi.get(id).then(setSupplier).catch(() => setFailed(true));
-  }, [id]);
+    supplierApi.get(id, trader).then(setSupplier).catch(() => setFailed(true));
+  }, [id, trader]);
 
   useEffect(() => {
     if (!id) return;
@@ -69,76 +92,214 @@ export default function SupplierScreen() {
     );
   }
 
+  const s = supplier;
+  const connected = isConnected(s.id);
+  /** Only connected traders can order: otherwise ask first, then do it. */
+  const whenConnected = (action: () => void) => (connected ? action() : ask(s.id, s.name, action));
+  const cashLimit = cashLimitFor(s);
+  const hours = s.hours.map((h) => `${h.days} ${h.open}-${h.close}`).join(' · ');
+
+  const summary = [
+    s.delivers ? (s.deliveryFeeCents ? `Delivery ${formatRand(s.deliveryFeeCents)}` : 'Free delivery') : 'Collect only',
+    `Min. order ${formatRand(s.minOrderCents)}`,
+    s.payfast && s.cash ? 'Digital or cash' : s.payfast ? 'Digital payment' : 'Cash',
+  ].join(' · ');
+
   const facts: { icon: IconName; text: string }[] = [
-    supplier.delivers
+    s.delivers
       ? {
           icon: 'truck',
-          text: `Delivers within ${supplier.deliveryRadiusKm} km · ${supplier.deliveryFeeCents ? formatRand(supplier.deliveryFeeCents) : 'free'}${supplier.freeDeliveryOverCents ? `, free over ${formatRand(supplier.freeDeliveryOverCents)}` : ''}`,
+          text: `Delivers within ${s.deliveryRadiusKm} km · ${s.deliveryFeeCents ? formatRand(s.deliveryFeeCents) : 'free'}${s.freeDeliveryOverCents ? `, free over ${formatRand(s.freeDeliveryOverCents)}` : ''}`,
         }
       : { icon: 'truck', text: 'No delivery' },
-    { icon: 'map-pin', text: supplier.collect ? `Collect at ${supplier.address}` : supplier.address },
-    { icon: 'credit-card', text: [supplier.payfast && 'Pay in the app', supplier.cash && 'Cash on delivery'].filter(Boolean).join(' · ') },
-    { icon: 'shopping-bag', text: `Minimum order ${formatRand(supplier.minOrderCents)}` },
-    { icon: 'clock', text: supplier.hours.map((h) => `${h.days} ${h.open}-${h.close}`).join(' · ') },
+    { icon: 'map-pin', text: s.collect ? `Collect at ${s.address}` : s.address },
+    ...(s.payfast ? [{ icon: 'credit-card' as IconName, text: 'Digital payment: card or instant EFT' }] : []),
+    ...(cashLimit ? [{ icon: 'dollar-sign' as IconName, text: `Accepts cash up to ${formatRand(cashLimit)} per order` }] : []),
+    { icon: 'shopping-bag', text: `Minimum order ${formatRand(s.minOrderCents)}` },
+    { icon: 'clock', text: hours },
   ];
 
   return (
-    <Screen back footer={cart.lines.length ? <CartBar supplierId={supplier.id} onOpen={() => router.push(`/informal-business/cart/${supplier.id}`)} /> : undefined}>
-      <View style={styles.head}>
-        <View style={[styles.logo, { backgroundColor: supplier.color }]}>
-          <Text style={styles.logoText}>{supplier.initials}</Text>
-        </View>
+    <SafeAreaView style={styles.safe} edges={['top', 'bottom']}>
+      {/* Fixed: who you're buying from. */}
+      <View style={styles.top}>
+        <BackButton />
+        <SupplierAvatar name={s.name} initials={s.initials} color={s.color} logoUrl={s.logoUrl} size={38} />
         <View style={{ flex: 1 }}>
-          <Text style={styles.name}>{supplier.name}</Text>
-          <Text style={styles.muted}>{supplier.area}</Text>
-        </View>
-      </View>
-      <Text style={styles.about}>{supplier.about}</Text>
-      <View style={styles.facts}>
-        {facts.map((f) => (
-          <View key={f.text} style={styles.fact}>
-            <Feather name={f.icon} size={14} color={colors.textMuted} />
-            <Text style={styles.factText}>{f.text}</Text>
+          <View style={styles.nameRow}>
+            <Text style={styles.name} numberOfLines={1}>
+              {s.name}
+            </Text>
+            {s.verified ? <VerifiedBadge /> : null}
           </View>
-        ))}
+          <Text style={styles.muted} numberOfLines={1}>
+            {s.area}
+          </Text>
+        </View>
+        <Pressable onPress={() => setAbout(true)} style={styles.iconButton} accessibilityRole="button" accessibilityLabel="About this supplier">
+          <Feather name="info" size={18} color={colors.ink} />
+        </Pressable>
       </View>
 
-      <Overline>Products</Overline>
-      <View style={styles.search}>
-        <Feather name="search" size={16} color={colors.textMuted} />
-        <TextInput
-          value={search}
-          onChangeText={setSearch}
-          placeholder="Search this supplier"
-          placeholderTextColor={colors.textFaint}
-          style={styles.searchInput}
-        />
-      </View>
-      <CategoryChips categories={supplier.categories} value={category} onChange={setCategory} />
+      <KeyboardAvoidingView style={{ flex: 1 }} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
+        <ScrollView stickyHeaderIndices={[1]} keyboardShouldPersistTaps="handled" showsVerticalScrollIndicator={false}>
+          <View style={styles.intro}>
+            <Text style={styles.about}>{s.about}</Text>
+            <Pressable onPress={() => setAbout(true)} style={styles.summary} accessibilityRole="button" accessibilityLabel="How they sell, more info">
+              <Text style={styles.summaryText}>{summary}</Text>
+              <Feather name="chevron-right" size={16} color={colors.textMuted} />
+            </Pressable>
+            {connected ? null : (
+              <View style={styles.connect}>
+                <Text style={styles.connectText}>Connect with {s.name} to start ordering.</Text>
+                <ConnectButton name={s.name} connected={false} onPress={() => ask(s.id, s.name)} />
+              </View>
+            )}
+          </View>
 
-      {!products ? (
-        <ActivityIndicator color={colors.accent} />
-      ) : products.length === 0 ? (
-        <Text style={styles.muted}>Nothing here matches. Try another word or category.</Text>
-      ) : (
-        <ProductGrid products={products} quantityOf={qtyOf} onOpen={setOpen} onAdd={(p) => setQty(p, qtyOf(p.id) + 1)} />
-      )}
+          {/* Pinned while the products scroll. */}
+          <View style={styles.sticky}>
+            <View style={styles.search}>
+              <Feather name="search" size={16} color={colors.textMuted} />
+              <TextInput
+                value={search}
+                onChangeText={setSearch}
+                placeholder={`Search ${s.name}`}
+                placeholderTextColor={colors.textFaint}
+                style={styles.searchInput}
+              />
+            </View>
+            <CategoryChips categories={s.categories} value={category} onChange={setCategory} />
+          </View>
 
-      <ProductSheet key={open?.id ?? 'closed'} product={open} inCart={open ? qtyOf(open.id) : 0} onClose={() => setOpen(null)} onSetQuantity={setQty} />
-    </Screen>
+          <View style={styles.products}>
+            {!products ? (
+              <ActivityIndicator color={colors.accent} />
+            ) : products.length === 0 ? (
+              <Text style={styles.muted}>Nothing here matches. Try another word or category.</Text>
+            ) : (
+              <ProductGrid
+                products={products}
+                quantityOf={qtyOf}
+                onOpen={setOpen}
+                onAdd={(p) => whenConnected(() => setQty(p, Math.max(qtyOf(p.id) + 1, p.minQty)))}
+              />
+            )}
+          </View>
+        </ScrollView>
+        {cart.lines.length ? (
+          <View style={styles.footer}>
+            <CartBar supplierId={s.id} onOpen={() => router.push(`/informal-business/cart/${s.id}`)} />
+          </View>
+        ) : null}
+      </KeyboardAvoidingView>
+
+      <ProductSheet
+        key={open?.id ?? 'closed'}
+        product={open}
+        inCart={open ? qtyOf(open.id) : 0}
+        onClose={() => setOpen(null)}
+        onSetQuantity={(p, qty) => whenConnected(() => setQty(p, qty))}
+      />
+
+      <Sheet visible={about} onClose={() => setAbout(false)}>
+        <ScrollView contentContainerStyle={{ gap: 12 }}>
+          <View style={styles.nameRow}>
+            <Text style={styles.sheetTitle}>{s.name}</Text>
+            {s.verified ? <VerifiedBadge size={18} /> : null}
+          </View>
+          {s.verified ? <Text style={styles.muted}>Verified supplier</Text> : null}
+          <Text style={styles.about}>{s.about}</Text>
+          <View style={styles.facts}>
+            {facts.map((f) => (
+              <View key={f.text} style={styles.fact}>
+                <Feather name={f.icon} size={15} color={colors.textMuted} />
+                <Text style={styles.factText}>{f.text}</Text>
+              </View>
+            ))}
+          </View>
+          {s.reasons.length ? (
+            <>
+              <Overline>Why we suggest them</Overline>
+              {s.reasons.map((r) => (
+                <View key={r} style={styles.fact}>
+                  <Feather name="check" size={15} color={colors.accentDeep} />
+                  <Text style={styles.factText}>{r}</Text>
+                </View>
+              ))}
+              {s.caution ? (
+                <View style={styles.fact}>
+                  <Feather name="alert-circle" size={15} color={colors.marigoldDeep} />
+                  <Text style={[styles.factText, { color: colors.marigoldDeep }]}>{s.caution}</Text>
+                </View>
+              ) : null}
+            </>
+          ) : null}
+          {connected ? (
+            <Button
+              title="Disconnect"
+              variant="secondary"
+              onPress={() => {
+                setAbout(false);
+                ask(s.id, s.name);
+              }}
+            />
+          ) : null}
+          <Button title="Close" variant="secondary" onPress={() => setAbout(false)} />
+        </ScrollView>
+      </Sheet>
+
+      {sheet}
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
-  head: { flexDirection: 'row', alignItems: 'center', gap: 14 },
-  logo: { width: 56, height: 56, borderRadius: radius.md, alignItems: 'center', justifyContent: 'center' },
-  logoText: { fontFamily: fonts.display, fontSize: 20, color: colors.white },
-  name: { fontFamily: fonts.display, fontSize: 21, color: colors.ink },
-  muted: { fontFamily: fonts.body, fontSize: 13, lineHeight: 18, color: colors.textMuted },
+  safe: { flex: 1, backgroundColor: colors.porcelain },
+  top: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 10,
+    paddingHorizontal: 20,
+    paddingTop: space.md,
+    paddingBottom: space.sm,
+    borderBottomWidth: 1,
+    borderBottomColor: colors.line,
+    backgroundColor: colors.porcelain,
+  },
+  nameRow: { flexDirection: 'row', alignItems: 'center', gap: 6 },
+  name: { flexShrink: 1, fontFamily: fonts.display, fontSize: 17, color: colors.ink },
+  iconButton: {
+    width: sizes.iconButton,
+    height: sizes.iconButton,
+    borderRadius: radius.sm,
+    borderWidth: 1,
+    borderColor: colors.line,
+    backgroundColor: colors.white,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  muted: { fontFamily: fonts.body, fontSize: 12.5, lineHeight: 17, color: colors.textMuted },
+  intro: { paddingHorizontal: 20, paddingTop: space.md, gap: 10 },
   about: { fontFamily: fonts.body, fontSize: 14, lineHeight: 20, color: colors.text },
-  facts: { backgroundColor: colors.white, borderRadius: radius.md, borderWidth: 1, borderColor: colors.line, padding: 14, gap: 9 },
-  fact: { flexDirection: 'row', gap: 10, alignItems: 'flex-start' },
-  factText: { flex: 1, fontFamily: fonts.medium, fontSize: 13, lineHeight: 18, color: colors.text },
+  summary: { flexDirection: 'row', alignItems: 'center', gap: 6 },
+  summaryText: { flex: 1, fontFamily: fonts.semibold, fontSize: 13, color: colors.text },
+  connect: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 10,
+    backgroundColor: colors.accentTint,
+    borderRadius: radius.md,
+    padding: 12,
+  },
+  connectText: { flex: 1, fontFamily: fonts.medium, fontSize: 13, lineHeight: 18, color: colors.ink },
+  sticky: { backgroundColor: colors.porcelain, paddingHorizontal: 20, paddingTop: space.md, paddingBottom: space.sm, gap: 10 },
   search: { height: 46, flexDirection: 'row', alignItems: 'center', gap: 10, backgroundColor: colors.white, borderRadius: radius.sm, borderWidth: 1, borderColor: colors.line, paddingHorizontal: 14 },
   searchInput: { flex: 1, height: '100%', fontFamily: fonts.medium, fontSize: 14.5, color: colors.text, outlineWidth: 0 },
+  products: { paddingHorizontal: 20, paddingTop: space.sm, paddingBottom: space.xl },
+  footer: { paddingHorizontal: 20, paddingTop: space.sm, paddingBottom: space.md },
+  sheetTitle: { flexShrink: 1, fontFamily: fonts.display, fontSize: 20, color: colors.ink },
+  facts: { backgroundColor: colors.porcelain, borderRadius: radius.md, padding: 14, gap: 10 },
+  fact: { flexDirection: 'row', gap: 10, alignItems: 'flex-start' },
+  factText: { flex: 1, fontFamily: fonts.medium, fontSize: 13.5, lineHeight: 19, color: colors.text },
 });

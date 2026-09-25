@@ -66,10 +66,14 @@ export function ProductSheet({
             </Text>
           </View>
           <View style={styles.priceRow}>
-            <Text style={styles.price}>{formatRand(p.priceCents)}</Text>
+            <Text style={[styles.price, p.compareAtPriceCents ? { color: colors.garnet } : null]}>{formatRand(p.priceCents)}</Text>
+            {p.compareAtPriceCents ? <Text style={styles.was}>{formatRand(p.compareAtPriceCents)}</Text> : null}
             <Text style={styles.vat}>{p.vatIncluded ? 'incl. VAT' : 'excl. VAT'}</Text>
             <Text style={[styles.stock, out && { color: colors.garnet }, p.stock === 'low' && { color: colors.marigoldDeep }]}>{STOCK_LABEL[p.stock]}</Text>
           </View>
+          {p.compareAtPriceCents ? (
+            <Text style={styles.save}>Save {formatRand(p.compareAtPriceCents - p.priceCents)} on this special</Text>
+          ) : null}
           <Text style={styles.description}>{p.description}</Text>
 
           {!out ? (
@@ -112,6 +116,8 @@ const styles = StyleSheet.create({
   pack: { fontFamily: fonts.body, fontSize: 13.5, color: colors.textMuted },
   priceRow: { flexDirection: 'row', alignItems: 'baseline', gap: 8 },
   price: { fontFamily: fonts.display, fontSize: 22, color: colors.ink },
+  was: { fontFamily: fonts.body, fontSize: 14, color: colors.textMuted, textDecorationLine: 'line-through' },
+  save: { alignSelf: 'flex-start', fontFamily: fonts.bold, fontSize: 12.5, color: colors.garnet, backgroundColor: colors.garnetTint, borderRadius: radius.pill, paddingHorizontal: 10, paddingVertical: 3, overflow: 'hidden' },
   vat: { fontFamily: fonts.body, fontSize: 12, color: colors.textMuted },
   stock: { marginLeft: 'auto', fontFamily: fonts.bold, fontSize: 12.5, color: colors.accentDeep },
   description: { fontFamily: fonts.body, fontSize: 14, lineHeight: 20, color: colors.text },

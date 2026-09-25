@@ -1,16 +1,24 @@
 /**
  * MOCK orders, doing what the server will (docs/supplier/04):
  *  - prices every line from the CATALOGUE, never from the cart
- *  - enforces the supplier's minimum order, cash limit and what it accepts
+ *  - enforces the supplier's minimum order, what it accepts, and the cash
+ *    limit (theirs, never over our R5,000 cap: ../lib/cashPolicy)
  *  - adds the delivery fee unless the order is over the free-delivery total
- * Statuses move on by themselves (from placement time) so the whole flow
- * can be shown without a backend: placed -> accepted after 20 s -> on its
- * way / ready after 60 s -> delivered / collected after 120 s.
+ * Digital payment: the order waits for payment and nothing reaches the
+ * supplier until it's paid (the payment step comes with the payment
+ * provider). Cash: the order goes to the supplier and waits for them to
+ * accept. Only verified businesses may order with cash; the server checks
+ * that from the session (the mock can't, the checkout screen does).
+ * Cash orders then move on by themselves so the whole flow can be shown
+ * without a backend: accepted after 20 s -> on its way / ready after 60 s
+ * -> delivered / collected after 120 s, each with an in-app notification.
  */
 import { formatRand } from '@/shared/lib/money';
 
+import { notify } from '../../notifications/lib/notificationStore';
 import { findMockProduct } from '../../catalogue/api/mockCatalogueData';
 import { findMockSupplier } from '../../suppliers/api/mockSupplierData';
+import { cashLimitFor } from '../lib/cashPolicy';
 import { Order, OrderError, OrderEvent, OrderLine, OrdersApi, OrderStatus } from '../types';
 
 const wait = (ms = 500) => new Promise((r) => setTimeout(r, ms));
@@ -22,7 +30,7 @@ const STEPS_SECONDS = { accepted: 20, moving: 60, done: 120 };
 
 /** The status right now, from how long ago it was placed. */
 function advanced(o: Order): Order {
-  if (o.status === 'cancelled' || o.status === 'rejected') return o;
+  if (o.status === 'cancelled' || o.status === 'rejected' || o.status === 'awaiting_payment') return o;
   const placed = new Date(o.placedAt).getTime();
   const age = (Date.now() - placed) / 1000;
   const at = (s: number) => new Date(placed + s * 1000).toISOString();
@@ -41,8 +49,33 @@ function advanced(o: Order): Order {
     status = collect ? 'collected' : 'delivered';
     events.push({ status, at: at(STEPS_SECONDS.done) });
   }
-  const paymentStatus = o.payment === 'in_app' ? 'paid' : status === 'delivered' || status === 'collected' ? 'confirmed_by_both' : 'cash_due';
+  const paymentStatus = o.payment === 'in_app' ? o.paymentStatus : status === 'delivered' || status === 'collected' ? 'confirmed_by_both' : 'cash_due';
   return { ...o, status, events, paymentStatus };
+}
+
+/** In-app notifications as the order moves (the backend also emails them). */
+function announce(o: Order) {
+  const href = `/informal-business/orders/${o.id}`;
+  const total = formatRand(o.totalCents);
+  if (o.status === 'awaiting_payment') {
+    notify({ icon: 'credit-card', title: 'Your order is waiting for payment', body: `${o.reference} · ${total} to ${o.supplierName}. Pay to send it to them.`, href });
+    return;
+  }
+  notify({ icon: 'send', title: `Order sent to ${o.supplierName}`, body: `${o.reference} · ${total}. Waiting for them to accept.`, href });
+  const collect = o.fulfilment === 'collect';
+  const later: [number, OrderStatus, string, string][] = [
+    [STEPS_SECONDS.accepted, 'accepted', 'check-circle', `${o.supplierName} accepted your order`],
+    [STEPS_SECONDS.moving, collect ? 'ready_for_collection' : 'out_for_delivery', collect ? 'package' : 'truck', collect ? 'Your order is ready to collect' : 'Your order is on its way'],
+    [STEPS_SECONDS.done, collect ? 'collected' : 'delivered', 'check', collect ? 'Order collected' : 'Order delivered'],
+  ];
+  for (const [seconds, status, icon, title] of later) {
+    setTimeout(() => {
+      const now = orders.find((x) => x.id === o.id);
+      if (!now || advanced(now).status !== status) return; // cancelled meanwhile
+      const cash = o.payment !== 'cash' ? '' : status === 'out_for_delivery' ? ` Have ${total} cash ready.` : status === 'ready_for_collection' ? ` Bring ${total} cash.` : '';
+      notify({ icon, title, body: `${o.reference} · ${o.supplierName}.${cash}`, href });
+    }, seconds * 1000 + 50);
+  }
 }
 
 export const mockOrdersApi: OrdersApi = {
@@ -66,8 +99,9 @@ export const mockOrdersApi: OrdersApi = {
     const free = supplier.freeDeliveryOverCents !== null && subtotalCents >= supplier.freeDeliveryOverCents;
     const deliveryFeeCents = input.fulfilment === 'delivery' && !free ? supplier.deliveryFeeCents : 0;
     const totalCents = subtotalCents + deliveryFeeCents;
-    if (input.payment === 'cash' && supplier.cashLimitCents !== null && totalCents > supplier.cashLimitCents) {
-      throw new OrderError('CASH_LIMIT', `${supplier.name} takes cash up to ${formatRand(supplier.cashLimitCents)} per order. Pay in the app instead.`);
+    const cashLimit = cashLimitFor(supplier);
+    if (input.payment === 'cash' && cashLimit !== null && totalCents > cashLimit) {
+      throw new OrderError('CASH_LIMIT', `${supplier.name} accepts cash up to ${formatRand(cashLimit)} per order. Pay digitally instead.`);
     }
 
     const now = new Date().toISOString();
@@ -76,9 +110,9 @@ export const mockOrdersApi: OrdersApi = {
       reference: `AKZ-2026-${String(nextNumber++).padStart(6, '0')}`,
       supplierId: supplier.id,
       supplierName: supplier.name,
-      status: 'placed',
+      status: input.payment === 'in_app' ? 'awaiting_payment' : 'placed',
       payment: input.payment,
-      paymentStatus: input.payment === 'in_app' ? 'paid' : 'cash_due',
+      paymentStatus: input.payment === 'in_app' ? 'unpaid' : 'cash_due',
       fulfilment: input.fulfilment,
       address: input.fulfilment === 'collect' ? supplier.address : input.deliveryAddress ?? '',
       lines,
@@ -86,9 +120,10 @@ export const mockOrdersApi: OrdersApi = {
       deliveryFeeCents,
       totalCents,
       placedAt: now,
-      events: [{ status: 'placed', at: now }],
+      events: [{ status: input.payment === 'in_app' ? 'awaiting_payment' : 'placed', at: now }],
     };
     orders = [order, ...orders];
+    announce(order);
     return order;
   },
 
@@ -108,7 +143,7 @@ export const mockOrdersApi: OrdersApi = {
     await wait(400);
     const o = orders.find((x) => x.id === id);
     if (!o) throw new OrderError('NOT_FOUND', "We couldn't find that order.");
-    if (advanced(o).status !== 'placed') throw new OrderError('TOO_LATE', 'The supplier already accepted this order, so it can no longer be cancelled here.');
+    if (!['awaiting_payment', 'placed'].includes(advanced(o).status)) throw new OrderError('TOO_LATE', 'The supplier already accepted this order, so it can no longer be cancelled here.');
     const cancelled: Order = { ...o, status: 'cancelled', events: [...o.events, { status: 'cancelled', at: new Date().toISOString() }] };
     orders = orders.map((x) => (x.id === id ? cancelled : x));
     return cancelled;

@@ -13,6 +13,7 @@ export function OptionCard({
   line,
   selected,
   disabled,
+  badge,
   onPress,
 }: {
   icon: IconName;
@@ -20,6 +21,8 @@ export function OptionCard({
   line: string;
   selected: boolean;
   disabled?: boolean;
+  /** A short tag after the title, e.g. "Recommended". */
+  badge?: string;
   onPress: () => void;
 }) {
   return (
@@ -31,7 +34,10 @@ export function OptionCard({
       style={[styles.card, selected && styles.on, disabled && { opacity: 0.45 }]}>
       <Feather name={icon} size={20} color={selected ? colors.accentDeep : colors.ink} />
       <View style={{ flex: 1 }}>
-        <Text style={styles.title}>{title}</Text>
+        <View style={styles.titleRow}>
+          <Text style={styles.title}>{title}</Text>
+          {badge ? <Text style={styles.badge}>{badge}</Text> : null}
+        </View>
         <Text style={styles.line}>{line}</Text>
       </View>
       <View style={[styles.radio, selected && styles.radioOn]}>{selected ? <View style={styles.dot} /> : null}</View>
@@ -40,6 +46,17 @@ export function OptionCard({
 }
 
 const styles = StyleSheet.create({
+  titleRow: { flexDirection: 'row', alignItems: 'center', gap: 8, flexWrap: 'wrap' },
+  badge: {
+    fontFamily: fonts.bold,
+    fontSize: 11,
+    color: colors.accentDeep,
+    backgroundColor: colors.accentTint,
+    paddingHorizontal: 8,
+    paddingVertical: 2,
+    borderRadius: radius.pill,
+    overflow: 'hidden',
+  },
   card: { flexDirection: 'row', alignItems: 'center', gap: 12, padding: 14, borderRadius: radius.md, borderWidth: 1, borderColor: colors.line, backgroundColor: colors.white },
   on: { borderColor: colors.accent, backgroundColor: colors.accentTint },
   title: { fontFamily: fonts.bold, fontSize: 14.5, color: colors.text },

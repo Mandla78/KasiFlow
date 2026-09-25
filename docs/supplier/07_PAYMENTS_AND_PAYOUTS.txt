@@ -58,8 +58,29 @@ Akayza ever holding it.
 
   Cash on delivery or collection: the order pass (QR) is scanned; both
   sides type the amount without seeing the other's; match -> "confirmed
-  by both"; differ -> "amounts don't match" (dispute). The supplier's
-  cash limit per order applies. Cash never touches Akayza.
+  by both"; differ -> "amounts don't match" (dispute). Cash never
+  touches Akayza.
+
+  CASH POLICY (decided 2026-09-25; the app shows it, the server enforces it)
+    - Digital payment is RECOMMENDED and the default. It's tracked, and
+      our commission comes off in the split. Cash is allowed because many
+      traders still work in cash, but with limits:
+    - Cash shows only if the supplier takes cash (otherwise it's hidden).
+    - Only VERIFIED businesses may order with cash. An unverified account
+      could send fake orders into a supplier's system with nothing at
+      stake; digital orders are paid up front, so they can't.
+    - Limit per order = the supplier's own cash limit, never over our cap
+      of R5,000 (PLATFORM_CASH_CAP; app: orders/lib/cashPolicy.ts). The
+      app says "This supplier accepts cash up to R...".
+    - A cash order goes to the supplier's system and WAITS FOR THE
+      SUPPLIER to accept it ("Waiting for the supplier"). Their system
+      can say no.
+    - Digital orders wait for payment ("Waiting for payment"); the
+      supplier doesn't see them until they're paid.
+    - Commission on cash: no split to take it from, so it's invoiced to
+      the supplier monthly on confirmed-by-both cash orders. That needs
+      the supplier agreement (commission rate, cash terms, invoicing,
+      disputes) and our terms of use for traders. To write before launch.
 
 
 4. REFUNDS AND CANCELLATIONS

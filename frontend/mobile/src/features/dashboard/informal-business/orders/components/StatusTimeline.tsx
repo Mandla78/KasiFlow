@@ -3,7 +3,7 @@ import { StyleSheet, Text, View } from 'react-native';
 
 import { colors, fonts } from '@/shared/theme/tokens';
 
-import { STATUS_LABEL, stepsFor, when } from '../lib/status';
+import { STEP_LABEL, stepsFor, when } from '../lib/status';
 import type { Order } from '../types';
 
 /** The order's steps, done ones ticked with their time. */
@@ -26,7 +26,7 @@ export function StatusTimeline({ order }: { order: Order }) {
               {i < steps.length - 1 ? <View style={[styles.line, at && doneAt(steps[i + 1]) ? styles.lineDone : null]} /> : null}
             </View>
             <View style={{ flex: 1, paddingBottom: 14 }}>
-              <Text style={[styles.label, !at && styles.pending]}>{STATUS_LABEL[s]}</Text>
+              <Text style={[styles.label, !at && styles.pending]}>{STEP_LABEL[s]}</Text>
               {at ? <Text style={styles.time}>{when(at)}</Text> : null}
             </View>
           </View>

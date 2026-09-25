@@ -127,9 +127,11 @@ function build(): Product[] {
         const r = seeded(id);
         const priceCents = Math.round(t.rands * (0.95 + r * 0.1) * 100); // +/- 5% per supplier
         const stock: StockLevel = r < 0.08 ? 'out' : r < 0.2 ? 'low' : 'in_stock';
+        const onSale = r > 0.78; // about one in five
+        const compareAtPriceCents = onSale ? Math.round((priceCents * 1.15) / 100) * 100 - 1 : null;
         products.push({
           id, supplierId: s.id, name: t.name, brand: t.brand, category, unit: t.unit, packSize: t.packSize,
-          priceCents, vatIncluded: true, stock, minQty: 1, maxQty: 50, description: t.description,
+          priceCents, compareAtPriceCents, vatIncluded: true, stock, minQty: 1, maxQty: 50, description: t.description,
           images: Array.from({ length: t.photos }, () => null),
         });
       });

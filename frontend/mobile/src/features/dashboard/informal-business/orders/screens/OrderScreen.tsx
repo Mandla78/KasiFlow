@@ -1,5 +1,5 @@
 import { Feather } from '@expo/vector-icons';
-import { useFocusEffect, useLocalSearchParams } from 'expo-router';
+import { router, useFocusEffect, useLocalSearchParams } from 'expo-router';
 import { useCallback, useEffect, useState } from 'react';
 import { ActivityIndicator, StyleSheet, Text, View } from 'react-native';
 
@@ -12,7 +12,7 @@ import { colors, fonts, radius } from '@/shared/theme/tokens';
 
 import { ordersApi } from '../api/ordersApi';
 import { StatusTimeline } from '../components/StatusTimeline';
-import { PAYMENT_LABEL, STATUS_LABEL, when } from '../lib/status';
+import { canCancel, PAYMENT_LABEL, STATUS_LABEL, when } from '../lib/status';
 import { Order, OrderError } from '../types';
 
 const REFRESH_MS = 10_000;
@@ -59,10 +59,17 @@ export default function OrderScreen() {
   }
 
   const cash = order.payment === 'cash';
+  const unpaid = order.status === 'awaiting_payment';
+  const footer = canCancel(order) ? (
+    <>
+      {unpaid ? <Button title={`Pay ${formatRand(order.totalCents)}`} icon="lock" onPress={() => router.push(`/informal-business/pay/${order.id}`)} /> : null}
+      <Button title="Cancel order" variant="secondary" onPress={cancel} loading={busy} />
+    </>
+  ) : undefined;
   const needsPass = (cash || order.fulfilment === 'collect') && !['cancelled', 'rejected', 'delivered', 'collected'].includes(order.status);
 
   return (
-    <Screen back footer={order.status === 'placed' ? <Button title="Cancel order" variant="secondary" onPress={cancel} loading={busy} /> : undefined}>
+    <Screen back footer={footer}>
       <View style={{ gap: 4 }}>
         <Title>{order.supplierName}</Title>
         <Text style={styles.muted}>
@@ -73,6 +80,20 @@ export default function OrderScreen() {
         <Tag label={STATUS_LABEL[order.status]} tone={order.status === 'cancelled' || order.status === 'rejected' ? 'garnet' : 'info'} />
         <Tag label={PAYMENT_LABEL[order.paymentStatus]} tone={order.paymentStatus === 'paid' || order.paymentStatus === 'confirmed_by_both' ? 'jade' : 'marigold'} />
       </View>
+
+      {unpaid ? (
+        <View style={styles.notice}>
+          <Feather name="credit-card" size={20} color={colors.marigoldDeep} />
+          <Text style={styles.noticeText}>Pay to send this order to {order.supplierName}. They only see it once it&apos;s paid.</Text>
+        </View>
+      ) : order.status === 'placed' ? (
+        <View style={styles.notice}>
+          <Feather name="clock" size={20} color={colors.marigoldDeep} />
+          <Text style={styles.noticeText}>
+            {order.supplierName} checks and accepts your order. We&apos;ll let you know here{cash ? ', and you pay cash when it arrives' : ''}.
+          </Text>
+        </View>
+      ) : null}
 
       <Card>
         <StatusTimeline order={order} />
@@ -136,6 +157,8 @@ export default function OrderScreen() {
 const styles = StyleSheet.create({
   muted: { fontFamily: fonts.body, fontSize: 13, lineHeight: 18, color: colors.textMuted },
   tags: { flexDirection: 'row', gap: 8, flexWrap: 'wrap' },
+  notice: { flexDirection: 'row', gap: 12, alignItems: 'flex-start', backgroundColor: colors.marigoldTint, borderRadius: radius.md, padding: 14 },
+  noticeText: { flex: 1, fontFamily: fonts.medium, fontSize: 13.5, lineHeight: 19, color: colors.text },
   pass: { flexDirection: 'row', gap: 12, alignItems: 'flex-start', backgroundColor: colors.accentTint, borderRadius: radius.md, padding: 14 },
   passTitle: { fontFamily: fonts.bold, fontSize: 14.5, color: colors.ink },
   address: { fontFamily: fonts.medium, fontSize: 14, lineHeight: 20, color: colors.text },

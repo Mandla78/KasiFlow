@@ -5,6 +5,9 @@ export type PaymentMethod = 'in_app' | 'cash';
 
 /** Server-owned; the app never sets these (docs/supplier/01). */
 export type OrderStatus =
+  /** Digital payment chosen, not paid yet: the supplier doesn't see it until it's paid. */
+  | 'awaiting_payment'
+  /** With the supplier's system, waiting for them to accept. */
   | 'placed'
   | 'accepted'
   | 'out_for_delivery'
@@ -60,7 +63,7 @@ export type PlaceOrderInput = {
 
 export class OrderError extends Error {
   constructor(
-    public code: 'BELOW_MINIMUM' | 'OUT_OF_STOCK' | 'CASH_LIMIT' | 'NOT_ACCEPTED' | 'NOT_FOUND' | 'TOO_LATE',
+    public code: 'BELOW_MINIMUM' | 'OUT_OF_STOCK' | 'CASH_LIMIT' | 'NOT_VERIFIED' | 'NOT_ACCEPTED' | 'NOT_FOUND' | 'TOO_LATE',
     message: string,
   ) {
     super(message);

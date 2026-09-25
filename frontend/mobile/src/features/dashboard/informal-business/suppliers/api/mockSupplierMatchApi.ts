@@ -11,8 +11,8 @@ import { categoryByCode } from '@/constants/categories';
 import type { Buying } from '@/features/auth/types';
 import { formatRand } from '@/shared/lib/money';
 
-import type { SupplierMatch, SupplierMatchApi } from '../types';
-import { MOCK_SUPPLIERS as SUPPLIERS } from './mockSupplierData';
+import type { MatchInput, SupplierMatch, SupplierMatchApi } from '../types';
+import { MockSupplier, MOCK_SUPPLIERS as SUPPLIERS } from './mockSupplierData';
 
 const wait = (ms = 700) => new Promise((r) => setTimeout(r, ms));
 
@@ -35,59 +35,63 @@ const SPEND_MAX: Record<NonNullable<Buying['spend']>, number | null> = {
   over_20k: null,
 };
 
+/** How well one supplier fits this trader, with the plain reasons. */
+export function matchOne(s: MockSupplier, { place, categories, buying }: MatchInput): SupplierMatch {
+  const wantsCollect = buying.fulfilment === 'collect';
+  const canCollect = buying.fulfilment !== 'delivery';
+  const spendMax = buying.spend ? SPEND_MAX[buying.spend] : null;
+
+  const shared = s.categories.filter((c) => categories.includes(c));
+  const km = distanceKm(place.latitude, place.longitude, s.latitude, s.longitude);
+  const delivers = !wantsCollect && km <= s.deliveryRadiusKm;
+  const collectable = canCollect && km <= COLLECT_RADIUS_KM;
+  const payOk = buying.payment === 'payfast' ? s.payfast : buying.payment === 'cash' ? s.cash : true;
+  const minOk = spendMax === null || s.minOrderCents <= spendMax;
+
+  const fit = shared.length / Math.max(categories.length, 1);
+  const reachScore = delivers ? 35 : collectable ? 25 : 0;
+  const closeness = Math.max(0, 1 - km / 100) * 10;
+  const score = fit * 40 + reachScore + closeness + (payOk ? 10 : 0) + (minOk ? 5 : 0);
+
+  const where = delivers
+    ? `${km.toFixed(1)} km away · delivers to you`
+    : collectable
+      ? `${km.toFixed(1)} km away · you can collect`
+      : `${km.toFixed(0)} km away · outside their delivery area`;
+  const what = shared.length
+    ? `Sells ${shared.length} of your ${categories.length} categories: ${shared
+        .slice(0, 3)
+        .map((c) => categoryByCode(c).label)
+        .join(', ')}${shared.length > 3 ? '…' : ''}`
+    : `Sells ${s.categories
+        .slice(0, 3)
+        .map((c) => categoryByCode(c).label)
+        .join(', ')}`;
+
+  return {
+    id: s.id,
+    name: s.name,
+    initials: s.initials,
+    color: s.color,
+    area: s.area,
+    distanceKm: km,
+    sharedCategories: shared,
+    payfast: s.payfast,
+    cash: s.cash,
+    delivers,
+    minOrderCents: s.minOrderCents,
+    withinReach: delivers || collectable,
+    verified: s.verified,
+    logoUrl: s.logoUrl,
+    reasons: [where, what, [s.payfast && 'Accepts payment in the app', s.cash && 'cash on delivery'].filter(Boolean).join(' · ')],
+    caution: minOk ? undefined : `Minimum order ${formatRand(s.minOrderCents)}, more than your usual spend`,
+    score,
+  };
+}
+
 export const mockSupplierMatchApi: SupplierMatchApi = {
-  async matchSuppliers({ place, categories, buying }) {
+  async matchSuppliers(input) {
     await wait(700);
-    const wantsCollect = buying.fulfilment === 'collect';
-    const canCollect = buying.fulfilment !== 'delivery';
-    const spendMax = buying.spend ? SPEND_MAX[buying.spend] : null;
-
-    const matches: SupplierMatch[] = [];
-    for (const s of SUPPLIERS) {
-      const shared = s.categories.filter((c) => categories.includes(c));
-      const km = distanceKm(place.latitude, place.longitude, s.latitude, s.longitude);
-      const delivers = !wantsCollect && km <= s.deliveryRadiusKm;
-      const collectable = canCollect && km <= COLLECT_RADIUS_KM;
-      const payOk = buying.payment === 'payfast' ? s.payfast : buying.payment === 'cash' ? s.cash : true;
-      const minOk = spendMax === null || s.minOrderCents <= spendMax;
-
-      const fit = shared.length / Math.max(categories.length, 1);
-      const reachScore = delivers ? 35 : collectable ? 25 : 0;
-      const closeness = Math.max(0, 1 - km / 100) * 10;
-      const score = fit * 40 + reachScore + closeness + (payOk ? 10 : 0) + (minOk ? 5 : 0);
-
-      const where = delivers
-        ? `${km.toFixed(1)} km away · delivers to you`
-        : collectable
-          ? `${km.toFixed(1)} km away · you can collect`
-          : `${km.toFixed(0)} km away · outside their delivery area`;
-      const what = shared.length
-        ? `Sells ${shared.length} of your ${categories.length} categories: ${shared
-            .slice(0, 3)
-            .map((c) => categoryByCode(c).label)
-            .join(', ')}${shared.length > 3 ? '…' : ''}`
-        : `Sells ${s.categories
-            .slice(0, 3)
-            .map((c) => categoryByCode(c).label)
-            .join(', ')}`;
-
-      matches.push({
-        id: s.id,
-        name: s.name,
-        initials: s.initials,
-        color: s.color,
-        area: s.area,
-        distanceKm: km,
-        sharedCategories: shared,
-        payfast: s.payfast,
-        cash: s.cash,
-        delivers,
-        minOrderCents: s.minOrderCents,
-        reasons: [where, what, [s.payfast && 'Accepts payment in the app', s.cash && 'cash on delivery'].filter(Boolean).join(' · ')],
-        caution: minOk ? undefined : `Minimum order ${formatRand(s.minOrderCents)}, more than your usual spend`,
-        score,
-      });
-    }
-    return matches.sort((a, b) => b.score - a.score);
+    return SUPPLIERS.map((s) => matchOne(s, input)).sort((a, b) => b.score - a.score);
   },
 };
