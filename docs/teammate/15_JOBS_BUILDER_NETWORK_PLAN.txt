@@ -232,17 +232,24 @@ THE IDEA
 ---------------------------------------------------------------------------
 9. WHAT WE NEED (and who)
 ---------------------------------------------------------------------------
-  Risuna
+  Risuna (all of jobs v2, including what touches shared code)
     - everything above, in this order: builder profile + visibility ->
       showcase from existing stage photos (photos only first) -> For you
       with "builders you may know" -> connect + WhatsApp/Call -> help
       posts -> crew on a job -> short videos.
-  Mandla
+    - Video uploads: a "job_video" purpose in shared.media with the 50 MB
+      cap and its tests. shared/ is Mandla's area, so write
+      NEEDS_job_video.txt with the exact change first, then make it in
+      your PR (Mandla reviews it there).
     - TRADES list: today general_builder, plumber, electrician, carpenter,
-      painter_tiler, other_trade. Proposal: split painter/tiler; add
-      bricklayer, roofer, welder, glazier. (Answer in QUESTION_trades.txt.)
-    - The Suppliers tab and "suppliers for your jobs" (engine side).
-    - Video in shared.media: allow a "job_video" purpose with the 50 MB cap.
+      painter_tiler, other_trade. Propose the new list (e.g. split
+      painter/tiler; add bricklayer, roofer, welder, glazier) in
+      QUESTION_trades.txt; after Mandla's yes, change the backend and app
+      constants in your PR, with a data migration for existing profiles.
+  Mandla (the supplier side only)
+    - The Suppliers tab and "suppliers for your jobs", wired AFTER the
+      supplier work in progress is done. Until then: the placeholder card
+      and screen, no fake data.
   Both
     - Report review: where reports go before we have an admin screen
       (propose: an email to us, no personal details in it).
