@@ -8,6 +8,7 @@ from __future__ import annotations
 from marshmallow import RAISE, Schema, fields, pre_load, validate
 
 from src.core.exceptions import ValidationError
+from src.shared.validation.text import CleanText
 
 _email = fields.Email(required=True, validate=validate.Length(max=254))
 _password = fields.String(required=True, validate=validate.Length(min=1, max=128))
@@ -51,7 +52,7 @@ class ConsentSchema(_Strict):
 
 
 class RegisterSchema(_Strict):
-    business_name = fields.String(required=True, validate=validate.Length(min=2, max=80))
+    business_name = CleanText(required=True, min_len=2, max_len=80)
     email = _email
     password = _password
     consent = fields.Nested(ConsentSchema, required=True)
@@ -90,7 +91,7 @@ class ChallengeSchema(_Strict):
 
 class GoogleSignInSchema(_Strict):
     id_token = fields.String(required=True, validate=validate.Length(min=20, max=4096))
-    business_name = fields.String(load_default=None, validate=validate.Length(min=2, max=80))
+    business_name = CleanText(load_default=None, min_len=2, max_len=80)
     consent = fields.Nested(ConsentSchema, load_default=None)
     device = fields.Nested(DeviceSchema, load_default=None)
 

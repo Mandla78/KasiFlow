@@ -12,9 +12,10 @@ import bcrypt
 # or a request that bypasses the app could set a weaker password than the
 # screen promised. Change both together.
 PASSWORD_MIN_LENGTH = 8
-# bcrypt only reads the first 72 BYTES; a longer password would be silently
-# truncated (or rejected by the bcrypt library), so cap it well below that.
 PASSWORD_MAX_LENGTH = 64
+# bcrypt holds at most 72 BYTES (the library refuses more). 64 characters
+# can be more than that (an emoji is 4 bytes), so the bytes are checked too.
+PASSWORD_MAX_BYTES = 72
 # "Special" = anything that is not a letter, a digit or whitespace, so any
 # symbol on a phone keyboard counts, not just a short fixed list.
 _SPECIAL = re.compile(r"[^A-Za-z0-9\s]")
@@ -22,14 +23,23 @@ _SPECIAL = re.compile(r"[^A-Za-z0-9\s]")
 
 def hash_password(plain_password: str) -> str:
     """Hash a plaintext password for storage. NEVER store plain_password
-    itself, and never log it."""
-    hashed = bcrypt.hashpw(plain_password.encode("utf-8"), bcrypt.gensalt())
+    itself, and never log it. Callers check the rule first; a password
+    over PASSWORD_MAX_BYTES never gets here."""
+    encoded = plain_password.encode("utf-8")
+    if len(encoded) > PASSWORD_MAX_BYTES:
+        raise ValueError("password too long for bcrypt")
+    hashed = bcrypt.hashpw(encoded, bcrypt.gensalt())
     return hashed.decode("utf-8")
 
 
 def verify_password(plain_password: str, hashed_password: str) -> bool:
-    """Verify a plaintext password attempt against a stored bcrypt hash."""
-    return bcrypt.checkpw(plain_password.encode("utf-8"), hashed_password.encode("utf-8"))
+    """Verify a plaintext password attempt against a stored bcrypt hash.
+    A guess longer than any password we accept is simply wrong (bcrypt would
+    refuse it with an error, which must never become a crash)."""
+    encoded = plain_password.encode("utf-8")
+    if len(encoded) > PASSWORD_MAX_BYTES:
+        return False
+    return bcrypt.checkpw(encoded, hashed_password.encode("utf-8"))
 
 
 def validate_password_complexity(password: str) -> list[str]:
@@ -45,6 +55,8 @@ def validate_password_complexity(password: str) -> list[str]:
         errors.append(f"Password must be at least {PASSWORD_MIN_LENGTH} characters long.")
     if len(password) > PASSWORD_MAX_LENGTH:
         errors.append(f"Password must be at most {PASSWORD_MAX_LENGTH} characters long.")
+    elif len(password.encode("utf-8")) > PASSWORD_MAX_BYTES:
+        errors.append("Password is too long (emoji and accented letters count extra).")
     if not re.search(r"[a-z]", password):
         errors.append("Password must contain at least one lowercase letter.")
     if not re.search(r"[A-Z]", password):
