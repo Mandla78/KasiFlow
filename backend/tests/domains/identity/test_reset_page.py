@@ -13,7 +13,7 @@ CONSENT = {"privacy_version": "0.1-draft", "terms_version": "0.1-draft"}
 
 
 def ticket_from_email(client, outbox) -> str:
-    client.post("/api/v1/auth/register", json={"business_name": "Reset Spaza", "email": EMAIL, "password": PASSWORD, "consent": CONSENT})
+    client.post("/api/v1/auth/register", json={"email": EMAIL, "password": PASSWORD, "consent": CONSENT})
     code = re.search(r">(\d{6})<", outbox[-1]["html_body"]).group(1)
     client.post("/api/v1/auth/verify-email", json={"email": EMAIL, "code": code})
     client.post("/api/v1/auth/forgot-password", json={"email": EMAIL})

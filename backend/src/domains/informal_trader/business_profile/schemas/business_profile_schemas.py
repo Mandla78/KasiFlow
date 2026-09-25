@@ -10,7 +10,7 @@ from __future__ import annotations
 from marshmallow import RAISE, Schema, ValidationError as MarshmallowError, fields, pre_load, validate, validates_schema
 
 from src.core.exceptions import ValidationError
-from src.shared.validation.text import CleanText, PersonName
+from src.shared.validation.text import BusinessName, CleanText, PersonName
 
 from ..constants import (
     BUSINESS_TYPES,
@@ -40,6 +40,7 @@ class _Strict(Schema):
 
 
 class BusinessSection(_Strict):
+    business_name = BusinessName(load_default=None, allow_none=True)
     business_type = _choice(BUSINESS_TYPES)
     trade = _choice(TRADES)
     owner_name = PersonName(load_default=None, allow_none=True)

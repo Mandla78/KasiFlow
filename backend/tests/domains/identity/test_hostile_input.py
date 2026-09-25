@@ -58,7 +58,7 @@ WRONG_TYPES = [None, 123, 1.5, True, [], {}, ["a"], {"a": 1}]
 
 
 def register(client, **overrides):
-    body = {"business_name": "Nomsa's Spaza", "email": "nomsa@example.com", "password": PASSWORD, "consent": CONSENT, **overrides}
+    body = {"email": "nomsa@example.com", "password": PASSWORD, "consent": CONSENT, **overrides}
     return client.post("/api/v1/auth/register", json=body)
 
 
@@ -133,12 +133,22 @@ def test_emoji_password_within_limits_works(client, outbox):
 # ------------------------------------------------------------ other fields
 
 
+def save_business_name(client, outbox, name):
+    data = signed_up(client, outbox)
+    headers = {"Authorization": f"Bearer {data['access_token']}"}
+    business = {"business_name": name, "business_type": "spaza", "trade": None, "owner_name": "Nomsa", "years_trading": "1_3", "cellphone": None}
+    return client.patch("/api/v1/me/business-profile", headers=headers, json={"business": business})
+
+
 @pytest.mark.parametrize("name", HOSTILE_TEXT)
 def test_business_name_junk(client, outbox, name):
-    r = register(client, business_name=name)
-    assert r.status_code != 500
-    if r.status_code == 202:  # accepted: must be stored as plain text, trimmed, sane length
-        assert len(name.strip()) >= 2 and len(name) <= 80
+    r = save_business_name(client, outbox, name)
+    assert r.status_code in (400, 422), (name, r.status_code)  # 400: the app-wide NUL guard
+
+
+def test_sign_up_takes_no_business_name(client):
+    """Email, password and consent only; the name comes in the first step."""
+    assert register(client, business_name="Nomsa's Spaza").status_code == 422
 
 
 @pytest.mark.parametrize("code", ["", "12345", "1234567", "abcdef", "١٢٣٤٥٦", "１２３４５６", "12 345", "😀😀😀😀😀😀", None, 123456])
@@ -149,7 +159,7 @@ def test_verification_code_junk(client, outbox, code):
 
 
 @pytest.mark.parametrize("value", WRONG_TYPES)
-@pytest.mark.parametrize("field", ["email", "password", "business_name", "consent"])
+@pytest.mark.parametrize("field", ["email", "password", "consent"])
 def test_register_wrong_types(client, field, value):
     assert_refused(register(client, **{field: value}))
 
@@ -206,7 +216,7 @@ def test_business_profile_text_junk(client, outbox, field, value):
 
 
 def test_responses_never_echo_raw_input_as_html(client):
-    r = register(client, business_name="<script>alert(1)</script>", email="<b>@x")
+    r = register(client, email="<script>alert(1)</script>@x")
     assert r.headers["Content-Type"].startswith("application/json")
     assert r.headers["X-Content-Type-Options"] == "nosniff"
 
@@ -221,20 +231,20 @@ def test_same_answer_for_bad_and_unknown_login_email_shapes(client):
 
 # ------------------------------------------------------------- name rules
 
-BAD_BUSINESS_NAMES = ["12334566", "00000", "😀😀😀", "Spaza 😀", "aaaa", "A", "1a", "!!!!", "---", "Shop@home", "<b>Shop</b>", "a1 a1"]
-GOOD_BUSINESS_NAMES = ["Nomsa's Spaza", "Shop 24/7", "Mokoena Build (Pty) Ltd", "Thabo & Sons", "Ēbè Tuck-shop", "S. Dlamini Trading #2"]
+BAD_BUSINESS_NAMES = ["12334566", "00000", "😀😀😀", "Spaza 😀", "aaaa", "A", "1a", "!!!!", "---", "Shop@home", "<b>Shop</b>",
+                      "a1 a1", "Shop 24", "Spaza 60", "Shop #2", "7-Eleven"]
+GOOD_BUSINESS_NAMES = ["Nomsa's Spaza", "Sixty Spaza", "Mokoena Build (Pty) Ltd", "Thabo & Sons", "Ēbè Tuck-shop", "S. Dlamini Trading"]
 
 
 @pytest.mark.parametrize("name", BAD_BUSINESS_NAMES)
 def test_business_name_must_be_a_real_name(client, outbox, name):
-    r = register(client, business_name=name)
-    assert r.status_code == 422, (name, r.status_code)
-    assert outbox == []
+    assert save_business_name(client, outbox, name).status_code == 422, name
 
 
 @pytest.mark.parametrize("name", GOOD_BUSINESS_NAMES)
 def test_real_business_names_are_accepted(client, outbox, name):
-    assert register(client, business_name=name).status_code == 202
+    r = save_business_name(client, outbox, name)
+    assert r.status_code == 200 and r.get_json()["data"]["profile"]["business"]["business_name"] == name
 
 
 BAD_PERSON_NAMES = ["Nomsa2", "N0msa", "😀 Nomsa", "12345", "N", "Nomsa & Co", "--"]

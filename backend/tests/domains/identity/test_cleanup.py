@@ -13,7 +13,7 @@ CONSENT = {"privacy_version": "0.1-draft", "terms_version": "0.1-draft"}
 
 
 def register(client, email):
-    return client.post("/api/v1/auth/register", json={"business_name": "Clean Spaza", "email": email, "password": "Spaza2026!", "consent": CONSENT})
+    return client.post("/api/v1/auth/register", json={"email": email, "password": "Spaza2026!", "consent": CONSENT})
 
 
 def test_old_unverified_sign_up_is_deleted_but_a_new_one_is_kept(app, client):

@@ -71,13 +71,13 @@ Commit the migration file with the model change, so everyone else gets it with `
 
 | Route | What it does |
 |---|---|
-| `POST /auth/register` | business name, email, password, consent versions. Always answers "Check your email." |
+| `POST /auth/register` | email, password, consent versions (the business name comes in the first onboarding step). Always answers "Check your email." |
 | `POST /auth/verify-email` | email + 6-digit code (+ optional phone key) → tokens + `trusted_phone_token` |
 | `POST /auth/resend-code` | always answers "Check your email." |
 | `POST /auth/login` | email + password (+ `trusted_phone_token` if this phone has one) → tokens; on a new phone → 202 `code_required` + `challenge`, and a code by email |
 | `POST /auth/login/verify` | challenge + 6-digit code → tokens + `trusted_phone_token` (this phone skips the code from now on) |
 | `POST /auth/login/resend-code` | challenge → a new code (max 3 per sign-in); always answers "Check your email." |
-| `POST /auth/google` | Google ID token (+ business name and consent for new users) → tokens |
+| `POST /auth/google` | Google ID token (+ consent for new users) → tokens |
 | `POST /auth/google/link` | Google ID token + password: adds Google to an existing account |
 | `POST /auth/refresh` | refresh token → new tokens (the old refresh token stops working) |
 | `POST /auth/logout` | ends this phone's session immediately |

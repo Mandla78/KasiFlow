@@ -63,7 +63,7 @@ function isOnboarded(p: Profile): boolean {
 
 type SessionContextValue = SessionState & {
   loaded: boolean;
-  startEmailSignUp: (businessName: string, email: string) => void;
+  startEmailSignUp: (email: string) => void;
   emailVerified: () => void;
   startGoogleSignUp: (email: string, ownerName: string, consented: boolean) => void;
   acceptConsent: () => void;
@@ -131,8 +131,7 @@ export function SessionProvider({ children }: { children: ReactNode }) {
       ...state,
       loaded,
       // Consent was ticked on the create-account screen, so stamp it here.
-      startEmailSignUp: (businessName, email) =>
-        setState({ status: 'unverified', profile: { ...emptyProfile, businessName, email, consent: consentNow() } }),
+      startEmailSignUp: (email) => setState({ status: 'unverified', profile: { ...emptyProfile, email, consent: consentNow() } }),
       emailVerified: () => patch({}, 'onboarding'),
       startGoogleSignUp: (email, ownerName, consented) =>
         setState({
@@ -196,7 +195,7 @@ export function SessionProvider({ children }: { children: ReactNode }) {
 
 /** What the server is the source of truth for. */
 function pickServerFields(p: Profile): Partial<Profile> {
-  return { email: p.email, businessName: p.businessName, signedUpWith: p.signedUpWith, consent: p.consent };
+  return { email: p.email, signedUpWith: p.signedUpWith, consent: p.consent };
 }
 
 export function useSession() {

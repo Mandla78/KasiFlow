@@ -42,7 +42,7 @@ export default function SignIn() {
     } catch (e) {
       if (e instanceof AuthError && e.code === 'EMAIL_NOT_VERIFIED') {
         // Right password, email never confirmed: the server just sent a new code.
-        startEmailSignUp('', email.trim().toLowerCase());
+        startEmailSignUp(email.trim().toLowerCase());
         router.push('/verify-email');
         return;
       }

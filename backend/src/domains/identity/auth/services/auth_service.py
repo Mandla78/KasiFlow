@@ -145,7 +145,9 @@ def _trust_this_phone(user, phone: Optional[PhoneInfo]) -> tuple:
 # --------------------------------------------------------------- register
 
 
-def register(business_name: str, email: str, password: str, privacy_version: str, terms_version: str) -> None:
+def register(email: str, password: str, privacy_version: str, terms_version: str) -> None:
+    """Email, password and consent only. The business name and everything
+    else about the business come in the onboarding steps (business profile)."""
     """Always ends the same way for the caller ("check your email"), so the
     response never reveals whether the email already has an account."""
     _check_password_rule(password)
@@ -171,12 +173,12 @@ def register(business_name: str, email: str, password: str, privacy_version: str
 
     resumed = bool(user)
     if user:  # never verified: the earlier attempt proved nothing, start over
-        account_service.restart_unverified(user, business_name)
+        account_service.restart_unverified(user)
         credential = db.session.get(PasswordCredential, user.id)
         credential.password_hash = hash_password(password)
         credential.changed_at = utcnow()
     else:
-        user = account_service.create_unverified(email, business_name)
+        user = account_service.create_unverified(email)
         db.session.add(PasswordCredential(user_id=user.id, password_hash=hash_password(password)))
 
     account_service.record_consents(user, privacy_version, terms_version, _ip(), request.headers.get("User-Agent"))
@@ -596,7 +598,6 @@ def _google_claims(id_token_value: str):
 
 def google_sign_in(
     id_token_value: str,
-    business_name: Optional[str],
     privacy_version: Optional[str],
     terms_version: Optional[str],
     device: Optional[DeviceInfo],
@@ -606,8 +607,8 @@ def google_sign_in(
       * this Google account is already linked       -> signed in
       * the email has a PASSWORD account             -> 409 GOOGLE_LINK_REQUIRED
         (never merged silently: the owner proves the password once)
-      * new here (or a sign-up that was never verified) -> needs business name
-        and consent; 422 GOOGLE_SIGNUP_DETAILS_REQUIRED until the app sends them
+      * new here (or a sign-up that was never verified) -> needs consent;
+        422 GOOGLE_SIGNUP_DETAILS_REQUIRED until the app sends it
     """
     claims = _google_claims(id_token_value)
 
@@ -633,9 +634,9 @@ def google_sign_in(
             data={"email": user.email},
         )
 
-    if not business_name or not privacy_version or not terms_version:
+    if not privacy_version or not terms_version:
         raise AppError(
-            "Name your business and accept the Privacy Policy and Terms to continue.",
+            "Accept the Privacy Policy and Terms to continue.",
             status_code=422,
             code="GOOGLE_SIGNUP_DETAILS_REQUIRED",
             data={"email": claims.email, "name": claims.name},
@@ -651,10 +652,10 @@ def google_sign_in(
         if credential:
             db.session.delete(credential)
         EmailCode.query.filter_by(user_id=user.id, used_at=None).update({"used_at": utcnow()})
-        account_service.claim_unverified_with(user, business_name, SignUpMethod.GOOGLE)
+        account_service.claim_unverified_with(user, SignUpMethod.GOOGLE)
         claimed = True
     elif not user:
-        user = account_service.create_verified(claims.email, business_name, SignUpMethod.GOOGLE)
+        user = account_service.create_verified(claims.email, SignUpMethod.GOOGLE)
     # (an active account with no password and no Google link can't normally
     # exist; if it does, the Google-proven email links it below)
 

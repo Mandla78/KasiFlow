@@ -9,13 +9,14 @@ import { File } from 'expo-file-system';
 import { Platform } from 'react-native';
 
 import { api, ApiError } from '@/shared/api/client';
+import { businessNameProblem } from '@/shared/lib/validation';
 
 import type { CipcStatus, Profile } from '@/features/auth/types';
 
 type ServerCipc = { number: string; status: CipcStatus; registered_name: string | null; entity_type: string | null; checked_at: string | null };
 
 export type ServerProfile = {
-  business: { business_type: Profile['businessType']; trade: Profile['trade']; owner_name: string | null; years_trading: Profile['yearsTrading']; cellphone: string | null };
+  business: { business_name: string | null; business_type: Profile['businessType']; trade: Profile['trade']; owner_name: string | null; years_trading: Profile['yearsTrading']; cellphone: string | null };
   registration: { sole_trader: boolean; cipc: ServerCipc | null };
   location: {
     building: string;
@@ -41,6 +42,7 @@ export function toServer(p: Profile): Record<Section, unknown> {
   const l = p.location;
   return {
     business: {
+      business_name: p.businessName.trim() && !businessNameProblem(p.businessName) ? p.businessName.trim() : null,
       business_type: p.businessType,
       trade: p.businessType === 'builder' ? p.trade : null,
       owner_name: p.ownerName.trim().length >= 2 ? p.ownerName.trim() : null,
@@ -69,6 +71,7 @@ export function toServer(p: Profile): Record<Section, unknown> {
 export function fromServer(s: ServerProfile): Partial<Profile> {
   const c = s.registration.cipc;
   return {
+    businessName: s.business.business_name ?? '',
     businessType: s.business.business_type,
     trade: s.business.trade,
     ownerName: s.business.owner_name ?? '',

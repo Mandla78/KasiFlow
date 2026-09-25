@@ -31,7 +31,7 @@ def device(platform="android") -> dict:
 def register(client, email=EMAIL, password=PASSWORD, consent=CONSENT):
     return client.post(
         "/api/v1/auth/register",
-        json={"business_name": "Nomsa's Spaza", "email": email, "password": password, "consent": consent},
+        json={"email": email, "password": password, "consent": consent},
     )
 
 

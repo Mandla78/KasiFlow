@@ -17,7 +17,7 @@ SESSION = "3f1c2b8e-1111-4a2b-9c3d-123456789abc"
 
 @pytest.fixture
 def me(client, outbox):
-    client.post("/api/v1/auth/register", json={"business_name": "Geo Spaza", "email": "geo@example.com", "password": PASSWORD, "consent": CONSENT})
+    client.post("/api/v1/auth/register", json={"email": "geo@example.com", "password": PASSWORD, "consent": CONSENT})
     code = re.search(r">(\d{6})<", outbox[-1]["html_body"]).group(1)
     token = client.post("/api/v1/auth/verify-email", json={"email": "geo@example.com", "code": code}).get_json()["data"]["access_token"]
     return {"Authorization": f"Bearer {token}"}

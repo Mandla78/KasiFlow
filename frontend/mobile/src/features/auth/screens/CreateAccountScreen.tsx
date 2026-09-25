@@ -11,13 +11,12 @@ import { TextField } from '@/shared/components/TextField';
 import { AuthError, authApi } from '@/features/auth/api/authApi';
 import { consentNow } from '@/features/auth/profile';
 import { useSession } from '@/features/auth/session/SessionProvider';
-import { isEmail, isStrongPassword, businessNameProblem } from '@/shared/lib/validation';
+import { isEmail, isStrongPassword } from '@/shared/lib/validation';
 import { colors, fonts } from '@/shared/theme/tokens';
 
-/** Account stage: business name, email, password, and agreeing to the Privacy Policy and Terms. No SMS. */
+/** Account stage: email, password, and agreeing to the Privacy Policy and Terms. The business comes in the steps after. */
 export default function CreateAccount() {
   const { startEmailSignUp } = useSession();
-  const [businessName, setBusinessName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirm, setConfirm] = useState('');
@@ -35,7 +34,6 @@ export default function CreateAccount() {
 
   const matches = confirm.length > 0 && confirm === password;
   const errors = {
-    businessName: !businessName.trim() ? 'Give your business a name' : businessNameProblem(businessName),
     email: !isEmail(email) ? 'Enter a valid email address' : serverError,
     // One message, shown only after they try: no rule list up front.
     password: !isStrongPassword(password)
@@ -43,7 +41,7 @@ export default function CreateAccount() {
       : '',
     confirm: confirm !== password ? "Passwords don't match" : '',
   };
-  const valid = !errors.businessName && !errors.email && !errors.password && !errors.confirm;
+  const valid = !errors.email && !errors.password && !errors.confirm;
 
   async function submit() {
     setTouched(true);
@@ -51,8 +49,8 @@ export default function CreateAccount() {
     if (!valid || !agreed) return;
     setBusy(true);
     try {
-      await authApi.createAccount({ businessName: businessName.trim(), email: email.trim(), password, consent: consentNow() });
-      startEmailSignUp(businessName.trim(), email.trim().toLowerCase());
+      await authApi.createAccount({ email: email.trim(), password, consent: consentNow() });
+      startEmailSignUp(email.trim().toLowerCase());
       router.push('/verify-email');
     } catch (e) {
       const message = e instanceof AuthError ? e.message : 'Something went wrong. Try again.';
@@ -100,16 +98,6 @@ export default function CreateAccount() {
         }}
       />
       <OrDivider />
-      <TextField
-        label="Business name"
-        placeholder="e.g. Nomsa's Spaza"
-        value={businessName}
-        onChangeText={setBusinessName}
-        autoCapitalize="words"
-        returnKeyType="next"
-        onSubmitEditing={() => emailRef.current?.focus()}
-        error={touched ? errors.businessName : ''}
-      />
       <TextField
         ref={emailRef}
         label="Email address"

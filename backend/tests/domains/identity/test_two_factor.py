@@ -24,7 +24,7 @@ def last_code(outbox) -> str:
 
 
 def signed_up(client, outbox, email=EMAIL) -> dict:
-    client.post("/api/v1/auth/register", json={"business_name": "2FA Spaza", "email": email, "password": PASSWORD, "consent": CONSENT})
+    client.post("/api/v1/auth/register", json={"email": email, "password": PASSWORD, "consent": CONSENT})
     r = client.post("/api/v1/auth/verify-email", json={"email": email, "code": last_code(outbox)})
     assert r.status_code == 200
     return r.get_json()["data"]

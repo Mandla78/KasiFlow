@@ -45,9 +45,6 @@ class User(BaseModel):
     status = db.Column(db.String(20), nullable=False, default=AccountStatus.UNVERIFIED.value)
     dashboard = db.Column(db.String(30), nullable=False, default=Dashboard.INFORMAL_BUSINESS.value)
     signed_up_with = db.Column(db.String(10), nullable=False, default=SignUpMethod.EMAIL.value)
-    #: The trading name given at sign-up. The full business profile
-    #: (type, area, categories...) lives in informal_trader/business_profile.
-    business_name = db.Column(db.String(80), nullable=False)
     email_verified_at = db.Column(db.DateTime(timezone=True), nullable=True)
     last_login_at = db.Column(db.DateTime(timezone=True), nullable=True)
 

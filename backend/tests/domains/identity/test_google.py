@@ -33,12 +33,12 @@ def test_google_is_off_until_configured(client):
     assert r.status_code == 503 and r.get_json()["code"] == "GOOGLE_NOT_CONFIGURED"
 
 
-def test_new_user_needs_business_name_and_consent_then_signs_in(client, fake_google):
+def test_new_user_needs_consent_then_signs_in(client, fake_google):
     first = google(client)
     assert first.status_code == 422 and first.get_json()["code"] == "GOOGLE_SIGNUP_DETAILS_REQUIRED"
     assert first.get_json()["data"]["email"] == "nomsa.g@example.com"
 
-    r = google(client, business_name="Nomsa's Spaza", consent=CONSENT)
+    r = google(client, consent=CONSENT)
     assert r.status_code == 200
     user = r.get_json()["data"]["user"]
     assert user["signed_up_with"] == "google" and user["status"] == "active" and user["email_verified"]
@@ -50,11 +50,11 @@ def test_new_user_needs_business_name_and_consent_then_signs_in(client, fake_goo
 def test_existing_password_account_is_never_merged_silently(client, fake_google, outbox):
     import re
 
-    client.post("/api/v1/auth/register", json={"business_name": "Nomsa's Spaza", "email": "nomsa.g@example.com", "password": PASSWORD, "consent": CONSENT})
+    client.post("/api/v1/auth/register", json={"email": "nomsa.g@example.com", "password": PASSWORD, "consent": CONSENT})
     code = re.search(r">(\d{6})<", outbox[-1]["html_body"]).group(1)
     client.post("/api/v1/auth/verify-email", json={"email": "nomsa.g@example.com", "code": code})
 
-    r = google(client, business_name="X Spaza", consent=CONSENT)
+    r = google(client, consent=CONSENT)
     assert r.status_code == 409 and r.get_json()["code"] == "GOOGLE_LINK_REQUIRED"
 
     wrong = client.post("/api/v1/auth/google/link", json={"id_token": NOMSA, "password": "Wrong2026!"})
@@ -68,10 +68,10 @@ def test_existing_password_account_is_never_merged_silently(client, fake_google,
 
 def test_pre_hijack_attack_fails(client, fake_google):
     # An attacker signs up with the victim's email and a password, never verifies.
-    client.post("/api/v1/auth/register", json={"business_name": "Attacker", "email": "nomsa.g@example.com", "password": "Attacker2026!", "consent": CONSENT})
+    client.post("/api/v1/auth/register", json={"email": "nomsa.g@example.com", "password": "Attacker2026!", "consent": CONSENT})
     # The real owner signs in with Google (proving the email).
-    r = google(client, business_name="Nomsa's Spaza", consent=CONSENT)
-    assert r.status_code == 200 and r.get_json()["data"]["user"]["business_name"] == "Nomsa's Spaza"
+    r = google(client, consent=CONSENT)
+    assert r.status_code == 200 and r.get_json()["data"]["user"]["signed_up_with"] == "google"
     # The attacker's planted password is gone.
     login = client.post("/api/v1/auth/login", json={"email": "nomsa.g@example.com", "password": "Attacker2026!"})
     assert login.status_code == 401
@@ -83,5 +83,5 @@ def test_bad_google_token_is_rejected(client, fake_google):
 
 
 def test_outdated_consent_rejected_on_google_path(client, fake_google):
-    r = google(client, business_name="Nomsa's Spaza", consent={"privacy_version": "0.0-old", "terms_version": "0.1-draft"})
+    r = google(client, consent={"privacy_version": "0.0-old", "terms_version": "0.1-draft"})
     assert r.status_code == 422 and r.get_json()["code"] == "CONSENT_OUTDATED"
