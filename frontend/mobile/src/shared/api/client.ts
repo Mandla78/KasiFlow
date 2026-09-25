@@ -8,6 +8,7 @@
  *  - If the session was ended elsewhere (logout, password change, new
  *    phone, stolen token detected), tells the app to sign out.
  *  - Times out instead of hanging on a bad network.
+ *  - Extra headers per call (e.g. Idempotency-Key), kept on the retry.
  */
 import { API_BASE_URL } from '@/constants/config';
 
@@ -34,13 +35,17 @@ export function setSessionEndedHandler(handler: (() => void) | null) {
   onSessionEnded = handler;
 }
 
-async function raw<T>(method: string, path: string, body?: unknown, token?: string): Promise<{ status: number; json: Envelope<T> }> {
+type Headers = Record<string, string>;
+
+async function raw<T>(method: string, path: string, body?: unknown, token?: string, extra: Headers = {}): Promise<{ status: number; json: Envelope<T> }> {
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(), TIMEOUT_MS);
   try {
     const res = await fetch(`${API_BASE_URL}${path}`, {
       method,
       headers: {
+        // The caller's extras first: they can never replace the token or content type.
+        ...extra,
         'Content-Type': 'application/json',
         Accept: 'application/json',
         ...(token ? { Authorization: `Bearer ${token}` } : {}),
@@ -84,16 +89,36 @@ async function refreshTokens(): Promise<boolean> {
 }
 
 /**
+ * A key for one user action (one tap on Save). Send it as Idempotency-Key
+ * so a retry after a dropped connection is saved once, not twice. Make it
+ * when the user taps, and reuse it if the same save is tried again.
+ * Not a secret: the server ties it to the signed-in user, the route and
+ * the request body, so it only has to be unique.
+ */
+export function newIdempotencyKey(): string {
+  const c = (globalThis as { crypto?: { randomUUID?: () => string } }).crypto;
+  if (c?.randomUUID) return c.randomUUID();
+  return `${Date.now().toString(36)}-${Math.random().toString(36).slice(2)}-${Math.random().toString(36).slice(2)}`;
+}
+
+/**
  * Call the API. `auth: true` sends the access token and handles expiry.
+ * `headers` adds extra headers (e.g. { 'Idempotency-Key': key }); they are
+ * sent again, unchanged, on the retry after a token refresh.
  * Returns `data` from the envelope; throws ApiError otherwise.
  */
-export async function api<T>(method: 'GET' | 'POST' | 'PATCH' | 'DELETE', path: string, body?: unknown, opts: { auth?: boolean } = {}): Promise<T> {
+export async function api<T>(
+  method: 'GET' | 'POST' | 'PATCH' | 'DELETE',
+  path: string,
+  body?: unknown,
+  opts: { auth?: boolean; headers?: Headers } = {},
+): Promise<T> {
   const token = opts.auth ? (await getTokens())?.accessToken : undefined;
-  let { status, json } = await raw<T>(method, path, body, token);
+  let { status, json } = await raw<T>(method, path, body, token, opts.headers);
 
   if (opts.auth && status === 401 && json.code === 'TOKEN_EXPIRED') {
     if (await refreshTokens()) {
-      ({ status, json } = await raw<T>(method, path, body, (await getTokens())?.accessToken));
+      ({ status, json } = await raw<T>(method, path, body, (await getTokens())?.accessToken, opts.headers));
     }
   }
 
