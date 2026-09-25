@@ -25,6 +25,7 @@ type WireOrder = {
   placed_at: string;
   pay_by: string | null;
   events: { status: OrderStatus; at: string }[];
+  documents: { invoice: boolean; receipt: boolean };
 };
 
 export function orderFromWire(o: WireOrder): Order {
@@ -53,6 +54,7 @@ export function orderFromWire(o: WireOrder): Order {
     placedAt: o.placed_at,
     payBy: o.pay_by,
     events: o.events,
+    documents: o.documents,
   };
 }
 
@@ -92,6 +94,10 @@ export const httpOrdersApi: OrdersApi = {
   async get(id) {
     const data = await orCallError(api<{ order: WireOrder }>('GET', `/me/orders/${encodeURIComponent(id)}`, undefined, { auth: true }));
     return orderFromWire(data.order);
+  },
+  async documentLink(id, kind) {
+    const data = await orCallError(api<{ url: string }>('POST', `/me/orders/${encodeURIComponent(id)}/documents/${kind}`, undefined, { auth: true }));
+    return data.url;
   },
   async startPayment(id) {
     const data = await orCallError(api<{ pay_url: string }>('POST', `/me/orders/${encodeURIComponent(id)}/pay`, undefined, { auth: true }));

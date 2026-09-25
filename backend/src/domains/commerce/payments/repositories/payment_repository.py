@@ -25,5 +25,9 @@ def by_id(payment_id: uuid.UUID, *, lock: bool = False) -> Optional[Payment]:
     return query.first()
 
 
+def for_order(order_id: uuid.UUID) -> list[Payment]:
+    return Payment.query.filter_by(order_id=order_id, is_deleted=False).order_by(Payment.created_at).all()
+
+
 def pending_for_order(order_id: uuid.UUID) -> list[Payment]:
     return Payment.query.filter_by(order_id=order_id, status="pending", is_deleted=False).all()

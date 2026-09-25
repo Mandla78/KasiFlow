@@ -32,6 +32,7 @@ from src.domains.informal_trader.credit_book.api import routes as _credit_book_r
 from src.domains.informal_trader.jobs.api import routes as _jobs_routes  # noqa: E402,F401
 from src.domains.commerce.orders.api import routes as _orders_routes  # noqa: E402,F401
 from src.domains.commerce.payments.api import routes as _payments_routes  # noqa: E402,F401
+from src.domains.commerce.documents.api import routes as _documents_routes  # noqa: E402,F401
 from src.domains.supplier.catalogue.api import routes as _catalogue_routes  # noqa: E402,F401
 from src.domains.supplier.connections.api import routes as _connections_routes  # noqa: E402,F401
 from src.domains.supplier.recommendation.api import routes as _recommendation_routes  # noqa: E402,F401

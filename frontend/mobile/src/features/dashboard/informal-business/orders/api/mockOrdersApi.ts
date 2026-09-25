@@ -157,6 +157,10 @@ export const mockOrdersApi: OrdersApi = {
     return cancelled;
   },
 
+  async documentLink() {
+    return null; // no documents in mock mode
+  },
+
   async startPayment() {
     return null; // no payment provider in mock mode
   },

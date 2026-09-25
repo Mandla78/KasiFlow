@@ -130,6 +130,10 @@ def _register_blueprints(app: Flask) -> None:
     from src.domains.commerce.payments.web.pay_pages import pay_pages_bp
 
     app.register_blueprint(pay_pages_bp)
+    # Order documents opened from a signed 10-minute link.
+    from src.domains.commerce.documents.web.document_pages import document_pages_bp
+
+    app.register_blueprint(document_pages_bp)
 
 
 def _register_error_handlers(app: Flask) -> None:

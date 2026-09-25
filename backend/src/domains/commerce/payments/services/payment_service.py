@@ -72,6 +72,12 @@ def start(user, order_id: uuid.UUID) -> dict:
     return {"pay_url": f"{current_app.config['APP_BASE_URL']}/pay/{ticket}", "amount_cents": order.total_cents}
 
 
+def completed_reference(order_id: uuid.UUID) -> Optional[str]:
+    """PayFast's reference for the order's completed payment (for the receipt)."""
+    payment = next((p for p in repo.for_order(order_id) if p.status == "complete"), None)
+    return payment.provider_reference if payment else None
+
+
 def form_for_ticket(ticket: str) -> Optional[dict]:
     """(PayFast's URL, the signed fields), or None if the link is used up."""
     if not ticket or len(ticket) > 100:

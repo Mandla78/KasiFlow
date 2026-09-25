@@ -54,7 +54,11 @@ export type Order = {
   /** Digital orders: pay before this or the order lapses. */
   payBy?: string | null;
   events: OrderEvent[];
+  /** Which PDFs the server can issue now (the server decides). */
+  documents?: { invoice: boolean; receipt: boolean };
 };
+
+export type DocumentKind = 'invoice' | 'receipt';
 
 export type PlaceOrderInput = {
   supplierId: string;
@@ -88,4 +92,6 @@ export interface OrdersApi {
   /** A secure pay link for an unpaid digital order; null where there's no
    *  payment provider (the mock). */
   startPayment(id: string): Promise<string | null>;
+  /** A 10-minute link to the order's PDF; null where there are no documents (the mock). */
+  documentLink(id: string, kind: DocumentKind): Promise<string | null>;
 }

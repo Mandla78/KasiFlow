@@ -229,6 +229,19 @@ def payable(user, order_id: uuid.UUID) -> Order:
     return order
 
 
+def owned_order(user, order_id: uuid.UUID) -> Order:
+    """The trader's own order (for documents); not theirs = not found."""
+    order = repo.for_user(user.id, order_id)
+    if order is None:
+        raise NotFoundError("We couldn't find that order.")
+    return order
+
+
+def get_order(order_id: uuid.UUID) -> Optional[Order]:
+    """For documents opened from a signed link (no trader in the request)."""
+    return repo.by_id(order_id)
+
+
 def get_for_payment(order_id: uuid.UUID) -> Optional[Order]:
     """For the payments feature (no trader in the request): the order, locked."""
     return repo.by_id(order_id, lock=True)
@@ -270,6 +283,19 @@ def _close(order: Order, status: str, actor: str, note: Optional[str] = None) ->
 
 # --------------------------------------------------------------------- view
 
+#: The sale is firm from here: the invoice can be issued.
+_INVOICE_AFTER = ("accepted", "out_for_delivery", "ready_for_collection", "delivered", "collected")
+
+
+def documents_ready(o: Order) -> dict[str, bool]:
+    """Invoice: once the supplier accepts, or a digital order is paid.
+    Receipt: once the money is confirmed (paid digitally, or cash confirmed by both)."""
+    return {
+        "invoice": o.status in _INVOICE_AFTER or (o.status == "placed" and o.payment_status == "paid"),
+        "receipt": o.payment_status in ("paid", "confirmed_by_both"),
+    }
+
+
 
 def view(o: Order) -> dict:
     """The trader's view of their order."""
@@ -296,4 +322,5 @@ def view(o: Order) -> dict:
         "placed_at": o.placed_at.isoformat(),
         "pay_by": o.pay_by.isoformat() if o.pay_by else None,
         "events": [{"status": e.status, "at": e.at.isoformat()} for e in o.events],
+        "documents": documents_ready(o),
     }
