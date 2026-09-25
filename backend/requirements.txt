@@ -38,5 +38,9 @@ phonenumbers==8.13.55
 google-auth==2.58.1
 requests==2.34.2
 
+# Media: Cloudinary (profile photos, job photos, product images).
+# The phone uploads straight to Cloudinary with a signature from us.
+cloudinary==1.46.0
+
 # Browser preview of the app (development only; phones don't use CORS)
 Flask-Cors==6.0.5

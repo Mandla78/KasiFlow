@@ -21,4 +21,6 @@ The reused code was adapted: the product name was replaced, and imports of TruCo
 | `backend/tests/architecture/test_finance_boundaries.py` | `tests/architecture/` | fails the build if finance imports a domain |
 | `frontend/mobile/src/shared/location-picker/` | `frontend/mobile/src/features/dashboard/shared/location-picker/` | address search + fixed-centre-pin map in a WebView (Mapbox GL JS), reverse geocode only pre-fills editable fields. Adapted: our components instead of react-native-paper, an OpenStreetMap fallback when no token is set, a web (iframe) version |
 
-Coming later, with the features that need them: media and malware scanning (Cloudinary), the PayFast provider and payment notifications, the backend Mapbox geocoding proxy. Each gets a row here when it's copied.
+| `backend/src/shared/media/` | `backend/src/shared/media/` | Cloudinary media: signed direct uploads, upload intents + orphan sweep, cross-feature upload ledger, HMAC-verified webhooks, owner-first folders with HMAC keys instead of database ids. Adapted: `akayza/informal-trader/…` and `akayza/supplier/…` folders, tables in the `platform` schema, malware scan off by default, a `fetch_asset` check so the server never trusts the URL or size the phone reports, a fake provider for tests. TruConnect's stuck-scan sweep stays per feature (shared code can't import a domain here) |
+
+Coming later, with the features that need them: the PayFast provider and payment notifications, the backend Mapbox geocoding proxy. Each gets a row here when it's copied.

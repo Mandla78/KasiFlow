@@ -5,7 +5,9 @@
  * where it is saved and read back. The server owns the CIPC result: the
  * app only ever sends the registration NUMBER.
  */
-import { api } from '@/shared/api/client';
+import { Platform } from 'react-native';
+
+import { api, ApiError } from '@/shared/api/client';
 
 import type { CipcStatus, Profile } from '@/features/auth/types';
 
@@ -26,6 +28,7 @@ export type ServerProfile = {
   } | null;
   buying: { categories: Profile['categories'] } & Profile['buying'];
   tools: Profile['tools'];
+  profile_image_url: string | null;
   verified: boolean;
   onboarded: boolean;
 };
@@ -91,6 +94,7 @@ export function fromServer(s: ServerProfile): Partial<Profile> {
     categories: s.buying.categories,
     buying: { restock: s.buying.restock, spend: s.buying.spend, payment: s.buying.payment, fulfilment: s.buying.fulfilment },
     tools: { ...s.tools },
+    profileImageUrl: s.profile_image_url,
   };
 }
 
@@ -100,5 +104,34 @@ export const businessProfileApi = {
   },
   async save(sections: Partial<Record<Section, unknown>>): Promise<ServerProfile> {
     return (await api<{ profile: ServerProfile }>('PATCH', '/me/business-profile', sections, { auth: true })).profile;
+  },
+
+  /**
+   * Profile photo: ask our server for a one-upload signature, post the
+   * file STRAIGHT to Cloudinary (our server never carries the bytes),
+   * then tell our server, which checks the upload with Cloudinary itself.
+   */
+  async uploadProfileImage(uri: string): Promise<ServerProfile> {
+    const sig = await api<{ upload_url: string; fields: Record<string, string> }>(
+      'POST',
+      '/me/business-profile/image/upload-signature',
+      undefined,
+      { auth: true },
+    );
+    const form = new FormData();
+    Object.entries(sig.fields).forEach(([k, v]) => form.append(k, v));
+    if (Platform.OS === 'web') {
+      form.append('file', await (await fetch(uri)).blob(), 'photo.jpg');
+    } else {
+      form.append('file', { uri, name: 'photo.jpg', type: 'image/jpeg' } as unknown as Blob);
+    }
+    const res = await fetch(sig.upload_url, { method: 'POST', body: form });
+    if (!res.ok) throw new ApiError(res.status, 'UPLOAD_FAILED', "Couldn't upload the photo. Check your connection and try again.");
+    return (await api<{ profile: ServerProfile }>('POST', '/me/business-profile/image', { public_id: sig.fields.public_id }, { auth: true }))
+      .profile;
+  },
+
+  async removeProfileImage(): Promise<ServerProfile | null> {
+    return (await api<{ profile: ServerProfile | null }>('DELETE', '/me/business-profile/image', undefined, { auth: true })).profile;
   },
 };

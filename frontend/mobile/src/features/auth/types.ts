@@ -67,6 +67,8 @@ export type Profile = {
   categories: CategoryCode[];
   buying: Buying;
   supplierIds: string[];
+  /** The approved profile photo (Cloudinary), if any. */
+  profileImageUrl?: string | null;
 
   tools: Record<ToolKey, boolean>;
 };

@@ -1,6 +1,6 @@
 import { Feather } from '@expo/vector-icons';
 import { ComponentProps } from 'react';
-import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { Image, Pressable, StyleSheet, Text, View } from 'react-native';
 
 import { colors, fonts, radius, sizes } from '@/shared/theme/tokens';
 
@@ -13,10 +13,12 @@ type Props = {
   verified?: boolean;
   /** Tapping the avatar opens the business profile. */
   onAvatarPress?: () => void;
+  /** The business's profile photo, shown instead of the initial. */
+  imageUrl?: string | null;
 };
 
 /** Tab screens' top bar: the business and one action (usually the bell). */
-export function TopBar({ initial, title, subtitle, action, verified, onAvatarPress }: Props) {
+export function TopBar({ initial, title, subtitle, action, verified, onAvatarPress, imageUrl }: Props) {
   return (
     <View style={styles.row}>
       <Pressable
@@ -25,7 +27,7 @@ export function TopBar({ initial, title, subtitle, action, verified, onAvatarPre
         accessibilityRole={onAvatarPress ? 'button' : undefined}
         accessibilityLabel={verified ? 'Business profile, verified' : 'Business profile'}
         style={styles.avatar}>
-        <Text style={styles.initial}>{initial.toUpperCase()}</Text>
+        {imageUrl ? <Image source={{ uri: imageUrl }} style={styles.photo} /> : <Text style={styles.initial}>{initial.toUpperCase()}</Text>}
         {verified ? (
           <View style={styles.tick}>
             <Feather name="check" size={9} color={colors.white} />
@@ -52,6 +54,7 @@ const styles = StyleSheet.create({
   row: { flexDirection: 'row', alignItems: 'center', gap: 12 },
   avatar: { width: 38, height: 38, borderRadius: radius.sm, backgroundColor: colors.ink, alignItems: 'center', justifyContent: 'center' },
   initial: { fontFamily: fonts.display, fontSize: 16, color: colors.white },
+  photo: { width: 38, height: 38, borderRadius: radius.sm },
   tick: {
     position: 'absolute',
     right: -4,

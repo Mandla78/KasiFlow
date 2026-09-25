@@ -33,6 +33,7 @@ export default function Account() {
     <Screen tab>
       <TopBar
         verified={isVerified(profile)}
+        imageUrl={profile.profileImageUrl}
         onAvatarPress={() => router.push('/informal-business/business')} initial={profile.businessName[0] ?? 'K'} title="Account" subtitle={profile.businessName} />
       <View style={{ gap: 6 }}>
         <Title>Your tools</Title>

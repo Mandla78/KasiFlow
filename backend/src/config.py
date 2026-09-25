@@ -184,4 +184,9 @@ def get_config(env_name: str | None = None):
         mail_missing = [k for k in ("MAIL_SERVER", "MAIL_USERNAME", "MAIL_PASSWORD", "MAIL_DEFAULT_SENDER") if not os.environ.get(k)]
         if mail_missing:
             raise RuntimeError(f"Missing email settings for production: {', '.join(mail_missing)}.")
+        if os.environ.get("MEDIA_PROVIDER", "cloudinary") != "cloudinary":
+            raise RuntimeError("MEDIA_PROVIDER must be cloudinary in production.")
+        media_missing = [k for k in ("CLOUDINARY_CLOUD_NAME", "CLOUDINARY_API_KEY", "CLOUDINARY_API_SECRET") if not os.environ.get(k)]
+        if media_missing:
+            raise RuntimeError(f"Missing media settings for production: {', '.join(media_missing)}.")
     return config

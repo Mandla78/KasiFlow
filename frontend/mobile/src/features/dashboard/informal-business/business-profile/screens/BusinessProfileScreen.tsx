@@ -10,9 +10,10 @@ import type { Profile } from '@/features/auth/types';
 import { Card, ListRow } from '@/shared/components/Parts';
 import { Screen } from '@/shared/components/Screen';
 import { Overline } from '@/shared/components/Text';
-import { colors, fonts, radius } from '@/shared/theme/tokens';
+import { colors, fonts } from '@/shared/theme/tokens';
 
 import { CipcStatusCard } from '../../more/components/CipcStatusCard';
+import { ProfilePhoto } from '../components/ProfilePhoto';
 
 const YEARS = { under_1: 'Less than a year', '1_3': '1 to 3 years', '3_plus': 'More than 3 years' } as const;
 const FULFIL = { delivery: 'Delivered', collect: 'I collect', either: 'Delivered or collect' } as const;
@@ -53,9 +54,7 @@ export default function BusinessProfileScreen() {
   return (
     <Screen back>
       <View style={styles.head}>
-        <View style={styles.avatar}>
-          <Text style={styles.avatarText}>{(profile.businessName[0] ?? 'A').toUpperCase()}</Text>
-        </View>
+        <ProfilePhoto />
         <View style={{ flex: 1, gap: 4 }}>
           <Text style={styles.name}>{profile.businessName}</Text>
           <Text style={styles.sub}>{profile.ownerName || profile.email}</Text>
@@ -97,9 +96,7 @@ export default function BusinessProfileScreen() {
 }
 
 const styles = StyleSheet.create({
-  head: { flexDirection: 'row', alignItems: 'center', gap: 14 },
-  avatar: { width: 60, height: 60, borderRadius: radius.md, backgroundColor: colors.ink, alignItems: 'center', justifyContent: 'center' },
-  avatarText: { fontFamily: fonts.display, fontSize: 24, color: colors.white },
+  head: { flexDirection: 'row', alignItems: 'flex-start', gap: 14 },
   name: { fontFamily: fonts.display, fontSize: 21, color: colors.ink },
   sub: { fontFamily: fonts.body, fontSize: 13, color: colors.textMuted },
   badge: { flexDirection: 'row', alignItems: 'center', gap: 5, alignSelf: 'flex-start', backgroundColor: colors.iconTile, borderRadius: 999, paddingVertical: 4, paddingHorizontal: 10 },

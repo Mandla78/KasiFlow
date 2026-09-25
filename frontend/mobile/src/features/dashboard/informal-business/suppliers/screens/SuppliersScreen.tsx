@@ -58,6 +58,7 @@ export default function SuppliersScreen() {
     <Screen tab>
       <TopBar
         verified={isVerified(profile)}
+        imageUrl={profile.profileImageUrl}
         onAvatarPress={() => router.push('/informal-business/business')}
         initial={profile.businessName[0] ?? 'A'}
         title="Suppliers"

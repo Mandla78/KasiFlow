@@ -1,6 +1,6 @@
 import { Feather } from '@expo/vector-icons';
 import { router } from 'expo-router';
-import { StyleSheet, Text, View } from 'react-native';
+import { Image, StyleSheet, Text, View } from 'react-native';
 
 import { Card, ListRow } from '@/shared/components/Parts';
 import { Screen } from '@/shared/components/Screen';
@@ -22,12 +22,17 @@ export default function More() {
     <Screen tab>
       <TopBar
         verified={isVerified(profile)}
+        imageUrl={profile.profileImageUrl}
         onAvatarPress={() => router.push('/informal-business/business')} initial={profile.businessName[0] ?? 'K'} title="More" subtitle={profile.businessName} />
 
       <Card onPress={() => router.push('/informal-business/business')}>
         <View style={styles.profile}>
           <View style={styles.avatar}>
-            <Text style={styles.avatarText}>{(profile.ownerName[0] ?? 'K').toUpperCase()}</Text>
+            {profile.profileImageUrl ? (
+              <Image source={{ uri: profile.profileImageUrl }} style={styles.avatarPhoto} />
+            ) : (
+              <Text style={styles.avatarText}>{(profile.ownerName[0] ?? 'K').toUpperCase()}</Text>
+            )}
           </View>
           <View style={{ flex: 1 }}>
             <View style={styles.nameRow}>
@@ -84,6 +89,7 @@ const styles = StyleSheet.create({
   profile: { flexDirection: 'row', alignItems: 'center', gap: 12 },
   avatar: { width: 50, height: 50, borderRadius: radius.md, backgroundColor: colors.ink, alignItems: 'center', justifyContent: 'center' },
   avatarText: { fontFamily: fonts.display, fontSize: 20, color: colors.white },
+  avatarPhoto: { width: 50, height: 50, borderRadius: radius.md },
   name: { fontFamily: fonts.bold, fontSize: 16, color: colors.text },
   nameRow: { flexDirection: 'row', alignItems: 'center', gap: 8 },
   verified: { flexDirection: 'row', alignItems: 'center', gap: 4, backgroundColor: colors.accentTint, borderRadius: 999, paddingVertical: 2, paddingHorizontal: 8 },

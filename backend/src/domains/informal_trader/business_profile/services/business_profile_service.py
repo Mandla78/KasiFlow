@@ -138,6 +138,7 @@ def public_view(p: Optional[BusinessProfile]) -> Optional[dict]:
         else {**{f: getattr(p, f) or "" for f in _LOCATION[:6]}, "latitude": float(p.latitude), "longitude": float(p.longitude)},
         "buying": {f: getattr(p, f) for f in _BUYING},
         "tools": p.tools or {},
+        "profile_image_url": p.profile_image_url,
         "verified": p.cipc_status == "verified",
         "onboarded": p.onboarded_at is not None,
         "updated_at": p.updated_at.isoformat() if p.updated_at else None,

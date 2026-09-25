@@ -40,3 +40,6 @@ class BusinessAuditEvent(str, enum.Enum):
     BUSINESS_PROFILE_SAVED = "business.profile_saved"
     CIPC_CHECKED = "business.cipc_checked"
     CIPC_CHECK_LIMITED = "business.cipc_check_limited"
+    PROFILE_IMAGE_UPLOADED = "business.profile_image_uploaded"
+    PROFILE_IMAGE_REMOVED = "business.profile_image_removed"
+    PROFILE_IMAGE_REJECTED = "business.profile_image_rejected"

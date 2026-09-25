@@ -75,5 +75,8 @@ class BusinessProfile(BaseModel):
 
     tools = db.Column(JSONB, nullable=False, default=dict)
 
+    #: The CURRENT approved profile photo (see business_profile_image.py).
+    profile_image_url = db.Column(db.String(1000), nullable=True)
+
     #: First time every required answer was in: onboarding finished.
     onboarded_at = db.Column(db.DateTime(timezone=True), nullable=True)

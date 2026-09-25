@@ -115,6 +115,27 @@ def list_customers():
 
 **Email is always real** (`MAIL_PROVIDER=smtp`): codes and reset links go to the user's inbox through the email templates, and are never written to any log. Set the `MAIL_*` settings in `backend/.env` (Gmail with an app password today; any SMTP relay later: Brevo, SendGrid, Amazon SES…; see `.env.example`). `MAIL_PROVIDER=fake` exists only for the automated tests. Production refuses to start with the fake provider or missing mail settings. Every email has an HTML and a plain-text version (`src/shared/email/templates/*.html` + `*.txt`).
 
+### Building a feature? How to use media (photos)
+
+Images live on **Cloudinary**; the phone uploads **straight to Cloudinary** with a one-upload signature from our server, so Flask never carries image bytes. Everything is in `backend/src/shared/media/` (adapted from TruConnect, see `REUSE.md`). The profile photo is the worked example: `domains/informal_trader/business_profile/services/profile_image_service.py`.
+
+Folders (`shared/media/folder_naming.py`), by owner first. `{key}` is an HMAC of the id, never our database id:
+
+```
+akayza/informal-trader/{key}/profile/          profile photo            (built)
+akayza/informal-trader/{key}/jobs/{job-key}/   job photos (builders)    -> folder_naming.informal_trader_job_folder(user_id, job_id)
+akayza/supplier/{key}/profile/                 supplier photo           -> supplier_profile_folder(supplier_id)
+akayza/supplier/{key}/products/{product-key}/  product images           -> supplier_product_folder(supplier_id, product_id)
+akayza/supplier/{key}/categories/              category images          -> supplier_category_folder(supplier_id)
+```
+
+The flow, three calls (copy the profile photo's):
+1. `POST .../upload-signature` → `create_intent(...)` + `get_media_provider().generate_signed_upload(public_id, max_px, folder)`.
+2. The phone posts the file to Cloudinary with exactly those fields.
+3. `POST ...` with `{public_id}` → check the prefix is the user's own folder, then **`get_media_provider().fetch_asset(public_id)`** for the real URL and size (never trust what the phone reports), `check_quota_before_upload`, save your row (`MediaAssetMixin`), `record_upload`, `mark_registered`.
+
+Abandoned uploads are deleted by the orphan sweep (every 30 min). Tests use `MEDIA_PROVIDER=fake` automatically (`tests/conftest.py`).
+
 ## 3. Mobile
 
 ```powershell
