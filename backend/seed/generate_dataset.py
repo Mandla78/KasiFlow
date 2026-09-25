@@ -438,10 +438,10 @@ def main() -> None:
     for number, s in enumerate(SUPPLIERS, start=1):
         folder = OUT / s["slug"]
         folder.mkdir(parents=True, exist_ok=True)
-        (folder / "supplier.json").write_text(json.dumps(supplier_json(s), indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+        (folder / "supplier.json").write_text(json.dumps(supplier_json(s), indent=2, ensure_ascii=False) + "\n", encoding="utf-8", newline="\n")
         rows = products(s, number)
         with (folder / "products.csv").open("w", encoding="utf-8", newline="") as f:
-            writer = csv.DictWriter(f, fieldnames=columns)
+            writer = csv.DictWriter(f, fieldnames=columns, lineterminator="\n")  # same bytes on every OS
             writer.writeheader()
             writer.writerows(rows)
         total += len(rows)
