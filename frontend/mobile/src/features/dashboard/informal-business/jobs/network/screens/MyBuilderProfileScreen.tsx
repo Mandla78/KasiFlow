@@ -14,21 +14,22 @@ import { colors, fonts, radius } from '@/shared/theme/tokens';
 import { networkApi } from '../api/networkApi';
 import { ABOUT_MAX, MAX_TRADES, TRAVEL_CHOICES } from '../lib/limits';
 import { TRADES, type Trade } from '../lib/trades';
-import type { MyWorkItem } from '../types';
+import type { MyBuild } from '../types';
 
 /** The questions builders ask before showing themselves (15_JOBS_BUILDER_NETWORK_PLAN.txt). */
 const QUESTIONS: [string, string][] = [
   ['Will other builders take my clients?', "No. Your clients' names and numbers are never shown."],
-  ['Who sees my number?', 'Only builders you connect with, or pick on a help post.'],
-  ['Can I hide my work?', 'Yes. You choose every photo, and you can hide everything any time.'],
-  ['What if someone is fake?', "Work photos come from stages clients confirmed. Report or block anyone from their profile's ..."],
+  ['Who sees my number?', 'Only builders you work a job with: an invite you accept, or a help post where you are picked.'],
+  ['Can I hide my work?', 'Yes. You choose every build, and you can hide everything any time.'],
+  ['What if someone is fake?', "Builds come from stages clients confirmed. Report or block anyone from their profile's ..."],
+  ['How do I get paid as a partner?', 'The builder states your pay before you say yes. They pay you in cash, and you both confirm it.'],
   ['Does it cost money or data?', "It's free. Small photos load first."],
 ];
 
 /**
  * Your builder profile: trades, one line about you, how far you travel,
- * "Show me to other builders" (off until you turn it on), and which photos
- * of your confirmed stages other builders see. Nothing is shown by default.
+ * "Show me to other builders" (off until you turn it on), and which of
+ * your client-confirmed builds other builders see.
  */
 export default function MyBuilderProfileScreen() {
   const [ready, setReady] = useState(false);
@@ -37,7 +38,7 @@ export default function MyBuilderProfileScreen() {
   const [about, setAbout] = useState('');
   const [travelKm, setTravelKm] = useState(20);
   const [visible, setVisible] = useState(false);
-  const [work, setWork] = useState<MyWorkItem[]>([]);
+  const [builds, setBuilds] = useState<MyBuild[]>([]);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState('');
   const [attempt, setAttempt] = useState(0);
@@ -52,7 +53,7 @@ export default function MyBuilderProfileScreen() {
         setAbout(p.about);
         setTravelKm(p.travelKm);
         setVisible(p.visible);
-        setWork(p.work);
+        setBuilds(p.builds);
         setFailed(false);
         setReady(true);
       })
@@ -71,7 +72,7 @@ export default function MyBuilderProfileScreen() {
     setSaving(true);
     setError('');
     try {
-      await networkApi.saveMyProfile({ trades, about, travelKm, visible, shownWorkIds: work.filter((w) => w.shown).map((w) => w.id) });
+      await networkApi.saveMyProfile({ trades, about, travelKm, visible, shownBuildIds: builds.filter((b) => b.shown).map((b) => b.id) });
       router.back();
     } catch (err) {
       setError(err instanceof ApiError ? err.message : "Couldn't save. Check your connection and try again.");
@@ -137,23 +138,23 @@ export default function MyBuilderProfileScreen() {
       </View>
 
       <View style={styles.section}>
-        <Overline>Your work</Overline>
-        <Text style={styles.small}>Photos of stages your clients confirmed. Choose what other builders see.</Text>
-        {work.length ? (
+        <Overline>Your builds</Overline>
+        <Text style={styles.small}>Jobs your clients confirmed, with their stage photos. Choose what other builders see.</Text>
+        {builds.length ? (
           <Card style={{ paddingVertical: 0 }}>
-            {work.map((w, i) => (
-              <View key={w.id} style={[styles.workRow, i < work.length - 1 && styles.rule]}>
-                <Image source={w.photo} style={styles.thumb} />
+            {builds.map((w, i) => (
+              <View key={w.id} style={[styles.workRow, i < builds.length - 1 && styles.rule]}>
+                {w.photos[0] ? <Image source={w.photos[0].photo} style={styles.thumb} /> : null}
                 <View style={{ flex: 1 }}>
-                  <Text style={styles.workTitle}>{w.stageName}</Text>
+                  <Text style={styles.workTitle}>{w.title}</Text>
                   <Text style={styles.small}>
-                    {w.jobTitle} · {w.suburb}
+                    {w.suburb} · {w.photos.length === 1 ? '1 photo' : `${w.photos.length} photos`}
                   </Text>
                 </View>
                 <Switch
                   value={w.shown}
-                  onValueChange={(v) => setWork((cur) => cur.map((x) => (x.id === w.id ? { ...x, shown: v } : x)))}
-                  accessibilityLabel={`Show ${w.stageName}`}
+                  onValueChange={(v) => setBuilds((cur) => cur.map((x) => (x.id === w.id ? { ...x, shown: v } : x)))}
+                  accessibilityLabel={`Show ${w.title}`}
                   trackColor={{ false: colors.line, true: colors.ink }}
                   thumbColor={colors.white}
                 />
@@ -161,7 +162,7 @@ export default function MyBuilderProfileScreen() {
             ))}
           </Card>
         ) : (
-          <Text style={styles.muted}>Photos show up here when a client confirms a stage that has a photo.</Text>
+          <Text style={styles.muted}>Your builds show up here when a client confirms a job&apos;s stages with photos.</Text>
         )}
         <InfoNote icon="camera">Avoid faces and house numbers. Only the suburb is shown, never the address.</InfoNote>
       </View>

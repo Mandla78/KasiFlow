@@ -11,34 +11,37 @@ import { colors, fonts } from '@/shared/theme/tokens';
 
 import { jobsApi } from '../api/jobsApi';
 import { NETWORK_READY } from '../network/api/networkApi';
+import { PartnerJobsList } from '../network/components/PartnerJobsList';
 import { SegmentedTabs } from '../network/components/SegmentedTabs';
-import { ForYouTab } from '../network/screens/ForYouTab';
+import { BuildersTab } from '../network/screens/BuildersTab';
 import { SuppliersTab } from '../network/screens/SuppliersTab';
 import { PaidProgress } from '../components/PaidProgress';
 import { confirmedCents, currentStage, statusLabel } from '../lib/stages';
 import { Job } from '../types';
 
-type Tab = 'for-you' | 'jobs' | 'suppliers';
+type Tab = 'jobs' | 'builders' | 'suppliers';
 
 const TABS: { key: Tab; label: string }[] = [
-  { key: 'for-you', label: 'For you' },
-  { key: 'jobs', label: 'Jobs' },
+  { key: 'jobs', label: 'My jobs' },
+  { key: 'builders', label: 'Builders' },
   { key: 'suppliers', label: 'Suppliers' },
 ];
 
 /**
- * Jobs (builders and trades), in three tabs (15_JOBS_BUILDER_NETWORK_PLAN.txt):
- *   For you    the builder network: builders to work with, help wanted, your people
- *   Jobs       active jobs with what's paid and confirmed, and the next stage.
+ * Jobs (builders and trades), in three tabs (15_JOBS_BUILDER_NETWORK_PLAN.txt,
+ * DECISION_jobs_partners.txt):
+ *   My jobs    active jobs with what's paid and confirmed, and the next stage;
+ *              invites from other builders and jobs you're a partner on.
  *              Done jobs live in History, deleted ones in the bin. Each job is
  *              paid in stages; each stage is a photo plus the client's sign-off.
+ *   Builders   find partners by the builds their clients confirmed
  *   Suppliers  suppliers for your jobs (coming soon)
- * Until the network's backend exists, the real API shows the Jobs list only.
+ * Until the network's backend exists, the real API shows My jobs only.
  */
 export default function JobsScreen() {
   const params = useLocalSearchParams<{ binned?: string; tab?: Tab }>();
-  // Back from deleting a job: the Jobs tab, where its Undo is.
-  const tab: Tab = !NETWORK_READY || params.binned ? 'jobs' : (params.tab ?? 'for-you');
+  // Back from deleting a job: My jobs, where its Undo is.
+  const tab: Tab = !NETWORK_READY || params.binned ? 'jobs' : (params.tab ?? 'jobs');
   const setTab = (t: Tab) => router.setParams({ tab: t });
   const [jobs, setJobs] = useState<Job[] | null>(null);
   const [failed, setFailed] = useState(false);
@@ -80,8 +83,8 @@ export default function JobsScreen() {
       <Title>Jobs</Title>
       {NETWORK_READY ? <SegmentedTabs tabs={TABS} value={tab} onChange={setTab} /> : null}
 
-      {tab === 'for-you' ? (
-        <ForYouTab />
+      {tab === 'builders' ? (
+        <BuildersTab />
       ) : tab === 'suppliers' ? (
         <SuppliersTab />
       ) : failed ? (
@@ -96,6 +99,7 @@ export default function JobsScreen() {
         </View>
       ) : (
         <>
+          {NETWORK_READY ? <PartnerJobsList /> : null}
           {active.length === 0 ? (
             <Card style={styles.center}>
               <IconTile name="tool" size={44} />

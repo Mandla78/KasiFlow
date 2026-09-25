@@ -16,18 +16,20 @@ import { networkApi, SAMPLE_ANSWERS } from '../api/networkApi';
 import { ContactButtons } from '../components/ContactButtons';
 import { PersonRow } from '../components/PersonRow';
 import { ShowMeSheet } from '../components/ShowMeSheet';
-import { pickedText } from '../lib/contact';
+import { dealText } from '../lib/contact';
+import { offerText, paidWhenText } from '../lib/pay';
 import { neededText, postDetails } from '../lib/postText';
-import { kmText, stagesText } from '../lib/recommend';
+import { kmText } from '../lib/recommend';
 import type { BuilderCard, HelpPost } from '../types';
 
 const REFRESH_MS = 4000;
 const openBuilder = (id: string) => router.push({ pathname: '/informal-business/jobs/builders/[builderId]', params: { builderId: id } });
 
 /**
- * A help post. Yours: who's interested (with their proof and work), pick
- * one, then WhatsApp or call them. Someone else's: who posted it, and
- * "I'm interested".
+ * A help post: an offer posted nearby, with the pay. Yours: who's
+ * interested (with their builds), pick one and they're your partner on the
+ * job, then WhatsApp or call them. Someone else's: who posted it, the pay,
+ * and "I'm interested".
  */
 export default function HelpPostScreen() {
   const { postId } = useLocalSearchParams<{ postId: string }>();
@@ -110,7 +112,13 @@ export default function HelpPostScreen() {
           />
         </View>
         <Text style={styles.what}>{post.what}</Text>
-        <Text style={styles.muted}>{postDetails(post)}</Text>
+        <Text style={styles.muted}>{postDetails({ ...post, days: post.offer.days })}</Text>
+      </View>
+
+      <View style={styles.pay}>
+        <Text style={styles.payLabel}>{post.mine ? 'The pay you offered' : 'Your pay'}</Text>
+        <Text style={styles.payValue}>{offerText(post.offer)}</Text>
+        <Text style={styles.payWhen}>Cash, {paidWhenText(post.offer.paidWhen, [post.what])}</Text>
       </View>
 
       {error ? <InfoNote icon="alert-circle">{error}</InfoNote> : null}
@@ -121,9 +129,20 @@ export default function HelpPostScreen() {
             <Card style={{ gap: 12 }}>
               <View style={styles.pickedHead}>
                 <Feather name="check-circle" size={18} color={colors.jade} />
-                <Text style={styles.pickedText}>You picked {picked.builder.name}. Send the details:</Text>
+                <Text style={styles.pickedText}>{picked.builder.name.split(' ')[0]} is your partner on the job. Send the details:</Text>
               </View>
-              <ContactButtons name={picked.builder.name} phone={picked.builder.phone} message={pickedText(picked.builder.name, me, post)} />
+              <ContactButtons
+                name={picked.builder.name}
+                phone={picked.builder.phone}
+                message={dealText(picked.builder.name, me, { jobTitle: post.jobTitle ?? 'the job', suburb: post.suburb, stageNames: [post.what], startsOn: post.startsOn, offer: post.offer })}
+              />
+              {post.jobId ? (
+                <Button
+                  title="Open the job"
+                  variant="secondary"
+                  onPress={() => router.dismissTo({ pathname: '/informal-business/jobs/[id]', params: { id: post.jobId! } })}
+                />
+              ) : null}
             </Card>
           ) : null}
 
@@ -135,7 +154,7 @@ export default function HelpPostScreen() {
                   <PersonRow
                     key={r.builder.id}
                     builder={r.builder}
-                    line={`${stagesText(r.builder.confirmedStages)} · ${kmText(r.builder.distanceKm)}`}
+                    line={`${r.builder.buildsConfirmed} builds confirmed · ${kmText(r.builder.distanceKm)}`}
                     onOpen={() => openBuilder(r.builder.id)}
                     last={i === post.responses.length - 1}
                     right={
@@ -164,7 +183,7 @@ export default function HelpPostScreen() {
             ) : null}
           </View>
 
-          <InfoNote icon="shield">Only who you pick gets your number, and you get theirs. The post closes after 7 days.</InfoNote>
+          <InfoNote icon="shield">Who you pick becomes your partner on the job, on this pay; you get each other&apos;s number. The post closes after 7 days.</InfoNote>
 
           {post.status === 'open' ? <Button title="Close this post" variant="secondary" onPress={() => setClosing(true)} /> : null}
         </>
@@ -176,7 +195,7 @@ export default function HelpPostScreen() {
               <Card style={{ paddingVertical: 0 }}>
                 <PersonRow
                   builder={post.owner}
-                  line={`${stagesText(post.owner.confirmedStages)}`}
+                  line={`${post.owner.buildsConfirmed} builds confirmed by clients`}
                   onOpen={() => openBuilder(post.owner!.id)}
                   last
                   right={<Feather name="chevron-right" size={18} color={colors.textFaint} />}
@@ -189,7 +208,7 @@ export default function HelpPostScreen() {
               You&apos;re interested. {post.owner?.name.split(' ')[0] ?? 'They'} sees your work and proof. If they pick you, you both get each other&apos;s number.
             </InfoNote>
           ) : (
-            <InfoNote icon="shield">Saying you&apos;re interested shares your builder profile, not your number. Numbers are shared only if you&apos;re picked.</InfoNote>
+            <InfoNote icon="shield">Saying you&apos;re interested shares your builds, not your number. If you&apos;re picked, you join the job on this pay and get each other&apos;s number.</InfoNote>
           )}
         </>
       )}
@@ -198,7 +217,7 @@ export default function HelpPostScreen() {
         <ConfirmSheet
           visible
           title={`Pick ${picking.name.split(' ')[0]}?`}
-          message={`You both get each other's number, and the post closes.`}
+          message={`They join the job on the pay you posted. You both get each other's number, and the post closes.`}
           confirmLabel={`Pick ${picking.name.split(' ')[0]}`}
           onCancel={() => setPicking(null)}
           onConfirm={() => {
@@ -237,6 +256,10 @@ const styles = StyleSheet.create({
   pickedText: { flex: 1, fontFamily: fonts.bold, fontSize: 14.5, color: colors.text },
   pick: { height: 38, minWidth: 72, paddingHorizontal: 14, borderRadius: radius.pill, backgroundColor: colors.ink, alignItems: 'center', justifyContent: 'center' },
   pickText: { fontFamily: fonts.bold, fontSize: 13.5, color: colors.white },
+  pay: { backgroundColor: colors.jadeTint, borderRadius: radius.sm, padding: 12, gap: 2 },
+  payLabel: { fontFamily: fonts.semibold, fontSize: 12, color: colors.jade, textTransform: 'uppercase', letterSpacing: 0.5 },
+  payValue: { fontFamily: fonts.display, fontSize: 22, color: colors.ink },
+  payWhen: { fontFamily: fonts.medium, fontSize: 13.5, color: colors.text },
   test: { flexDirection: 'row', alignItems: 'center', gap: 8, justifyContent: 'center', minHeight: 32 },
   testText: { fontFamily: fonts.semibold, fontSize: 12.5, color: colors.accentDeep },
 });
