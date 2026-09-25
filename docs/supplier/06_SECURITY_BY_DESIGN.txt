@@ -1,0 +1,54 @@
+===========================================================================
+SUPPLIER 06 -- SECURITY BY DESIGN (threats -> controls -> tests)
+===========================================================================
+
+  THREAT                               CONTROL                                 TEST
+  ------------------------------------ --------------------------------------- -------------------------------
+  Trader reads another trader's        every /me/orders query filtered by      trader B gets 404 on A's order,
+  order (IDOR)                         current_user().id; 404 for both         invoice, cancel
+                                       "missing" and "not yours"
+  Supplier key reads/changes another   every integration query filtered by    key of supplier X gets 404 on
+  supplier's products/orders           the key's supplier_id                   supplier Y's SKU/order
+  Price tampering from the phone       the phone sends product ids + qty only; a changed price in the request
+                                       server prices from the database;       is ignored (field refused)
+                                       lines keep a snapshot
+  Stock race (two traders, last item)  conditional UPDATE ... WHERE stock>=qty two concurrent orders for the
+                                       in the order transaction                last unit: one succeeds
+  Double order on a retry              Idempotency-Key on POST /me/orders      same key twice -> one order
+  Order spam / scraping                rate limits per user (app) and per      429 after the limit; audited
+                                       API key (integration); page sizes
+                                       capped
+  Stolen / leaked API key              hashed at rest, prefix only in logs,   revoked key -> 401 at once;
+                                       scopes, expiry, instant revoke, IP      wrong scope -> 403
+                                       allow-list option, audit per use
+  Forged PayFast notification          4 ITN checks (07): signature+passphrase, forged ITN -> refused, order
+                                       PayFast source, amount == order,        stays unpaid; replayed ITN ->
+                                       server-to-server validate; idempotent   no double effect
+  Order marked paid by the app         payment status set ONLY by the          PATCH from app refused
+                                       verified ITN (or the cash handshake)
+  Malicious supplier content           CleanText on text; images re-hosted     script/emoji/control chars in
+  (script in names, huge images)       through media (size/type checked)       a CSV row -> row rejected
+  CSV import abuse (huge file,         size limit, row limit, formula-         a 10 MB file refused; "=cmd"
+  CSV formula injection in exports)    injection guard when we EXPORT CSV     cell prefixed on export
+                                       (prefix =,+,-,@ with ')
+  Webhook to a malicious URL (SSRF)    supplier webhook URLs: https only, no   http://169.254.169.254 refused
+                                       private/loopback IPs, resolved and
+                                       checked before each call, short timeout
+  Personal data to suppliers           suppliers get the business name, the    the webhook/order payload never
+                                       delivery address, a phone for the       contains credit-book data
+                                       driver -- nothing else (POPIA)
+  Secrets in logs                      no keys, ITN payloads redacted, no      log test like the email one
+                                       full addresses in logs
+
+
+  AUDIT (append-only trail, already built)
+    supplier created/paused; key created/revoked/used-with-wrong-scope;
+    import started/finished (counts); order placed/accepted/rejected/
+    cancelled/dispatched/delivered; payment verified/failed; cash
+    confirmed/disputed.
+
+
+  RATE LIMITS (starting numbers)
+    app: browse 120/min, place order 10/min + 50/day per user
+    integration: 600/min per key, batch 60/min, imports 10/hour
+    PayFast notify: per source IP generous, but every call verified

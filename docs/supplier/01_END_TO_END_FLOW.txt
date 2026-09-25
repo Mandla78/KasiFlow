@@ -1,0 +1,57 @@
+===========================================================================
+SUPPLIER 01 -- THE END-TO-END FLOW
+===========================================================================
+
+THE TRADER'S JOURNEY (the app)
+
+  1. SUPPLIERS TAB -- "Near you": suppliers the recommendation engine
+     ranks for this trader, each with plain reasons ("Delivers to
+     Tembisa", "Sells 4 things you buy", "Accepts cash"), plus "Your
+     suppliers" (ordered from before).
+  2. SUPPLIER PAGE -- logo, about, area, hours, delivery/collect, how you
+     can pay, minimum order; a category filter; the product GRID.
+  3. PRODUCT -- photos (1-7), pack size, unit, price, stock hint, [+].
+  4. CART -- one cart per supplier; quantities; running total; minimum
+     order check; "Continue".
+  5. CHECKOUT -- delivery (to the business pin, or another address) or
+     collect (supplier's address + hours); payment: in the app (PayFast)
+     or cash on delivery/collection (only what this supplier accepts);
+     review; "Place order".
+  6. PAY -- in-app: PayFast's secure page; the order is PAID only when
+     our server has verified PayFast's notification (07). Cash: nothing
+     to pay yet; the order pass is issued.
+  7. MY ORDERS -- list (active first), each with status; order detail:
+     items, totals, timeline (Placed -> Accepted -> On its way ->
+     Delivered / Ready to collect -> Collected), the ORDER PASS (QR) for
+     cash or collection, the INVOICE/RECEIPT (PDF).
+  8. DELIVERY -- cash: both sides type the amount (the handshake,
+     plan 09); match -> "Confirmed by both"; differ -> "Amounts don't
+     match" (a dispute, never silently fixed).
+  9. RECORD -- every paid/confirmed order is an entry on My record.
+ 10. "WHAT YOU OWE SUPPLIERS" -- from real orders (stock on credit, cash
+     due on delivery), not typed by hand.
+
+
+THE SUPPLIER'S SIDE (their systems + our API; no app)
+
+  a. ONBOARDING (by us, this weekend by script/CLI): supplier profile,
+     PayFast merchant ID for payouts, API credentials with scopes.
+  b. CATALOGUE: their ERP pushes products, prices and stock (JSON API),
+     or uploads a CSV/JSON file (bulk import) -- validated row by row.
+  c. ORDERS: we notify them (signed webhook to their system, and email to
+     their orders address); they accept / reject / dispatch / mark ready
+     through the API (or, for the demo, the backend does it on a timer).
+  d. MONEY: in-app payments reach their PayFast account through Split
+     Payments (07); cash is confirmed by their driver in the handshake.
+  e. DOCUMENTS: the tax invoice is the SUPPLIER's (they are the seller);
+     we generate it on their behalf from their details (08).
+
+
+ORDER STATES (server-owned; the app never sets them)
+
+    placed -> accepted -> (delivery) out_for_delivery -> delivered
+                       -> (collect)  ready_for_collection -> collected
+    placed -> rejected | cancelled (by the trader before acceptance)
+    payment: unpaid -> pending -> paid | failed | refunded
+             cash: due -> confirmed_by_both | disputed
+    Every change is audited and written to the trader's record.

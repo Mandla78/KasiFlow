@@ -1,0 +1,79 @@
+===========================================================================
+SUPPLIER 07 -- PAYMENTS AND PAYOUTS
+How a trader pays, and how the money reaches the supplier -- without
+Akayza ever holding it.
+===========================================================================
+
+1. PAYING IN THE APP (PayFast)
+---------------------------------------------------------------------------
+
+  1. Trader places the order (server-priced; payment_status "unpaid").
+  2. App asks our backend for a PayFast payment for that order; the
+     backend builds the signed request (merchant id/key, amount from the
+     ORDER, m_payment_id = our order reference, return/cancel/notify URLs,
+     signature with our passphrase) -- the app never sets the amount.
+  3. The app opens PayFast's page (in-app browser). The trader pays.
+  4. PayFast calls our notify_url (the ITN). The order becomes PAID only
+     after ALL FOUR checks pass:
+       a) the signature, recomputed with our passphrase, matches
+       b) the call comes from PayFast (source IP / host is PayFast's)
+       c) the amount equals the order's amount
+       d) we post the data back to PayFast's validate endpoint and it
+          answers VALID (server-to-server confirmation)
+     Plus: idempotent (the same ITN twice changes nothing), the order
+     must be in a payable state, the raw ITN is stored redacted.
+  5. The return page in the app only SHOWS the status we got from the
+     ITN; returning from PayFast proves nothing by itself.
+
+
+2. HOW THE MONEY REACHES THE SUPPLIER (the decision)
+---------------------------------------------------------------------------
+
+  OPTION A -- PAYFAST SPLIT PAYMENTS (recommended)
+    PayFast Split Payments pays a portion of each payment instantly to a
+    SECOND PayFast merchant: a fixed amount, a percentage, or both, with a
+    min and max. One receiving merchant per transaction (so one order =
+    one supplier, which is already our rule). The supplier needs their own
+    PayFast merchant account; we store only their MERCHANT ID (not their
+    secrets). Our platform fee is what's not split.
+    Why: the money moves supplier-ward inside PayFast, instantly; we never
+    hold it or pay out ourselves; the supplier's own PayFast account is the
+    record they already trust.
+
+  OPTION B -- pay into the supplier's own merchant account, fee split back
+    Needs each supplier's merchant KEY and PASSPHRASE on our servers (more
+    secrets to guard) -- rejected unless PayFast requires it.
+
+  OPTION C -- we collect everything and pay suppliers out later
+    Rejected: that's holding client money (regulation, risk, trust).
+
+  TO VERIFY with PayFast before launch (10): which account receives first
+  and the fee treatment on a split; whether the whole amount minus our
+  fee can be split; refunds on split payments; how the receiving merchant
+  is linked/approved.
+
+
+3. CASH (the showcase; plan 09)
+---------------------------------------------------------------------------
+
+  Cash on delivery or collection: the order pass (QR) is scanned; both
+  sides type the amount without seeing the other's; match -> "confirmed
+  by both"; differ -> "amounts don't match" (dispute). The supplier's
+  cash limit per order applies. Cash never touches Akayza.
+
+
+4. REFUNDS AND CANCELLATIONS
+---------------------------------------------------------------------------
+
+  Before payment: cancel freely. After an in-app payment: refund through
+  PayFast (API or merchant dashboard -- to verify); status "refunded"
+  only when PayFast confirms. Rejected-by-supplier after payment ->
+  automatic refund request, audited.
+
+
+5. SETTINGS (backend/.env; sandbox now)
+---------------------------------------------------------------------------
+
+  PAYFAST_MODE=sandbox, PAYFAST_MERCHANT_ID, PAYFAST_MERCHANT_KEY,
+  PAYFAST_PASSPHRASE, PUBLIC notify URL (the ngrok address in development)
+  Production refuses to start in sandbox mode or without a passphrase.

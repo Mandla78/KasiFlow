@@ -1,0 +1,104 @@
+===========================================================================
+SUPPLIER 04 -- BACKEND PLAN
+===========================================================================
+
+DOMAINS AND FOLDERS (the scaffold already exists)
+
+  domains/supplier/supplier_profile/   suppliers: profile, hours, delivery,
+                                       payments accepted, payout id, logo
+  domains/supplier/catalogue/          products, images, stock, prices
+  domains/supplier/integration/        API credentials, scopes, bulk import
+                                       jobs, outbound webhooks
+  domains/commerce/orders/             carts are on the phone; orders,
+                                       order lines, status history
+  domains/commerce/payments/           PayFast checkout + ITN, payment
+                                       records, refunds (07)
+  domains/supplier/recommendation/     the supplier recommendation engine
+                                       (new folder)
+  shared/documents/ (new)              PDF invoice/receipt rendering (08)
+
+
+TABLES (schema "supplier" and "commerce"; BaseModel everywhere)
+
+  supplier.suppliers        external_id (unique), trading/legal name,
+                            about, vat_number, orders_email, phone,
+                            address + lat/lng, hours (JSONB), delivery
+                            radius/fee/free-over, collect, in_app, cash,
+                            cash_limit, minimum_order, categories[],
+                            payfast_merchant_id, logo_url, status
+                            (active/paused)
+  supplier.products         supplier_id, external_id (SKU; unique per
+                            supplier), name, brand, category, unit,
+                            pack_size, price_cents, vat_included, stock,
+                            min_qty, max_qty, barcode, description, active
+  supplier.product_images   product_id, position 1-7, MediaFileColumns
+  supplier.api_credentials  supplier_id, key_prefix, key_hash (HMAC),
+                            scopes[], created/last_used/expires/revoked
+  supplier.import_jobs      supplier_id, kind (products_csv/json), counts
+                            (created, updated, failed), errors (JSONB,
+                            row + reason), status
+  commerce.orders           reference (human: AKZ-2026-000123), trader
+                            user_id, supplier_id, fulfilment, address
+                            snapshot, payment_method, subtotal/delivery/
+                            total cents, status, payment_status,
+                            idempotency key, placed_at...
+  commerce.order_lines      order_id, product_id, SNAPSHOT of name/unit/
+                            pack/price at order time, qty, line_total
+  commerce.order_events     order_id, from -> to, by (trader / supplier
+                            key / system), at -- append-only
+  commerce.payments         order_id, provider (payfast), provider
+                            reference, amount, status, raw ITN (redacted),
+                            verified_at
+
+
+APIS
+
+  Trader (app), all @auth_required(dashboard="informal_business"):
+    GET  /suppliers/recommended          ranked, with reasons
+    GET  /suppliers/{id}                 profile (public facts only)
+    GET  /suppliers/{id}/products        ?category=&q=&page=
+    GET  /products/{id}
+    POST /me/orders                      {supplier_id, lines[{product_id,
+                                         qty}], fulfilment, address?,
+                                         payment_method} + Idempotency-Key
+                                         -> server-priced order
+    GET  /me/orders, GET /me/orders/{id}, POST /me/orders/{id}/cancel
+    GET  /me/orders/{id}/invoice.pdf     (08)
+
+  Supplier systems (integration, API key auth, 05):
+    PUT  /integration/v1/products/{sku}          upsert one
+    POST /integration/v1/products:batch          up to 500
+    POST /integration/v1/imports                 CSV/JSON file
+    PATCH /integration/v1/products/{sku}/stock   {stock}
+    GET  /integration/v1/orders?status=placed
+    POST /integration/v1/orders/{ref}/accept | reject | dispatch | ready
+
+  PayFast: POST /payments/payfast/notify (public, ITN checks, 07)
+
+
+THE SUPPLIER RECOMMENDATION ENGINE (v1, explainable, no black box)
+
+  Candidates: active suppliers who can serve the trader:
+    delivery: distance(trader pin, supplier pin) <= radius, or
+    collect: within a reasonable distance (e.g. 20 km).
+  Score (0-100), each part with its reason line:
+    + category overlap with what the trader buys   (strongest)
+    + distance (closer is better; delivers beats collect-only)
+    + payment fit (trader prefers cash / in-app)
+    + fulfilment fit (trader's delivery/collect choice)
+    + "your supplier" (ordered before, delivered, confirmed)
+    - minimum order well above the trader's usual spend (caution only)
+  Distance: haversine in Python (no PostGIS needed at this size).
+  Output = the shape the app's SupplierMatch already expects.
+
+
+RULES
+
+  - Prices, totals, delivery fees: computed on the server from the
+    database at order time; lines store a snapshot.
+  - Stock: checked and held on placement (UPDATE ... WHERE stock >= qty,
+    in one transaction); released on reject/cancel.
+  - Money in cents (bigint); VAT per product flag; rounding rules in one
+    place.
+  - Order placement is idempotent (Idempotency-Key): a retried "Place
+    order" never creates two orders.

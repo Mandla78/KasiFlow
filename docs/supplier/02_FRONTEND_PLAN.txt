@@ -1,0 +1,79 @@
+===========================================================================
+SUPPLIER 02 -- FRONTEND PLAN (mock first, every feature in its own folder)
+===========================================================================
+
+WHY SEPARATE FOLDERS
+
+  When something breaks, the folder names it: a wrong price in the grid is
+  catalogue/, a wrong total is cart/, a wrong status is orders/. Each
+  folder has the same inside, like the credit book:
+
+    types.ts   api/ (interface + mock + http later)   components/
+    lib/ (pure helpers, testable)   screens/
+
+  Features talk to each other only through their api/ and types.ts, never
+  by reaching into another folder's components.
+
+
+THE FOLDERS  (src/features/dashboard/informal-business/...)
+
+  suppliers/      (exists: "Near you" list, SupplierCard)
+    screens/  SuppliersScreen (recommended + your suppliers)
+              SupplierScreen  (one supplier: header, about, hours,
+                               payment/delivery facts, category chips)
+    api/      supplierApi (list + one supplier), mock from the dataset
+
+  catalogue/      products, categories
+    screens/  (none: the grid lives on SupplierScreen)
+    components/ ProductGrid (3 columns), ProductCard, CategoryChips,
+                ProductSheet (photos 1-7, details, quantity, add)
+    api/      catalogueApi: products(supplierId, category?, search?),
+              product(id)
+    lib/      formatPack(), priceLine()
+
+  cart/           one cart per supplier, kept on the phone
+    screens/  CartScreen
+    components/ CartLine, QuantityStepper, MinimumOrderBar
+    lib/      cartStore (add/remove/set qty, per supplier; totals are
+              an ESTIMATE until the server prices the order)
+
+  checkout/
+    screens/  CheckoutScreen (delivery/collect, address, payment method,
+              review) -> PlaceOrder
+    components/ FulfilmentChoice, PaymentChoice, OrderSummary
+
+  orders/         "My orders"
+    screens/  OrdersScreen (active / past), OrderScreen (detail:
+              timeline, items, totals, pass, documents)
+    components/ StatusTimeline, OrderPass (QR), DocumentLinks
+    api/      ordersApi: place(cart), list(), get(id), cancel(id)
+
+  (later) payments/  PayFast WebView + return screens
+  (later) handshake/ the cash confirmation screens (plan 09)
+
+  Routes (thin, app/(dashboard)/informal-business/...):
+    suppliers/[id].tsx, cart/[supplierId].tsx, checkout/[supplierId].tsx,
+    orders/index.tsx, orders/[id].tsx
+
+
+MOCK DATA
+
+  The mock reads a small slice of the dataset (03): 3 suppliers, ~20
+  products each, 1-3 images each (placeholders), so the screens look real.
+  Mock order statuses advance on a timer (placed -> accepted -> on its
+  way) so the whole flow can be demoed without a backend.
+
+
+REVIEW STEP
+
+  All screens on mock -> Mandla reviews on the phone -> fixes -> THEN the
+  backend is built to the same shapes (04).
+
+
+UI RULES
+
+  Same components and palette as the rest of the app; money as cents
+  with formatRand; prices always say "incl. VAT" (or not) as the supplier
+  sets; "Estimated total" in the cart, "Total" only after the server
+  priced the order; no internal jargon (no "SKU" on screen, "code" if
+  needed); every list: loading, empty, error.

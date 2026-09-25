@@ -1,0 +1,90 @@
+===========================================================================
+SUPPLIER 03 -- THE DATASET (synthetic, realistic, integration-ready)
+===========================================================================
+
+WHY SYNTHETIC
+
+  Real supplier data would need their permission; a fake that looks like
+  a real company would be impersonation. So: fictional companies, clearly
+  fictional details (example.com emails, fake-but-valid-format numbers
+  marked as test), realistic products and South African prices.
+
+
+THE SUPPLIERS (fictional)
+
+  Mahlangu Wholesale      spaza groceries, drinks, household   digital + cash
+                          Tembisa, delivers 15 km
+  Ndlovu Hardware         building materials, plumbing,        digital
+                          electrical, tools; Ivory Park, 25 km
+  Glow Distributors       fragrance, personal care, phone      digital
+                          accessories; Soweto, collect + 10 km
+  (+ Kasi Cold Drinks     beverages only, digital + cash -- if time)
+
+
+FILES  (backend/seed/suppliers/<slug>/)
+
+  supplier.json      the profile (below)
+  products.csv       the catalogue (below)
+  images/            placeholders we generate (logo + 1-7 per product)
+
+  The SAME files are what a supplier's ERP would send: the loader and the
+  integration API accept exactly these shapes (05). Mock mode reads a
+  small slice; the backend imports all of it.
+
+  Sizes: mock ~20 products per supplier; backend 150-300 per supplier
+  (hundreds in total) to prove import, paging, search and speed.
+
+
+supplier.json
+
+  {
+    "external_id": "MAHLANGU-001",
+    "trading_name": "Mahlangu Wholesale",
+    "legal_name": "Mahlangu Wholesale (Pty) Ltd",       (fictional)
+    "about": "Groceries and drinks for spaza shops, delivered daily.",
+    "vat_number": null | "4xxxxxxxxx" (test, marked),
+    "orders_email": "orders@mahlangu.example.com",
+    "phone": "0110000000",
+    "collection_address": {street, suburb, city, province, postal_code,
+                           latitude, longitude},
+    "hours": [{"days": "mon-fri", "open": "07:00", "close": "17:00"}, ...],
+    "delivery": {"offers": true, "radius_km": 15, "fee_cents": 0,
+                 "free_over_cents": 150000},
+    "collect": true,
+    "payments": {"in_app": true, "cash": true, "cash_limit_cents": 500000},
+    "minimum_order_cents": 50000,
+    "categories": ["food_grocery", "beverages", ...],   (our 22 codes)
+    "payout": {"payfast_merchant_id": "<sandbox id>"}
+  }
+
+products.csv  (one row per product; UTF-8; header row)
+
+  sku, name, brand, category, unit, pack_size, price_rands, vat_included,
+  stock, min_qty, max_qty, barcode, description, active, image_1..image_7
+
+  - category: one of our 22 codes; unit: each | pack | case | bag | kg |
+    litre | metre | roll ...; price_rands like 189.99 (converted to cents,
+    rounding refused if more than 2 decimals)
+  - barcode: 13-digit EAN with a valid check digit, from a fictional
+    prefix
+  - image_n: a file name in images/ or an https URL; 1-7 per product
+  - bad rows are REPORTED (row number + reason), never silently dropped
+
+
+IMAGES (no real photos: we generate them)
+
+  A clean placeholder per product image: the category icon, the product
+  name and pack size on a soft brand colour; logos as monograms. Uploaded
+  through our media pipeline to
+    akayza-dev/supplier/{key}/profile/            the logo
+    akayza-dev/supplier/{key}/products/{key}/     1-7 per product
+  -- which also proves the real upload path end to end.
+
+
+HOW IT'S MADE
+
+  A script (backend/seed/generate_dataset.py) builds the CSV/JSON from
+  realistic product lists per category (SA brands kept generic: "Maize
+  meal 10kg", not a trademark as the product's identity), prices with
+  sensible ranges, stock levels, and the placeholders. Deterministic
+  (seeded), so everyone gets the same data.

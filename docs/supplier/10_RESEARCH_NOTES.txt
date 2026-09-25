@@ -1,0 +1,57 @@
+===========================================================================
+SUPPLIER 10 -- RESEARCH NOTES (sources, and what's still to verify)
+Checked Friday 25 September 2026.
+===========================================================================
+
+PAYFAST SPLIT PAYMENTS
+  - Splits a portion of each online payment instantly to a third party:
+    fixed amount, percentage, or both; min and max possible.
+  - One receiving merchant per split transaction; the receiver's
+    Merchant ID is mandatory; amounts in cents.
+  - Two ways: a global split set up by PayFast support, or split data
+    sent in each payment request (per-payment control -- what we need).
+  - The receiving party needs its own PayFast account.
+  Sources:
+    https://payfast.io/features/split-payments/
+    https://support.payfast.help/portal/en/kb/articles/how-do-i-integrate-split-payments-into-my-platform
+    https://developers.payfast.co.za/documentation/#split-payments
+  TO VERIFY in the developer docs / with PayFast: exact field names,
+  which account receives first, fees on the split, refunds of split
+  payments, how a receiving merchant is linked.
+
+PAYFAST ITN (payment notifications)
+  - Checks: valid signature (with the passphrase as salt); source is
+    PayFast (IP / *.payfast.co.za outside sandbox); amount matches the
+    order; server-to-server POST to PayFast's validate endpoint must
+    answer VALID. Ports used: 80, 8080, 8081, 443.
+  Sources:
+    https://support.payfast.co.za/portal/en/kb/articles/what-causes-the-itn-security-check-errors
+    https://developers.payfast.co.za/
+
+VAT INVOICES (SARS, VAT Act s20)
+  - R50-R5,000: abridged tax invoice (no buyer details required).
+  - Over R5,000: full tax invoice incl. buyer's name, address, VAT number.
+  - Must say "Tax Invoice" / "VAT Invoice" / "Invoice"; supplier name,
+    address, VAT number; serial number; date; description; quantity;
+    value; VAT. Issue within 21 days.
+  Sources:
+    https://www.sars.gov.za/businesses-and-employers/government/tax-invoices/
+    https://taxfaculty.ac.za/news/read/vat-invoice-requirements
+
+ERP INTEGRATION
+  - Sage (Evolution / 200, 300, X3), SYSPRO, SAP B1, Dynamics BC, Odoo,
+    Xero are common; Sage X3 e-commerce exposes a REST JSON API; older
+    on-premise Sage installs often need middleware/connectors (e.g.
+    Commercient syncs orders, inventory, customers with Shopify/Magento);
+    local integrators push orders to the ERP and stock back to the store.
+  Sources:
+    https://www.sage.com/en-za/sage-business-cloud/sage-x3/complementary-solutions/sage-ecommerce/
+    https://www.commercient.com/product/sync-integration-for-sage-200-evolution-south-african-and-shopify/
+    https://prefsol.co.za/web-marketing-services/ecommerce-integration-services/
+  Our conclusion: a REST API + signed webhooks + file import covers all
+  three patterns (05).
+
+STILL TO RESEARCH
+  - PayFast refunds API and sandbox behaviour for splits
+  - PDF library choice on Windows (fpdf2 vs ReportLab) -- quick spike
+  - Whether suppliers need a data processing agreement template (POPIA)

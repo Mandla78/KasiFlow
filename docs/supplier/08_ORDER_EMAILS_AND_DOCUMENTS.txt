@@ -1,0 +1,50 @@
+===========================================================================
+SUPPLIER 08 -- ORDER EMAILS AND DOCUMENTS (invoice, receipt)
+===========================================================================
+
+1. EMAILS (our email templates: HTML + .txt twin, never secrets)
+---------------------------------------------------------------------------
+
+  To the TRADER                      To the SUPPLIER (orders_email)
+  order placed (summary, ref)        new order (lines, fulfilment, how
+  order accepted / rejected (why)      paid, delivery address, trader's
+  paid (receipt attached/linked)       business name + phone for delivery)
+  on its way / ready to collect      order cancelled by the trader
+  delivered / collected              payment confirmed
+  cash confirmed by both / dispute   cash confirmed / dispute
+
+  Rules: the trader's customers and credit book are never in any email;
+  links point to the app (or an https page), never embed tokens; sent in
+  the background (MAIL_ASYNC) so ordering never waits for email;
+  per-address caps like the sign-up emails.
+
+
+2. DOCUMENTS (PDF)
+---------------------------------------------------------------------------
+
+  TAX INVOICE -- the SUPPLIER's document (they are the seller), generated
+  by us on their behalf from their details, per the VAT Act (s20):
+    - words "Tax Invoice" (when the supplier is VAT-registered)
+    - supplier's name, address, VAT number
+    - serial number (per supplier, e.g. MAH-2026-000123), date of issue
+    - description, quantity, value of the supply, VAT amount (or "VAT
+      included" statement)
+    - R50 to R5,000: an ABRIDGED tax invoice is enough
+    - over R5,000: a FULL tax invoice, which ALSO needs the buyer's name,
+      address and VAT number (if they have one)
+    - issued within 21 days of the sale
+    Non-VAT supplier -> "Invoice" (no VAT lines).
+
+  PAYMENT RECEIPT -- Akayza's record that money moved: order ref, amount,
+  method (paid in the app / cash confirmed by both), date/time, PayFast
+  reference (in-app) -- "not a tax invoice" printed on it.
+
+  How: rendered on the server from the order snapshot (never from what
+  the app sends), with a pure-Python PDF library (fpdf2 or ReportLab --
+  no system GTK dependency on Windows). The PDF's SHA-256 is stored with
+  the order, so a changed copy can be spotted. Download:
+  GET /me/orders/{id}/invoice.pdf (the trader's own orders only), also
+  attached to the "paid"/"delivered" email.
+
+  Numbering: gap-free per supplier, allocated in the same transaction
+  that issues the invoice (a sequence table row locked FOR UPDATE).

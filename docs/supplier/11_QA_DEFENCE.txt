@@ -1,0 +1,56 @@
+===========================================================================
+SUPPLIER 11 -- Q&A DEFENCE (what judges will ask; our answers)
+Only claim what's built by then. Update after each phase.
+===========================================================================
+
+Q: Where do the suppliers come from? Are they real?
+A: Suppliers connect their own systems to our integration API; for the
+   demo they're fictional companies with a realistic catalogue of
+   hundreds of products, imported through the SAME API and file import a
+   real supplier's ERP would use. No supplier app to install.
+
+Q: How does a supplier's ERP actually connect?
+A: Three ways, because that's what SA wholesalers run: their system pushes
+   to our REST API (per-supplier keys with scopes), a connector syncs both
+   ways, or they upload CSV/JSON exports. Orders reach them by signed
+   webhook or by polling. We can show a key being created, an import with
+   a row-error report, a stock change appearing in the app.
+
+Q: What stops a supplier (or a stolen key) touching another supplier's data?
+A: Every integration query is scoped to the key's supplier; keys are
+   hashed, scoped, expiring and instantly revocable; wrong scope -> 403,
+   revoked -> 401; every use is audited.
+
+Q: Can a trader change the price in the app and pay less?
+A: No. The app sends products and quantities only; the server prices the
+   order from the database and keeps a snapshot on each line.
+
+Q: Do you hold the money?
+A: No. In-app payments go through PayFast, and Split Payments pays the
+   supplier's own PayFast account directly; cash is between the trader and
+   the driver, and both confirm the amount. We never pay out.
+
+Q: How do you know a payment is real?
+A: Only PayFast's notification marks an order paid, after four checks:
+   signature with our passphrase, it came from PayFast, the amount
+   matches, and PayFast confirms it server-to-server. The app's return
+   page can't mark anything paid.
+
+Q: What about invoices and tax?
+A: The invoice is the supplier's (they're the seller); we generate it
+   from their details following SARS's rules (abridged up to R5,000, full
+   above), with a gap-free number per supplier, and store its hash.
+
+Q: Two traders order the last item at once?
+A: Stock is held in the same database transaction with a conditional
+   update; one order succeeds, the other is told it's out of stock.
+
+Q: Why would suppliers integrate?
+A: Orders from hundreds of spaza shops near them, paid in the app or in
+   cash that's confirmed on both sides, with fewer disputes -- through the
+   system they already run.
+
+Q: POPIA?
+A: Suppliers receive only what an order needs (business name, delivery
+   address, a phone for the driver); a trader's customers and credit book
+   never leave the trader's account.

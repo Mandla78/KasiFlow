@@ -1,0 +1,97 @@
+===========================================================================
+SUPPLIER 05 -- ERP INTEGRATION (research + our design)
+Our strongest Q&A point: "we integrate with the systems suppliers
+already run". Built properly, defended with evidence.
+===========================================================================
+
+1. WHAT SUPPLIERS ACTUALLY RUN (research, 10_RESEARCH_NOTES)
+---------------------------------------------------------------------------
+
+  South African wholesalers and distributors mostly run Sage (Sage 200
+  Evolution / Pastel, Sage 300, Sage X3), SYSPRO, SAP Business One,
+  Microsoft Dynamics 365 Business Central, Odoo, Xero/Sage Accounting for
+  smaller ones.
+  Three real-world patterns connect them to online stores:
+    a) the ERP (or a connector) PUSHES products/stock/prices to the
+       store's REST API and PULLS orders back
+    b) middleware / connector products sync both ways (e.g. Commercient,
+       local integrators) -- common for older on-premise Sage installs
+       that have no clean API
+    c) scheduled FILE exports (CSV) uploaded to the store
+  So we support all three with ONE model:
+    REST API (push + pull), signed WEBHOOKS for orders, and FILE IMPORT
+    (CSV/JSON) for systems that can only export files.
+
+
+2. OUR DESIGN
+---------------------------------------------------------------------------
+
+  AUTHENTICATION -- API keys, per supplier
+    - Format: akz_live_<prefix>_<secret> / akz_test_... (test keys only
+      touch the sandbox supplier and fake orders)
+    - Shown ONCE at creation; we store only the HMAC of the secret and
+      the visible prefix (to identify it in logs and audit)
+    - Scopes (least privilege): catalogue:write, stock:write,
+      orders:read, orders:write, webhooks:manage
+    - Expiry, rotation (two keys valid during a switch), instant revoke,
+      last_used_at, optional IP allow-list per key
+    - Header: Authorization: Bearer akz_live_...
+    - Optional request signing (HMAC over method+path+timestamp+body,
+      5-minute window) for suppliers who want it; required for webhooks
+      we send them
+
+  CREDENTIALS WITHOUT A DASHBOARD (this weekend)
+    flask supplier create --file seed/suppliers/mahlangu/supplier.json
+    flask supplier keys create --supplier MAHLANGU-001 --scopes catalogue:write,orders:read --test
+    flask supplier keys list / revoke
+    flask supplier import --supplier MAHLANGU-001 --file products.csv
+    (the keys print once to the terminal; the audit trail records who
+    created/revoked which prefix -- API_KEY_* events already exist)
+
+  ENDPOINTS  /api/integration/v1/  (versioned; separate from the app API)
+    PUT   products/{sku}            upsert one product
+    POST  products:batch            up to 500 per call, per-item results
+    POST  imports                   a CSV/JSON file; returns a job id;
+    GET   imports/{id}              job status + row errors
+    PATCH products/{sku}/stock      fast stock-only updates
+    PATCH products/{sku}/price
+    GET   orders?status=placed&since=...   (pull, for systems without
+                                    webhooks)
+    POST  orders/{ref}/accept | reject {reason} | dispatch | ready
+    POST  webhooks                  register their HTTPS endpoint
+
+  OUTBOUND WEBHOOKS (we -> supplier)
+    order.placed, order.cancelled, payment.confirmed, cash.confirmed
+    Signed: X-Akayza-Signature = HMAC-SHA256(secret, timestamp + body),
+    X-Akayza-Timestamp; retries with back-off (1m, 5m, 30m, 2h, 12h);
+    never contains the trader's customers or credit book -- only what the
+    order needs.
+
+  CORRECTNESS
+    - Idempotency-Key on every write (src/shared/idempotency exists): an
+      ERP retrying after a timeout never doubles a product or an action
+    - Upserts by SKU (external_id): re-sending the catalogue is safe
+    - Deltas: stock/price-only endpoints so a busy ERP needn't resend all
+    - Every row validated; bad rows reported (row, field, reason), good
+      rows still applied
+    - Content hygiene: supplier text through CleanText; images only via
+      our media pipeline (their URL is fetched, checked, re-hosted), never
+      hot-linked
+
+
+3. SANDBOX
+---------------------------------------------------------------------------
+
+  Test keys work against a sandbox supplier with fake orders, so a
+  supplier's developer can build their connector without touching live
+  traders. The demo uses test keys throughout.
+
+
+4. WHAT WE SHOW IN THE DEMO / Q&A
+---------------------------------------------------------------------------
+
+  - Creating a supplier and a scoped key from the CLI (key shown once)
+  - A CSV import of hundreds of products with a row-error report
+  - A stock update through the API appearing in the app
+  - An order placed in the app arriving through the API / webhook
+  - A revoked key failing immediately (401), a wrong scope failing (403)

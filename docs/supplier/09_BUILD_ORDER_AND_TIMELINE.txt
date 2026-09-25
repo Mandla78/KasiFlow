@@ -1,0 +1,51 @@
+===========================================================================
+SUPPLIER 09 -- BUILD ORDER AND TIMELINE (to Sunday 09:00)
+Branch: mandla/supplier. Merge to main only when a phase works.
+===========================================================================
+
+PHASE 1 -- FRONTEND ON MOCK (Friday evening)            [review gate]
+  1.1 dataset slice for the mock (3 suppliers, ~20 products each)
+  1.2 suppliers/: recommended list (real shape), SupplierScreen
+  1.3 catalogue/: category chips, 3-column grid, product sheet (photos)
+  1.4 cart/: per-supplier cart, stepper, minimum order, estimated total
+  1.5 checkout/: delivery/collect, payment choice, review, place order
+  1.6 orders/: My orders list, order detail (timeline, lines, pass,
+      documents placeholder); mock statuses advance on a timer
+  -> MANDLA REVIEWS ON THE PHONE; fixes; then Phase 2
+
+PHASE 2 -- DATASET + CATALOGUE + INTEGRATION (Friday night / Sat morning)
+  2.1 generate_dataset.py: suppliers (JSON), products (CSV, hundreds),
+      placeholder images 1-7, uploaded via media
+  2.2 supplier_profile + catalogue tables, migration, loader, CLI
+      (create supplier, keys, import)
+  2.3 integration API: keys, scopes, upserts, batch, import jobs,
+      stock/price deltas, rate limits, audit; tests (IDOR per key,
+      scopes, revoke, idempotency, bad rows)
+  2.4 trader API: suppliers, products (paging, search)
+  2.5 supplier recommendation engine + tests; app switches to real
+
+PHASE 3 -- ORDERS (Saturday)
+  3.1 orders tables, place (server pricing, stock hold, idempotency),
+      list/get/cancel, supplier accept/reject/dispatch via API
+  3.2 order emails (trader + supplier), audit, record entries
+  3.3 app: real orders; My orders; order detail
+
+  Sat 11:00 DevLab, 12:30 SSDLC (bring 06), War Rooms 12:00-17:00
+
+PHASE 4 -- PAYFAST (Saturday midnight, as Mandla said)
+  4.1 sandbox account, checkout, ITN with all four checks, Split Payments
+  4.2 app: pay in the app, return screen shows the verified status
+  4.3 PDF invoice + receipt, attached to the email
+
+PHASE 5 -- CASH PATH + "WHAT YOU OWE SUPPLIERS" (Saturday night)
+  5.1 order pass QR, both amounts, match/dispute (plan 09)
+  5.2 owed-to-suppliers view from orders
+
+SUNDAY
+  06:00 code freeze   07:00 demo run on the phone   09:00 SUBMIT
+
+IF TIME RUNS OUT, CUT IN THIS ORDER (last = never)
+  outbound webhooks (keep the pull API) -> refunds -> full tax invoice
+  (keep abridged) -> collection flow (keep delivery) -> ...
+  NEVER CUT: suppliers -> grid -> cart -> order -> paid in the app
+  (PayFast sandbox) -> the cash path with a mismatch -> the record
