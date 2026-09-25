@@ -12,6 +12,9 @@ from flask import Flask
 from src.config import get_config
 from src.extensions import bcrypt, db, jwt, ma, migrate
 
+#: Deeper JSON than this is refused (400) before any route sees it.
+MAX_JSON_DEPTH = 32
+
 
 def create_app(env_name: str | None = None) -> Flask:
     app = Flask(__name__)
@@ -162,20 +165,36 @@ def _register_input_guard(app: Flask) -> None:
 
     from src.core.responses import error_response
 
+    class _TooDeep(Exception):
+        pass
+
     def _has_nul(value) -> bool:
-        if isinstance(value, str):
-            return "\x00" in value
-        if isinstance(value, dict):
-            return any(_has_nul(k) or _has_nul(v) for k, v in value.items())
-        if isinstance(value, list):
-            return any(_has_nul(v) for v in value)
+        """Walks the JSON with its own stack, not recursion: a body nested
+        thousands deep can't overflow Python's stack (found by Risuna's
+        hostile-input tests). No request of ours nests past a few levels."""
+        stack = [(value, 0)]
+        while stack:
+            item, depth = stack.pop()
+            if depth > MAX_JSON_DEPTH:
+                raise _TooDeep()
+            if isinstance(item, str):
+                if "\x00" in item:
+                    return True
+            elif isinstance(item, dict):
+                stack.extend((k, depth + 1) for k in item.keys())
+                stack.extend((v, depth + 1) for v in item.values())
+            elif isinstance(item, list):
+                stack.extend((v, depth + 1) for v in item)
         return False
 
     @app.before_request
     def _refuse_nul():
-        found = any(_has_nul(v) for v in request.args.values()) or any(_has_nul(v) for v in request.form.values())
-        if not found and request.is_json:
-            found = _has_nul(request.get_json(silent=True))
+        try:
+            found = any(_has_nul(v) for v in request.args.values()) or any(_has_nul(v) for v in request.form.values())
+            if not found and request.is_json:
+                found = _has_nul(request.get_json(silent=True))
+        except (_TooDeep, RecursionError):  # RecursionError: the JSON parser itself gave up
+            return error_response(message="The request isn't in a shape we accept.", status_code=400, code="INVALID_BODY")
         if found:
             return error_response(message="The request contains characters we don't accept.", status_code=400, code="INVALID_CHARACTERS")
 

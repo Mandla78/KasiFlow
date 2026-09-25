@@ -28,4 +28,8 @@ TEST
   when the guard is fixed it starts passing, pytest flags it, and the
   mark comes off.
 
-DECISION:
+DECISION: Option (a), done 25 Sep 2026 (Mandla). The guard walks the JSON with
+its own stack and refuses deeper than 32 levels (400 INVALID_BODY); a
+RecursionError from the JSON parser itself (100,000 deep) is also a 400.
+Your xfail mark is removed and the test passes; identity's hostile-input
+tests cover the public sign-in route too. Thanks for finding it.
