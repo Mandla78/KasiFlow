@@ -35,8 +35,9 @@ PRIORITIES (in this order; deadline: final submission Sun 09:00)
   Branches: risuna/tools-bin, risuna/order-book-ui, risuna/order-book-api,
   risuna/jobs-v2. Same rules as before (11_AI_AGENT_BRIEF.txt): mock +
   contract first, Mandla approves, then backend. Base your branches on
-  mandla/supplier (it has your merged work + the supplier side), not main,
-  until Mandla merges it into main.
+  main (git pull first): it now has your merged work AND the supplier side
+  (docs/supplier/ is the supplier plan). Your old branches are merged;
+  don't reuse them.
 
 
 ---------------------------------------------------------------------------
