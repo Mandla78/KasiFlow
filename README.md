@@ -134,7 +134,7 @@ The flow, three calls (copy the profile photo's):
 2. The phone posts the file to Cloudinary with exactly those fields.
 3. `POST ...` with `{public_id}` → check the prefix is the user's own folder, then **`get_media_provider().fetch_asset(public_id)`** for the real URL and size (never trust what the phone reports), `check_quota_before_upload`, save your row (`MediaAssetMixin`), `record_upload`, `mark_registered`.
 
-Abandoned uploads are deleted by the orphan sweep (every 30 min). Tests use `MEDIA_PROVIDER=fake` automatically (`tests/conftest.py`).
+Abandoned uploads are deleted by the orphan sweep (every 30 min). **Check the real setup any time:** `python scripts/verify_media.py` (from `backend/`, venv on; for the webhook step, run the backend and `ngrok http 5000 --url=<CLOUDINARY_WEBHOOK_BASE_URL>` first). Tests use `MEDIA_PROVIDER=fake` automatically (`tests/conftest.py`).
 
 ## 3. Mobile
 
