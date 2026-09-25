@@ -17,8 +17,9 @@ THE LIST
                                                    Profile
   Virtual check-in            Fri 15:30            VIRTUAL CHECK-IN      --
                                                    button
-  Problem statement (mentors) Fri 19:10-20:00      in the mentor call    05_final_submission
-                                                                         (slide 2 text)
+  PROBLEM STATEMENT           Fri 22:00 HARD       Sonke profile         01_team_profile/
+                                                                         PROBLEM_STATEMENT.txt
+  Problem statement (mentors) Fri 19:10-20:00      in the mentor call    (same text)
   Progress update #1          Fri 23:59            Progress Updates      02_progress_updates
   SSDLC (security)            Sat 12:30            SSDLC                 03_ssdlc
   War room (12 min, panel)    Sat 14:00-17:00      room by email         06_pitch

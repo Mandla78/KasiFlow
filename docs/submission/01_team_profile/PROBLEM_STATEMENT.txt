@@ -1,0 +1,98 @@
+===========================================================================
+PROBLEM STATEMENT  -- due FRIDAY 22:00 on Sonke (before assessing starts)
+===========================================================================
+
+No product name and no description of the solution here (the idea stays
+private until the pitch). This is the PROBLEM only. Every number has a
+source (bottom); check the [MANDLA] line before pasting.
+
+
+---------------------------------------------------------------------------
+PASTE-READY (about 170 words)
+---------------------------------------------------------------------------
+
+Spaza shop owners in South Africa's townships restock from wholesalers
+through phone calls, WhatsApp messages and cash handed to delivery
+drivers, and none of it leaves a record that both sides accept. That
+missing record costs them twice: a supplier can't reconcile the cash,
+and the owner can't prove the business trades at all.
+
+The scale is large. Spaza shops turn over about R180 billion a year
+inside a R900 billion township economy, yet about 80% of township
+businesses are unregistered, fewer than 9% can get a bank loan and 57%
+survive on personal savings (Standard Bank, 2025). When government
+opened a R500 million Spaza Shop Support Fund, only R179.6 million had
+reached 2,369 shops by May 2026: 354 applications failed verification
+(non-existent businesses, ownership mismatches) and only 58% of
+applicants held a valid municipal licence (DSBD, May 2026). Real shops
+can't prove themselves, and fake ones slip in. The owners are ready to
+change: more than 56% already prefer EFT to cash (Standard Bank, 2025).
+
+
+---------------------------------------------------------------------------
+THE FIVE PARTS (what the organisers asked for)
+---------------------------------------------------------------------------
+
+1. WHO
+   Spaza shop owners in South African townships: small, often
+   home-based (49% trade from a home or garage), mostly unregistered,
+   self-funded. And the wholesalers who supply them, who carry the
+   other half of every unrecorded order and cash handover.
+
+2. WHAT
+   Restocking runs on calls, WhatsApp and cash with no shared record.
+   So: (a) orders and cash payments can't be confirmed by both sides,
+   (b) nothing proves the shop trades, so it can't reach credit,
+   support funds or better supplier terms, and (c) wholesalers can't
+   reconcile what drivers collect.
+
+3. WHERE
+   South African townships, in the trade between spaza shops and their
+   wholesalers: at the counter, on the phone, and at the door when
+   stock and cash change hands. We start in Gauteng townships
+   (Tembisa, Ivory Park) and Limpopo, where our team is.
+
+4. WHY IT MATTERS AT SCALE
+   R180 billion a year flows through spaza shops (R900 billion township
+   economy). About 80% of township businesses are unregistered and
+   fewer than 9% can get a bank loan. Even a funded government
+   programme couldn't get money to them: R179.6 million of R500 million
+   deployed, because verification fails in both directions.
+
+5. EVIDENCE
+   - Standard Bank, Township Informal Economy Report 2025: R900bn
+     economy; spaza about R180bn; ~80% unregistered; <9% bank loans;
+     57% self-funded; 49% operate from home/garage; >56% prefer EFT.
+   - DSBD / dtic update, May 2026: R179.6m approved for 2,369 shops
+     from the R500m fund; 354 applications failed verification
+     (non-existent businesses, ownership discrepancies, applicant vs
+     operator mismatches); only 58% linked to a valid licence/permit.
+   - Lived experience [MANDLA: one or two sentences of what you have
+     seen yourself, e.g. a spaza owner you know, how they order, a cash
+     dispute with a driver. Only real observations; delete this line
+     if there is none.]
+
+
+---------------------------------------------------------------------------
+DON'T SAY / SAY (the organisers' rule)
+---------------------------------------------------------------------------
+
+  Don't: "Spaza shops struggle with records."
+  Say:   "About 80% of township businesses are unregistered and fewer
+         than 9% can get a bank loan (Standard Bank, 2025); 354 Spaza
+         Shop Support Fund applications failed verification and only 58%
+         of applicants held a valid licence (DSBD, 2026)."
+
+
+---------------------------------------------------------------------------
+SOURCES (checked 25 Sep 2026)
+---------------------------------------------------------------------------
+
+  Standard Bank, Township Informal Economy Report 2025 (launch, Oct 2025)
+    https://www.standardbank.co.za/southafrica/news-and-media/newsroom/80-percent-of-township-businesses-unregistered-reveals-standard-bank-inaugural-informal-economy-report
+    https://www.standardbank.co.za/southafrica/business/bizconnect/help-me-grow-my-business/articles/insights-from-the-launch-of-the-township-informal-economy-report-2025
+    https://www.moneyweb.co.za/news/south-africa/four-in-five-township-businesses-unregistered-as-economy-nears-r1trn/
+  DSBD and dtic, Spaza Shop Support Fund update (May 2026)
+    https://www.gov.za/news/media-statements/small-business-development-and-trade-industry-and-competition-update-spaza
+    https://www.sanews.gov.za/south-africa/government-approves-r1796-million-spaza-shop-support
+    https://www.sowetan.co.za/news/2026-05-31-only-r1796m-of-r500m-spaza-shop-fund-allocated-as-licensing-hurdles-stall-applications/
