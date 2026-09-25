@@ -22,9 +22,10 @@ export function formatPlace(p: PickedPlace): string {
 }
 
 /**
- * The entry point: shows the chosen address, or two ways to set one --
- * search, or the phone's location on the map. Either way ends on the map,
- * so the pin is always confirmed by the user.
+ * The entry point: shows the chosen address (tap to adjust the pin, or
+ * search a different one), or two ways to set one -- search, or the
+ * phone's location on the map. Every way ends on the map, so the pin is
+ * always confirmed by the user.
  */
 export function AddressPickerField({ label, value, onChange, mapTitle, confirmLabel, error }: Props) {
   const [searching, setSearching] = useState(false);
@@ -40,18 +41,25 @@ export function AddressPickerField({ label, value, onChange, mapTitle, confirmLa
     <View style={{ gap: 8 }}>
       <Text style={styles.label}>{label}</Text>
       {value ? (
-        <Pressable onPress={() => openMap({ latitude: value.latitude, longitude: value.longitude })} style={[styles.card, styles.cardSet]}>
-          <View style={styles.pinTile}>
-            <Feather name="map-pin" size={18} color={colors.white} />
-          </View>
-          <View style={{ flex: 1 }}>
-            <Text style={styles.addr}>{formatPlace(value)}</Text>
-            <Text style={styles.sub}>
-              {value.province} · pin set on the map
-            </Text>
-          </View>
-          <Text style={styles.change}>Change</Text>
-        </Pressable>
+        <>
+          <Pressable onPress={() => openMap({ latitude: value.latitude, longitude: value.longitude })} style={[styles.card, styles.cardSet]}>
+            <View style={styles.pinTile}>
+              <Feather name="map-pin" size={18} color={colors.white} />
+            </View>
+            <View style={{ flex: 1 }}>
+              <Text style={styles.addr}>{formatPlace(value)}</Text>
+              <Text style={styles.sub}>
+                {value.province} · pin set on the map
+              </Text>
+            </View>
+            <Text style={styles.change}>Change</Text>
+          </Pressable>
+          {/* Moved? "Change" adjusts the pin; this finds a whole new address. */}
+          <Pressable onPress={() => setSearching(true)} style={styles.searchAgain} accessibilityRole="button">
+            <Feather name="search" size={15} color={colors.ink} />
+            <Text style={styles.searchAgainText}>Search a different address</Text>
+          </Pressable>
+        </>
       ) : (
         <View style={styles.actions}>
           <Pressable onPress={() => setSearching(true)} style={[styles.card, error ? { borderColor: colors.garnet } : null]}>
@@ -88,6 +96,8 @@ export function AddressPickerField({ label, value, onChange, mapTitle, confirmLa
 
 const styles = StyleSheet.create({
   label: { fontFamily: fonts.semibold, fontSize: 13, color: colors.text },
+  searchAgain: { flexDirection: 'row', alignItems: 'center', gap: 8, paddingVertical: 8, alignSelf: 'flex-start' },
+  searchAgainText: { fontFamily: fonts.bold, fontSize: 13.5, color: colors.ink, textDecorationLine: 'underline' },
   actions: { gap: 10 },
   card: {
     flexDirection: 'row',
