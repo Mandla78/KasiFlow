@@ -1,13 +1,14 @@
 /**
- * "Builders you may know" and help-post matching, explainable like the
- * supplier engine (15_JOBS_BUILDER_NETWORK_PLAN.txt §6). Every candidate
- * gets a score out of 100 and the reasons behind it; the top reason goes on
- * the card. Plain arithmetic, no black box. The server will run the same
- * rules; this copy runs the mock.
+ * Which builders to show, explainable like the supplier engine
+ * (15_JOBS_BUILDER_NETWORK_PLAN.txt §6, with partners instead of
+ * connections: DECISION_jobs_partners.txt). Every candidate gets a score
+ * out of 100 and the reasons behind it; the top reason goes in lists.
+ * Plain arithmetic, no black box. The server will run the same rules; this
+ * copy runs the mock.
  *
  *   trade fit            30  trades that work together highest; same trade lower
  *   closeness            20  within your travel distance, nearer is better
- *   mutual connections   20  builders you both know ("triadic closure")
+ *   partners in common   20  builders you've both worked with ("triadic closure")
  *   proof                20  stages confirmed by clients, log-scaled
  *   activity             10  active in the last 30 days
  */
@@ -16,13 +17,16 @@ import { tradeFit, tradeLabel, type Trade } from './trades';
 
 const DAY = 86_400_000;
 
-export type Viewer = At & { id: string; trades: Trade[]; travelKm: number; connections: string[] };
+export type Viewer = At & { id: string; trades: Trade[]; travelKm: number; partners: string[] };
 
 export type Candidate = At & {
   id: string;
   name: string;
   trades: Trade[];
-  connections: string[];
+  /** How far they travel for work. */
+  travelKm: number;
+  /** Builders they've worked a job with. */
+  partners: string[];
   confirmedStages: number;
   lastActiveAt: string;
   joinedAt: string;
@@ -32,11 +36,11 @@ export type Scored = {
   id: string;
   score: number;
   distanceKm: number;
-  /** Names of builders you both know. */
-  mutual: string[];
+  /** Names of your partners who've also worked with them. */
+  inCommon: string[];
   /** Strongest first. */
   reasons: string[];
-  /** The one line for the card. */
+  /** The one line for lists. */
   reason: string;
 };
 
@@ -55,19 +59,19 @@ export function kmText(km: number): string {
   return `${tenths < 10 ? tenths.toFixed(1) : tenths.toFixed(0)} km`;
 }
 
-/** Closeness out of 20: full marks next door, nothing past your travel distance. */
+/** Closeness out of 20: full marks next door, nothing past the travel distance. */
 export function closeness(km: number, travelKm: number): number {
   if (km > travelKm) return 0;
   return 20 * (1 - km / travelKm);
 }
 
-/** Proof out of 20, log-scaled so a few big builders don't take every row (50 stages = full). */
+/** Proof out of 20, log-scaled so a few big builders don't take every place (50 stages = full). */
 export function proof(confirmedStages: number): number {
   return Math.min(20, (20 * Math.log1p(Math.max(0, confirmedStages))) / Math.log1p(50));
 }
 
-/** Out of 20: one builder you both know already counts. */
-export function mutualPoints(count: number): number {
+/** Out of 20: one partner in common already counts. */
+export function inCommonPoints(count: number): number {
   return Math.min(20, count * 8);
 }
 
@@ -79,11 +83,12 @@ export function stagesText(n: number): string {
   return n === 1 ? '1 stage confirmed by a client' : `${n} stages confirmed by clients`;
 }
 
-function mutualText(names: string[]): string {
-  const first = names[0].split(' ')[0];
-  if (names.length === 1) return `Works with ${first}, who you know`;
-  if (names.length === 2) return `Knows ${first} and ${names[1].split(' ')[0]}, who you know`;
-  return `Knows ${first} and ${names.length - 1} others you know`;
+const first = (name: string) => name.split(' ')[0] ?? name;
+
+function inCommonText(names: string[]): string {
+  if (names.length === 1) return `Built with ${first(names[0]!)}, your partner`;
+  if (names.length === 2) return `Built with ${first(names[0]!)} and ${first(names[1]!)}, your partners`;
+  return `Built with ${first(names[0]!)} and ${names.length - 1} other partners of yours`;
 }
 
 function plural(trade: Trade): string {
@@ -92,11 +97,11 @@ function plural(trade: Trade): string {
 
 export function scoreBuilder(me: Viewer, c: Candidate, nameOf: (id: string) => string, now: number): Scored {
   const km = distanceKm(me, c);
-  const mutual = c.connections.filter((id) => me.connections.includes(id)).map(nameOf);
+  const inCommon = c.partners.filter((id) => me.partners.includes(id)).map(nameOf);
   const parts = {
     trade: tradeFit(me.trades, c.trades),
     closeness: closeness(km, me.travelKm),
-    mutual: mutualPoints(mutual.length),
+    inCommon: inCommonPoints(inCommon.length),
     proof: proof(c.confirmedStages),
     activity: activity(c.lastActiveAt, now),
   };
@@ -105,7 +110,7 @@ export function scoreBuilder(me: Viewer, c: Candidate, nameOf: (id: string) => s
   const mine = me.trades[0];
 
   const reasons: [number, string][] = [];
-  if (mutual.length) reasons.push([parts.mutual + 20, mutualText(mutual)]);
+  if (inCommon.length) reasons.push([parts.inCommon + 20, inCommonText(inCommon)]);
   if (c.confirmedStages > 0) reasons.push([parts.proof, stagesText(c.confirmedStages)]);
   if (parts.trade === 30 && theirs && mine) reasons.push([parts.trade - 15, `${tradeLabel(theirs)}s often work with ${plural(mine)}`]);
   reasons.push([parts.closeness, km <= me.travelKm ? `${kmText(km)} from you` : `${kmText(km)} away, further than you travel`]);
@@ -113,29 +118,29 @@ export function scoreBuilder(me: Viewer, c: Candidate, nameOf: (id: string) => s
   if (isNew) reasons.push([1, 'New on Akayza']);
   reasons.sort((a, b) => b[0] - a[0]);
 
-  // The card line: who you know, then proof, then "new", then distance.
-  const reason = mutual.length
-    ? mutualText(mutual)
+  // The list line: partners in common, then proof, then "new", then distance.
+  const reason = inCommon.length
+    ? inCommonText(inCommon)
     : c.confirmedStages > 0
       ? stagesText(c.confirmedStages)
       : isNew
         ? 'New on Akayza'
-        : `${tradeLabel(theirs)} · ${kmText(km)}`;
+        : `${theirs ? tradeLabel(theirs) : 'Builder'} · ${kmText(km)}`;
 
-  const score = Math.round(parts.trade + parts.closeness + parts.mutual + parts.proof + parts.activity);
-  return { id: c.id, score, distanceKm: km, mutual, reasons: reasons.map((r) => r[1]), reason };
+  const score = Math.round(parts.trade + parts.closeness + parts.inCommon + parts.proof + parts.activity);
+  return { id: c.id, score, distanceKm: km, inCommon, reasons: reasons.map((r) => r[1]), reason };
 }
 
 /**
- * Builders you may know, best first. Never: yourself, your connections,
- * anyone blocked either way, anyone hidden (the caller leaves them out).
- * Fairness: after the top 3, every third place goes to a builder who joined
- * in the last 30 days, so new builders get their first connection too.
+ * Builders near you, best first (the caller leaves out yourself, your
+ * partners, saved and blocked builders). Fairness: after the top 3, every
+ * third place goes to a builder who joined in the last 30 days, so new
+ * builders get their first job with someone too.
  */
 export function suggest(me: Viewer, candidates: Candidate[], nameOf: (id: string) => string, now: number, limit = 12): Scored[] {
   const byId = new Map(candidates.map((c) => [c.id, c]));
   const ranked = candidates
-    .filter((c) => c.id !== me.id && !me.connections.includes(c.id))
+    .filter((c) => c.id !== me.id)
     .map((c) => scoreBuilder(me, c, nameOf, now))
     .sort((a, b) => b.score - a.score || a.distanceKm - b.distanceKm);
 
@@ -150,6 +155,24 @@ export function suggest(me: Viewer, candidates: Candidate[], nameOf: (id: string
     if (next) mixed.push(next);
   }
   return mixed.slice(0, limit);
+}
+
+/**
+ * Who could do this trade on a job at `site`: that trade only, and only
+ * builders the job is within travel distance for; then nearest, most
+ * proof, partners in common and most active first.
+ */
+export function rankForJob(me: Viewer, site: At, trade: Trade, candidates: Candidate[], nameOf: (id: string) => string, now: number): Scored[] {
+  return candidates
+    .filter((c) => c.id !== me.id && c.trades.includes(trade))
+    .map((c) => {
+      const km = distanceKm(site, c);
+      const s = scoreBuilder({ ...me, ...site, trades: [trade] }, c, nameOf, now);
+      return { ...s, distanceKm: km, score: Math.round(closeness(km, c.travelKm) + proof(c.confirmedStages) + inCommonPoints(s.inCommon.length) + activity(c.lastActiveAt, now)), fits: km <= c.travelKm };
+    })
+    .filter((s) => s.fits)
+    .sort((a, b) => b.score - a.score || a.distanceKm - b.distanceKm)
+    .map(({ fits: _fits, ...s }) => s);
 }
 
 export type PostCandidate = At & { id: string; trade: Trade; owner: Candidate };

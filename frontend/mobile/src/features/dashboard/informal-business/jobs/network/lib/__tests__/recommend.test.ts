@@ -1,6 +1,6 @@
 import { describe, expect, it } from '@jest/globals';
 
-import { closeness, distanceKm, kmText, proof, rankHelpPosts, scoreBuilder, suggest, type Candidate, type Viewer } from '../recommend';
+import { closeness, distanceKm, kmText, proof, rankForJob, rankHelpPosts, scoreBuilder, suggest, type Candidate, type Viewer } from '../recommend';
 import { tradeFit, tradesText } from '../trades';
 
 const NOW = Date.parse('2026-09-25T12:00:00Z');
@@ -8,7 +8,7 @@ const daysAgo = (n: number) => new Date(NOW - n * 86_400_000).toISOString();
 const TEMBISA = { latitude: -25.9964, longitude: 28.2268 };
 const IVORY_PARK = { latitude: -25.999, longitude: 28.196 };
 
-const me: Viewer = { id: 'me', ...TEMBISA, trades: ['general_builder'], travelKm: 20, connections: ['sipho'] };
+const me: Viewer = { id: 'me', ...TEMBISA, trades: ['general_builder'], travelKm: 20, partners: ['sipho'] };
 const names: Record<string, string> = { sipho: 'Sipho Dube', palesa: 'Palesa M' };
 const nameOf = (id: string) => names[id] ?? id;
 
@@ -18,7 +18,8 @@ function builder(id: string, extra: Partial<Candidate> = {}): Candidate {
     name: id,
     ...IVORY_PARK,
     trades: ['plumber'],
-    connections: [],
+    travelKm: 20,
+    partners: [],
     confirmedStages: 0,
     lastActiveAt: daysAgo(2),
     joinedAt: daysAgo(300),
@@ -65,13 +66,13 @@ describe('distance and parts', () => {
 });
 
 describe('scoreBuilder', () => {
-  it('puts who you both know first, and explains it', () => {
-    const s = scoreBuilder(me, builder('thabo', { connections: ['sipho'], confirmedStages: 12 }), nameOf, NOW);
-    expect(s.reason).toBe('Works with Sipho, who you know');
-    expect(s.reasons[0]).toBe('Works with Sipho, who you know');
+  it('puts partners in common first, and explains it', () => {
+    const s = scoreBuilder(me, builder('thabo', { partners: ['sipho'], confirmedStages: 12 }), nameOf, NOW);
+    expect(s.reason).toBe('Built with Sipho, your partner');
+    expect(s.reasons[0]).toBe('Built with Sipho, your partner');
     expect(s.reasons).toContain('12 stages confirmed by clients');
     expect(s.reasons).toContain('Plumbers often work with general builders');
-    expect(s.mutual).toEqual(['Sipho Dube']);
+    expect(s.inCommon).toEqual(['Sipho Dube']);
   });
 
   it('cold start: a new builder with nothing yet is still explained', () => {
@@ -83,8 +84,8 @@ describe('scoreBuilder', () => {
 });
 
 describe('suggest', () => {
-  it('never suggests yourself or your connections', () => {
-    const out = suggest(me, [builder('me'), builder('sipho'), builder('thabo')], nameOf, NOW);
+  it('never suggests yourself', () => {
+    const out = suggest(me, [builder('me'), builder('thabo')], nameOf, NOW);
     expect(out.map((s) => s.id)).toEqual(['thabo']);
   });
 
@@ -96,6 +97,26 @@ describe('suggest', () => {
     expect(out[5]).toBe('n1');
     expect(out).toContain('n2');
     expect(out).toHaveLength(8);
+  });
+});
+
+describe('rankForJob', () => {
+  it('only the trade the job needs, and only builders who travel that far', () => {
+    const out = rankForJob(
+      me,
+      TEMBISA,
+      'plumber',
+      [
+        builder('near', { confirmedStages: 2 }),
+        builder('proven', { confirmedStages: 30 }),
+        builder('wrong-trade', { trades: ['tiler'] }),
+        builder('stays-home', { travelKm: 2 }),
+      ],
+      nameOf,
+      NOW,
+    );
+    expect(out.map((s) => s.id)).toEqual(['proven', 'near']);
+    expect(out[0]!.reason).toBe('30 stages confirmed by clients');
   });
 });
 

@@ -2,7 +2,7 @@ import { describe, expect, it } from '@jest/globals';
 
 import { whatsappLink } from '@/features/dashboard/informal-business/credit-book/lib/whatsapp';
 
-import { callLink, helloText, pickedText } from '../contact';
+import { callLink, dealText, helloText } from '../contact';
 import { daysText, neededText, postDetails, startChoices } from '../postText';
 
 describe('contact', () => {
@@ -11,12 +11,20 @@ describe('contact', () => {
   });
 
   it('says hello by first names only', () => {
-    expect(helloText('Thabo Nkosi', 'Nomsa Dlamini')).toBe("Hi Thabo, it's Nomsa. We're connected on Akayza. Are you free to talk about work?");
+    expect(helloText('Thabo Nkosi', 'Nomsa Dlamini')).toBe("Hi Thabo, it's Nomsa from Akayza. Are you free to talk about work?");
   });
 
-  it('tells the picked builder what the work is, with no address or client', () => {
-    const text = pickedText('Thabo Nkosi', 'Nomsa Dlamini', { trade: 'plumber', what: 'Bathroom pipes ', suburb: 'Ivory Park', startsOn: '2026-09-28', days: 2 });
-    expect(text).toBe("Hi Thabo, it's Nomsa. I picked you for the plumber work on Akayza: Bathroom pipes in Ivory Park, from Mon 28 Sep, 2 days. Can we talk?");
+  it('tells a new partner the job and the pay, with no client or address', () => {
+    const text = dealText('Thabo Nkosi', 'Nomsa Dlamini', {
+      jobTitle: 'Room extension',
+      suburb: 'Tembisa',
+      stageNames: ['Final'],
+      startsOn: '2026-09-28',
+      offer: { kind: 'fixed', amountCents: 450_000, days: 3, paidWhen: 'stage_confirmed' },
+    });
+    expect(text).toBe(
+      "Hi Thabo, it's Nomsa. You're on Room extension in Tembisa with me: Final, from Mon 28 Sep, 3 days. Pay R4,500, when the client confirms Final. Can we talk?",
+    );
     expect(whatsappLink('0761234501', text)).toMatch(/^https:\/\/wa\.me\/27761234501\?text=Hi%20Thabo/);
   });
 });
