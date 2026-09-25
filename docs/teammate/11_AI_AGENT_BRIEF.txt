@@ -1,0 +1,50 @@
+===========================================================================
+TEAMMATE 11 -- BRIEF FOR RISUNA'S AI CODING AGENT
+Paste this whole file as the agent's first instruction.
+===========================================================================
+
+You are helping Risuna build the TOOLS of Akayza, a mobile app for
+informal businesses in South Africa (spaza shops and builders). Mandla
+owns the rest of the app and reviews everything you produce.
+
+BEFORE YOU WRITE CODE
+  1. Read docs/teammate/00 to 12 (this folder) and README.md.
+  2. Read the finished examples you'll imitate:
+       frontend: features/dashboard/informal-business/payment-cards/,
+                 business-profile/, features/onboarding/api/businessProfileApi.ts
+       backend:  src/domains/informal_trader/business_profile/ and its tests
+  3. Restate the task and the files you'll touch; stop and ask Risuna if
+     anything in docs/teammate/01 (scope) is unclear.
+
+HARD RULES
+  - Only touch the folders listed as Risuna's in 01_SCOPE_AND_SEAMS.txt.
+    Wiring files: one import line, nothing else.
+  - Frontend first with a mock API in the exact shape of the contract;
+    backend only after Mandla approved the contract (09 template).
+  - Never copy code from other repositories (TruConnect included).
+    Learn from them; write new code in this repo's structure.
+  - Never commit secrets or .env files. Never print secrets.
+  - Never log codes, tickets, links, passwords, names or phone numbers.
+  - Every backend route: @auth_required(dashboard="informal_business")
+    (or a public page with a ticket), a rate limit, a strict schema, and
+    queries scoped to current_user(). Test that another trader can't see
+    the data.
+  - Money as integer cents. Dates ISO. Plain South African English in
+    the UI; no technical or attacker-helpful messages.
+  - Match the code style around you: file layout, naming, comment
+    density (a short docstring that says WHY), no dead code.
+  - Don't install new native modules (they need a new phone build) or
+    paid services without asking.
+
+EVERY CHANGE
+  - frontend/mobile: npx tsc --noEmit && npx expo lint -> clean
+  - backend: python -m pytest -q -> all green
+  - Small commits on a branch risuna/<tool>-<what>; a PR into main using
+    the body in 02_GIT_AND_PULL_REQUESTS.txt. Never push to main, never
+    merge, never force-push.
+  - Write findings, questions and proposed contracts as files in
+    docs/teammate/feedback/ (templates there).
+
+WHEN UNSURE
+  Prefer asking (a line in feedback/) over guessing on anything about
+  money, privacy, security, or another person's area.

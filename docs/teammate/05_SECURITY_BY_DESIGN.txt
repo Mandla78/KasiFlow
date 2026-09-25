@@ -1,0 +1,100 @@
+===========================================================================
+TEAMMATE 05 -- SECURITY BY DESIGN
+The rules every tool keeps. Reviewers check these on every PR.
+===========================================================================
+
+  These are also what we present at the SSDLC session (Sat 12:30), so
+  for each rule you apply, say in the PR HOW you applied it.
+
+
+1. WHO CAN SEE WHAT (the #1 bug class: IDOR)
+---------------------------------------------------------------------------
+
+  - The signed-in trader comes ONLY from the token: current_user().
+  - Never trust an id from the URL or body to decide whose data it is.
+    Every query is scoped:  Debt.query.filter_by(id=debt_id, user_id=current_user().id)
+    Not found and "not yours" give the SAME 404 (don't reveal it exists).
+  - A test proves trader B can't read, change or delete trader A's rows.
+
+
+2. INPUT
+---------------------------------------------------------------------------
+
+  - marshmallow schemas with unknown=RAISE: extra fields -> 422.
+  - Lengths capped on every string (names 80, notes 200...).
+  - Choices checked against constants (and a DB check constraint).
+  - Money: integer cents, > 0, with a sane maximum (e.g. R100,000 for
+    a credit sale) -- say the number in the contract.
+  - Dates: not absurdly far in the past/future.
+  - Never build SQL by hand; SQLAlchemy only.
+
+
+3. PRIVACY (POPIA)
+---------------------------------------------------------------------------
+
+  - Collect only what the tool needs. A credit customer: a name the
+    trader chooses (can be a nickname) and optionally a phone number
+    for WhatsApp. No ID numbers, no addresses.
+  - Customer names/phones are the TRADER's data: never shown to
+    suppliers, never in the shared record (the record shows counts and
+    amounts, not who).
+  - Job clients: name + phone for the sign-off link, nothing more.
+  - The trader can delete a customer; their money history stays as
+    anonymised amounts (the record must still add up).
+  - "Download my data" (Security screen) should include the tool's data
+    later: note in your contract what it would export.
+
+
+4. SECRETS AND LOGS
+---------------------------------------------------------------------------
+
+  - No secret, token, link, code or password in a log line, ever (not
+    even in development). Log ids and reasons only.
+  - Links that act as a key (job sign-off, shared record): 128+ random
+    bits (secrets.token_urlsafe), stored ONLY as an HMAC hash
+    (see domains/identity/auth/services/secrets.py for the idea; write
+    your own copy in your feature -- identity's internals are sealed),
+    one use where the plan says so, with an expiry, revocable.
+  - .env never committed.
+
+
+5. TRUST AND PROOF (the heart of Akayza)
+---------------------------------------------------------------------------
+
+  - Two kinds of entries, always labelled honestly:
+      "Recorded by you"         only the trader said it
+      "Confirmed by both"       the other side confirmed independently
+  - The other side types THEIR OWN amount; neither sees the other's
+    number first. Match -> confirmed; differ -> "amounts don't match"
+    (a dispute), never silently fixed.
+  - Stage photos: camera only (never the gallery), time-stamped by the
+    server, and the photo's SHA-256 is stored with the stage event so
+    a swapped photo is detectable.
+  - Records are append-only: corrections are new entries that point at
+    the old one.
+
+
+6. ABUSE
+---------------------------------------------------------------------------
+
+  - Rate limit every route (per user) and every public page (per IP).
+  - Public pages (sign-off, shared record) show the minimum, carry
+    Referrer-Policy: no-referrer and no-store (already on every
+    response), and answer the same for "expired" and "never existed".
+  - WhatsApp reminders are opened by the trader on their own phone
+    (wa.me link); the server never messages customers.
+
+
+7. AUDIT
+---------------------------------------------------------------------------
+
+  Audit the moments someone might later dispute: debt added, repayment
+  recorded, entry corrected, sign-off link created/used/expired, record
+  shared/unshared. Amounts and ids, never names or phone numbers.
+
+
+8. NO HINTS
+---------------------------------------------------------------------------
+
+  Messages tell the user what to do, never how the system works
+  inside ("link expired or already used", not "token hash not found").

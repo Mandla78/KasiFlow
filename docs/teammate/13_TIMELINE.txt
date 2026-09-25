@@ -1,0 +1,31 @@
+===========================================================================
+TEAMMATE 13 -- TIMELINE (GKHack26, team PR)
+===========================================================================
+
+FRIDAY 25 SEPTEMBER
+  now           Read 00-12. Set up the repo, backend and app locally.
+  15:30         Team call.  16:00 kick-off.
+  by 22:00      Mandla: team profile final on Sonke.
+  evening       Risuna: Credit book FRONTEND (mock) -> first PR.
+                Contract for the credit book -> feedback/.
+                Mandla: supplier side (profile, catalogue, orders).
+  by midnight   Both push. Mandla reviews/merges what's ready.
+
+SATURDAY 26 SEPTEMBER
+  morning       Risuna: Credit book BACKEND (after contract OK),
+                mock -> real. Jobs FRONTEND (mock).
+  11:00         DevLab -- everyone attends.
+  12:30         SSDLC session -- bring the security notes from your PRs
+                (file 05: what you applied and how).
+  afternoon     Jobs backend + sign-off page; Account/Home live lines.
+  21:30         Lean Canvas.
+  night         My record screen + share (orders mocked).
+
+SUNDAY 27 SEPTEMBER
+  06:00         CODE FREEZE: only fixes after this, no new features.
+  07:00-08:30   Demo run-through on a real phone; screenshots; README.
+  09:00         SUBMIT.
+
+IF TIME RUNS OUT, CUT IN THIS ORDER (last = never cut)
+  Daily tally -> house records import -> jobs share link ->
+  customer page -> ... -> Credit book (NEVER CUT)

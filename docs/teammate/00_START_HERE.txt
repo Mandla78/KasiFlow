@@ -1,0 +1,101 @@
+===========================================================================
+TEAMMATE 00 -- START HERE
+For: Risuna (and Risuna's AI coding agent)
+From: Mandla
+Written: Friday 25 September 2026
+===========================================================================
+
+WHAT YOU OWN
+
+    THE TOOLS, end to end, in the informal-business (trader) app:
+
+      Credit book      "Customers owe me" / "I owe suppliers", new credit
+                       sale, repayments, WhatsApp reminder/receipt
+      Jobs             builders: job with stages, camera-only stage
+                       photos, the client sign-off link, house records
+      My record        the trader's record screen + share link (the parts
+                       that come from YOUR tools; see file 08)
+      Account tab      the tool tiles with live lines, "Add a tool"
+      Home tab         the numbers and big buttons that come from tools
+      Daily tally      optional, only if everything above is done
+
+    NOT YOURS (Mandla is building these; don't touch their folders):
+
+      Order stock / Materials, My orders, Your delivery, the order pass
+      and cash handshake, the Suppliers tab, the supplier recommendation
+      engine, payments (PayFast), identity (sign-up, sign-in, security),
+      business profile, media (shared/media).
+
+    Where your tools touch those, use the SEAMS in file 01 (a function or
+    a mock you call), never their code directly.
+
+
+HOW YOU WORK (the short version; details in 02)
+
+    1. Pick a tool (any order: credit book is the most valuable for the
+       demo; jobs is the most impressive for builders).
+    2. Build its FRONTEND with a MOCK API that has the exact shape the
+       real one will have (file 03). Make every button work against
+       the mock.
+    3. Write the API CONTRACT you propose (endpoints, request/response,
+       validation, limits) in docs/teammate/feedback/ (file 09).
+    4. Push to your own branch, open a Pull Request into main.
+    5. Mandla reviews. Only Mandla merges into main.
+    6. After "go ahead" on the contract: build the BACKEND for it (file
+       04), security by design (file 05), and switch the mock to real.
+       Another PR.
+
+    Research anything the tools need (WhatsApp links, public holidays,
+    camera, hashing...) and write what you find in feedback/ (file 10).
+
+
+READ IN THIS ORDER
+
+    00_START_HERE.txt              this file
+    01_SCOPE_AND_SEAMS.txt         exactly what's in, what's out, where
+                                   your code meets Mandla's
+    02_GIT_AND_PULL_REQUESTS.txt   branches, commits, PRs, who merges
+    03_FRONTEND_GUIDE.txt          folders, components, mock-first APIs
+    04_BACKEND_GUIDE.txt           domains, routes, tests (after go-ahead)
+    05_SECURITY_BY_DESIGN.txt      the rules every tool must keep
+    06_CREDIT_BOOK_PLAN.txt        screens, data, API, done-when
+    07_JOBS_PLAN.txt               screens, data, API, done-when
+    08_RECORD_ACCOUNT_HOME_PLAN.txt  My record, Account tab, Home tab
+    09_API_CONTRACT_TEMPLATE.txt   how to propose an API before building it
+    10_RESEARCH_AND_PUBLIC_APIS.txt  what to look into, and what not
+    11_AI_AGENT_BRIEF.txt          paste this into your AI agent first
+    12_DEFINITION_OF_DONE.txt      the checklist on every PR
+    13_TIMELINE.txt                today, tonight, the weekend
+    feedback/                      YOUR folder for findings, questions,
+                                   contracts, for Mandla to review
+
+
+THE PRODUCT IN ONE BREATH
+
+    Akayza helps informal businesses (spaza shops first, then builders
+    and trades) buy stock from real suppliers and keep an honest,
+    two-sided record of money that changes hands. Slogan: "Keep it in
+    the kasi." The traders use the app for free; suppliers are the
+    customers. Production-grade, secure by design, regulator-aware
+    (POPIA), not a demo.
+
+    The design: docs/design/Akayza_Simplified_App_Screens.pdf
+      p1 Home, p2-p3 Credit book, p5 My record, p11-p15 builder + jobs,
+      p16 tools as mini-apps. The PDF is a HINT, not a pixel spec.
+
+    The app already has: sign-up (4 steps), sign-in with two-factor,
+    Security, Business profile (saved on the server), Payment cards
+    (test mode), Suppliers "Near you" (mock). The backend already has
+    identity, business profile, media (Cloudinary), audit, scheduler.
+
+
+GOLDEN RULES (break these and the PR goes back)
+
+    - Never commit secrets. .env files stay on your laptop.
+    - Never copy code from other projects (TruConnect included). Read,
+      learn, write our own.
+    - Never put a user id from the request in charge of whose data you
+      return: always the signed-in user (file 05).
+    - No hints for attackers in the UI; collect only what we need.
+    - Money is always whole CENTS (integers), never floats.
+    - Small PRs. Green checks (tsc, lint, tests) before you ask for review.

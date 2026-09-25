@@ -1,0 +1,113 @@
+===========================================================================
+TEAMMATE 02 -- GIT, BRANCHES AND PULL REQUESTS
+Only Mandla merges into main.
+===========================================================================
+
+
+1. ONE-TIME SET-UP (Risuna)
+---------------------------------------------------------------------------
+
+    git clone https://github.com/Mandla78/KasiFlow.git
+    cd KasiFlow
+    README.md -> "What you need installed", "1. Database", "2. Backend",
+    "3. Mobile". Ask Mandla for the values that go in your own .env files
+    over a private channel, never in a chat group, never in git.
+
+    Your own local database: backend/scripts/setup_db.sql, then
+    `flask --app app db upgrade`. Your data never touches Mandla's.
+
+
+2. BRANCHES
+---------------------------------------------------------------------------
+
+    main                     always works. Nobody pushes to it directly.
+    risuna/<tool>-<what>     your work, one branch per piece, e.g.
+                               risuna/credit-book-ui
+                               risuna/credit-book-api
+                               risuna/jobs-stages-ui
+                               risuna/account-tab-live-lines
+
+    Start every branch from a fresh main:
+        git checkout main
+        git pull
+        git checkout -b risuna/credit-book-ui
+
+    Keep it fresh while you work (main moves fast this weekend):
+        git fetch origin
+        git rebase origin/main          (or: git merge origin/main)
+
+
+3. COMMITS
+---------------------------------------------------------------------------
+
+    Small, one idea each. Message: what changed, then why.
+        "Credit book: new credit sale screen (mock API)"
+        "Credit book: amounts in cents; reject negative and > R100,000"
+
+    Before EVERY commit:
+        frontend/mobile:  npx tsc --noEmit    and    npx expo lint
+        backend:          python -m pytest -q   (all green)
+        git status        -> no .env, no secrets, no node_modules, no
+                             personal test data
+
+
+4. PULL REQUESTS
+---------------------------------------------------------------------------
+
+    git push -u origin risuna/credit-book-ui
+    GitHub -> "Compare & pull request" -> base: main.
+
+    Title: "Credit book: customers owe me + new credit sale (frontend, mock)"
+    Body (copy this):
+
+        What:        (screens / endpoints added)
+        Why:         (which part of file 06/07/08)
+        Mock or real: (mock API / real backend)
+        Contract:    docs/teammate/feedback/<file>.txt (if backend)
+        Security:    (which rules from file 05 apply, and how you kept them)
+        Tested:      (tsc, lint, pytest; what you tapped through; screenshots)
+        Not done:    (honest list)
+        Questions:   (for Mandla)
+
+    Keep PRs small: one screen or one endpoint group. A 2,000-line PR
+    won't get reviewed tonight.
+
+    Review: Mandla comments on the PR. Fix on the same branch and push;
+    the PR updates itself. Don't open a new PR for fixes.
+
+
+5. WHO MERGES -- ONLY MANDLA (how it's enforced)
+---------------------------------------------------------------------------
+
+    Mandla, on GitHub (Settings of Mandla78/KasiFlow):
+
+    IF THE REPO IS PUBLIC (or on a paid plan):
+      Settings -> Branches -> Add branch protection rule (or Rules ->
+      Rulesets -> New ruleset) for "main":
+        [x] Require a pull request before merging
+        [x] Require approvals: 1
+        [x] Restrict who can push to matching branches: Mandla only
+        [x] Do not allow bypassing the above settings (optional)
+        [x] Block force pushes
+      Collaborators -> Risuna with the "Write" role: can push branches
+      and open PRs, can't push to or merge into main.
+
+    IF THE REPO IS PRIVATE ON GITHUB FREE (branch rules aren't enforced
+    there):
+      Give Risuna the "Read" role, and Risuna works from a FORK:
+        Risuna: Fork on GitHub -> clone the fork -> push branches to the
+        fork -> open PRs from the fork into Mandla78/KasiFlow:main.
+      With "Read", nobody but Mandla can push or merge into main.
+      (Settings -> General -> "Allow forking" must be on.)
+
+    Either way: Risuna never merges, never pushes to main, never
+    force-pushes shared branches.
+
+
+6. WHEN MAIN CHANGES UNDER YOU
+---------------------------------------------------------------------------
+
+    Mandla is merging supplier work tonight too. If your PR shows
+    conflicts: rebase on origin/main, fix, run the checks, push.
+    Conflicts in files you don't own (file 01) -> take main's version
+    and ask.

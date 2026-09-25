@@ -1,0 +1,105 @@
+===========================================================================
+TEAMMATE 04 -- BACKEND GUIDE (Flask, PostgreSQL)
+Only AFTER Mandla approves the API contract for that tool (file 09)
+===========================================================================
+
+
+1. THE SHAPE OF A FEATURE
+---------------------------------------------------------------------------
+
+  backend/src/domains/informal_trader/credit_book/   (scaffold exists)
+      api/routes.py            thin: validate -> call service -> answer
+      schemas/*_schemas.py     marshmallow, unknown fields REJECTED
+      services/*_service.py    the rules; the only layer that decides
+      repositories/*_repo.py   all database access for this feature
+      models/*.py              SQLAlchemy tables (schema "trader")
+      constants.py             allowed values (must match the app)
+      jobs/ + schedulers/      only if you need a scheduled job
+
+  Worked example to copy the SHAPE of (not the content):
+    domains/informal_trader/business_profile/  -- model, schema, service,
+    repository, routes, audit helper, tests. Read it first.
+
+  Tables: inherit BaseModel (src/core/base_model.py): UUID id,
+  created_at, updated_at, is_deleted, deleted_at. Soft delete for
+  business records; financial rows are NEVER deleted (not even softly):
+  a repayment entered by mistake gets a correcting entry, not an erase.
+
+
+2. WIRING (one line each; nothing else in these files)
+---------------------------------------------------------------------------
+
+    src/__init__.py  _register_models():
+        from src.domains.informal_trader.credit_book import models as _credit_book  # noqa: F401
+    src/api/__init__.py:
+        from src.domains.informal_trader.credit_book.api import routes as _credit_book_routes  # noqa: E402,F401
+    src/master_scheduler/registry.py  (only if you have a job)
+    tests/conftest.py  TRADER_TABLES: add your tables so each test
+        starts empty
+
+
+3. ROUTES
+---------------------------------------------------------------------------
+
+    from src.api import api_bp
+    from src.core.decorators import auth_required, current_user
+    from src.core.responses import success_response
+    from src.shared.rate_limit.limiter import limiter
+
+    @api_bp.post("/me/credit-book/customer-debts")
+    @limiter.limit("60 per minute")
+    @auth_required(dashboard="informal_business")
+    def add_customer_debt():
+        data = load(NewDebtSchema(), request.get_json(silent=True))
+        entry = credit_book_service.add_debt(current_user(), data)
+        return success_response({"entry": credit_book_service.view(entry)}, status_code=201)
+
+  - URLs under /me/... : always the signed-in trader's own data.
+  - Every route: @auth_required + a rate limit.
+  - Answers use success_response / error_response (the envelope the app
+    expects: {success, message, data, code}).
+  - Errors: raise AppError / ValidationError / NotFoundError from
+    src.core.exceptions with a stable `code` the app can switch on.
+
+
+4. MIGRATIONS
+---------------------------------------------------------------------------
+
+    cd backend && .venv\Scripts\activate
+    flask --app app db migrate -m "credit book"
+    -> rename the file to the next number: 00NN_credit_book.py and set
+       revision = '00NN_credit_book' (look at the newest file in
+       migrations/versions/ for the current number; tell Mandla which
+       number you took so two PRs don't collide)
+    flask --app app db upgrade
+    flask --app app db check        -> "No new upgrade operations detected."
+  Read the generated file before committing. Check constraints for every
+  choice column (see business_profile model).
+
+
+5. TESTS (required in the same PR)
+---------------------------------------------------------------------------
+
+    tests/domains/informal_trader/test_credit_book.py
+  Use the helpers in tests/domains/informal_trader/test_business_profile.py
+  (signed_in(client, outbox) gives you an Authorization header).
+  Test at least: needs a token; the happy path; each validation rule;
+  another trader can't see or change your rows (IDOR); rate limits where
+  they matter; money edge cases (0, negative, huge).
+
+    python -m pytest -q        -> all green, including everyone else's
+
+
+6. USING OTHER PARTS
+---------------------------------------------------------------------------
+
+    A user's details:      from src.domains.identity.accounts.services
+                           import account_service  (read only)
+    Photos:                src.shared.media (README "How to use media")
+    Audit trail:           publish an AuditEvent (see business_profile/
+                           services/profile_audit.py); add your event
+                           names to src/shared/audit/event_types/business.py
+    Email:                 src.shared.email.email.EmailService with a
+                           template (HTML + .txt twin)
+    Scheduled jobs:        a run() -> JobResult in your jobs/, declared in
+                           your schedulers/, added to the master registry

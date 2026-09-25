@@ -1,0 +1,81 @@
+===========================================================================
+TEAMMATE 08 -- MY RECORD, ACCOUNT TAB, HOME TAB
+Making the tabs real once the tools exist
+===========================================================================
+
+
+1. ACCOUNT TAB (features/dashboard/informal-business/account/)
+---------------------------------------------------------------------------
+
+  Today: tiles + "This month" read account/mock.ts.
+
+  Make it real:
+    - Each tile's live line comes from its tool's summary:
+        Credit book  "R340 owed to you"       creditBookApi.summary()
+        Jobs         "2 active"               jobsApi.summary()
+        My record    "38 of 41 confirmed"     recordApi.summary()
+        Order stock / My orders               Mandla's (keep mock.ts
+                                              values for those two, marked)
+    - "Add a tool" opens a sheet listing every tool with a switch
+      (ToggleRow from shared/components/Parts) -> useSession().setTool().
+      My record is always on (disabled switch, with a line saying why).
+    - "This month": Credit given / Paid back from the credit book
+      summary; Stock bought stays mocked until orders exist.
+    - Loading and error states for each tile (a tile can fail alone).
+
+
+2. HOME TAB (features/dashboard/informal-business/home/)
+---------------------------------------------------------------------------
+
+  Today: home/mock.ts. The layout depends on business type (spaza vs
+  builder). Make real what comes from YOUR tools:
+    spaza:   "Owed to you" (credit book), "Due today" count; big button
+             "Credit sale" -> /credit-book/new
+    builder: "Waiting on clients R12,000 / Walls stage needs sign-off"
+             (jobs), "Active jobs"; big button "New job" -> /jobs/new
+    "Your tools" sheet: same live lines as the Account tab (share the
+    code: one hook, e.g. useToolSummaries()).
+  Leave the order/supplier numbers ("You owe suppliers" from orders,
+  "Delivery on its way") on the mock, clearly marked, for Mandla.
+
+
+3. MY RECORD (PDF p5) -- features/dashboard/informal-business/record/
+---------------------------------------------------------------------------
+
+  What it says: how long they've traded, how many money moments were
+  CONFIRMED BY BOTH vs RECORDED BY YOU, and lets them SHARE that (with a
+  supplier, a lender, a landlord) as a read-only link.
+
+  Screen /informal-business/record
+    "Trading for 3 years" (business profile yearsTrading + months on
+    Akayza), "38 of 41 money moments confirmed by both sides",
+    legend: Confirmed by both / Recorded by you,
+    list by month (source icon: credit book, job, order),
+    "Share my record" -> creates a link; "Shared now" list with views
+    and "Stop sharing".
+
+  Sources:
+    credit book repayments  -> "recorded by you" (no customer app yet)
+    job stages signed off   -> "confirmed by both" (via link)
+    orders + cash handshake -> Mandla's (mock entries with source "order")
+
+  SHARED RECORD PAGE (public web page on the backend, like the reset page)
+    /record/{ticket}: business name, area, trading since, counts and
+    amounts per month, confirmed vs recorded. NO customer names, NO
+    phone numbers, NO addresses. Revocable, expiry (e.g. 30 days),
+    view count, rate limited, noindex.
+
+  The record is the proof layer (backend domains/proof/, scaffold exists:
+  ledger, handshake, integrity, reputation, share). BEFORE building its
+  backend, write the contract and agree it with Mandla: the order side
+  writes into the same ledger.
+
+
+4. DONE WHEN
+---------------------------------------------------------------------------
+
+  [ ] Account tiles read real summaries (mock -> real per tool)
+  [ ] Add a tool sheet switches tools (saved via the profile sync)
+  [ ] Home numbers/buttons for your tools are real
+  [ ] My record screen from the record summary (orders mocked)
+  [ ] Share link + public page + stop sharing

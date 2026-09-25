@@ -1,0 +1,53 @@
+===========================================================================
+TEAMMATE 09 -- API CONTRACT TEMPLATE
+Write this BEFORE the backend. Mandla approves it; then you build it.
+Save as: docs/teammate/feedback/CONTRACT_<tool>.txt
+===========================================================================
+
+TOOL:            (e.g. Credit book)
+AUTHOR / DATE:
+STATUS:          proposed | approved by Mandla (date) | changed (why)
+
+
+1. ENDPOINTS
+---------------------------------------------------------------------------
+  For each:
+    METHOD /path
+    Who:           signed-in trader (/me) | public page (ticket) | ...
+    Request body:  field: type, required?, limits (e.g. amount_cents:
+                   int, 1..10000000)
+    Response 2xx:  the JSON inside `data`
+    Errors:        HTTP status + code (e.g. 422 VALIDATION_ERROR,
+                   404 NOT_FOUND, 429 RATE_LIMITED)
+    Rate limit:    e.g. 60 per minute per user
+
+
+2. TABLES
+---------------------------------------------------------------------------
+  table, columns (type, null?, limits), indexes, check constraints,
+  what is soft-deleted, what is never deleted
+
+
+3. RULES
+---------------------------------------------------------------------------
+  The business rules in plain words (e.g. "a payment can't be more than
+  what's left"; "a correction points at the entry it fixes").
+
+
+4. SECURITY (file 05, one line each)
+---------------------------------------------------------------------------
+  IDOR:        how every query is scoped
+  Input:       schema, limits
+  Privacy:     what personal data, why, who sees it, what's exported
+  Secrets:     any links/tickets and how they're stored
+  Abuse:       rate limits
+  Audit:       which events, which fields (no names/phones)
+
+
+5. WHAT THE APP MOCK DOES TODAY
+---------------------------------------------------------------------------
+  Point at the mock file; list any difference from this contract.
+
+
+6. OPEN QUESTIONS FOR MANDLA
+---------------------------------------------------------------------------

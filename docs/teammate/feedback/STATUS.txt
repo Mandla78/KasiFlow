@@ -1,0 +1,14 @@
+STATUS -- Risuna's tools (update in every PR)
+
+DONE
+  -
+
+IN PROGRESS
+  -
+
+BLOCKED (and on what)
+  -
+
+NEXT
+  - Credit book frontend (mock), PR 1
+  - CONTRACT_credit_book.txt

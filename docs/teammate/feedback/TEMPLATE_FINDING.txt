@@ -1,0 +1,21 @@
+FINDING: (topic, e.g. "SA public holidays for due dates")
+BY / DATE:
+FOR TOOL: (credit book / jobs / record / tabs)
+
+QUESTION WE HAD
+  (one or two lines)
+
+WHAT I FOUND
+  - option A: (what it is, free or paid, needs an account/key?, works
+    offline?, link to its docs)
+  - option B:
+
+RISKS (privacy, cost, a new native module, rate limits, reliability)
+
+MY RECOMMENDATION
+  (one option, and why)
+
+WHAT I NEED FROM MANDLA
+  (approve / an API key / a decision / nothing)
+
+DECISION: (Mandla fills in, with a date)

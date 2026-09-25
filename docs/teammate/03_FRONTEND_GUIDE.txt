@@ -1,0 +1,121 @@
+===========================================================================
+TEAMMATE 03 -- FRONTEND GUIDE (Expo / React Native, TypeScript)
+How the app is organised, and how to build a tool mock-first
+===========================================================================
+
+
+1. WHERE THINGS GO
+---------------------------------------------------------------------------
+
+  ROUTES ARE THIN. A file under src/app/ only re-exports a screen:
+
+    src/app/(dashboard)/informal-business/credit-book/index.tsx
+        export { default } from '@/features/dashboard/informal-business/credit-book/screens/CreditBookScreen';
+
+    src/app/(dashboard)/informal-business/credit-book/new.tsx
+        export { default } from '.../credit-book/screens/NewCreditSaleScreen';
+
+    src/app/(dashboard)/informal-business/credit-book/[id].tsx   (one entry)
+
+  THE CODE LIVES IN THE FEATURE FOLDER:
+
+    src/features/dashboard/informal-business/credit-book/
+        types.ts              the data shapes (match the API contract)
+        api/creditBookApi.ts  the interface + the switch (mock or http)
+        api/mockCreditBookApi.ts
+        api/httpCreditBookApi.ts   (later, when the backend exists)
+        components/           pieces only this feature uses
+        screens/              one file per screen
+        lib/                  pure helpers (due-date maths etc.) + tests
+
+  Route strings are TYPED: after you add a route file, restart Expo
+  (`npx expo start --clear`) so `router.push('/informal-business/...')`
+  typechecks.
+
+
+2. BUILDING BLOCKS (use these; don't restyle from scratch)
+---------------------------------------------------------------------------
+
+    @/shared/components/Screen      <Screen back footer={...}> page frame
+                                    (tab screens: <Screen tab>)
+    @/shared/components/Button      variants: primary, secondary, danger
+    @/shared/components/Text        Title, Body, Overline
+    @/shared/components/TextField   label, error, password, optional
+    @/shared/components/SelectField bottom-sheet picker (single/multiple)
+    @/shared/components/InfoHint    the (i) "why we ask" hint
+    @/shared/components/Parts       Card, ListRow, IconTile, Tag,
+                                    InfoNote, ToggleRow
+    @/shared/components/TopBar      tab header (avatar, title, action)
+    @/shared/components/ComingSoon  placeholder (replace it!)
+    @/shared/theme/tokens           colors, fonts, radius, sizes
+    @/shared/lib/money              Cents type, formatRand(cents)
+    @/features/auth/session/SessionProvider   useSession(): profile,
+                                    setTool, updateProfile...
+
+  Look at features/dashboard/informal-business/payment-cards/ and
+  business-profile/ for finished examples of list + detail + form.
+
+  Palette: navy #0F172A (ink), blue accent #2563EB, amber for "needs
+  attention", garnet for danger. Light background. Big touch targets
+  (44px+). Plain words a spaza owner would use ("owes you", "paid back").
+
+
+3. MOCK FIRST, WITH THE REAL SHAPE
+---------------------------------------------------------------------------
+
+  Every tool starts with an interface and a mock, so the screens are
+  finished before the backend exists, and switching is one line:
+
+    // api/creditBookApi.ts
+    import { USE_MOCK_AUTH } from '@/constants/config';
+    export interface CreditBookApi {
+      list(tab: 'customers' | 'suppliers'): Promise<CreditEntry[]>;
+      addSale(input: NewCreditSale): Promise<CreditEntry>;
+      recordRepayment(id: string, amount: Cents): Promise<CreditEntry>;
+      ...
+    }
+    export const creditBookApi: CreditBookApi = USE_MOCK_AUTH ? mockCreditBookApi : httpCreditBookApi;
+
+  The mock:
+    - keeps data in memory (and SecureStore if it must survive a
+      restart; see payment-cards/api/mockPaymentCardsApi.ts),
+    - waits ~400 ms (so loading states get built),
+    - THROWS the same errors the server will (validation, not found),
+    - uses the same field names as the API contract (snake_case on the
+      wire, mapped to camelCase in the http layer only).
+
+  "Change the mock into real" = write httpXApi.ts against the approved
+  contract using `api()` from @/shared/api/client (it attaches the
+  token, refreshes it, and turns errors into ApiError). Screens don't
+  change. See features/onboarding/api/businessProfileApi.ts.
+
+  EXPO_PUBLIC_USE_MOCK_API=true in frontend/mobile/.env -> mocks;
+  false -> the real backend at EXPO_PUBLIC_API_URL.
+
+
+4. RULES FOR SCREENS
+---------------------------------------------------------------------------
+
+    - Every list has: loading, empty ("No one owes you anything yet"),
+      error with retry.
+    - Every form: validate on submit, one clear message per field, the
+      button shows loading, no double submit.
+    - Money: input in rand, stored and sent as integer cents.
+      R12.50 -> 1250. Never floats. formatRand() to show.
+    - Dates: store ISO dates; show "Today", "Fri 2 Oct", "Month-end".
+    - Customer names stay on the trader's phone/account only; never
+      shown to suppliers (show "Customer names stay private to you").
+    - No attacker hints ("user not found", "code sent to 082...").
+    - Offline: show a calm "No connection" message; never lose what the
+      trader typed (keep the form state).
+    - Accessibility: accessibilityLabel on icon-only buttons.
+
+
+5. CHECKS BEFORE A PR
+---------------------------------------------------------------------------
+
+    cd frontend/mobile
+    npx tsc --noEmit        -> no errors
+    npx expo lint           -> no errors, no warnings
+    Tap through every screen on a phone or the web preview
+    (npx expo start --web) with the mock AND, later, the real backend.

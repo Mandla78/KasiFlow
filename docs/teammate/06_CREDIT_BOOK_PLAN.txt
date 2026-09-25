@@ -1,0 +1,100 @@
+===========================================================================
+TEAMMATE 06 -- CREDIT BOOK (PDF p2-p3)
+Spaza default tool. NEVER CUT from the demo.
+===========================================================================
+
+  The spaza gives goods "on the book" to people they know; today it's a
+  paper book or memory. We make it quick to write down, easy to see
+  who's due, and polite to remind.
+
+
+1. SCREENS
+---------------------------------------------------------------------------
+
+  CREDIT BOOK (p2)  /informal-business/credit-book
+    Two tabs: "Customers owe me" | "I owe suppliers"
+    Header: total outstanding for the tab; "2 due today"; "1 overdue"
+    List: name, what they took (short), amount left, due ("Today",
+          "Fri", "Month-end", "3 days late" in amber)
+    Big button: "New credit sale" (customers tab) / "Add supplier debt"
+    Tap a row -> ENTRY DETAIL
+
+  NEW CREDIT SALE (p3)  /informal-business/credit-book/new
+    Customer: pick an existing one or type a new name (+ optional phone)
+    Amount (rand)
+    What they took (optional, short)
+    Pays back on: Today / Friday / Month-end / Pick a date
+    [x] Send WhatsApp receipt  (only if a phone is set)
+    Note under the form: "Customer names stay private to you."
+    Save -> back to the list, new entry on top
+
+  ENTRY DETAIL  /informal-business/credit-book/[id]
+    Who, amount, what, date given, due date, status
+    History: sale, repayments (each with date and "recorded by you")
+    Buttons: "Record repayment" (full or part), "Remind on WhatsApp",
+             "Correct this entry" (adds a correction, never edits history)
+
+  CUSTOMER  /informal-business/credit-book/customers/[id]  (nice-to-have)
+    All entries for one customer, total owed, "paid on time" count
+
+  I OWE SUPPLIERS tab
+    Hand-added debts (supplier name, amount, due) + the hook
+    suppliersOwedFromOrders() (file 01, seam c), mocked as []
+
+
+2. DATA (proposal; put the final shape in your contract)
+---------------------------------------------------------------------------
+
+  credit_customers  id, user_id (the trader), name (<=60), phone (SA,
+                    optional), created_at, deleted_at
+  credit_entries    id, user_id, kind: customer_debt | supplier_debt,
+                    customer_id (customer_debt) or supplier_name
+                    (supplier_debt, <=80), amount_cents (>0, <= 10,000,000),
+                    description (<=120), given_on, due_on, status: open |
+                    paid | written_off, corrects_entry_id (nullable)
+  credit_payments   id, entry_id, user_id, amount_cents (>0, <= remaining),
+                    paid_on, recorded_at, source: trader
+  Outstanding = amount - sum(payments). Status "paid" when it hits 0.
+  Nothing is hard-deleted; a mistake is a correcting entry.
+
+
+3. API (proposal)
+---------------------------------------------------------------------------
+
+  GET    /me/credit-book?kind=customer_debt|supplier_debt&status=open
+  POST   /me/credit-book/entries             new sale or supplier debt
+  GET    /me/credit-book/entries/{id}
+  POST   /me/credit-book/entries/{id}/payments
+  POST   /me/credit-book/entries/{id}/corrections
+  GET    /me/credit-book/customers           (search by name prefix)
+  POST   /me/credit-book/customers
+  DELETE /me/credit-book/customers/{id}      (anonymises; history stays)
+  GET    /me/credit-book/summary             totals for Home/Account
+
+  All /me: the signed-in trader only (file 05 s1).
+
+
+4. WHATSAPP (no API needed)
+---------------------------------------------------------------------------
+
+  Receipt / reminder = open https://wa.me/27XXXXXXXXX?text=<encoded>
+  with Linking.openURL on the trader's phone. Message examples:
+    "Hi Thabo, Nomsa's Spaza: R85.00 on the book for bread and milk,
+     due Friday. Thank you!"
+    "Hi Thabo, friendly reminder from Nomsa's Spaza: R85.00 was due
+     Friday."
+  Phone to international format: 082 123 4567 -> 27821234567.
+  Never include a link to our app or anything the customer must log in to.
+
+
+5. DONE WHEN
+---------------------------------------------------------------------------
+
+  [ ] both tabs list, total, due-today/overdue counts (mock, then real)
+  [ ] new credit sale with all validations; can't save R0 or negative
+  [ ] part and full repayment; status flips to paid at 0
+  [ ] correction instead of edit
+  [ ] WhatsApp receipt/reminder opens with the right text
+  [ ] Account tile + Home "owed to you" read the summary (file 08)
+  [ ] backend: IDOR test, validation tests, cents only, audit events
+  [ ] feeds My record: repayments count as "recorded by you"

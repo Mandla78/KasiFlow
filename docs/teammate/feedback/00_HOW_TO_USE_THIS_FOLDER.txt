@@ -1,0 +1,18 @@
+===========================================================================
+FEEDBACK -- Risuna's folder for Mandla to review
+===========================================================================
+
+Put here, one file each, committed in your PRs:
+
+  CONTRACT_<tool>.txt        a proposed API (template: ../09)
+  FINDING_<topic>.txt        research results (template below)
+  QUESTION_<topic>.txt       something only Mandla can decide
+  NEEDS_<topic>.txt          a change needed in someone else's area
+                             (e.g. "add dailyTally tool key", "a row in
+                             More"), with the reason
+  STATUS.txt                 a running list: done / in progress / blocked
+
+Mandla answers by editing the file (a "DECISION:" line at the bottom,
+with a date), in a PR comment, or in chat -- and then the file says so.
+
+Keep each file short: what, why, the options, your recommendation.

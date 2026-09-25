@@ -1,0 +1,106 @@
+===========================================================================
+TEAMMATE 07 -- JOBS (builders and trades, PDF p11-p15)
+Builder default tool. Second priority after the credit book.
+===========================================================================
+
+  A builder is paid in stages, in cash, by clients who later dispute
+  what was paid and when. We turn each stage into a photo + a sign-off
+  the CLIENT gives from a link, with no app.
+
+
+1. SCREENS
+---------------------------------------------------------------------------
+
+  JOBS LIST  /informal-business/jobs
+    Active jobs: client, place, "R5,000 of R38,000 paid and confirmed",
+    next stage; "New job" button. Done jobs below.
+
+  NEW JOB  /informal-business/jobs/new
+    Client name, client phone (for the sign-off link), where (short text
+    or reuse the address picker: shared/location-picker), total (rand),
+    stages: a starter list (Deposit / Foundation / Walls / Roof / Final)
+    the builder can rename, add, remove; an amount per stage; the stage
+    amounts must add up to the total (show the difference live).
+
+  JOB (p12)  /informal-business/jobs/[id]
+    Stages as steps, each: amount, status (not started / in progress /
+    photo taken / waiting for client / confirmed by both / amounts don't
+    match), photo thumbnail.
+    "Paid and confirmed R5,000 of R38,000"
+
+  STAGE PHOTO (p13)  /informal-business/jobs/[id]/stages/[stageId]/photo
+    CAMERA ONLY (expo-camera or ImagePicker.launchCameraAsync; never the
+    gallery). Upload via shared.media (job folder). The server records the
+    time and the photo's SHA-256 with the stage.
+
+  SEND FOR SIGN-OFF (p14, the builder's side)
+    Builder types the cash they received for this stage, taps "Send to
+    client" -> WhatsApp opens with the sign-off link. The builder does
+    NOT see the client's number until both are in.
+
+  CLIENT SIGN-OFF PAGE (p14, the client's side) -- a WEB PAGE on the
+  backend, no app, no login (like the password reset page:
+  domains/identity/auth/api/reset_page.py shows the pattern)
+    /sign-off?ticket=...
+    Shows: builder's business name, the stage, the photo, and
+    "How much cash did you pay for this stage?" [R ____]  [Confirm]
+    or "Not yet". One use, 7 days. Then "Thank you".
+
+  HOUSE RECORDS (p15)  /informal-business/jobs/[id]/record
+    The job's stages as a record: live stages "Confirmed by both"
+    (photo + client sign-off); IMPORTED stages (from old WhatsApp photos)
+    marked "By you, date unknown" because WhatsApp strips the date.
+    "Share" -> a read-only link (same rules as My record share).
+
+
+2. DATA (proposal)
+---------------------------------------------------------------------------
+
+  jobs          id, user_id, client_name (<=60), client_phone, place (<=120),
+                total_cents, status: active | done | cancelled
+  job_stages    id, job_id, position, name (<=40), amount_cents,
+                status (above), photo (via shared.media: public_id, url,
+                sha256, taken_at), builder_amount_cents, client_amount_cents,
+                confirmed_at, source: live | imported
+  signoff_links id, stage_id, ticket_hash (HMAC), expires_at, used_at,
+                revoked_at   (the ticket itself is only ever in the link)
+
+  Match rule: builder_amount == client_amount -> confirmed_by_both;
+  different -> amounts_dont_match (dispute, both numbers kept).
+
+
+3. API (proposal)
+---------------------------------------------------------------------------
+
+  GET/POST  /me/jobs                     list / create (with stages)
+  GET/PATCH /me/jobs/{id}                 detail / rename, cancel, done
+  POST      /me/jobs/{id}/stages/{sid}/photo/upload-signature
+  POST      /me/jobs/{id}/stages/{sid}/photo     {public_id}
+  POST      /me/jobs/{id}/stages/{sid}/signoff   {builder_amount_cents}
+                                                 -> {whatsapp_text, link}
+  GET/POST  /sign-off?ticket=...          PUBLIC page (not /api/v1),
+                                          rate limited per IP
+
+
+4. SECURITY NOTES (on top of file 05)
+---------------------------------------------------------------------------
+
+  - Sign-off ticket: 128+ bits, HMAC-stored, one use, 7 days, the page
+    answers the same for used/expired/unknown.
+  - Honest limit (say it in the pitch): a link is weaker than two
+    signed phones; we record that confirmation came "via link".
+  - Client phone numbers never appear in logs, the audit trail, or any
+    shared record.
+  - Photos of a client's home: the job folder, never public listings.
+
+
+5. DONE WHEN
+---------------------------------------------------------------------------
+
+  [ ] list, new job (stages add up), job detail (mock, then real)
+  [ ] camera-only photo per stage, uploaded through shared.media
+  [ ] sign-off link sent via WhatsApp; public page confirms or disputes
+  [ ] "R x of R y paid and confirmed" computed from confirmed stages
+  [ ] house record view + share link
+  [ ] backend: IDOR tests, ticket tests (one use, expiry, same answer),
+      photo hash stored, audit events

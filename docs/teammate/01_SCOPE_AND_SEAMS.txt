@@ -1,0 +1,117 @@
+===========================================================================
+TEAMMATE 01 -- SCOPE AND SEAMS
+What's yours, what isn't, and exactly where the two meet
+===========================================================================
+
+
+1. YOURS
+---------------------------------------------------------------------------
+
+  FRONTEND (frontend/mobile/src/...)
+
+    features/dashboard/informal-business/credit-book/   (exists: a
+        placeholder screen) -> the whole credit book
+    features/dashboard/informal-business/jobs/          (exists: a
+        placeholder screen) -> jobs, stages, stage photo, house records
+    features/dashboard/informal-business/record/        (NEW) My record
+        + share
+    features/dashboard/informal-business/account/       the Account tab
+        (exists, uses mock.ts) -> live tool lines, "Add a tool" sheet
+    features/dashboard/informal-business/home/          the Home tab
+        (exists, uses mock.ts) -> the tool numbers and big buttons
+    features/dashboard/informal-business/tally/         (NEW, optional)
+
+    app/(dashboard)/informal-business/credit-book/...   route files
+    app/(dashboard)/informal-business/jobs/...          (thin re-exports,
+    app/(dashboard)/informal-business/record/...         see file 03)
+
+  BACKEND (backend/src/..., only after the contract is approved)
+
+    domains/informal_trader/credit_book/    (exists: empty scaffold)
+    domains/informal_trader/jobs/           (exists: empty scaffold)
+    domains/proof/...                       (exists: empty scaffold for
+                                             record, share, ledger;
+                                             agree the shape with Mandla
+                                             first, it's shared with the
+                                             order/cash side)
+    tests/domains/informal_trader/...       your tests
+    migrations/versions/...                 your migrations (numbered;
+                                             see file 04)
+
+  WEB PAGES the backend serves (no app needed):
+    the client SIGN-OFF page for a job stage (file 07)
+    the public SHARED RECORD page (file 08)
+
+
+2. NOT YOURS -- DON'T EDIT
+---------------------------------------------------------------------------
+
+    features/auth/**, features/onboarding/**            identity, sign-up
+    features/dashboard/informal-business/suppliers/**   Suppliers tab
+    features/dashboard/informal-business/business-profile/**
+    features/dashboard/informal-business/payment-cards/**
+    features/dashboard/informal-business/more/**        (ask if you need a
+                                                          row added)
+    backend/src/domains/identity/**   (sealed: a test fails the build if
+                                       you import its internals)
+    backend/src/domains/supplier/**, domains/commerce/**   orders, payments
+    backend/src/shared/media/**       use it, don't change it
+    backend/src/__init__.py, api/__init__.py, config.py,
+    master_scheduler/registry.py      you ADD one line to wire your
+                                      feature in; nothing else
+
+  If you think one of these needs to change, write it in feedback/
+  (file 09 template) and Mandla does it.
+
+
+3. THE SEAMS (where your tools meet Mandla's work)
+---------------------------------------------------------------------------
+
+  a) WHO IS SIGNED IN
+       Frontend: useSession() from features/auth/session/SessionProvider
+         -> profile (businessName, businessType, tools, ...)
+       Backend:  @auth_required(dashboard="informal_business") and
+         current_user() from src.core.decorators. That's all you need.
+
+  b) WHICH TOOLS ARE ON
+       profile.tools = { creditBook, orderStock, myRecord, jobs }
+       Turning a tool on/off: useSession().setTool(key, on). It already
+       saves to the server (business profile sync). "My record" can't be
+       switched off. Adding a NEW tool key (e.g. dailyTally) needs a
+       change in both constants/businessTypes.ts and the backend's
+       business_profile constants: ask Mandla (feedback/).
+
+  c) "I OWE SUPPLIERS" (credit book, second tab)
+       Some of those debts will come from real ORDERS (supplier gave
+       stock on credit). Orders are Mandla's. For now:
+         - the trader can ADD a supplier debt by hand (your data), and
+         - leave a clearly marked hook: suppliersOwedFromOrders() in your
+           api, returning [] in the mock. Mandla fills it when orders
+           exist. Show both in one list, labelled by source.
+
+  d) MY RECORD
+       The record counts things confirmed by both sides. Your tools feed
+       it: repayments recorded (credit book), stages signed off by the
+       client (jobs). Orders + cash handshakes (Mandla) feed it too. Build
+       the screen and the share link over an interface like:
+         recordApi.summary() -> { monthsTrading, confirmedByBoth,
+                                   recordedByYou, entries: [...] }
+       where entries have a `source` ("credit_book" | "job" | "order").
+       Mock the "order" ones; Mandla wires them.
+
+  e) PHOTOS (jobs: stage photos)
+       Use the media module; don't write your own Cloudinary code.
+       Folder: folders.informal_trader_job_folder(user.id, job.id).
+       How: README "How to use media" + the profile photo as the worked
+       example (business_profile/services/profile_image_service.py).
+       Stage photos are CAMERA ONLY (never the gallery) -- file 07.
+
+  f) NOTIFICATIONS / HOME NUMBERS
+       Home shows "you owe suppliers" (from c) and "cash taken today"
+       (roadmap/tally). Use your own api functions; if a number comes
+       from orders, mock it and mark it.
+
+  g) WHATSAPP
+       Receipts and reminders open WhatsApp with a pre-filled message
+       (a wa.me link), sent BY THE TRADER from their own phone. No
+       WhatsApp API, no server sending messages this weekend (file 10).

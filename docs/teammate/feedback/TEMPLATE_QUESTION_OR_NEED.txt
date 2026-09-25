@@ -1,0 +1,14 @@
+QUESTION / NEED: (one line)
+BY / DATE:
+AREA IT TOUCHES: (whose folder / which file)
+
+WHY I NEED IT
+  (what I'm building, what's blocked without it)
+
+WHAT I SUGGEST
+  (the smallest change that would unblock me)
+
+UNTIL THEN
+  (what I'll do meanwhile, e.g. mock it and mark it)
+
+DECISION: (Mandla fills in, with a date)

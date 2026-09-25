@@ -1,0 +1,59 @@
+===========================================================================
+TEAMMATE 10 -- RESEARCH AND PUBLIC APIS
+Look into these; write what you find in feedback/ (template there).
+Don't add a paid service, an account, or an API key without Mandla's OK.
+===========================================================================
+
+
+1. ALREADY DECIDED (no research needed)
+---------------------------------------------------------------------------
+
+  WhatsApp messages: wa.me links opened by the trader (free, no API,
+    no account). Format: https://wa.me/27821234567?text=<urlencoded>
+  Photos: Cloudinary through our shared.media module.
+  Maps/addresses: Mapbox through shared/location-picker (keys exist).
+  Money: integer cents, ZAR only.
+
+
+2. PLEASE RESEARCH (short answers are fine)
+---------------------------------------------------------------------------
+
+  a) SOUTH AFRICAN PUBLIC HOLIDAYS for due dates ("Month-end" that lands
+     on a holiday; "Friday" that is Good Friday).
+       Options to compare: a free public API (e.g. Nager.Date, which
+       lists ZA holidays) vs a small table we keep in code for 2026-2027.
+       Question: offline-first matters to spaza owners -- which is safer?
+
+  b) CAMERA-ONLY capture in Expo SDK 57 for stage photos:
+       expo-camera vs ImagePicker.launchCameraAsync; can the user sneak
+       in a gallery photo? What EXIF/time data survives? Recommend one.
+
+  c) HASHING A PHOTO ON THE PHONE (SHA-256) before upload: expo-crypto
+       digest of the file bytes; cost on a cheap Android; is hashing on
+       the server (after Cloudinary) enough instead?
+
+  d) SA PHONE NUMBERS: validating and converting 082 123 4567 -> +27...
+       (we have phonenumbers on the backend; what on the phone?).
+
+  e) WHATSAPP LIMITS: message length in a wa.me link; emoji and
+       Afrikaans/isiZulu characters in URLs; what happens without
+       WhatsApp installed (fallback to SMS link sms:?).
+
+  f) SHARE LINKS: how other apps make "view-only, revocable" links;
+       QR code for the shared record (a library for React Native?).
+
+  g) OFFLINE: can a trader add a credit sale with no signal and have it
+       sync later without duplicates? (We have idempotency keys on the
+       backend: src/shared/idempotency. How would the app use them?)
+
+  h) ANYTHING a real spaza/builder user told you would help the tools.
+
+
+3. RED FLAGS (tell us before going further)
+---------------------------------------------------------------------------
+
+  - Anything that needs the user's ID number or bank details
+  - Anything that sends messages FROM our server to customers
+  - Any API that costs money per call, or needs a company registration
+  - Any SDK that needs a new native module (it forces a new phone build:
+    Mandla schedules those)

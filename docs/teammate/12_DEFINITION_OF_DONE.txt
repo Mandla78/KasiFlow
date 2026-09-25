@@ -1,0 +1,32 @@
+===========================================================================
+TEAMMATE 12 -- DEFINITION OF DONE (the PR checklist)
+Copy into the PR and tick what's true. Untrue boxes stay unticked.
+===========================================================================
+
+FRONTEND
+  [ ] Screens match the plan (06/07/08) and the PDF's intent
+  [ ] Loading, empty and error states on every list
+  [ ] Forms validate; one clear message per field; no double submit
+  [ ] Money in cents end to end; formatRand to show
+  [ ] Works with the mock (EXPO_PUBLIC_USE_MOCK_API=true)
+  [ ] Works with the real backend (if this PR has one)
+  [ ] npx tsc --noEmit clean;  npx expo lint clean
+  [ ] Screenshots or a short screen recording in the PR
+
+BACKEND (if any)
+  [ ] Contract approved (link to feedback/CONTRACT_<tool>.txt)
+  [ ] Routes: auth, rate limit, strict schema, /me scoping
+  [ ] Tables: constraints, soft delete where right, money never deleted
+  [ ] Migration numbered, reviewed, `db check` clean
+  [ ] Tests: happy path, each validation, IDOR (other trader), limits
+  [ ] Audit events for disputable moments; no names/phones in them
+  [ ] python -m pytest -q all green
+
+SECURITY BY DESIGN (05)
+  [ ] Listed in the PR which rules applied and how
+
+HOUSEKEEPING
+  [ ] Only my folders touched (plus one-line wiring)
+  [ ] No secrets, no .env, no debug prints, no commented-out code
+  [ ] README / docs updated if how-to-run or an API changed
+  [ ] "Not done" and "Questions" sections filled in honestly
