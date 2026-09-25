@@ -50,7 +50,8 @@ STATUS:          proposed. The app side is built on the mocks (branch
                                           on_akayza_since, worked_with[first
                                           names], partners_in_common[names],
                                           reasons[], builds[build]
-                                          404 if hidden, blocked, or unknown
+                                          404 if hidden (unless you are
+                                          partners), blocked, or unknown
     PUT    /builders/<id>/save        -> 204  (bookmark; they aren't told)
     DELETE /builders/<id>/save        -> 204
     POST   /builders/<id>/block       -> 204
