@@ -17,7 +17,7 @@ import { Cents } from '@/shared/lib/money';
 import { DESCRIPTION_MAX, MAX_AMOUNT_CENTS, NAME_MAX, REASON_MAX } from '../lib/amounts';
 import { addDays, daysBetween, isIsoDay, MAX_DAYS_AHEAD, MAX_DAYS_BACK, nextFriday, todayIso } from '../lib/dueDates';
 import { normalisePhone } from '../lib/whatsapp';
-import { Corrected, CreditBookApi, CreditEntry, CreditEntryDetail, Customer, CustomerRef, EntryStatus, HistoryItem } from '../types';
+import { BIN_DAYS, Corrected, CreditBookApi, CreditEntry, CreditEntryDetail, Customer, CustomerRef, EntryStatus, HistoryItem } from '../types';
 
 // v2: customers only (v1 had supplier debts).
 const KEY = 'akayza.mock-credit-book.v2';
@@ -34,6 +34,8 @@ type StoredEntry = {
   status: EntryStatus;
   createdAt: string;
   history: HistoryItem[];
+  /** Set when the trader deletes it: hidden from them, kept here. */
+  binnedAt?: string | null;
 };
 type Book = { customers: StoredCustomer[]; entries: StoredEntry[] };
 
@@ -121,15 +123,25 @@ function view(b: Book, e: StoredEntry): CreditEntry {
     dueOn: e.dueOn,
     status: e.status,
     createdAt: e.createdAt,
+    binnedAt: e.binnedAt ?? null,
   };
 }
+
+const shown = (e: StoredEntry) => !e.binnedAt;
+
+/** Still in the bin's view: deleted in the last BIN_DAYS days. */
+const inBin = (e: StoredEntry) => !!e.binnedAt && Date.now() - Date.parse(e.binnedAt) < BIN_DAYS * 86_400_000;
+
+/** When the entry last changed: its newest history line. */
+const lastActivity = (e: StoredEntry) => e.history.reduce((latest, h) => (h.recordedAt > latest ? h.recordedAt : latest), e.createdAt);
 
 function detail(b: Book, e: StoredEntry): CreditEntryDetail {
   return { ...view(b, e), history: [...e.history] };
 }
 
+/** An entry the trader can see; binned ones are "not found" like the server's. */
 function find(b: Book, id: string): StoredEntry {
-  return b.entries.find((e) => e.id === id) ?? notFound();
+  return b.entries.find((e) => e.id === id && shown(e)) ?? notFound();
 }
 
 function checkAmount(cents: Cents) {
@@ -165,7 +177,7 @@ function statusAfter(e: StoredEntry): EntryStatus {
 
 function customerView(b: Book, c: StoredCustomer): Customer {
   const owes = b.entries
-    .filter((e) => e.customerId === c.id && e.status === 'open')
+    .filter((e) => e.customerId === c.id && e.status === 'open' && shown(e))
     .reduce((sum, e) => sum + view(b, e).outstandingCents, 0);
   return { id: c.id, name: c.name, phone: c.phone, owesCents: owes };
 }
@@ -174,7 +186,7 @@ export const mockCreditBookApi: CreditBookApi = {
   async list() {
     await wait();
     const b = await load();
-    const rows = b.entries.filter((e) => e.status !== 'cancelled').map((e) => view(b, e));
+    const rows = b.entries.filter((e) => e.status !== 'cancelled' && shown(e)).map((e) => view(b, e));
     const open = rows.filter((e) => e.status === 'open').sort((x, y) => x.dueOn.localeCompare(y.dueOn));
     const paid = rows.filter((e) => e.status === 'paid').sort((x, y) => y.createdAt.localeCompare(x.createdAt));
     return [...open, ...paid];
@@ -290,7 +302,7 @@ export const mockCreditBookApi: CreditBookApi = {
     const b = await load();
     const today = todayIso();
     const month = today.slice(0, 7);
-    const live = b.entries.filter((e) => e.status !== 'cancelled');
+    const live = b.entries.filter((e) => e.status !== 'cancelled' && shown(e));
     const open = live.filter((e) => e.status === 'open').map((e) => view(b, e));
     const dueToday = open.filter((e) => e.dueOn === today);
     return {
@@ -301,8 +313,46 @@ export const mockCreditBookApi: CreditBookApi = {
       overdueCount: open.filter((e) => e.dueOn < today).length,
       givenThisMonthCents: live.filter((e) => e.givenOn.startsWith(month)).reduce((s, e) => s + e.amountCents, 0),
       paidBackThisMonthCents: b.entries
+        .filter(shown)
         .flatMap((e) => e.history)
         .reduce((s, h) => s + (h.type === 'repayment' && h.on.startsWith(month) ? h.amountCents : 0), 0),
     };
+  },
+
+  async history(query) {
+    await wait(300);
+    const b = await load();
+    const q = query.trim().toLowerCase();
+    return b.entries
+      .filter((e) => shown(e) && (e.status === 'paid' || e.status === 'cancelled'))
+      .map((e) => ({ e, v: view(b, e) }))
+      .filter(({ v }) => !q || v.customer.name.toLowerCase().includes(q))
+      .sort((x, y) => lastActivity(y.e).localeCompare(lastActivity(x.e)))
+      .map(({ v }) => v);
+  },
+
+  async bin() {
+    await wait(300);
+    const b = await load();
+    return b.entries
+      .filter(inBin)
+      .sort((x, y) => (y.binnedAt ?? '').localeCompare(x.binnedAt ?? ''))
+      .map((e) => view(b, e));
+  },
+
+  async moveToBin(id) {
+    await wait();
+    const b = await load();
+    find(b, id).binnedAt = new Date().toISOString();
+    await save(b);
+  },
+
+  async restore(id) {
+    await wait();
+    const b = await load();
+    const e = b.entries.find((x) => x.id === id && inBin(x)) ?? notFound();
+    e.binnedAt = null;
+    await save(b);
+    return view(b, e);
   },
 };

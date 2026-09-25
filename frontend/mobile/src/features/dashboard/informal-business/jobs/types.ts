@@ -55,6 +55,8 @@ export type Job = {
   status: JobStatus;
   stages: Stage[];
   createdAt: string;
+  /** When the builder moved it to the bin (hidden from them, never deleted); null otherwise. */
+  binnedAt: string | null;
 };
 
 export type NewJob = {
@@ -89,4 +91,14 @@ export interface JobsApi {
   /** The builder's cash amount for the stage; returns the link to send to the client. */
   sendSignOff(jobId: string, stageId: string, builderAmountCents: Cents, businessName: string): Promise<SignOffSent>;
   summary(): Promise<JobsSummary>;
+  /** Done jobs, newest first; q searches the job and the client's name. */
+  history(query: string): Promise<Job[]>;
+  /**
+   * The bin: jobs deleted in the last 30 days. Deleting only HIDES a job
+   * from the builder; its stages, photos and the client's confirmations
+   * stay in the database and in their record.
+   */
+  bin(): Promise<Job[]>;
+  moveToBin(id: string): Promise<void>;
+  restore(id: string): Promise<Job>;
 }

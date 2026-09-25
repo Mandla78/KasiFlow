@@ -15,6 +15,7 @@ const entry: CreditEntry = {
   dueOn: '2026-10-02',
   status: 'open',
   createdAt: `${T}T08:00:00Z`,
+  binnedAt: null,
 };
 
 describe('South African cellphones', () => {

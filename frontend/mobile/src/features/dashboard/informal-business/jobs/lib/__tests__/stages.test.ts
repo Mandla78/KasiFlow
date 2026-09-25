@@ -26,6 +26,7 @@ const job: Job = {
   totalCents: 3_800_000,
   status: 'active',
   createdAt: '2026-09-25T08:00:00Z',
+  binnedAt: null,
   stages: [
     stage('Deposit', 500_000, { status: 'confirmed', builderAmountCents: 500_000, clientAmountCents: 500_000 }),
     stage('Walls', 1_200_000, { status: 'waiting', builderAmountCents: 1_200_000 }),

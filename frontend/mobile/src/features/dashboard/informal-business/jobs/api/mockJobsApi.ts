@@ -26,6 +26,8 @@ import {
   stagesTotal,
   TITLE_MAX,
 } from '../lib/stages';
+import { BIN_DAYS } from '@/features/dashboard/informal-business/credit-book/types';
+
 import { ClientAnswer, Job, JobsApi, Stage } from '../types';
 
 const KEY = 'akayza.mock-jobs.v1';
@@ -72,6 +74,7 @@ function sample(): Job[] {
       totalCents: 3_800_000,
       status: 'active',
       createdAt: daysAgo(20),
+      binnedAt: null,
       stages: [
         stage('Deposit', 500_000, { status: 'confirmed', builderAmountCents: 500_000, clientAmountCents: 500_000, signOffSentAt: daysAgo(19), confirmedAt: daysAgo(19) }),
         stage('Walls', 1_200_000, { status: 'waiting', builderAmountCents: 1_200_000, signOffSentAt: daysAgo(1) }),
@@ -102,8 +105,17 @@ async function save(next: Job[]) {
   }
 }
 
+const shown = (j: Job) => !j.binnedAt;
+
+/** Still in the bin's view: deleted in the last BIN_DAYS days. */
+const inBin = (j: Job) => !!j.binnedAt && Date.now() - Date.parse(j.binnedAt) < BIN_DAYS * 86_400_000;
+
+/** When the job last moved on: its latest confirmation, or when it was made. */
+const lastActivity = (j: Job) => j.stages.reduce((latest, s) => (s.confirmedAt && s.confirmedAt > latest ? s.confirmedAt : latest), j.createdAt);
+
+/** A job the builder can see; binned ones are "not found" like the server's. */
 function find(all: Job[], id: string): Job {
-  return all.find((j) => j.id === id) ?? notFound();
+  return all.find((j) => j.id === id && shown(j)) ?? notFound();
 }
 
 function findStage(job: Job, stageId: string): Stage {
@@ -129,7 +141,7 @@ export const mockJobsApi: JobsApi = {
     await wait();
     const all = await load();
     // Active first (newest first), then done.
-    return [...all].sort((a, b) => (a.status === b.status ? b.createdAt.localeCompare(a.createdAt) : a.status === 'active' ? -1 : 1)).map(copy);
+    return all.filter(shown).sort((a, b) => (a.status === b.status ? b.createdAt.localeCompare(a.createdAt) : a.status === 'active' ? -1 : 1)).map(copy);
   },
 
   async get(id) {
@@ -148,7 +160,7 @@ export const mockJobsApi: JobsApi = {
     if (input.stages.length < 1 || input.stages.length > MAX_STAGES) invalid('stages', `Add 1 to ${MAX_STAGES} stages.`);
     const stages = input.stages.map((s) => stage(text(s.name, 'stages', STAGE_NAME_MAX), cents(s.amountCents, 'stages')));
     if (stagesTotal(stages) !== total) invalid('stages', 'The stages must add up to the total.');
-    const job: Job = { id: newId('job'), title, clientName, clientPhone, place, totalCents: total, status: 'active', stages, createdAt: new Date().toISOString() };
+    const job: Job = { id: newId('job'), title, clientName, clientPhone, place, totalCents: total, status: 'active', stages, createdAt: new Date().toISOString(), binnedAt: null };
     await save([job, ...all]);
     return copy(job);
   },
@@ -185,13 +197,47 @@ export const mockJobsApi: JobsApi = {
   async summary() {
     await wait(250);
     const all = await load();
-    const active = all.filter((j) => j.status === 'active');
+    const active = all.filter((j) => j.status === 'active' && shown(j));
     const stages = active.flatMap((j) => j.stages);
     return {
       activeJobs: active.length,
       waitingOnClientsCents: stages.filter((s) => s.status === 'waiting').reduce((sum, s) => sum + s.amountCents, 0),
       needsSignOff: stages.filter((s) => s.status === 'photo_taken' || s.status === 'amounts_dont_match').length,
     };
+  },
+
+  async history(query) {
+    await wait(300);
+    const q = query.trim().toLowerCase();
+    return (await load())
+      .filter((j) => shown(j) && j.status === 'done')
+      .filter((j) => !q || j.title.toLowerCase().includes(q) || j.clientName.toLowerCase().includes(q))
+      .sort((a, b) => lastActivity(b).localeCompare(lastActivity(a)))
+      .map(copy);
+  },
+
+  async bin() {
+    await wait(300);
+    return (await load())
+      .filter(inBin)
+      .sort((a, b) => (b.binnedAt ?? '').localeCompare(a.binnedAt ?? ''))
+      .map(copy);
+  },
+
+  async moveToBin(id) {
+    await wait();
+    const all = await load();
+    find(all, id).binnedAt = new Date().toISOString();
+    await save(all);
+  },
+
+  async restore(id) {
+    await wait();
+    const all = await load();
+    const job = all.find((j) => j.id === id && inBin(j)) ?? notFound();
+    job.binnedAt = null;
+    await save(all);
+    return copy(job);
   },
 };
 

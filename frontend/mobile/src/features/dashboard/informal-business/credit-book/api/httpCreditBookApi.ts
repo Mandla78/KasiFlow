@@ -22,6 +22,8 @@ type WireEntry = {
   due_on: string;
   status: CreditEntry['status'];
   created_at: string;
+  /** From the bin endpoints (CONTRACT_bin.txt); absent elsewhere until they exist. */
+  binned_at?: string | null;
 };
 type WireCorrected = { amount_cents: number; due_on: string; description: string };
 type WireHistory =
@@ -53,6 +55,7 @@ function entry(e: WireEntry): CreditEntry {
     dueOn: e.due_on,
     status: e.status,
     createdAt: e.created_at,
+    binnedAt: e.binned_at ?? null,
   };
 }
 
@@ -131,5 +134,24 @@ export const httpCreditBookApi: CreditBookApi = {
 
   async summary() {
     return summary((await api<{ summary: WireSummary }>('GET', `${BASE}/summary`, undefined, { auth: true })).summary);
+  },
+
+  async history(query) {
+    // Until GET /history exists (CONTRACT_bin.txt): the paid-back entries the server already lists.
+    const q = query.trim().toLowerCase();
+    const paid = (await api<{ entries: WireEntry[] }>('GET', `${BASE}/entries?status=paid`, undefined, { auth: true })).entries.map(entry);
+    return paid.filter((e) => !q || e.customer.name.toLowerCase().includes(q));
+  },
+
+  async bin() {
+    return (await api<{ entries: WireEntry[] }>('GET', `${BASE}/bin`, undefined, { auth: true })).entries.map(entry);
+  },
+
+  async moveToBin(id) {
+    await api('DELETE', `${BASE}/entries/${encodeURIComponent(id)}`, undefined, { auth: true });
+  },
+
+  async restore(id) {
+    return entry((await api<{ entry: WireEntry }>('POST', `${BASE}/entries/${encodeURIComponent(id)}/restore`, undefined, { auth: true })).entry);
   },
 };
