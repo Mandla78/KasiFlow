@@ -44,6 +44,9 @@ reviewed before launch. Numbers live in ONE place in code:
     one-time pay link (30 minutes) from our server, which builds and signs
     the payment from the ORDER. [BUILT 26 Sep 2026]
   - The order waits for payment; the supplier only sees it once it's paid.
+    A PAID order is CONFIRMED at once -- the money is in, so the supplier
+    doesn't accept it separately; it goes straight to delivery or
+    collection. The trader gets a "payment received" email. [BUILT]
     An unpaid order lapses automatically after 24 hours and its stock goes
     back (checked every 10 minutes). [BUILT]
   - An order is PAID only when PayFast's notification passes all four
@@ -110,6 +113,12 @@ reviewed before launch. Numbers live in ONE place in code:
     or cash confirmed by both), number RCT-<year>-<order number>.
   - Both are PDFs, opened from a link that works for 10 minutes and only
     for that document; a trader only gets links for their own orders.
+  - They carry the seller's and the buyer's details (names, address,
+    emails, phones; the buyer's CIPC number when they gave one, marked
+    verified only if our check said so) and a QR code. The QR opens a
+    public page that confirms the document is genuine (number, supplier,
+    date, total, paid) and shows NO personal details; the link is signed,
+    so numbers can't be tried one by one.
 
 
 6. DISPUTES AND REFUNDS

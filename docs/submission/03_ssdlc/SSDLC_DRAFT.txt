@@ -80,7 +80,9 @@ THREAT MODELLING & DESIGN REVIEW (STRIDE -- what is built)
   - Payment links and client sign-off links are 256-bit tickets stored
     only as HMAC-SHA256 hashes, short-lived and revoked by a newer link.
     Invoice and receipt downloads use links signed with a server key that
-    expire after 10 minutes and are valid for one document only.
+    expire after 10 minutes and are valid for one document only. Every
+    document carries a QR code to a signed public check page, so a forged
+    or altered invoice is caught; that page shows no personal details.
   - Builders' stage photos: the server records its own time and a SHA-256
     fingerprint of the stored file, so a swapped or back-dated photo is
     detectable; camera only, never the gallery.
