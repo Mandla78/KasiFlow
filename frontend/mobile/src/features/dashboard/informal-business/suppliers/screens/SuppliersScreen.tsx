@@ -1,7 +1,7 @@
 import { router } from 'expo-router';
 import { Feather } from '@expo/vector-icons';
 import { useEffect, useRef, useState } from 'react';
-import { ActivityIndicator, StyleSheet, Text, TextInput, View } from 'react-native';
+import { ActivityIndicator, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
 
 import { CategoryCode } from '@/constants/categories';
 import { areaOf, isVerified } from '@/features/auth/profile';
@@ -11,10 +11,10 @@ import { Overline } from '@/shared/components/Text';
 import { TopBar } from '@/shared/components/TopBar';
 import { colors, fonts, radius } from '@/shared/theme/tokens';
 
-import { useCartSupplierIds } from '../../cart/lib/cartStore';
+import { useCartItemCount } from '../../cart/lib/cartStore';
 import { CategoryChips } from '../../catalogue/components/CategoryChips';
 import { supplierMatchApi } from '../api/supplierMatchApi';
-import { SupplierCard } from '../components/SupplierCard';
+import { SupplierCircle } from '../components/SupplierCircle';
 import { useConnect } from '../lib/useConnect';
 import type { SupplierMatch } from '../types';
 
@@ -28,12 +28,12 @@ import type { SupplierMatch } from '../types';
  */
 export default function SuppliersScreen() {
   const { profile } = useSession();
-  const { isConnected, ask, sheet, syncFromServer } = useConnect();
+  const { isConnected, syncFromServer } = useConnect();
   const [matches, setMatches] = useState<SupplierMatch[] | null>(null);
   const [failed, setFailed] = useState(false);
   const [chip, setChip] = useState<CategoryCode | 'all'>('all');
   const [query, setQuery] = useState('');
-  const hasCart = useCartSupplierIds().length > 0;
+  const cartItems = useCartItemCount();
 
   const place = profile.location;
   useEffect(() => {
@@ -69,10 +69,10 @@ export default function SuppliersScreen() {
   const recommended = others.filter((m) => !m.withinReach && m.sharedCategories.length > 0);
   const more = others.filter((m) => !m.withinReach && m.sharedCategories.length === 0);
   const sections = [
-    { title: 'Your suppliers', list: yours },
-    { title: 'Near you', list: near },
-    { title: 'Recommended for you', list: recommended },
-    { title: 'More suppliers', list: more },
+    { title: 'Your suppliers', list: yours, hint: 'Suppliers you connect with show here. Open one and tap Connect to start ordering.' },
+    { title: 'Near you', list: near, hint: '' },
+    { title: 'Recommended for you', list: recommended, hint: '' },
+    { title: 'More suppliers', list: more, hint: '' },
   ];
 
   return (
@@ -84,7 +84,7 @@ export default function SuppliersScreen() {
         initial={profile.businessName[0] ?? 'A'}
         title="Suppliers"
         subtitle={areaOf(profile) ? `Near ${areaOf(profile)}` : undefined}
-        action={{ icon: 'shopping-cart', label: 'Your carts', dot: hasCart, onPress: () => router.push('/informal-business/cart') }}
+        action={{ icon: 'shopping-cart', label: `Your carts, ${cartItems} items`, badge: cartItems, onPress: () => router.push('/informal-business/cart') }}
       />
       <View style={styles.search}>
         <Feather name="search" size={16} color={colors.textMuted} />
@@ -107,29 +107,33 @@ export default function SuppliersScreen() {
       ) : null}
       {failed ? <Text style={styles.muted}>Couldn&apos;t load suppliers. Check your connection and open this tab again.</Text> : null}
 
-      {sections.map((sec) =>
-        sec.list.length ? (
-          <View key={sec.title} style={styles.section}>
-            <Overline>{sec.title}</Overline>
-            {sec.list.map((m) => (
-              <SupplierCard
-                key={m.id}
-                match={m}
-                connected={isConnected(m.id)}
-                onConnect={() => ask(m.id, m.name)}
-                onOpen={() => router.push(`/informal-business/supplier/${m.id}`)}
-              />
-            ))}
-          </View>
-        ) : null,
-      )}
+      {matches &&
+        sections.map((sec) =>
+          sec.list.length || (sec.hint && !q && chip === 'all') ? (
+            <View key={sec.title} style={styles.section}>
+              <View style={styles.sectionHead}>
+                <Overline>{sec.title}</Overline>
+                {sec.list.length ? <Text style={styles.count}>{sec.list.length}</Text> : null}
+              </View>
+              {sec.list.length ? (
+                // A row you swipe sideways: big circles, the name below.
+                <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.row} contentContainerStyle={styles.rowContent}>
+                  {sec.list.map((m) => (
+                    <SupplierCircle key={m.id} match={m} connected={isConnected(m.id)} onOpen={() => router.push(`/informal-business/supplier/${m.id}`)} />
+                  ))}
+                </ScrollView>
+              ) : (
+                <Text style={styles.hint}>{sec.hint}</Text>
+              )}
+            </View>
+          ) : null,
+        )}
 
       {matches && shown.length === 0 ? (
         <Text style={styles.empty}>
           {matches.length === 0 ? 'No suppliers to show right now. New suppliers are joining; check again soon.' : 'No suppliers match. Try another word or category.'}
         </Text>
       ) : null}
-      {sheet}
     </Screen>
   );
 }
@@ -147,7 +151,13 @@ const styles = StyleSheet.create({
     paddingHorizontal: 14,
   },
   searchInput: { flex: 1, height: '100%', fontFamily: fonts.medium, fontSize: 14.5, color: colors.text, outlineWidth: 0 },
-  section: { gap: 8 },
+  section: { gap: 10 },
+  sectionHead: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
+  count: { fontFamily: fonts.semibold, fontSize: 12, color: colors.textMuted },
+  // Full width: the row runs edge to edge while the screen keeps its 20 px sides.
+  row: { marginHorizontal: -20 },
+  rowContent: { paddingHorizontal: 20, gap: 14 },
+  hint: { fontFamily: fonts.body, fontSize: 13, lineHeight: 18, color: colors.textMuted },
   loading: { alignItems: 'center', gap: 10, paddingVertical: 30 },
   muted: { fontFamily: fonts.body, fontSize: 13, lineHeight: 18, color: colors.textMuted },
   empty: { fontFamily: fonts.body, fontSize: 13.5, lineHeight: 19, color: colors.textMuted, textAlign: 'center', paddingVertical: 20 },
