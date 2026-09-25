@@ -40,7 +40,8 @@ def today() -> date:
 
 
 def _invalid(field: str, message: str) -> ValidationError:
-    return ValidationError("Please check the highlighted fields.", errors=[{field: [message]}])
+    # One field, one rule: the message itself is what the app shows.
+    return ValidationError(message, errors=[{field: [message]}])
 
 
 def _not_found() -> NotFoundError:
