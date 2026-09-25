@@ -29,7 +29,7 @@ from src.shared.audit.event_types.commerce import CommerceAuditEvent as E
 
 from ..models import Payment
 from ..repositories import payment_repository as repo
-from . import payfast
+from . import payfast, payment_emails
 
 #: A pay link works this long (the order itself waits up to 24 hours).
 TICKET_MINUTES = 30
@@ -149,6 +149,8 @@ def handle_itn(posted: list[tuple[str, str]], remote_ip: Optional[str]) -> str:
         order_id=payment.order_id, payment_id=payment.id, amount_cents=payment.amount_cents,
         reason=None if paid_in_time else "paid_after_lapse",
     )
+    if paid_in_time:
+        payment_emails.payment_received(order, payment.provider_reference)
     return "paid" if paid_in_time else "paid_late"
 
 

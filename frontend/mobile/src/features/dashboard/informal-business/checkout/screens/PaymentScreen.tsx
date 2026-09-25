@@ -112,7 +112,12 @@ export default function PaymentScreen() {
       {step === 'checking' ? (
         <Note icon="clock" title="Confirming your payment" text="Checking with PayFast. This usually takes a few seconds." />
       ) : step === 'paid' ? (
-        <Note icon="check-circle" title="Payment confirmed" text={`Your order is on its way to ${order.supplierName}. We'll let you know when they accept it.`} good />
+        <Note
+          icon="check-circle"
+          title="Paid and confirmed"
+          text={`${order.supplierName} has your order. We've emailed your receipt, and we'll let you know when it's ${order.fulfilment === 'collect' ? 'ready to collect' : 'on its way'}.`}
+          good
+        />
       ) : step === 'not_yet' ? (
         <Note
           icon="info"
@@ -122,7 +127,7 @@ export default function PaymentScreen() {
       ) : step === 'soon' ? (
         <Note icon="lock" title="Coming soon" text={`Digital payment isn't switched on here yet. Your order is saved; ${order.supplierName} gets it once it's paid.`} />
       ) : (
-        <Note icon="shield" title="How it works" text="You pay on PayFast's own page; Akayza never sees your card. Your order goes to the supplier once PayFast confirms the payment." />
+        <Note icon="shield" title="How it works" text="You pay on PayFast's own page; Akayza never sees your card. Once PayFast confirms the payment, your order is confirmed straight away." />
       )}
       {error ? <Text style={styles.error}>{error}</Text> : null}
     </Screen>

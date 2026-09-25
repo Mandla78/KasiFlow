@@ -75,7 +75,11 @@ def test_a_tax_invoice_in_the_suppliers_name_with_vat_per_line(app, client, plac
         order_service.supplier_move(uuid.UUID(o["id"]), "accepted")
         d = document_service.invoice(uuid.UUID(o["id"]))
     assert d["title"] == "Tax Invoice" and not d["full"]  # under R5,000: abridged
-    assert d["supplier"]["vat_number"] == "4999000012" and d["buyer"] is None
+    assert d["supplier"]["vat_number"] == "4999000012" and d["supplier"]["email"].endswith(".example.com")
+    # Buyer details on every invoice (required only above R5,000, shown always).
+    assert d["buyer"]["business"] == "Nomsa's Spaza" and d["buyer"]["email"] == "nomsa@example.com"
+    assert d["buyer"]["owner"] == "Nomsa Dlamini" and d["buyer"]["phone"]
+    assert d["buyer"]["cipc_number"] is None  # none given: none shown
     assert d["number"] == "INV-" + o["reference"].removeprefix("AKZ-")
     zero, std = [l for l in d["lines"] if l.zero_rated], [l for l in d["lines"] if not l.zero_rated]
     assert zero and all(l.vat_cents == 0 for l in zero)
@@ -136,3 +140,26 @@ def test_a_receipt_once_the_money_is_confirmed(app, client, placed):
         d = document_service.receipt(oid)
     assert d["method"] == "Cash, confirmed by both" and d["total_cents"] == o["total_cents"]
     assert client.get(_path(link(client, me, o, "receipt").get_json()["data"]["url"])).data.startswith(b"%PDF")
+
+
+def test_a_given_cipc_number_is_on_the_invoice(app, client, placed):
+    me, o = placed
+    client.patch("/api/v1/me/business-profile", headers=me, json={"registration": {"sole_trader": False, "cipc_number": "2020/123456/07"}})
+    with app.app_context():
+        order_service.supplier_move(uuid.UUID(o["id"]), "accepted")
+        buyer = document_service.invoice(uuid.UUID(o["id"]))["buyer"]
+    assert buyer["cipc_number"] == "2020/123456/07"
+
+
+def test_the_qr_opens_a_genuine_check_without_personal_details(app, client, placed):
+    me, o = placed
+    with app.app_context():
+        order_service.supplier_move(uuid.UUID(o["id"]), "accepted")
+        url = document_service.invoice(uuid.UUID(o["id"]))["verify_url"]
+    page = client.get(_path(url)).get_data(as_text=True)
+    assert "Genuine document" in page and o["reference"] in page
+    assert "nomsa@example.com" not in page and "Nomsa" not in page
+    number = url.split("/verify/")[1].split("?")[0]
+    assert "can't confirm" in client.get(f"/verify/{number}?s=0000").get_data(as_text=True)
+    other = number[:-1] + ("1" if number[-1] != "1" else "2")
+    assert "can't confirm" in client.get(f"/verify/{other}?s={url.split('s=')[1]}").get_data(as_text=True)

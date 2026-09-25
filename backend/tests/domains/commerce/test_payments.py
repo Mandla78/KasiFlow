@@ -158,15 +158,20 @@ def test_a_new_pay_link_cancels_the_old_one(client, order):
 # -------------------------------------------------------------------- ITN
 
 
-def test_a_verified_notification_pays_the_order_once(app, client, order):
+def test_a_verified_notification_pays_the_order_once(app, client, order, outbox):
     me, o = order
     pay_link(client, me, o)
     posted = itn(app, o)
+    sent_before = len(outbox)
     assert notify(client, posted).status_code == 200
+    emails = outbox[sent_before:]
+    assert len(emails) == 1 and emails[0]["subject"] == f"Payment received for order {o['reference']}"
+    assert o["reference"] in emails[0]["html_body"] and "1089250" in emails[0]["html_body"]
     paid = order_now(client, me, o)
-    assert paid["status"] == "placed" and paid["payment_status"] == "paid"
-    notify(client, posted)  # PayFast repeats itself
-    assert [e["status"] for e in order_now(client, me, o)["events"]] == ["awaiting_payment", "placed"]
+    assert paid["status"] == "accepted" and paid["payment_status"] == "paid"  # paid = confirmed, no waiting
+    notify(client, posted)  # PayFast repeats itself: no second email either
+    assert len(outbox) == sent_before + 1
+    assert [e["status"] for e in order_now(client, me, o)["events"]] == ["awaiting_payment", "accepted"]
     with app.app_context():
         p = Payment.query.one()
         assert p.status == "complete" and p.provider_reference == "1089250"

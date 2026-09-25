@@ -1,0 +1,16 @@
+{% extends "_layout.html" %}
+{% block content %}
+<p style="font-size:18px;font-weight:700;margin:0 0 6px;">Payment received</p>
+<p style="font-size:14px;color:#334155;margin:0 0 18px;">Thank you{% if business %}, {{ business }}{% endif %}. Your payment is confirmed and your order is on its way to {{ supplier }}.</p>
+<table style="width:100%;border-collapse:collapse;font-size:14px;margin-bottom:16px;">
+  <tr><td style="color:#64748B;padding:4px 0;">Order</td><td style="text-align:right;font-weight:700;">{{ reference }}</td></tr>
+  <tr><td style="color:#64748B;padding:4px 0;">Paid</td><td style="text-align:right;font-weight:700;">{{ total }}</td></tr>
+  <tr><td style="color:#64748B;padding:4px 0;">Method</td><td style="text-align:right;">Digital payment (PayFast){% if provider_reference %} &middot; ref {{ provider_reference }}{% endif %}</td></tr>
+  <tr><td style="color:#64748B;padding:4px 0;">{{ fulfilment_label }}</td><td style="text-align:right;">{{ address }}</td></tr>
+</table>
+<table style="width:100%;border-collapse:collapse;font-size:13.5px;border-top:1px solid #E2E8F0;">
+  {% for line in lines %}<tr><td style="padding:6px 0;">{{ line.qty }} &times; {{ line.name }} <span style="color:#64748B;">({{ line.pack }})</span></td><td style="text-align:right;">{{ line.total }}</td></tr>{% endfor %}
+  {% if delivery %}<tr><td style="padding:6px 0;">Delivery</td><td style="text-align:right;">{{ delivery }}</td></tr>{% endif %}
+</table>
+<p style="font-size:14px;color:#334155;margin-top:18px;">Your invoice and payment receipt are in the app under My orders &rarr; {{ reference }}. We'll let you know when it's on its way.</p>
+{% endblock %}

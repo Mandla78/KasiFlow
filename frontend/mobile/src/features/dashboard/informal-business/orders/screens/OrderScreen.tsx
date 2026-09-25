@@ -154,7 +154,7 @@ export default function OrderScreen() {
           icon="file-text"
           label="Invoice (PDF)"
           ready={!!order.documents?.invoice}
-          waiting="When the supplier accepts"
+          waiting={order.payment === 'in_app' ? 'When the payment is confirmed' : 'When the supplier accepts'}
           onOpen={() => openDocument('invoice')}
         />
         <DocumentRow

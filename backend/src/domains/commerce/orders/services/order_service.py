@@ -242,21 +242,28 @@ def get_order(order_id: uuid.UUID) -> Optional[Order]:
     return repo.by_id(order_id)
 
 
+def get_by_reference(reference: str) -> Optional[Order]:
+    """For the public "is this document genuine?" check."""
+    return repo.by_reference(reference)
+
+
 def get_for_payment(order_id: uuid.UUID) -> Optional[Order]:
     """For the payments feature (no trader in the request): the order, locked."""
     return repo.by_id(order_id, lock=True)
 
 
 def mark_paid(order: Order, provider_reference: str) -> bool:
-    """A verified payment arrived: the order goes to the supplier. Returns
-    False if the order is no longer waiting (paid already, or it lapsed:
-    then the payment is recorded and must be refunded). The caller commits."""
+    """A verified payment arrived. A paid order is CONFIRMED at once: the
+    money is in, so there's nothing for the supplier to accept -- it goes
+    straight to their delivery (or collection) steps. Returns False if the
+    order is no longer waiting (paid already, or it lapsed: then the
+    payment is recorded and must be refunded). The caller commits."""
     if order.status != "awaiting_payment":
         return False
-    order.status = "placed"
+    order.status = "accepted"
     order.payment_status = "paid"
-    order.events.append(OrderEvent(status="placed", actor="system", at=utcnow(), note="Paid"))
-    order_audit.record(E.ORDER_STATUS_CHANGED, order_id=order.id, reference=order.reference, status="placed", actor="system", paid_with=provider_reference)
+    order.events.append(OrderEvent(status="accepted", actor="system", at=utcnow(), note="Paid"))
+    order_audit.record(E.ORDER_STATUS_CHANGED, order_id=order.id, reference=order.reference, status="accepted", actor="system", paid_with=provider_reference)
     return True
 
 
@@ -288,10 +295,11 @@ _INVOICE_AFTER = ("accepted", "out_for_delivery", "ready_for_collection", "deliv
 
 
 def documents_ready(o: Order) -> dict[str, bool]:
-    """Invoice: once the supplier accepts, or a digital order is paid.
+    """Invoice: once the order is confirmed (the supplier accepted a cash
+    order, or a digital order was paid -- which confirms it at once).
     Receipt: once the money is confirmed (paid digitally, or cash confirmed by both)."""
     return {
-        "invoice": o.status in _INVOICE_AFTER or (o.status == "placed" and o.payment_status == "paid"),
+        "invoice": o.status in _INVOICE_AFTER,
         "receipt": o.payment_status in ("paid", "confirmed_by_both"),
     }
 
