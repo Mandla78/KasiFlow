@@ -27,8 +27,13 @@ reviewed before launch. Numbers live in ONE place in code:
     over their amount, if they offer it).
   - Every order has one reference, AKZ-YYYY-NNNNNN, unique on Akayza.
     Suppliers' own invoice numbers come from their system.
-  - The trader can cancel until the supplier accepts. After that, the
-    supplier decides (and refunds a digital payment if they agree).
+  - CANCELLING (decided 2026-09-25):
+      Cash order     the trader can cancel until the supplier accepts it.
+                     Once accepted, it can't be cancelled.
+      Digital order  can't be cancelled by the trader, like a stock order
+                     paid up front. Unpaid, it simply lapses after 24
+                     hours. Paid, problems go through a dispute (section 6)
+                     and the supplier refunds if they agree.
 
 
 3. DIGITAL PAYMENT (recommended)

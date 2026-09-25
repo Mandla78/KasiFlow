@@ -146,7 +146,8 @@ export const mockOrdersApi: OrdersApi = {
     await wait(400);
     const o = orders.find((x) => x.id === id);
     if (!o) throw new OrderError('NOT_FOUND', "We couldn't find that order.");
-    if (!['awaiting_payment', 'placed'].includes(advanced(o).status)) throw new OrderError('TOO_LATE', 'The supplier already accepted this order, so it can no longer be cancelled here.');
+    if (o.payment !== 'cash') throw new OrderError('TOO_LATE', "Orders paid digitally can't be cancelled.");
+    if (advanced(o).status !== 'placed') throw new OrderError('TOO_LATE', 'The supplier already accepted this order, so it can no longer be cancelled.');
     const cancelled: Order = { ...o, status: 'cancelled', events: [...o.events, { status: 'cancelled', at: new Date().toISOString() }] };
     orders = orders.map((x) => (x.id === id ? cancelled : x));
     return cancelled;

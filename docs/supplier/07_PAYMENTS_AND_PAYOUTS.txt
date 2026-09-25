@@ -70,7 +70,9 @@ Akayza ever holding it.
 4. REFUNDS AND CANCELLATIONS
 ---------------------------------------------------------------------------
 
-  Before payment: cancel freely. After an in-app payment: refund through
+  Cancelling: cash orders until the supplier accepts; digital orders
+  never by the trader (unpaid ones lapse after 24 hours). See
+  12_POLICIES.txt section 2. Refunds after an in-app payment go through
   PayFast (API or merchant dashboard -- to verify); status "refunded"
   only when PayFast confirms. Rejected-by-supplier after payment ->
   automatic refund request, audited.

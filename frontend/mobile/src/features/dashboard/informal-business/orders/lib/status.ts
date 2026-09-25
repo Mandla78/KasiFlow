@@ -37,9 +37,11 @@ export function stepsFor(o: Order): OrderStatus[] {
     : ['placed', 'accepted', 'out_for_delivery', 'delivered'];
 }
 
-/** The trader can still cancel: the supplier hasn't accepted yet. */
+/** Only a cash order, and only until the supplier accepts it. A digital
+ *  order is never cancelled by the trader (docs/supplier/12, section 2);
+ *  an unpaid one lapses on its own. */
 export function canCancel(o: Order): boolean {
-  return o.status === 'awaiting_payment' || o.status === 'placed';
+  return o.payment === 'cash' && o.status === 'placed';
 }
 
 export function isActive(o: Order): boolean {

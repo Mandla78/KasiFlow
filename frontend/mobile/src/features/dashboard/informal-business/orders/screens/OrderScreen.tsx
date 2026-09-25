@@ -60,11 +60,10 @@ export default function OrderScreen() {
 
   const cash = order.payment === 'cash';
   const unpaid = order.status === 'awaiting_payment';
-  const footer = canCancel(order) ? (
-    <>
-      {unpaid ? <Button title={`Pay ${formatRand(order.totalCents)}`} icon="lock" onPress={() => router.push(`/informal-business/pay/${order.id}`)} /> : null}
-      <Button title="Cancel order" variant="secondary" onPress={cancel} loading={busy} />
-    </>
+  const footer = unpaid ? (
+    <Button title={`Pay ${formatRand(order.totalCents)}`} icon="lock" onPress={() => router.push(`/informal-business/pay/${order.id}`)} />
+  ) : canCancel(order) ? (
+    <Button title="Cancel order" variant="secondary" onPress={cancel} loading={busy} />
   ) : undefined;
   const needsPass = (cash || order.fulfilment === 'collect') && !['cancelled', 'rejected', 'delivered', 'collected'].includes(order.status);
 
@@ -84,7 +83,7 @@ export default function OrderScreen() {
       {unpaid ? (
         <View style={styles.notice}>
           <Feather name="credit-card" size={20} color={colors.marigoldDeep} />
-          <Text style={styles.noticeText}>Pay to send this order to {order.supplierName}. They only see it once it&apos;s paid.</Text>
+          <Text style={styles.noticeText}>Pay to send this order to {order.supplierName}. They only see it once it&apos;s paid. Unpaid orders lapse after 24 hours.</Text>
         </View>
       ) : order.status === 'placed' ? (
         <View style={styles.notice}>
