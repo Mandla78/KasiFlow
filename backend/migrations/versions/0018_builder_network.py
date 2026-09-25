@@ -1,7 +1,7 @@
 """trader: builder network (profiles, saves, blocks, reports, job partners, partner payments, help posts)
 
-Revision ID: 0016_builder_network
-Revises: 0015_supplier_connections
+Revision ID: 0018_builder_network
+Revises: 0017_orders
 Create Date: 2026-09-25 22:58:31.023840
 
 """
@@ -10,8 +10,8 @@ import sqlalchemy as sa
 from sqlalchemy.dialects import postgresql
 
 # revision identifiers, used by Alembic.
-revision = '0016_builder_network'
-down_revision = '0015_supplier_connections'
+revision = '0018_builder_network'
+down_revision = '0017_orders'
 branch_labels = None
 depends_on = None
 

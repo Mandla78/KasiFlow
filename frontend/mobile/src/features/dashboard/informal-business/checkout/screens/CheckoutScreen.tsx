@@ -1,5 +1,5 @@
 import { router, useLocalSearchParams } from 'expo-router';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { ActivityIndicator, StyleSheet, Text, View } from 'react-native';
 
 import type { Place } from '@/features/auth/types';
@@ -10,6 +10,7 @@ import { Screen } from '@/shared/components/Screen';
 import { Sheet } from '@/shared/components/Sheet';
 import { Overline } from '@/shared/components/Text';
 import { AddressPickerField, formatPlace } from '@/shared/location-picker/components/AddressPickerField';
+import { newIdempotencyKey } from '@/shared/api/client';
 import { formatRand } from '@/shared/lib/money';
 import { colors, fonts, radius } from '@/shared/theme/tokens';
 
@@ -47,6 +48,8 @@ export default function CheckoutScreen() {
   const [payment, setPayment] = useState<PaymentMethod | null>(null);
   const [error, setError] = useState('');
   const [busy, setBusy] = useState(false);
+  // One key for this order: a retry after a dropped connection can't order twice.
+  const orderKey = useRef<string | null>(null);
   const [openCash, setOpenCash] = useState(0);
   const [cashHelp, setCashHelp] = useState(false);
 
@@ -114,18 +117,26 @@ export default function CheckoutScreen() {
     setBusy(true);
     setError('');
     try {
+      orderKey.current ??= newIdempotencyKey();
+      const elsewhere = fulfilment === 'delivery' && where === 'other' && otherPlace;
       const order = await ordersApi.place({
         supplierId: supplier.id,
         lines: lines.map((l) => ({ productId: l.productId, qty: l.qty })),
         fulfilment,
         payment,
-        deliveryAddress: fulfilment === 'delivery' ? deliveryAddress : null,
+        // Somewhere else: its address and pin. My business: the server uses the saved pin.
+        deliveryAddress: elsewhere ? deliveryAddress : null,
+        deliveryPoint: elsewhere ? { latitude: otherPlace.latitude, longitude: otherPlace.longitude } : null,
+        idempotencyKey: orderKey.current,
       });
       clearCart(supplier.id);
       router.dismissAll();
       // Digital: on to the secure payment step. Cash: the order, waiting for the supplier.
       router.push(order.status === 'awaiting_payment' ? `/informal-business/pay/${order.id}` : `/informal-business/orders/${order.id}`);
     } catch (e) {
+      // A definite "no" (below the minimum, out of stock...): the next try is a
+      // new order, so a new key. A dropped connection keeps the key: same order.
+      if (e instanceof OrderError) orderKey.current = null;
       setError(e instanceof OrderError ? e.message : "Couldn't place the order. Check your connection and try again.");
       setBusy(false);
     }

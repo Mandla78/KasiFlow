@@ -15,7 +15,9 @@ export type OrderStatus =
   | 'delivered'
   | 'collected'
   | 'rejected'
-  | 'cancelled';
+  | 'cancelled'
+  /** Digital order not paid within 24 hours: it lapsed and its stock went back. */
+  | 'expired';
 
 export type PaymentStatus = 'unpaid' | 'paid' | 'cash_due' | 'confirmed_by_both' | 'disputed' | 'refunded';
 
@@ -49,6 +51,8 @@ export type Order = {
   deliveryFeeCents: Cents;
   totalCents: Cents;
   placedAt: string;
+  /** Digital orders: pay before this or the order lapses. */
+  payBy?: string | null;
   events: OrderEvent[];
 };
 
@@ -58,12 +62,18 @@ export type PlaceOrderInput = {
   lines: { productId: string; qty: number }[];
   fulfilment: Fulfilment;
   payment: PaymentMethod;
+  /** Only when delivering somewhere other than the business (with its pin);
+   *  null = the business's own saved address. */
   deliveryAddress: string | null;
+  deliveryPoint?: { latitude: number; longitude: number } | null;
+  /** One per "Place order" tap, reused on a retry: never two orders. */
+  idempotencyKey?: string;
 };
 
 export class OrderError extends Error {
   constructor(
-    public code: 'BELOW_MINIMUM' | 'OUT_OF_STOCK' | 'CASH_LIMIT' | 'NOT_ACCEPTED' | 'NOT_FOUND' | 'TOO_LATE',
+    /** The server's code, e.g. BELOW_MINIMUM, OUT_OF_STOCK, CASH_LIMIT, NOT_CONNECTED, TOO_LATE. */
+    public code: string,
     message: string,
   ) {
     super(message);

@@ -30,6 +30,9 @@ from src.domains.identity.auth.schedulers.identity_scheduler import (
 from src.shared.media.scheduler import (
     JOB_SPECS as MEDIA_JOB_SPECS,
 )
+from src.domains.commerce.orders.schedulers.orders_scheduler import (
+    JOB_SPECS as ORDERS_JOB_SPECS,
+)
 from src.master_scheduler import runner
 from src.master_scheduler.interfaces import JobSpec, SchedulerEngine
 
@@ -39,6 +42,7 @@ ALL_JOB_SPECS: list[JobSpec] = [
     *IDEMPOTENCY_JOB_SPECS,
     *IDENTITY_JOB_SPECS,
     *MEDIA_JOB_SPECS,
+    *ORDERS_JOB_SPECS,
     # Each Akayza domain adds its own JOB_SPECS here the same way, e.g.
     # *CREDIT_BOOK_JOB_SPECS from
     # domains/informal_trader/credit_book/schedulers/credit_book_scheduler.py

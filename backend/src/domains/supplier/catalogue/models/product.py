@@ -23,7 +23,7 @@ full catalogue). Kept, because old orders point at it.
 """
 from __future__ import annotations
 
-from sqlalchemy.dialects.postgresql import UUID
+from sqlalchemy.dialects.postgresql import ARRAY, UUID
 
 from src.core.base_model import BaseModel
 from src.extensions import db
@@ -49,6 +49,7 @@ class Product(BaseModel):
         db.CheckConstraint("price_cents > 0", name="ck_products_price"),
         db.CheckConstraint("compare_at_price_cents IS NULL OR compare_at_price_cents > price_cents", name="ck_products_compare_at"),
         db.CheckConstraint("stock_qty >= 0", name="ck_products_stock"),
+        db.CheckConstraint("cardinality(image_urls) <= 7", name="ck_products_images"),
         db.CheckConstraint(f"min_qty >= 1 AND max_qty >= min_qty AND max_qty <= {MAX_QTY_LIMIT}", name="ck_products_qty"),
         {"schema": "supplier"},
     )
@@ -70,6 +71,9 @@ class Product(BaseModel):
     #: For delivery planning (a pallet of bricks, 50 kg of cement).
     weight_kg = db.Column(db.Numeric(8, 3), nullable=True)
     description = db.Column(db.String(1000), nullable=True)
+    #: 0-7 photo links, the first is the main one (our Cloudinary only:
+    #: shared/media/public_urls.py).
+    image_urls = db.Column(ARRAY(db.String(500)), nullable=False, default=list)
 
     price_cents = db.Column(db.BigInteger, nullable=False)
     compare_at_price_cents = db.Column(db.BigInteger, nullable=True)

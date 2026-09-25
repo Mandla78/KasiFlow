@@ -14,6 +14,7 @@ from typing import Any, Optional
 from src.core.base_model import utcnow
 from src.shared.audit.event_types.supplier import SupplierAuditEvent as E
 from src.shared.constants.commerce_policy import cash_limit_for
+from src.shared.media.public_urls import delivery_url
 
 from ..models import Supplier
 from ..repositories import supplier_repository as repo
@@ -80,7 +81,7 @@ def public_view(s: Supplier) -> dict:
         "name": s.trading_name,
         "initials": initials(s.trading_name),
         "color": s.brand_color,
-        "logo_url": s.logo_url,
+        "logo_url": delivery_url(s.logo_url, 200) if s.logo_url else None,
         "verified": s.verified_at is not None,
         "about": s.about or "",
         "area": area(s),

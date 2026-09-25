@@ -1,109 +1,109 @@
-product_code,name,brand,category,unit,pack_size,units_per_pack,price_rands,compare_at_rands,vat_rate,vat_included,stock,min_qty,max_qty,unit_barcode,case_barcode,weight_kg,description,active
-MIDRAN-PL-0000,"PVC sewer pipe, 110 mm",Flow Line,plumbing,length,6 m,1,304.39,,standard,true,124,1,200,2060000000002,,,Class 34 sewer pipe.,true
-MIDRAN-PL-0001,"PVC sewer pipe, 110 mm",Hot Flow,plumbing,length,6 m,1,331.59,,standard,true,216,1,200,2060000000019,,,Class 34 sewer pipe.,true
-MIDRAN-PL-0002,"PVC sewer pipe, 110 mm",Pipe Pro,plumbing,length,6 m,1,367.09,,standard,true,116,1,200,2060000000026,,,Class 34 sewer pipe.,true
-MIDRAN-PL-0100,"PVC pipe, 50 mm",Flow Line,plumbing,length,6 m,1,142.99,,standard,true,215,1,200,2060000000033,,,Waste pipe.,true
-MIDRAN-PL-0101,"PVC pipe, 50 mm",Hot Flow,plumbing,length,6 m,1,150.99,175.19,standard,true,74,1,200,2060000000040,,,Waste pipe.,true
-MIDRAN-PL-0102,"PVC pipe, 50 mm",Pipe Pro,plumbing,length,6 m,1,164.29,,standard,true,357,1,200,2060000000057,,,Waste pipe.,true
-MIDRAN-PL-0200,"Copper pipe, 15 mm",Flow Line,plumbing,length,5.5 m,1,261.69,,standard,true,32,1,200,2060000000064,,,Class 1 copper pipe.,true
-MIDRAN-PL-0201,"Copper pipe, 15 mm",Hot Flow,plumbing,length,5.5 m,1,283.29,,standard,true,385,1,200,2060000000071,,,Class 1 copper pipe.,true
-MIDRAN-PL-0202,"Copper pipe, 15 mm",Pipe Pro,plumbing,length,5.5 m,1,310.79,349.69,standard,true,245,1,200,2060000000088,,,Class 1 copper pipe.,true
-MIDRAN-PL-0300,"HDPE pipe, 20 mm",Flow Line,plumbing,roll,50 m,1,439.09,,standard,true,43,1,200,2060000000095,,,Water supply pipe.,true
-MIDRAN-PL-0301,"HDPE pipe, 20 mm",Hot Flow,plumbing,roll,50 m,1,475.69,589.59,standard,true,33,1,200,2060000000101,,,Water supply pipe.,true
-MIDRAN-PL-0302,"HDPE pipe, 20 mm",Pipe Pro,plumbing,roll,50 m,1,509.89,619.39,standard,true,65,1,200,2060000000118,,,Water supply pipe.,true
-MIDRAN-PL-0400,Close-coupled toilet suite,Flow Line,plumbing,each,White,1,1203.29,,standard,true,235,1,20,2060000000125,,,"Pan, cistern and seat.",true
-MIDRAN-PL-0401,Close-coupled toilet suite,Hot Flow,plumbing,each,White,1,1333.69,,standard,true,100,1,20,2060000000132,,,"Pan, cistern and seat.",true
-MIDRAN-PL-0402,Close-coupled toilet suite,Pipe Pro,plumbing,each,White,1,1466.49,1698.09,standard,true,328,1,20,2060000000149,,,"Pan, cistern and seat.",true
-MIDRAN-PL-0500,Electric geyser,Flow Line,plumbing,each,150 litre,1,4803.79,,standard,true,41,1,20,2060000000156,,150,SABS-approved geyser.,true
-MIDRAN-PL-0501,Electric geyser,Hot Flow,plumbing,each,150 litre,1,5152.99,,standard,true,395,1,20,2060000000163,,150,SABS-approved geyser.,true
-MIDRAN-PL-0502,Electric geyser,Pipe Pro,plumbing,each,150 litre,1,5610.99,,standard,true,144,1,20,2060000000170,,150,SABS-approved geyser.,true
-MIDRAN-PL-0510,Electric geyser,Flow Line,plumbing,each,100 litre,1,3935.39,,standard,true,106,1,20,2060000000187,,100,SABS-approved geyser.,true
-MIDRAN-PL-0511,Electric geyser,Hot Flow,plumbing,each,100 litre,1,4191.09,,standard,true,141,1,20,2060000000194,,100,SABS-approved geyser.,true
-MIDRAN-PL-0512,Electric geyser,Pipe Pro,plumbing,each,100 litre,1,4532.69,,standard,true,17,1,20,2060000000200,,100,SABS-approved geyser.,true
-MIDRAN-PL-0600,"Pillar tap, chrome",Flow Line,plumbing,each,15 mm,1,164.89,,standard,true,306,1,200,2060000000217,,,Chrome pillar tap.,true
-MIDRAN-PL-0601,"Pillar tap, chrome",Hot Flow,plumbing,each,15 mm,1,181.49,,standard,true,0,1,200,2060000000224,,,Chrome pillar tap.,true
-MIDRAN-PL-0602,"Pillar tap, chrome",Pipe Pro,plumbing,each,15 mm,1,193.19,,standard,true,3,1,200,2060000000231,,,Chrome pillar tap.,true
-MIDRAN-PL-0700,Kitchen sink mixer,Flow Line,plumbing,each,Standard,1,615.19,,standard,true,190,1,20,2060000000248,,,Single-lever mixer.,true
-MIDRAN-PL-0701,Kitchen sink mixer,Hot Flow,plumbing,each,Standard,1,660.09,,standard,true,234,1,20,2060000000255,,,Single-lever mixer.,true
-MIDRAN-PL-0702,Kitchen sink mixer,Pipe Pro,plumbing,each,Standard,1,713.99,,standard,true,389,1,20,2060000000262,,,Single-lever mixer.,true
-MIDRAN-PL-0800,Stopcock,Flow Line,plumbing,each,15 mm,1,112.49,131.99,standard,true,178,1,200,2060000000279,,,Brass stopcock.,true
-MIDRAN-PL-0801,Stopcock,Hot Flow,plumbing,each,15 mm,1,122.89,,standard,true,149,1,200,2060000000286,,,Brass stopcock.,true
-MIDRAN-PL-0802,Stopcock,Pipe Pro,plumbing,each,15 mm,1,135.19,,standard,true,104,1,200,2060000000293,,,Brass stopcock.,true
-MIDRAN-PL-0900,Thread tape,Flow Line,plumbing,pack,10 rolls,10,44.69,,standard,true,93,1,200,2060000000309,12060000000306,,PTFE thread tape.,true
-MIDRAN-PL-0901,Thread tape,Hot Flow,plumbing,pack,10 rolls,10,46.89,,standard,true,8,1,200,2060000000316,12060000000313,,PTFE thread tape.,true
-MIDRAN-PL-0902,Thread tape,Pipe Pro,plumbing,pack,10 rolls,10,50.49,,standard,true,0,1,200,2060000000323,12060000000320,,PTFE thread tape.,true
-MIDRAN-EL-0000,"Surfix cable, 2.5 mm",Wire Co,electrical,roll,100 m,1,1306.29,1583.49,standard,true,262,1,200,2060000000330,,,Twin and earth cable.,true
-MIDRAN-EL-0001,"Surfix cable, 2.5 mm",Bright Home,electrical,roll,100 m,1,1425.49,,standard,true,161,1,200,2060000000347,,,Twin and earth cable.,true
-MIDRAN-EL-0002,"Surfix cable, 2.5 mm",Volt Safe,electrical,roll,100 m,1,1550.29,,standard,true,6,1,200,2060000000354,,,Twin and earth cable.,true
-MIDRAN-EL-0100,"Surfix cable, 1.5 mm",Wire Co,electrical,roll,100 m,1,892.59,,standard,true,321,1,200,2060000000361,,,Twin and earth cable.,true
-MIDRAN-EL-0101,"Surfix cable, 1.5 mm",Bright Home,electrical,roll,100 m,1,934.49,1065.99,standard,true,0,1,200,2060000000378,,,Twin and earth cable.,true
-MIDRAN-EL-0102,"Surfix cable, 1.5 mm",Volt Safe,electrical,roll,100 m,1,1030.39,1218.69,standard,true,3,1,200,2060000000385,,,Twin and earth cable.,true
-MIDRAN-EL-0200,"LED bulb, 9 W",Wire Co,electrical,pack,10 bulbs,10,155.29,,standard,true,325,1,200,2060000000392,12060000000399,,"Cool white, B22.",true
-MIDRAN-EL-0201,"LED bulb, 9 W",Bright Home,electrical,pack,10 bulbs,10,174.99,,standard,true,4,1,200,2060000000408,12060000000405,,"Cool white, B22.",true
-MIDRAN-EL-0202,"LED bulb, 9 W",Volt Safe,electrical,pack,10 bulbs,10,187.99,,standard,true,9,1,200,2060000000415,12060000000412,,"Cool white, B22.",true
-MIDRAN-EL-0300,Double switched socket,Wire Co,electrical,each,100 x 100 mm,1,61.39,,standard,true,134,1,200,2060000000422,,,Double switched socket.,true
-MIDRAN-EL-0301,Double switched socket,Bright Home,electrical,each,100 x 100 mm,1,67.99,,standard,true,197,1,200,2060000000439,,,Double switched socket.,true
-MIDRAN-EL-0302,Double switched socket,Volt Safe,electrical,each,100 x 100 mm,1,70.89,,standard,true,162,1,200,2060000000446,,,Double switched socket.,true
-MIDRAN-EL-0400,"Light switch, 1-lever",Wire Co,electrical,each,100 x 50 mm,1,30.99,,standard,true,115,1,200,2060000000453,,,One-lever switch.,true
-MIDRAN-EL-0401,"Light switch, 1-lever",Bright Home,electrical,each,100 x 50 mm,1,33.29,,standard,true,9,1,200,2060000000460,,,One-lever switch.,true
-MIDRAN-EL-0402,"Light switch, 1-lever",Volt Safe,electrical,each,100 x 50 mm,1,36.19,,standard,true,230,1,200,2060000000477,,,One-lever switch.,true
-MIDRAN-EL-0500,Distribution board,Wire Co,electrical,each,8-way,1,519.19,,standard,true,301,1,20,2060000000484,,,Surface-mount DB.,true
-MIDRAN-EL-0501,Distribution board,Bright Home,electrical,each,8-way,1,561.59,,standard,true,145,1,20,2060000000491,,,Surface-mount DB.,true
-MIDRAN-EL-0502,Distribution board,Volt Safe,electrical,each,8-way,1,609.59,727.09,standard,true,65,1,20,2060000000507,,,Surface-mount DB.,true
-MIDRAN-EL-0510,Distribution board,Wire Co,electrical,each,12-way,1,709.89,,standard,true,29,1,20,2060000000514,,,Surface-mount DB.,true
-MIDRAN-EL-0511,Distribution board,Bright Home,electrical,each,12-way,1,774.79,,standard,true,248,1,20,2060000000521,,,Surface-mount DB.,true
-MIDRAN-EL-0512,Distribution board,Volt Safe,electrical,each,12-way,1,814.19,929.99,standard,true,0,1,20,2060000000538,,,Surface-mount DB.,true
-MIDRAN-EL-0600,Circuit breaker,Wire Co,electrical,each,20 A,1,79.49,,standard,true,9,1,200,2060000000545,,,Single-pole breaker.,true
-MIDRAN-EL-0601,Circuit breaker,Bright Home,electrical,each,20 A,1,87.29,,standard,true,278,1,200,2060000000552,,,Single-pole breaker.,true
-MIDRAN-EL-0602,Circuit breaker,Volt Safe,electrical,each,20 A,1,91.29,113.09,standard,true,91,1,200,2060000000569,,,Single-pole breaker.,true
-MIDRAN-EL-0700,Earth leakage unit,Wire Co,electrical,each,63 A,1,401.09,,standard,true,5,1,200,2060000000576,,,30 mA earth leakage.,true
-MIDRAN-EL-0701,Earth leakage unit,Bright Home,electrical,each,63 A,1,421.29,,standard,true,121,1,200,2060000000583,,,30 mA earth leakage.,true
-MIDRAN-EL-0702,Earth leakage unit,Volt Safe,electrical,each,63 A,1,467.49,,standard,true,121,1,200,2060000000590,,,30 mA earth leakage.,true
-MIDRAN-EL-0800,"PVC conduit, 20 mm",Wire Co,electrical,length,4 m,1,22.19,,standard,true,0,1,200,2060000000606,,,Conduit pipe.,true
-MIDRAN-EL-0801,"PVC conduit, 20 mm",Bright Home,electrical,length,4 m,1,23.59,,standard,true,126,1,200,2060000000613,,,Conduit pipe.,true
-MIDRAN-EL-0802,"PVC conduit, 20 mm",Volt Safe,electrical,length,4 m,1,25.49,,standard,true,317,1,200,2060000000620,,,Conduit pipe.,true
-MIDRAN-EL-0900,Insulation tape,Wire Co,electrical,pack,10 rolls,10,53.39,,standard,true,51,1,200,2060000000637,12060000000634,,Black insulation tape.,true
-MIDRAN-EL-0901,Insulation tape,Bright Home,electrical,pack,10 rolls,10,57.79,70.19,standard,true,284,1,200,2060000000644,12060000000641,,Black insulation tape.,true
-MIDRAN-EL-0902,Insulation tape,Volt Safe,electrical,pack,10 rolls,10,61.09,,standard,true,0,1,200,2060000000651,12060000000658,,Black insulation tape.,true
-MIDRAN-BM-0000,"Cement, 42.5N",Rock Build,building_materials,bag,50 kg,1,96.39,119.89,standard,true,388,1,200,2060000000668,,50,General-purpose cement.,true
-MIDRAN-BM-0001,"Cement, 42.5N",Clay Works,building_materials,bag,50 kg,1,106.89,,standard,true,182,1,200,2060000000675,,50,General-purpose cement.,true
-MIDRAN-BM-0002,"Cement, 42.5N",Steel Line,building_materials,bag,50 kg,1,115.19,,standard,true,390,1,200,2060000000682,,50,General-purpose cement.,true
-MIDRAN-BM-0100,"Cement, 32.5R",Rock Build,building_materials,bag,50 kg,1,89.49,,standard,true,286,1,200,2060000000699,,50,Plaster and brickwork cement.,true
-MIDRAN-BM-0101,"Cement, 32.5R",Clay Works,building_materials,bag,50 kg,1,94.89,,standard,true,10,1,200,2060000000705,,50,Plaster and brickwork cement.,true
-MIDRAN-BM-0102,"Cement, 32.5R",Steel Line,building_materials,bag,50 kg,1,104.89,,standard,true,215,1,200,2060000000712,,50,Plaster and brickwork cement.,true
-MIDRAN-BM-0200,Building sand,Rock Build,building_materials,cube,1 m³,1,577.59,,standard,true,5,1,20,2060000000729,,,Delivered by truck.,true
-MIDRAN-BM-0201,Building sand,Clay Works,building_materials,cube,1 m³,1,615.09,,standard,true,17,1,20,2060000000736,,,Delivered by truck.,true
-MIDRAN-BM-0202,Building sand,Steel Line,building_materials,cube,1 m³,1,664.79,,standard,true,70,1,20,2060000000743,,,Delivered by truck.,true
-MIDRAN-BM-0300,Plaster sand,Rock Build,building_materials,cube,1 m³,1,610.29,,standard,true,323,1,20,2060000000750,,,Fine plaster sand.,true
-MIDRAN-BM-0301,Plaster sand,Clay Works,building_materials,cube,1 m³,1,665.49,,standard,true,155,1,20,2060000000767,,,Fine plaster sand.,true
-MIDRAN-BM-0302,Plaster sand,Steel Line,building_materials,cube,1 m³,1,706.49,,standard,true,210,1,20,2060000000774,,,Fine plaster sand.,true
-MIDRAN-BM-0400,"Concrete stone, 19 mm",Rock Build,building_materials,cube,1 m³,1,664.49,,standard,true,290,1,20,2060000000781,,,Concrete stone.,true
-MIDRAN-BM-0401,"Concrete stone, 19 mm",Clay Works,building_materials,cube,1 m³,1,720.49,866.99,standard,true,6,1,20,2060000000798,,,Concrete stone.,true
-MIDRAN-BM-0402,"Concrete stone, 19 mm",Steel Line,building_materials,cube,1 m³,1,760.59,,standard,true,353,1,20,2060000000804,,,Concrete stone.,true
-MIDRAN-BM-0500,Maxi stock bricks,Rock Build,building_materials,pallet,500 bricks,1,1518.69,,standard,true,3,1,20,2060000000811,,,"Stock bricks, a pallet.",true
-MIDRAN-BM-0501,Maxi stock bricks,Clay Works,building_materials,pallet,500 bricks,1,1593.99,,standard,true,23,1,20,2060000000828,,,"Stock bricks, a pallet.",true
-MIDRAN-BM-0502,Maxi stock bricks,Steel Line,building_materials,pallet,500 bricks,1,1719.59,,standard,true,30,1,20,2060000000835,,,"Stock bricks, a pallet.",true
-MIDRAN-BM-0600,Cement blocks,Rock Build,building_materials,pallet,100 blocks,1,1160.19,,standard,true,358,1,20,2060000000842,,,Hollow cement blocks.,true
-MIDRAN-BM-0601,Cement blocks,Clay Works,building_materials,pallet,100 blocks,1,1239.59,,standard,true,79,1,20,2060000000859,,,Hollow cement blocks.,true
-MIDRAN-BM-0602,Cement blocks,Steel Line,building_materials,pallet,100 blocks,1,1339.99,,standard,true,364,1,20,2060000000866,,,Hollow cement blocks.,true
-MIDRAN-BM-0700,"IBR roof sheet, 0.47 mm",Rock Build,building_materials,sheet,3.6 m,1,256.39,,standard,true,251,1,200,2060000000873,,,Galvanised IBR sheet.,true
-MIDRAN-BM-0701,"IBR roof sheet, 0.47 mm",Clay Works,building_materials,sheet,3.6 m,1,272.29,337.79,standard,true,254,1,200,2060000000880,,,Galvanised IBR sheet.,true
-MIDRAN-BM-0702,"IBR roof sheet, 0.47 mm",Steel Line,building_materials,sheet,3.6 m,1,299.79,361.99,standard,true,0,1,200,2060000000897,,,Galvanised IBR sheet.,true
-MIDRAN-BM-0710,"IBR roof sheet, 0.47 mm",Rock Build,building_materials,sheet,6 m,1,405.09,483.89,standard,true,262,1,200,2060000000903,,,Galvanised IBR sheet.,true
-MIDRAN-BM-0711,"IBR roof sheet, 0.47 mm",Clay Works,building_materials,sheet,6 m,1,440.59,,standard,true,0,1,200,2060000000910,,,Galvanised IBR sheet.,true
-MIDRAN-BM-0712,"IBR roof sheet, 0.47 mm",Steel Line,building_materials,sheet,6 m,1,493.19,,standard,true,0,1,200,2060000000927,,,Galvanised IBR sheet.,true
-MIDRAN-BM-0800,Corrugated roof sheet,Rock Build,building_materials,sheet,3 m,1,191.29,216.69,standard,true,10,1,200,2060000000934,,,Galvanised corrugated sheet.,true
-MIDRAN-BM-0801,Corrugated roof sheet,Clay Works,building_materials,sheet,3 m,1,206.29,250.99,standard,true,325,1,200,2060000000941,,,Galvanised corrugated sheet.,true
-MIDRAN-BM-0802,Corrugated roof sheet,Steel Line,building_materials,sheet,3 m,1,228.09,,standard,true,15,1,200,2060000000958,,,Galvanised corrugated sheet.,true
-MIDRAN-BM-0900,Brickforce,Rock Build,building_materials,roll,20 m,1,34.99,,standard,true,82,1,200,2060000000965,,,"Brickforce wire, 150 mm.",true
-MIDRAN-BM-0901,Brickforce,Clay Works,building_materials,roll,20 m,1,37.79,44.39,standard,true,292,1,200,2060000000972,,,"Brickforce wire, 150 mm.",true
-MIDRAN-BM-0902,Brickforce,Steel Line,building_materials,roll,20 m,1,41.89,,standard,true,13,1,200,2060000000989,,,"Brickforce wire, 150 mm.",true
-MIDRAN-BM-1000,Damp-proof course,Rock Build,building_materials,roll,30 m,1,87.49,,standard,true,0,1,200,2060000000996,,,375 mm DPC.,true
-MIDRAN-BM-1001,Damp-proof course,Clay Works,building_materials,roll,30 m,1,95.89,,standard,true,195,1,200,2060000001009,,,375 mm DPC.,true
-MIDRAN-BM-1002,Damp-proof course,Steel Line,building_materials,roll,30 m,1,103.99,,standard,true,146,1,200,2060000001016,,,375 mm DPC.,true
-MIDRAN-BM-1100,"Timber, 38 x 114 mm",Rock Build,building_materials,length,3.6 m,1,143.09,,standard,true,47,1,200,2060000001023,,,Treated SA pine.,true
-MIDRAN-BM-1101,"Timber, 38 x 114 mm",Clay Works,building_materials,length,3.6 m,1,155.09,,standard,true,309,1,200,2060000001030,,,Treated SA pine.,true
-MIDRAN-BM-1102,"Timber, 38 x 114 mm",Steel Line,building_materials,length,3.6 m,1,165.59,,standard,true,110,1,200,2060000001047,,,Treated SA pine.,true
-MIDRAN-BM-1110,"Timber, 38 x 114 mm",Rock Build,building_materials,length,6.6 m,1,258.99,,standard,true,3,1,200,2060000001054,,,Treated SA pine.,true
-MIDRAN-BM-1111,"Timber, 38 x 114 mm",Clay Works,building_materials,length,6.6 m,1,277.19,,standard,true,56,1,200,2060000001061,,,Treated SA pine.,true
-MIDRAN-BM-1112,"Timber, 38 x 114 mm",Steel Line,building_materials,length,6.6 m,1,303.79,,standard,true,60,1,200,2060000001078,,,Treated SA pine.,true
+product_code,name,brand,category,unit,pack_size,units_per_pack,price_rands,compare_at_rands,vat_rate,vat_included,stock,min_qty,max_qty,unit_barcode,case_barcode,weight_kg,description,active,image_1
+MIDRAN-PL-0000,"PVC sewer pipe, 110 mm",Flow Line,plumbing,length,6 m,1,304.39,,standard,true,124,1,200,2060000000002,,,Class 34 sewer pipe.,true,
+MIDRAN-PL-0001,"PVC sewer pipe, 110 mm",Hot Flow,plumbing,length,6 m,1,331.59,,standard,true,216,1,200,2060000000019,,,Class 34 sewer pipe.,true,
+MIDRAN-PL-0002,"PVC sewer pipe, 110 mm",Pipe Pro,plumbing,length,6 m,1,367.09,,standard,true,116,1,200,2060000000026,,,Class 34 sewer pipe.,true,
+MIDRAN-PL-0100,"PVC pipe, 50 mm",Flow Line,plumbing,length,6 m,1,142.99,,standard,true,215,1,200,2060000000033,,,Waste pipe.,true,
+MIDRAN-PL-0101,"PVC pipe, 50 mm",Hot Flow,plumbing,length,6 m,1,150.99,175.19,standard,true,74,1,200,2060000000040,,,Waste pipe.,true,
+MIDRAN-PL-0102,"PVC pipe, 50 mm",Pipe Pro,plumbing,length,6 m,1,164.29,,standard,true,357,1,200,2060000000057,,,Waste pipe.,true,
+MIDRAN-PL-0200,"Copper pipe, 15 mm",Flow Line,plumbing,length,5.5 m,1,261.69,,standard,true,32,1,200,2060000000064,,,Class 1 copper pipe.,true,
+MIDRAN-PL-0201,"Copper pipe, 15 mm",Hot Flow,plumbing,length,5.5 m,1,283.29,,standard,true,385,1,200,2060000000071,,,Class 1 copper pipe.,true,
+MIDRAN-PL-0202,"Copper pipe, 15 mm",Pipe Pro,plumbing,length,5.5 m,1,310.79,349.69,standard,true,245,1,200,2060000000088,,,Class 1 copper pipe.,true,
+MIDRAN-PL-0300,"HDPE pipe, 20 mm",Flow Line,plumbing,roll,50 m,1,439.09,,standard,true,43,1,200,2060000000095,,,Water supply pipe.,true,
+MIDRAN-PL-0301,"HDPE pipe, 20 mm",Hot Flow,plumbing,roll,50 m,1,475.69,589.59,standard,true,33,1,200,2060000000101,,,Water supply pipe.,true,
+MIDRAN-PL-0302,"HDPE pipe, 20 mm",Pipe Pro,plumbing,roll,50 m,1,509.89,619.39,standard,true,65,1,200,2060000000118,,,Water supply pipe.,true,
+MIDRAN-PL-0400,Close-coupled toilet suite,Flow Line,plumbing,each,White,1,1203.29,,standard,true,235,1,20,2060000000125,,,"Pan, cistern and seat.",true,
+MIDRAN-PL-0401,Close-coupled toilet suite,Hot Flow,plumbing,each,White,1,1333.69,,standard,true,100,1,20,2060000000132,,,"Pan, cistern and seat.",true,
+MIDRAN-PL-0402,Close-coupled toilet suite,Pipe Pro,plumbing,each,White,1,1466.49,1698.09,standard,true,328,1,20,2060000000149,,,"Pan, cistern and seat.",true,
+MIDRAN-PL-0500,Electric geyser,Flow Line,plumbing,each,150 litre,1,4803.79,,standard,true,41,1,20,2060000000156,,150,SABS-approved geyser.,true,
+MIDRAN-PL-0501,Electric geyser,Hot Flow,plumbing,each,150 litre,1,5152.99,,standard,true,395,1,20,2060000000163,,150,SABS-approved geyser.,true,
+MIDRAN-PL-0502,Electric geyser,Pipe Pro,plumbing,each,150 litre,1,5610.99,,standard,true,144,1,20,2060000000170,,150,SABS-approved geyser.,true,
+MIDRAN-PL-0510,Electric geyser,Flow Line,plumbing,each,100 litre,1,3935.39,,standard,true,106,1,20,2060000000187,,100,SABS-approved geyser.,true,
+MIDRAN-PL-0511,Electric geyser,Hot Flow,plumbing,each,100 litre,1,4191.09,,standard,true,141,1,20,2060000000194,,100,SABS-approved geyser.,true,
+MIDRAN-PL-0512,Electric geyser,Pipe Pro,plumbing,each,100 litre,1,4532.69,,standard,true,17,1,20,2060000000200,,100,SABS-approved geyser.,true,
+MIDRAN-PL-0600,"Pillar tap, chrome",Flow Line,plumbing,each,15 mm,1,164.89,,standard,true,306,1,200,2060000000217,,,Chrome pillar tap.,true,
+MIDRAN-PL-0601,"Pillar tap, chrome",Hot Flow,plumbing,each,15 mm,1,181.49,,standard,true,0,1,200,2060000000224,,,Chrome pillar tap.,true,
+MIDRAN-PL-0602,"Pillar tap, chrome",Pipe Pro,plumbing,each,15 mm,1,193.19,,standard,true,3,1,200,2060000000231,,,Chrome pillar tap.,true,
+MIDRAN-PL-0700,Kitchen sink mixer,Flow Line,plumbing,each,Standard,1,615.19,,standard,true,190,1,20,2060000000248,,,Single-lever mixer.,true,
+MIDRAN-PL-0701,Kitchen sink mixer,Hot Flow,plumbing,each,Standard,1,660.09,,standard,true,234,1,20,2060000000255,,,Single-lever mixer.,true,
+MIDRAN-PL-0702,Kitchen sink mixer,Pipe Pro,plumbing,each,Standard,1,713.99,,standard,true,389,1,20,2060000000262,,,Single-lever mixer.,true,
+MIDRAN-PL-0800,Stopcock,Flow Line,plumbing,each,15 mm,1,112.49,131.99,standard,true,178,1,200,2060000000279,,,Brass stopcock.,true,
+MIDRAN-PL-0801,Stopcock,Hot Flow,plumbing,each,15 mm,1,122.89,,standard,true,149,1,200,2060000000286,,,Brass stopcock.,true,
+MIDRAN-PL-0802,Stopcock,Pipe Pro,plumbing,each,15 mm,1,135.19,,standard,true,104,1,200,2060000000293,,,Brass stopcock.,true,
+MIDRAN-PL-0900,Thread tape,Flow Line,plumbing,pack,10 rolls,10,44.69,,standard,true,93,1,200,2060000000309,12060000000306,,PTFE thread tape.,true,
+MIDRAN-PL-0901,Thread tape,Hot Flow,plumbing,pack,10 rolls,10,46.89,,standard,true,8,1,200,2060000000316,12060000000313,,PTFE thread tape.,true,
+MIDRAN-PL-0902,Thread tape,Pipe Pro,plumbing,pack,10 rolls,10,50.49,,standard,true,0,1,200,2060000000323,12060000000320,,PTFE thread tape.,true,
+MIDRAN-EL-0000,"Surfix cable, 2.5 mm",Wire Co,electrical,roll,100 m,1,1306.29,1583.49,standard,true,262,1,200,2060000000330,,,Twin and earth cable.,true,
+MIDRAN-EL-0001,"Surfix cable, 2.5 mm",Bright Home,electrical,roll,100 m,1,1425.49,,standard,true,161,1,200,2060000000347,,,Twin and earth cable.,true,
+MIDRAN-EL-0002,"Surfix cable, 2.5 mm",Volt Safe,electrical,roll,100 m,1,1550.29,,standard,true,6,1,200,2060000000354,,,Twin and earth cable.,true,
+MIDRAN-EL-0100,"Surfix cable, 1.5 mm",Wire Co,electrical,roll,100 m,1,892.59,,standard,true,321,1,200,2060000000361,,,Twin and earth cable.,true,
+MIDRAN-EL-0101,"Surfix cable, 1.5 mm",Bright Home,electrical,roll,100 m,1,934.49,1065.99,standard,true,0,1,200,2060000000378,,,Twin and earth cable.,true,
+MIDRAN-EL-0102,"Surfix cable, 1.5 mm",Volt Safe,electrical,roll,100 m,1,1030.39,1218.69,standard,true,3,1,200,2060000000385,,,Twin and earth cable.,true,
+MIDRAN-EL-0200,"LED bulb, 9 W",Wire Co,electrical,pack,10 bulbs,10,155.29,,standard,true,325,1,200,2060000000392,12060000000399,,"Cool white, B22.",true,
+MIDRAN-EL-0201,"LED bulb, 9 W",Bright Home,electrical,pack,10 bulbs,10,174.99,,standard,true,4,1,200,2060000000408,12060000000405,,"Cool white, B22.",true,
+MIDRAN-EL-0202,"LED bulb, 9 W",Volt Safe,electrical,pack,10 bulbs,10,187.99,,standard,true,9,1,200,2060000000415,12060000000412,,"Cool white, B22.",true,
+MIDRAN-EL-0300,Double switched socket,Wire Co,electrical,each,100 x 100 mm,1,61.39,,standard,true,134,1,200,2060000000422,,,Double switched socket.,true,
+MIDRAN-EL-0301,Double switched socket,Bright Home,electrical,each,100 x 100 mm,1,67.99,,standard,true,197,1,200,2060000000439,,,Double switched socket.,true,
+MIDRAN-EL-0302,Double switched socket,Volt Safe,electrical,each,100 x 100 mm,1,70.89,,standard,true,162,1,200,2060000000446,,,Double switched socket.,true,
+MIDRAN-EL-0400,"Light switch, 1-lever",Wire Co,electrical,each,100 x 50 mm,1,30.99,,standard,true,115,1,200,2060000000453,,,One-lever switch.,true,
+MIDRAN-EL-0401,"Light switch, 1-lever",Bright Home,electrical,each,100 x 50 mm,1,33.29,,standard,true,9,1,200,2060000000460,,,One-lever switch.,true,
+MIDRAN-EL-0402,"Light switch, 1-lever",Volt Safe,electrical,each,100 x 50 mm,1,36.19,,standard,true,230,1,200,2060000000477,,,One-lever switch.,true,
+MIDRAN-EL-0500,Distribution board,Wire Co,electrical,each,8-way,1,519.19,,standard,true,301,1,20,2060000000484,,,Surface-mount DB.,true,
+MIDRAN-EL-0501,Distribution board,Bright Home,electrical,each,8-way,1,561.59,,standard,true,145,1,20,2060000000491,,,Surface-mount DB.,true,
+MIDRAN-EL-0502,Distribution board,Volt Safe,electrical,each,8-way,1,609.59,727.09,standard,true,65,1,20,2060000000507,,,Surface-mount DB.,true,
+MIDRAN-EL-0510,Distribution board,Wire Co,electrical,each,12-way,1,709.89,,standard,true,29,1,20,2060000000514,,,Surface-mount DB.,true,
+MIDRAN-EL-0511,Distribution board,Bright Home,electrical,each,12-way,1,774.79,,standard,true,248,1,20,2060000000521,,,Surface-mount DB.,true,
+MIDRAN-EL-0512,Distribution board,Volt Safe,electrical,each,12-way,1,814.19,929.99,standard,true,0,1,20,2060000000538,,,Surface-mount DB.,true,
+MIDRAN-EL-0600,Circuit breaker,Wire Co,electrical,each,20 A,1,79.49,,standard,true,9,1,200,2060000000545,,,Single-pole breaker.,true,
+MIDRAN-EL-0601,Circuit breaker,Bright Home,electrical,each,20 A,1,87.29,,standard,true,278,1,200,2060000000552,,,Single-pole breaker.,true,
+MIDRAN-EL-0602,Circuit breaker,Volt Safe,electrical,each,20 A,1,91.29,113.09,standard,true,91,1,200,2060000000569,,,Single-pole breaker.,true,
+MIDRAN-EL-0700,Earth leakage unit,Wire Co,electrical,each,63 A,1,401.09,,standard,true,5,1,200,2060000000576,,,30 mA earth leakage.,true,
+MIDRAN-EL-0701,Earth leakage unit,Bright Home,electrical,each,63 A,1,421.29,,standard,true,121,1,200,2060000000583,,,30 mA earth leakage.,true,
+MIDRAN-EL-0702,Earth leakage unit,Volt Safe,electrical,each,63 A,1,467.49,,standard,true,121,1,200,2060000000590,,,30 mA earth leakage.,true,
+MIDRAN-EL-0800,"PVC conduit, 20 mm",Wire Co,electrical,length,4 m,1,22.19,,standard,true,0,1,200,2060000000606,,,Conduit pipe.,true,
+MIDRAN-EL-0801,"PVC conduit, 20 mm",Bright Home,electrical,length,4 m,1,23.59,,standard,true,126,1,200,2060000000613,,,Conduit pipe.,true,
+MIDRAN-EL-0802,"PVC conduit, 20 mm",Volt Safe,electrical,length,4 m,1,25.49,,standard,true,317,1,200,2060000000620,,,Conduit pipe.,true,
+MIDRAN-EL-0900,Insulation tape,Wire Co,electrical,pack,10 rolls,10,53.39,,standard,true,51,1,200,2060000000637,12060000000634,,Black insulation tape.,true,
+MIDRAN-EL-0901,Insulation tape,Bright Home,electrical,pack,10 rolls,10,57.79,70.19,standard,true,284,1,200,2060000000644,12060000000641,,Black insulation tape.,true,
+MIDRAN-EL-0902,Insulation tape,Volt Safe,electrical,pack,10 rolls,10,61.09,,standard,true,0,1,200,2060000000651,12060000000658,,Black insulation tape.,true,
+MIDRAN-BM-0000,"Cement, 42.5N",Rock Build,building_materials,bag,50 kg,1,96.39,119.89,standard,true,388,1,200,2060000000668,,50,General-purpose cement.,true,
+MIDRAN-BM-0001,"Cement, 42.5N",Clay Works,building_materials,bag,50 kg,1,106.89,,standard,true,182,1,200,2060000000675,,50,General-purpose cement.,true,
+MIDRAN-BM-0002,"Cement, 42.5N",Steel Line,building_materials,bag,50 kg,1,115.19,,standard,true,390,1,200,2060000000682,,50,General-purpose cement.,true,
+MIDRAN-BM-0100,"Cement, 32.5R",Rock Build,building_materials,bag,50 kg,1,89.49,,standard,true,286,1,200,2060000000699,,50,Plaster and brickwork cement.,true,
+MIDRAN-BM-0101,"Cement, 32.5R",Clay Works,building_materials,bag,50 kg,1,94.89,,standard,true,10,1,200,2060000000705,,50,Plaster and brickwork cement.,true,
+MIDRAN-BM-0102,"Cement, 32.5R",Steel Line,building_materials,bag,50 kg,1,104.89,,standard,true,215,1,200,2060000000712,,50,Plaster and brickwork cement.,true,
+MIDRAN-BM-0200,Building sand,Rock Build,building_materials,cube,1 m³,1,577.59,,standard,true,5,1,20,2060000000729,,,Delivered by truck.,true,
+MIDRAN-BM-0201,Building sand,Clay Works,building_materials,cube,1 m³,1,615.09,,standard,true,17,1,20,2060000000736,,,Delivered by truck.,true,
+MIDRAN-BM-0202,Building sand,Steel Line,building_materials,cube,1 m³,1,664.79,,standard,true,70,1,20,2060000000743,,,Delivered by truck.,true,
+MIDRAN-BM-0300,Plaster sand,Rock Build,building_materials,cube,1 m³,1,610.29,,standard,true,323,1,20,2060000000750,,,Fine plaster sand.,true,
+MIDRAN-BM-0301,Plaster sand,Clay Works,building_materials,cube,1 m³,1,665.49,,standard,true,155,1,20,2060000000767,,,Fine plaster sand.,true,
+MIDRAN-BM-0302,Plaster sand,Steel Line,building_materials,cube,1 m³,1,706.49,,standard,true,210,1,20,2060000000774,,,Fine plaster sand.,true,
+MIDRAN-BM-0400,"Concrete stone, 19 mm",Rock Build,building_materials,cube,1 m³,1,664.49,,standard,true,290,1,20,2060000000781,,,Concrete stone.,true,
+MIDRAN-BM-0401,"Concrete stone, 19 mm",Clay Works,building_materials,cube,1 m³,1,720.49,866.99,standard,true,6,1,20,2060000000798,,,Concrete stone.,true,
+MIDRAN-BM-0402,"Concrete stone, 19 mm",Steel Line,building_materials,cube,1 m³,1,760.59,,standard,true,353,1,20,2060000000804,,,Concrete stone.,true,
+MIDRAN-BM-0500,Maxi stock bricks,Rock Build,building_materials,pallet,500 bricks,1,1518.69,,standard,true,3,1,20,2060000000811,,,"Stock bricks, a pallet.",true,
+MIDRAN-BM-0501,Maxi stock bricks,Clay Works,building_materials,pallet,500 bricks,1,1593.99,,standard,true,23,1,20,2060000000828,,,"Stock bricks, a pallet.",true,
+MIDRAN-BM-0502,Maxi stock bricks,Steel Line,building_materials,pallet,500 bricks,1,1719.59,,standard,true,30,1,20,2060000000835,,,"Stock bricks, a pallet.",true,
+MIDRAN-BM-0600,Cement blocks,Rock Build,building_materials,pallet,100 blocks,1,1160.19,,standard,true,358,1,20,2060000000842,,,Hollow cement blocks.,true,
+MIDRAN-BM-0601,Cement blocks,Clay Works,building_materials,pallet,100 blocks,1,1239.59,,standard,true,79,1,20,2060000000859,,,Hollow cement blocks.,true,
+MIDRAN-BM-0602,Cement blocks,Steel Line,building_materials,pallet,100 blocks,1,1339.99,,standard,true,364,1,20,2060000000866,,,Hollow cement blocks.,true,
+MIDRAN-BM-0700,"IBR roof sheet, 0.47 mm",Rock Build,building_materials,sheet,3.6 m,1,256.39,,standard,true,251,1,200,2060000000873,,,Galvanised IBR sheet.,true,
+MIDRAN-BM-0701,"IBR roof sheet, 0.47 mm",Clay Works,building_materials,sheet,3.6 m,1,272.29,337.79,standard,true,254,1,200,2060000000880,,,Galvanised IBR sheet.,true,
+MIDRAN-BM-0702,"IBR roof sheet, 0.47 mm",Steel Line,building_materials,sheet,3.6 m,1,299.79,361.99,standard,true,0,1,200,2060000000897,,,Galvanised IBR sheet.,true,
+MIDRAN-BM-0710,"IBR roof sheet, 0.47 mm",Rock Build,building_materials,sheet,6 m,1,405.09,483.89,standard,true,262,1,200,2060000000903,,,Galvanised IBR sheet.,true,
+MIDRAN-BM-0711,"IBR roof sheet, 0.47 mm",Clay Works,building_materials,sheet,6 m,1,440.59,,standard,true,0,1,200,2060000000910,,,Galvanised IBR sheet.,true,
+MIDRAN-BM-0712,"IBR roof sheet, 0.47 mm",Steel Line,building_materials,sheet,6 m,1,493.19,,standard,true,0,1,200,2060000000927,,,Galvanised IBR sheet.,true,
+MIDRAN-BM-0800,Corrugated roof sheet,Rock Build,building_materials,sheet,3 m,1,191.29,216.69,standard,true,10,1,200,2060000000934,,,Galvanised corrugated sheet.,true,
+MIDRAN-BM-0801,Corrugated roof sheet,Clay Works,building_materials,sheet,3 m,1,206.29,250.99,standard,true,325,1,200,2060000000941,,,Galvanised corrugated sheet.,true,
+MIDRAN-BM-0802,Corrugated roof sheet,Steel Line,building_materials,sheet,3 m,1,228.09,,standard,true,15,1,200,2060000000958,,,Galvanised corrugated sheet.,true,
+MIDRAN-BM-0900,Brickforce,Rock Build,building_materials,roll,20 m,1,34.99,,standard,true,82,1,200,2060000000965,,,"Brickforce wire, 150 mm.",true,
+MIDRAN-BM-0901,Brickforce,Clay Works,building_materials,roll,20 m,1,37.79,44.39,standard,true,292,1,200,2060000000972,,,"Brickforce wire, 150 mm.",true,
+MIDRAN-BM-0902,Brickforce,Steel Line,building_materials,roll,20 m,1,41.89,,standard,true,13,1,200,2060000000989,,,"Brickforce wire, 150 mm.",true,
+MIDRAN-BM-1000,Damp-proof course,Rock Build,building_materials,roll,30 m,1,87.49,,standard,true,0,1,200,2060000000996,,,375 mm DPC.,true,
+MIDRAN-BM-1001,Damp-proof course,Clay Works,building_materials,roll,30 m,1,95.89,,standard,true,195,1,200,2060000001009,,,375 mm DPC.,true,
+MIDRAN-BM-1002,Damp-proof course,Steel Line,building_materials,roll,30 m,1,103.99,,standard,true,146,1,200,2060000001016,,,375 mm DPC.,true,
+MIDRAN-BM-1100,"Timber, 38 x 114 mm",Rock Build,building_materials,length,3.6 m,1,143.09,,standard,true,47,1,200,2060000001023,,,Treated SA pine.,true,
+MIDRAN-BM-1101,"Timber, 38 x 114 mm",Clay Works,building_materials,length,3.6 m,1,155.09,,standard,true,309,1,200,2060000001030,,,Treated SA pine.,true,
+MIDRAN-BM-1102,"Timber, 38 x 114 mm",Steel Line,building_materials,length,3.6 m,1,165.59,,standard,true,110,1,200,2060000001047,,,Treated SA pine.,true,
+MIDRAN-BM-1110,"Timber, 38 x 114 mm",Rock Build,building_materials,length,6.6 m,1,258.99,,standard,true,3,1,200,2060000001054,,,Treated SA pine.,true,
+MIDRAN-BM-1111,"Timber, 38 x 114 mm",Clay Works,building_materials,length,6.6 m,1,277.19,,standard,true,56,1,200,2060000001061,,,Treated SA pine.,true,
+MIDRAN-BM-1112,"Timber, 38 x 114 mm",Steel Line,building_materials,length,6.6 m,1,303.79,,standard,true,60,1,200,2060000001078,,,Treated SA pine.,true,
