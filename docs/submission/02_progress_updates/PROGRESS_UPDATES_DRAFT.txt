@@ -11,10 +11,11 @@ THE SONKE FORM (4 fields), sent EVERY 2 HOURS (22:00, 00:00, 02:00, ...)
 
   SCHEDULE (each slot = what that update shows; adjust as we go)
     Fri 22:00  auth: sign-up, email code, sign-in, reset links, limits   2
-    Sat 00:00  account security + privacy: new-phone check, sessions,
-               download my data, close account, audit trail              3
-    Sat 02:00  business profile + onboarding: business details, CIPC
-               check, location with address search, secure photo upload  3
+    Sat 00:00  sign-up steps (onboarding): business details, CIPC check,
+               location with address search                              3
+    Sat 02:00  account security + privacy: new-phone check, sessions,
+               download my data, close account, audit trail, secure
+               photo upload                                              3
     Sat 04:00  credit book (customers, credit sales, payments)           4
     Sat 06:00  jobs (stages, camera photos, client sign-off link)        4
     Sat 08:00  live Home/Account from the tools; supplier data feed       5
@@ -43,14 +44,16 @@ THE SONKE FORM (4 fields), sent EVERY 2 HOURS (22:00, 00:00, 02:00, ...)
     refused).
 
   WHAT WILL YOU FOCUS ON NEXT?
-  Account security and privacy: a second check when signing in on a new
-  phone, managing signed-in sessions, and letting users download their
-  data or close their account.
+  The sign-up steps after the account is created: a short onboarding that
+  asks only for what we can verify and actually use, so we can personalise
+  each user's app and power our recommendations from day one.
 
   WHAT CHALLENGES ARE YOU FACING?
-  Links in messages: WhatsApp doesn't open links to a local development
-  address, so every link (like the password reset) now uses a secure
-  https address.
+  Setting up a secure https tunnel (ngrok) so we can test the full
+  password reset on real phones: the one-use reset ticket expires after 30
+  minutes, and links to a local development address don't open from email
+  or WhatsApp on a phone. We now send every link through the tunnel's
+  https address and are testing it end to end.
 
 
 TEMPLATE
