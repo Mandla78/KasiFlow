@@ -1,0 +1,55 @@
+{
+  "external_id": "MOKGALAKA-001",
+  "trading_name": "Mokgalaka Wholesale",
+  "legal_name": "Mokgalaka Wholesale (Pty) Ltd",
+  "about": "Groceries, drinks and cleaning stock for spaza shops around Mankweng and Turfloop.",
+  "vat_number": null,
+  "orders_email": "orders@mokgalaka-wholesale.example.com",
+  "phone": null,
+  "brand_color": "#1F4E3D",
+  "collection_address": {
+    "street": "Unit 4, Mankweng Main Road",
+    "suburb": "Mankweng",
+    "city": "Polokwane",
+    "province": "Limpopo",
+    "postal_code": "0727",
+    "latitude": -23.8712,
+    "longitude": 29.7154
+  },
+  "hours": [
+    {
+      "days": "mon-fri",
+      "open": "07:00",
+      "close": "17:00"
+    },
+    {
+      "days": "sat",
+      "open": "08:00",
+      "close": "13:00"
+    }
+  ],
+  "delivery": {
+    "offers": true,
+    "radius_km": 20,
+    "fee_cents": 4000,
+    "free_over_cents": 150000
+  },
+  "collect": true,
+  "payments": {
+    "in_app": true,
+    "cash": true,
+    "cash_limit_cents": 300000
+  },
+  "minimum_order_cents": 40000,
+  "categories": [
+    "food_grocery",
+    "beverages",
+    "snacks_confectionery",
+    "household_cleaning",
+    "personal_care",
+    "dairy_chilled"
+  ],
+  "payout": {
+    "merchant_id": null
+  }
+}

@@ -89,7 +89,7 @@ def test_no_pin_yet_asks_for_the_location(client, outbox, seeded):
 def test_every_supplier_is_ranked_none_hidden_best_first(client, me, seeded):
     suppliers = data(client.get("/api/v1/suppliers/recommended", headers=me))["suppliers"]
     names = [s["name"] for s in suppliers]
-    assert len(suppliers) == 7
+    assert len(suppliers) == 11
     assert names[0] in ("Mahlangu Wholesale", "Dlamini Drinks")  # sells what she buys and delivers to her
     assert names.index("Soweto Cash & Carry") > names.index("Mahlangu Wholesale")
     scores = [s["score"] for s in suppliers]
@@ -196,3 +196,20 @@ def test_connections_are_private_and_need_a_real_supplier(client, outbox, me, se
     assert data(client.get("/api/v1/me/suppliers", headers=other))["supplier_ids"] == []
     assert client.put(f"/api/v1/me/suppliers/{uuid.uuid4()}", headers=me).status_code == 404
     assert client.put("/api/v1/me/suppliers/not-a-uuid", headers=me).status_code == 404
+
+
+@pytest.mark.parametrize(
+    "place, lat, lng, expected_first",
+    [
+        ("Turfloop (University of Limpopo), Mankweng", -23.8833, 29.7333, "Mokgalaka Wholesale"),
+        ("Sefako Makgatho University, Ga-Rankuwa", -25.6170, 27.9970, "Molefe Cash & Carry"),
+    ],
+)
+def test_the_demo_places_get_a_supplier_that_delivers(client, outbox, seeded, place, lat, lng, expected_first):
+    """The team demos from these two places: the Suppliers tab must be true there."""
+    headers = signed_in(client, outbox, "demo@example.com")
+    profile = {**PROFILE, "location": {**PROFILE["location"], "latitude": lat, "longitude": lng}}
+    assert client.patch("/api/v1/me/business-profile", headers=headers, json=profile).status_code == 200
+    top = data(client.get("/api/v1/suppliers/recommended", headers=headers))["suppliers"][0]
+    assert top["name"] == expected_first, place
+    assert top["delivers_to_you"] and top["distance_km"] < 5

@@ -1,0 +1,175 @@
+product_code,name,brand,category,unit,pack_size,units_per_pack,price_rands,compare_at_rands,vat_rate,vat_included,stock,min_qty,max_qty,unit_barcode,case_barcode,weight_kg,description,active
+SOSHBU-BM-0000,"Cement, 42.5N",Rock Build,building_materials,bag,50 kg,1,97.09,,standard,true,188,1,200,2110000000004,,50,General-purpose cement.,true
+SOSHBU-BM-0001,"Cement, 42.5N",Clay Works,building_materials,bag,50 kg,1,108.29,,standard,true,305,1,200,2110000000011,,50,General-purpose cement.,true
+SOSHBU-BM-0002,"Cement, 42.5N",Steel Line,building_materials,bag,50 kg,1,115.19,,standard,true,341,1,200,2110000000028,,50,General-purpose cement.,true
+SOSHBU-BM-0100,"Cement, 32.5R",Rock Build,building_materials,bag,50 kg,1,90.59,,standard,true,89,1,200,2110000000035,,50,Plaster and brickwork cement.,true
+SOSHBU-BM-0101,"Cement, 32.5R",Clay Works,building_materials,bag,50 kg,1,95.29,,standard,true,287,1,200,2110000000042,,50,Plaster and brickwork cement.,true
+SOSHBU-BM-0102,"Cement, 32.5R",Steel Line,building_materials,bag,50 kg,1,106.39,,standard,true,10,1,200,2110000000059,,50,Plaster and brickwork cement.,true
+SOSHBU-BM-0200,Building sand,Rock Build,building_materials,cube,1 m³,1,591.29,674.49,standard,true,211,1,20,2110000000066,,,Delivered by truck.,true
+SOSHBU-BM-0201,Building sand,Clay Works,building_materials,cube,1 m³,1,639.09,,standard,true,155,1,20,2110000000073,,,Delivered by truck.,true
+SOSHBU-BM-0202,Building sand,Steel Line,building_materials,cube,1 m³,1,673.99,,standard,true,394,1,20,2110000000080,,,Delivered by truck.,true
+SOSHBU-BM-0300,Plaster sand,Rock Build,building_materials,cube,1 m³,1,631.99,,standard,true,309,1,20,2110000000097,,,Fine plaster sand.,true
+SOSHBU-BM-0301,Plaster sand,Clay Works,building_materials,cube,1 m³,1,691.89,,standard,true,7,1,20,2110000000103,,,Fine plaster sand.,true
+SOSHBU-BM-0302,Plaster sand,Steel Line,building_materials,cube,1 m³,1,741.39,,standard,true,229,1,20,2110000000110,,,Fine plaster sand.,true
+SOSHBU-BM-0400,"Concrete stone, 19 mm",Rock Build,building_materials,cube,1 m³,1,665.69,,standard,true,208,1,20,2110000000127,,,Concrete stone.,true
+SOSHBU-BM-0401,"Concrete stone, 19 mm",Clay Works,building_materials,cube,1 m³,1,717.89,,standard,true,77,1,20,2110000000134,,,Concrete stone.,true
+SOSHBU-BM-0402,"Concrete stone, 19 mm",Steel Line,building_materials,cube,1 m³,1,796.29,,standard,true,234,1,20,2110000000141,,,Concrete stone.,true
+SOSHBU-BM-0500,Maxi stock bricks,Rock Build,building_materials,pallet,500 bricks,1,1546.09,,standard,true,197,1,20,2110000000158,,,"Stock bricks, a pallet.",true
+SOSHBU-BM-0501,Maxi stock bricks,Clay Works,building_materials,pallet,500 bricks,1,1674.19,,standard,true,32,1,20,2110000000165,,,"Stock bricks, a pallet.",true
+SOSHBU-BM-0502,Maxi stock bricks,Steel Line,building_materials,pallet,500 bricks,1,1767.49,,standard,true,42,1,20,2110000000172,,,"Stock bricks, a pallet.",true
+SOSHBU-BM-0600,Cement blocks,Rock Build,building_materials,pallet,100 blocks,1,1149.89,1413.09,standard,true,14,1,20,2110000000189,,,Hollow cement blocks.,true
+SOSHBU-BM-0601,Cement blocks,Clay Works,building_materials,pallet,100 blocks,1,1275.69,,standard,true,129,1,20,2110000000196,,,Hollow cement blocks.,true
+SOSHBU-BM-0602,Cement blocks,Steel Line,building_materials,pallet,100 blocks,1,1365.89,,standard,true,2,1,20,2110000000202,,,Hollow cement blocks.,true
+SOSHBU-BM-0700,"IBR roof sheet, 0.47 mm",Rock Build,building_materials,sheet,3.6 m,1,256.19,,standard,true,89,1,200,2110000000219,,,Galvanised IBR sheet.,true
+SOSHBU-BM-0701,"IBR roof sheet, 0.47 mm",Clay Works,building_materials,sheet,3.6 m,1,276.29,323.49,standard,true,3,1,200,2110000000226,,,Galvanised IBR sheet.,true
+SOSHBU-BM-0702,"IBR roof sheet, 0.47 mm",Steel Line,building_materials,sheet,3.6 m,1,299.19,358.59,standard,true,72,1,200,2110000000233,,,Galvanised IBR sheet.,true
+SOSHBU-BM-0710,"IBR roof sheet, 0.47 mm",Rock Build,building_materials,sheet,6 m,1,426.09,,standard,true,72,1,200,2110000000240,,,Galvanised IBR sheet.,true
+SOSHBU-BM-0711,"IBR roof sheet, 0.47 mm",Clay Works,building_materials,sheet,6 m,1,454.49,,standard,true,77,1,200,2110000000257,,,Galvanised IBR sheet.,true
+SOSHBU-BM-0712,"IBR roof sheet, 0.47 mm",Steel Line,building_materials,sheet,6 m,1,499.89,599.39,standard,true,3,1,200,2110000000264,,,Galvanised IBR sheet.,true
+SOSHBU-BM-0800,Corrugated roof sheet,Rock Build,building_materials,sheet,3 m,1,196.79,,standard,true,285,1,200,2110000000271,,,Galvanised corrugated sheet.,true
+SOSHBU-BM-0801,Corrugated roof sheet,Clay Works,building_materials,sheet,3 m,1,209.39,248.49,standard,true,357,1,200,2110000000288,,,Galvanised corrugated sheet.,true
+SOSHBU-BM-0802,Corrugated roof sheet,Steel Line,building_materials,sheet,3 m,1,232.49,,standard,true,190,1,200,2110000000295,,,Galvanised corrugated sheet.,true
+SOSHBU-BM-0900,Brickforce,Rock Build,building_materials,roll,20 m,1,36.29,42.69,standard,true,69,1,200,2110000000301,,,"Brickforce wire, 150 mm.",true
+SOSHBU-BM-0901,Brickforce,Clay Works,building_materials,roll,20 m,1,39.19,,standard,true,197,1,200,2110000000318,,,"Brickforce wire, 150 mm.",true
+SOSHBU-BM-0902,Brickforce,Steel Line,building_materials,roll,20 m,1,42.39,,standard,true,194,1,200,2110000000325,,,"Brickforce wire, 150 mm.",true
+SOSHBU-BM-1000,Damp-proof course,Rock Build,building_materials,roll,30 m,1,89.89,103.49,standard,true,184,1,200,2110000000332,,,375 mm DPC.,true
+SOSHBU-BM-1001,Damp-proof course,Clay Works,building_materials,roll,30 m,1,95.59,,standard,true,345,1,200,2110000000349,,,375 mm DPC.,true
+SOSHBU-BM-1002,Damp-proof course,Steel Line,building_materials,roll,30 m,1,105.59,123.19,standard,true,273,1,200,2110000000356,,,375 mm DPC.,true
+SOSHBU-BM-1100,"Timber, 38 x 114 mm",Rock Build,building_materials,length,3.6 m,1,142.29,,standard,true,299,1,200,2110000000363,,,Treated SA pine.,true
+SOSHBU-BM-1101,"Timber, 38 x 114 mm",Clay Works,building_materials,length,3.6 m,1,157.49,,standard,true,247,1,200,2110000000370,,,Treated SA pine.,true
+SOSHBU-BM-1102,"Timber, 38 x 114 mm",Steel Line,building_materials,length,3.6 m,1,169.49,,standard,true,0,1,200,2110000000387,,,Treated SA pine.,true
+SOSHBU-BM-1110,"Timber, 38 x 114 mm",Rock Build,building_materials,length,6.6 m,1,263.39,,standard,true,288,1,200,2110000000394,,,Treated SA pine.,true
+SOSHBU-BM-1111,"Timber, 38 x 114 mm",Clay Works,building_materials,length,6.6 m,1,283.59,,standard,true,0,1,200,2110000000400,,,Treated SA pine.,true
+SOSHBU-BM-1112,"Timber, 38 x 114 mm",Steel Line,building_materials,length,6.6 m,1,307.79,360.69,standard,true,0,1,200,2110000000417,,,Treated SA pine.,true
+SOSHBU-TH-0000,Builder's wheelbarrow,Site Pro,tools_hardware,each,65 litre,1,805.79,,standard,true,244,1,20,2110000000424,,65,Heavy-duty wheelbarrow.,true
+SOSHBU-TH-0001,Builder's wheelbarrow,Fixit,tools_hardware,each,65 litre,1,867.59,,standard,true,0,1,20,2110000000431,,65,Heavy-duty wheelbarrow.,true
+SOSHBU-TH-0002,Builder's wheelbarrow,Iron Hand,tools_hardware,each,65 litre,1,959.59,,standard,true,2,1,20,2110000000448,,65,Heavy-duty wheelbarrow.,true
+SOSHBU-TH-0010,Builder's wheelbarrow,Site Pro,tools_hardware,each,85 litre,1,967.09,,standard,true,41,1,20,2110000000455,,85,Heavy-duty wheelbarrow.,true
+SOSHBU-TH-0011,Builder's wheelbarrow,Fixit,tools_hardware,each,85 litre,1,1079.49,,standard,true,4,1,20,2110000000462,,85,Heavy-duty wheelbarrow.,true
+SOSHBU-TH-0012,Builder's wheelbarrow,Iron Hand,tools_hardware,each,85 litre,1,1173.09,,standard,true,246,1,20,2110000000479,,85,Heavy-duty wheelbarrow.,true
+SOSHBU-TH-0100,Round-mouth spade,Site Pro,tools_hardware,each,Standard,1,161.79,,standard,true,56,1,200,2110000000486,,,"Steel spade, wooden handle.",true
+SOSHBU-TH-0101,Round-mouth spade,Fixit,tools_hardware,each,Standard,1,173.89,,standard,true,154,1,200,2110000000493,,,"Steel spade, wooden handle.",true
+SOSHBU-TH-0102,Round-mouth spade,Iron Hand,tools_hardware,each,Standard,1,190.19,,standard,true,393,1,200,2110000000509,,,"Steel spade, wooden handle.",true
+SOSHBU-TH-0200,Claw hammer,Site Pro,tools_hardware,each,500 g,1,134.89,,standard,true,3,1,200,2110000000516,,,Fibreglass handle.,true
+SOSHBU-TH-0201,Claw hammer,Fixit,tools_hardware,each,500 g,1,143.09,166.49,standard,true,260,1,200,2110000000523,,,Fibreglass handle.,true
+SOSHBU-TH-0202,Claw hammer,Iron Hand,tools_hardware,each,500 g,1,156.49,,standard,true,125,1,200,2110000000530,,,Fibreglass handle.,true
+SOSHBU-TH-0300,Brick trowel,Site Pro,tools_hardware,each,280 mm,1,105.49,,standard,true,348,1,200,2110000000547,,,Forged steel trowel.,true
+SOSHBU-TH-0301,Brick trowel,Fixit,tools_hardware,each,280 mm,1,118.69,,standard,true,5,1,200,2110000000554,,,Forged steel trowel.,true
+SOSHBU-TH-0302,Brick trowel,Iron Hand,tools_hardware,each,280 mm,1,124.69,,standard,true,136,1,200,2110000000561,,,Forged steel trowel.,true
+SOSHBU-TH-0400,Spirit level,Site Pro,tools_hardware,each,600 mm,1,171.99,,standard,true,172,1,200,2110000000578,,,Aluminium spirit level.,true
+SOSHBU-TH-0401,Spirit level,Fixit,tools_hardware,each,600 mm,1,183.79,215.09,standard,true,174,1,200,2110000000585,,,Aluminium spirit level.,true
+SOSHBU-TH-0402,Spirit level,Iron Hand,tools_hardware,each,600 mm,1,200.49,,standard,true,95,1,200,2110000000592,,,Aluminium spirit level.,true
+SOSHBU-TH-0410,Spirit level,Site Pro,tools_hardware,each,1200 mm,1,266.09,,standard,true,357,1,200,2110000000608,,,Aluminium spirit level.,true
+SOSHBU-TH-0411,Spirit level,Fixit,tools_hardware,each,1200 mm,1,294.19,,standard,true,78,1,200,2110000000615,,,Aluminium spirit level.,true
+SOSHBU-TH-0412,Spirit level,Iron Hand,tools_hardware,each,1200 mm,1,314.39,,standard,true,0,1,200,2110000000622,,,Aluminium spirit level.,true
+SOSHBU-TH-0500,"Wire nails, 75 mm",Site Pro,tools_hardware,box,5 kg,1,204.99,,standard,true,399,1,200,2110000000639,,5,Round wire nails.,true
+SOSHBU-TH-0501,"Wire nails, 75 mm",Fixit,tools_hardware,box,5 kg,1,227.19,,standard,true,331,1,200,2110000000646,,5,Round wire nails.,true
+SOSHBU-TH-0502,"Wire nails, 75 mm",Iron Hand,tools_hardware,box,5 kg,1,240.29,274.29,standard,true,1,1,200,2110000000653,,5,Round wire nails.,true
+SOSHBU-TH-0600,Roofing screws,Site Pro,tools_hardware,box,100 screws,1,134.99,152.69,standard,true,186,1,200,2110000000660,,,Self-drilling roofing screws.,true
+SOSHBU-TH-0601,Roofing screws,Fixit,tools_hardware,box,100 screws,1,144.29,,standard,true,191,1,200,2110000000677,,,Self-drilling roofing screws.,true
+SOSHBU-TH-0602,Roofing screws,Iron Hand,tools_hardware,box,100 screws,1,158.29,,standard,true,36,1,200,2110000000684,,,Self-drilling roofing screws.,true
+SOSHBU-TH-0700,Tape measure,Site Pro,tools_hardware,each,8 m,1,87.49,103.59,standard,true,280,1,200,2110000000691,,,Metric tape measure.,true
+SOSHBU-TH-0701,Tape measure,Fixit,tools_hardware,each,8 m,1,98.69,,standard,true,186,1,200,2110000000707,,,Metric tape measure.,true
+SOSHBU-TH-0702,Tape measure,Iron Hand,tools_hardware,each,8 m,1,103.59,,standard,true,340,1,200,2110000000714,,,Metric tape measure.,true
+SOSHBU-TH-0800,Angle grinder,Site Pro,tools_hardware,each,115 mm,1,622.09,,standard,true,155,1,20,2110000000721,,,750 W angle grinder.,true
+SOSHBU-TH-0801,Angle grinder,Fixit,tools_hardware,each,115 mm,1,688.49,,standard,true,243,1,20,2110000000738,,,750 W angle grinder.,true
+SOSHBU-TH-0802,Angle grinder,Iron Hand,tools_hardware,each,115 mm,1,724.69,,standard,true,0,1,20,2110000000745,,,750 W angle grinder.,true
+SOSHBU-TH-0900,Cutting discs,Site Pro,tools_hardware,pack,10 x 115 mm,1,107.49,123.69,standard,true,348,1,200,2110000000752,,,Steel cutting discs.,true
+SOSHBU-TH-0901,Cutting discs,Fixit,tools_hardware,pack,10 x 115 mm,1,117.99,,standard,true,79,1,200,2110000000769,,,Steel cutting discs.,true
+SOSHBU-TH-0902,Cutting discs,Iron Hand,tools_hardware,pack,10 x 115 mm,1,125.59,,standard,true,267,1,200,2110000000776,,,Steel cutting discs.,true
+SOSHBU-TH-1000,Safety boots,Site Pro,tools_hardware,each,Size 8,1,439.19,,standard,true,148,1,200,2110000000783,,,Steel-toe safety boots.,true
+SOSHBU-TH-1001,Safety boots,Fixit,tools_hardware,each,Size 8,1,481.89,,standard,true,249,1,200,2110000000790,,,Steel-toe safety boots.,true
+SOSHBU-TH-1002,Safety boots,Iron Hand,tools_hardware,each,Size 8,1,531.49,,standard,true,206,1,200,2110000000806,,,Steel-toe safety boots.,true
+SOSHBU-PL-0000,"PVC sewer pipe, 110 mm",Flow Line,plumbing,length,6 m,1,317.59,,standard,true,250,1,200,2110000000813,,,Class 34 sewer pipe.,true
+SOSHBU-PL-0001,"PVC sewer pipe, 110 mm",Hot Flow,plumbing,length,6 m,1,342.49,,standard,true,58,1,200,2110000000820,,,Class 34 sewer pipe.,true
+SOSHBU-PL-0002,"PVC sewer pipe, 110 mm",Pipe Pro,plumbing,length,6 m,1,366.49,,standard,true,7,1,200,2110000000837,,,Class 34 sewer pipe.,true
+SOSHBU-PL-0100,"PVC pipe, 50 mm",Flow Line,plumbing,length,6 m,1,144.29,,standard,true,75,1,200,2110000000844,,,Waste pipe.,true
+SOSHBU-PL-0101,"PVC pipe, 50 mm",Hot Flow,plumbing,length,6 m,1,157.69,185.59,standard,true,269,1,200,2110000000851,,,Waste pipe.,true
+SOSHBU-PL-0102,"PVC pipe, 50 mm",Pipe Pro,plumbing,length,6 m,1,170.39,,standard,true,0,1,200,2110000000868,,,Waste pipe.,true
+SOSHBU-PL-0200,"Copper pipe, 15 mm",Flow Line,plumbing,length,5.5 m,1,268.79,,standard,true,394,1,200,2110000000875,,,Class 1 copper pipe.,true
+SOSHBU-PL-0201,"Copper pipe, 15 mm",Hot Flow,plumbing,length,5.5 m,1,294.19,,standard,true,229,1,200,2110000000882,,,Class 1 copper pipe.,true
+SOSHBU-PL-0202,"Copper pipe, 15 mm",Pipe Pro,plumbing,length,5.5 m,1,311.49,363.99,standard,true,216,1,200,2110000000899,,,Class 1 copper pipe.,true
+SOSHBU-PL-0300,"HDPE pipe, 20 mm",Flow Line,plumbing,roll,50 m,1,440.79,,standard,true,332,1,200,2110000000905,,,Water supply pipe.,true
+SOSHBU-PL-0301,"HDPE pipe, 20 mm",Hot Flow,plumbing,roll,50 m,1,478.99,,standard,true,0,1,200,2110000000912,,,Water supply pipe.,true
+SOSHBU-PL-0302,"HDPE pipe, 20 mm",Pipe Pro,plumbing,roll,50 m,1,530.99,,standard,true,217,1,200,2110000000929,,,Water supply pipe.,true
+SOSHBU-PL-0400,Close-coupled toilet suite,Flow Line,plumbing,each,White,1,1252.59,1424.69,standard,true,70,1,20,2110000000936,,,"Pan, cistern and seat.",true
+SOSHBU-PL-0401,Close-coupled toilet suite,Hot Flow,plumbing,each,White,1,1365.79,,standard,true,254,1,20,2110000000943,,,"Pan, cistern and seat.",true
+SOSHBU-PL-0402,Close-coupled toilet suite,Pipe Pro,plumbing,each,White,1,1442.59,,standard,true,327,1,20,2110000000950,,,"Pan, cistern and seat.",true
+SOSHBU-PL-0500,Electric geyser,Flow Line,plumbing,each,150 litre,1,4899.49,,standard,true,13,1,20,2110000000967,,150,SABS-approved geyser.,true
+SOSHBU-PL-0501,Electric geyser,Hot Flow,plumbing,each,150 litre,1,5242.89,,standard,true,0,1,20,2110000000974,,150,SABS-approved geyser.,true
+SOSHBU-PL-0502,Electric geyser,Pipe Pro,plumbing,each,150 litre,1,5668.69,,standard,true,209,1,20,2110000000981,,150,SABS-approved geyser.,true
+SOSHBU-PL-0510,Electric geyser,Flow Line,plumbing,each,100 litre,1,4004.09,,standard,true,169,1,20,2110000000998,,100,SABS-approved geyser.,true
+SOSHBU-PL-0511,Electric geyser,Hot Flow,plumbing,each,100 litre,1,4201.89,,standard,true,218,1,20,2110000001001,,100,SABS-approved geyser.,true
+SOSHBU-PL-0512,Electric geyser,Pipe Pro,plumbing,each,100 litre,1,4649.89,,standard,true,330,1,20,2110000001018,,100,SABS-approved geyser.,true
+SOSHBU-PL-0600,"Pillar tap, chrome",Flow Line,plumbing,each,15 mm,1,171.79,,standard,true,325,1,200,2110000001025,,,Chrome pillar tap.,true
+SOSHBU-PL-0601,"Pillar tap, chrome",Hot Flow,plumbing,each,15 mm,1,181.39,,standard,true,212,1,200,2110000001032,,,Chrome pillar tap.,true
+SOSHBU-PL-0602,"Pillar tap, chrome",Pipe Pro,plumbing,each,15 mm,1,201.39,247.99,standard,true,355,1,200,2110000001049,,,Chrome pillar tap.,true
+SOSHBU-PL-0700,Kitchen sink mixer,Flow Line,plumbing,each,Standard,1,617.09,,standard,true,392,1,20,2110000001056,,,Single-lever mixer.,true
+SOSHBU-PL-0701,Kitchen sink mixer,Hot Flow,plumbing,each,Standard,1,683.09,,standard,true,322,1,20,2110000001063,,,Single-lever mixer.,true
+SOSHBU-PL-0702,Kitchen sink mixer,Pipe Pro,plumbing,each,Standard,1,742.59,,standard,true,357,1,20,2110000001070,,,Single-lever mixer.,true
+SOSHBU-PL-0800,Stopcock,Flow Line,plumbing,each,15 mm,1,117.79,,standard,true,356,1,200,2110000001087,,,Brass stopcock.,true
+SOSHBU-PL-0801,Stopcock,Hot Flow,plumbing,each,15 mm,1,125.59,151.99,standard,true,40,1,200,2110000001094,,,Brass stopcock.,true
+SOSHBU-PL-0802,Stopcock,Pipe Pro,plumbing,each,15 mm,1,135.39,,standard,true,2,1,200,2110000001100,,,Brass stopcock.,true
+SOSHBU-PL-0900,Thread tape,Flow Line,plumbing,pack,10 rolls,10,44.69,,standard,true,222,1,200,2110000001117,12110000001114,,PTFE thread tape.,true
+SOSHBU-PL-0901,Thread tape,Hot Flow,plumbing,pack,10 rolls,10,47.99,,standard,true,137,1,200,2110000001124,12110000001121,,PTFE thread tape.,true
+SOSHBU-PL-0902,Thread tape,Pipe Pro,plumbing,pack,10 rolls,10,51.99,64.29,standard,true,4,1,200,2110000001131,12110000001138,,PTFE thread tape.,true
+SOSHBU-EL-0000,"Surfix cable, 2.5 mm",Wire Co,electrical,roll,100 m,1,1327.59,,standard,true,96,1,200,2110000001148,,,Twin and earth cable.,true
+SOSHBU-EL-0001,"Surfix cable, 2.5 mm",Bright Home,electrical,roll,100 m,1,1474.79,,standard,true,261,1,200,2110000001155,,,Twin and earth cable.,true
+SOSHBU-EL-0002,"Surfix cable, 2.5 mm",Volt Safe,electrical,roll,100 m,1,1596.79,,standard,true,219,1,200,2110000001162,,,Twin and earth cable.,true
+SOSHBU-EL-0100,"Surfix cable, 1.5 mm",Wire Co,electrical,roll,100 m,1,897.39,,standard,true,118,1,200,2110000001179,,,Twin and earth cable.,true
+SOSHBU-EL-0101,"Surfix cable, 1.5 mm",Bright Home,electrical,roll,100 m,1,986.59,,standard,true,100,1,200,2110000001186,,,Twin and earth cable.,true
+SOSHBU-EL-0102,"Surfix cable, 1.5 mm",Volt Safe,electrical,roll,100 m,1,1034.89,,standard,true,129,1,200,2110000001193,,,Twin and earth cable.,true
+SOSHBU-EL-0200,"LED bulb, 9 W",Wire Co,electrical,pack,10 bulbs,10,161.79,,standard,true,391,1,200,2110000001209,12110000001206,,"Cool white, B22.",true
+SOSHBU-EL-0201,"LED bulb, 9 W",Bright Home,electrical,pack,10 bulbs,10,178.09,,standard,true,47,1,200,2110000001216,12110000001213,,"Cool white, B22.",true
+SOSHBU-EL-0202,"LED bulb, 9 W",Volt Safe,electrical,pack,10 bulbs,10,185.89,,standard,true,15,1,200,2110000001223,12110000001220,,"Cool white, B22.",true
+SOSHBU-EL-0300,Double switched socket,Wire Co,electrical,each,100 x 100 mm,1,62.89,,standard,true,0,1,200,2110000001230,,,Double switched socket.,true
+SOSHBU-EL-0301,Double switched socket,Bright Home,electrical,each,100 x 100 mm,1,66.69,,standard,true,102,1,200,2110000001247,,,Double switched socket.,true
+SOSHBU-EL-0302,Double switched socket,Volt Safe,electrical,each,100 x 100 mm,1,73.49,,standard,true,10,1,200,2110000001254,,,Double switched socket.,true
+SOSHBU-EL-0400,"Light switch, 1-lever",Wire Co,electrical,each,100 x 50 mm,1,31.59,,standard,true,343,1,200,2110000001261,,,One-lever switch.,true
+SOSHBU-EL-0401,"Light switch, 1-lever",Bright Home,electrical,each,100 x 50 mm,1,33.49,,standard,true,8,1,200,2110000001278,,,One-lever switch.,true
+SOSHBU-EL-0402,"Light switch, 1-lever",Volt Safe,electrical,each,100 x 50 mm,1,37.19,43.49,standard,true,289,1,200,2110000001285,,,One-lever switch.,true
+SOSHBU-EL-0500,Distribution board,Wire Co,electrical,each,8-way,1,533.19,,standard,true,150,1,20,2110000001292,,,Surface-mount DB.,true
+SOSHBU-EL-0501,Distribution board,Bright Home,electrical,each,8-way,1,572.39,712.49,standard,true,238,1,20,2110000001308,,,Surface-mount DB.,true
+SOSHBU-EL-0502,Distribution board,Volt Safe,electrical,each,8-way,1,626.59,,standard,true,334,1,20,2110000001315,,,Surface-mount DB.,true
+SOSHBU-EL-0510,Distribution board,Wire Co,electrical,each,12-way,1,718.99,,standard,true,53,1,20,2110000001322,,,Surface-mount DB.,true
+SOSHBU-EL-0511,Distribution board,Bright Home,electrical,each,12-way,1,768.89,,standard,true,0,1,20,2110000001339,,,Surface-mount DB.,true
+SOSHBU-EL-0512,Distribution board,Volt Safe,electrical,each,12-way,1,851.79,,standard,true,0,1,20,2110000001346,,,Surface-mount DB.,true
+SOSHBU-EL-0600,Circuit breaker,Wire Co,electrical,each,20 A,1,80.59,,standard,true,332,1,200,2110000001353,,,Single-pole breaker.,true
+SOSHBU-EL-0601,Circuit breaker,Bright Home,electrical,each,20 A,1,87.39,,standard,true,84,1,200,2110000001360,,,Single-pole breaker.,true
+SOSHBU-EL-0602,Circuit breaker,Volt Safe,electrical,each,20 A,1,93.69,,standard,true,398,1,200,2110000001377,,,Single-pole breaker.,true
+SOSHBU-EL-0700,Earth leakage unit,Wire Co,electrical,each,63 A,1,393.69,,standard,true,71,1,200,2110000001384,,,30 mA earth leakage.,true
+SOSHBU-EL-0701,Earth leakage unit,Bright Home,electrical,each,63 A,1,427.99,,standard,true,138,1,200,2110000001391,,,30 mA earth leakage.,true
+SOSHBU-EL-0702,Earth leakage unit,Volt Safe,electrical,each,63 A,1,465.19,,standard,true,375,1,200,2110000001407,,,30 mA earth leakage.,true
+SOSHBU-EL-0800,"PVC conduit, 20 mm",Wire Co,electrical,length,4 m,1,22.59,28.29,standard,true,115,1,200,2110000001414,,,Conduit pipe.,true
+SOSHBU-EL-0801,"PVC conduit, 20 mm",Bright Home,electrical,length,4 m,1,24.69,,standard,true,0,1,200,2110000001421,,,Conduit pipe.,true
+SOSHBU-EL-0802,"PVC conduit, 20 mm",Volt Safe,electrical,length,4 m,1,26.09,,standard,true,0,1,200,2110000001438,,,Conduit pipe.,true
+SOSHBU-EL-0900,Insulation tape,Wire Co,electrical,pack,10 rolls,10,54.09,,standard,true,281,1,200,2110000001445,12110000001442,,Black insulation tape.,true
+SOSHBU-EL-0901,Insulation tape,Bright Home,electrical,pack,10 rolls,10,59.19,,standard,true,158,1,200,2110000001452,12110000001459,,Black insulation tape.,true
+SOSHBU-EL-0902,Insulation tape,Volt Safe,electrical,pack,10 rolls,10,61.89,,standard,true,0,1,200,2110000001469,12110000001466,,Black insulation tape.,true
+SOSHBU-PF-0000,"PVA paint, white",Colour Kasi,paint_finishes,tin,5 litre,1,225.89,,standard,true,115,1,200,2110000001476,,5,Interior/exterior PVA.,true
+SOSHBU-PF-0001,"PVA paint, white",Coat Pro,paint_finishes,tin,5 litre,1,242.59,,standard,true,352,1,200,2110000001483,,5,Interior/exterior PVA.,true
+SOSHBU-PF-0002,"PVA paint, white",Bright Wall,paint_finishes,tin,5 litre,1,261.89,,standard,true,128,1,200,2110000001490,,5,Interior/exterior PVA.,true
+SOSHBU-PF-0010,"PVA paint, white",Colour Kasi,paint_finishes,tin,20 litre,1,796.69,,standard,true,365,1,200,2110000001506,,20,Interior/exterior PVA.,true
+SOSHBU-PF-0011,"PVA paint, white",Coat Pro,paint_finishes,tin,20 litre,1,869.49,,standard,true,0,1,200,2110000001513,,20,Interior/exterior PVA.,true
+SOSHBU-PF-0012,"PVA paint, white",Bright Wall,paint_finishes,tin,20 litre,1,946.39,1153.69,standard,true,0,1,200,2110000001520,,20,Interior/exterior PVA.,true
+SOSHBU-PF-0100,"Roof paint, red oxide",Colour Kasi,paint_finishes,tin,20 litre,1,1157.59,,standard,true,395,1,200,2110000001537,,20,Roof and wall paint.,true
+SOSHBU-PF-0101,"Roof paint, red oxide",Coat Pro,paint_finishes,tin,20 litre,1,1257.49,,standard,true,72,1,200,2110000001544,,20,Roof and wall paint.,true
+SOSHBU-PF-0102,"Roof paint, red oxide",Bright Wall,paint_finishes,tin,20 litre,1,1345.69,,standard,true,304,1,200,2110000001551,,20,Roof and wall paint.,true
+SOSHBU-PF-0200,"Enamel paint, gloss white",Colour Kasi,paint_finishes,tin,5 litre,1,396.49,,standard,true,44,1,200,2110000001568,,5,For doors and trims.,true
+SOSHBU-PF-0201,"Enamel paint, gloss white",Coat Pro,paint_finishes,tin,5 litre,1,431.09,,standard,true,116,1,200,2110000001575,,5,For doors and trims.,true
+SOSHBU-PF-0202,"Enamel paint, gloss white",Bright Wall,paint_finishes,tin,5 litre,1,469.99,,standard,true,274,1,200,2110000001582,,5,For doors and trims.,true
+SOSHBU-PF-0300,Paint roller set,Colour Kasi,paint_finishes,each,225 mm,1,106.29,,standard,true,127,1,200,2110000001599,,,"Roller, tray and extension.",true
+SOSHBU-PF-0301,Paint roller set,Coat Pro,paint_finishes,each,225 mm,1,116.49,,standard,true,33,1,200,2110000001605,,,"Roller, tray and extension.",true
+SOSHBU-PF-0302,Paint roller set,Bright Wall,paint_finishes,each,225 mm,1,125.79,,standard,true,184,1,200,2110000001612,,,"Roller, tray and extension.",true
+SOSHBU-PF-0400,Paint brush set,Colour Kasi,paint_finishes,pack,5 brushes,5,89.09,,standard,true,28,1,200,2110000001629,12110000001626,,25 to 100 mm brushes.,true
+SOSHBU-PF-0401,Paint brush set,Coat Pro,paint_finishes,pack,5 brushes,5,97.39,,standard,true,3,1,200,2110000001636,12110000001633,,25 to 100 mm brushes.,true
+SOSHBU-PF-0402,Paint brush set,Bright Wall,paint_finishes,pack,5 brushes,5,105.29,,standard,true,148,1,200,2110000001643,12110000001640,,25 to 100 mm brushes.,true
+SOSHBU-PF-0500,Tile adhesive,Colour Kasi,paint_finishes,bag,20 kg,1,141.89,,standard,true,0,1,200,2110000001650,,20,Floor and wall tile adhesive.,true
+SOSHBU-PF-0501,Tile adhesive,Coat Pro,paint_finishes,bag,20 kg,1,154.49,174.99,standard,true,4,1,200,2110000001667,,20,Floor and wall tile adhesive.,true
+SOSHBU-PF-0502,Tile adhesive,Bright Wall,paint_finishes,bag,20 kg,1,169.29,,standard,true,128,1,200,2110000001674,,20,Floor and wall tile adhesive.,true
+SOSHBU-PF-0600,"Tile grout, white",Colour Kasi,paint_finishes,bag,5 kg,1,78.79,,standard,true,66,1,200,2110000001681,,5,Fine grout.,true
+SOSHBU-PF-0601,"Tile grout, white",Coat Pro,paint_finishes,bag,5 kg,1,88.99,,standard,true,283,1,200,2110000001698,,5,Fine grout.,true
+SOSHBU-PF-0602,"Tile grout, white",Bright Wall,paint_finishes,bag,5 kg,1,93.09,,standard,true,373,1,200,2110000001704,,5,Fine grout.,true
+SOSHBU-PF-0700,Crack filler,Colour Kasi,paint_finishes,bag,2 kg,1,58.39,,standard,true,14,1,200,2110000001711,,2,Interior crack filler.,true
+SOSHBU-PF-0701,Crack filler,Coat Pro,paint_finishes,bag,2 kg,1,63.39,,standard,true,351,1,200,2110000001728,,2,Interior crack filler.,true
+SOSHBU-PF-0702,Crack filler,Bright Wall,paint_finishes,bag,2 kg,1,68.09,,standard,true,192,1,200,2110000001735,,2,Interior crack filler.,true

@@ -1,0 +1,175 @@
+product_code,name,brand,category,unit,pack_size,units_per_pack,price_rands,compare_at_rands,vat_rate,vat_included,stock,min_qty,max_qty,unit_barcode,case_barcode,weight_kg,description,active
+PLKBUI-BM-0000,"Cement, 42.5N",Rock Build,building_materials,bag,50 kg,1,104.39,,standard,true,358,1,200,2090000000009,,50,General-purpose cement.,true
+PLKBUI-BM-0001,"Cement, 42.5N",Clay Works,building_materials,bag,50 kg,1,111.69,137.89,standard,true,42,1,200,2090000000016,,50,General-purpose cement.,true
+PLKBUI-BM-0002,"Cement, 42.5N",Steel Line,building_materials,bag,50 kg,1,118.49,132.99,standard,true,150,1,200,2090000000023,,50,General-purpose cement.,true
+PLKBUI-BM-0100,"Cement, 32.5R",Rock Build,building_materials,bag,50 kg,1,93.99,,standard,true,0,1,200,2090000000030,,50,Plaster and brickwork cement.,true
+PLKBUI-BM-0101,"Cement, 32.5R",Clay Works,building_materials,bag,50 kg,1,102.69,,standard,true,275,1,200,2090000000047,,50,Plaster and brickwork cement.,true
+PLKBUI-BM-0102,"Cement, 32.5R",Steel Line,building_materials,bag,50 kg,1,108.89,,standard,true,229,1,200,2090000000054,,50,Plaster and brickwork cement.,true
+PLKBUI-BM-0200,Building sand,Rock Build,building_materials,cube,1 m³,1,594.49,713.49,standard,true,9,1,20,2090000000061,,,Delivered by truck.,true
+PLKBUI-BM-0201,Building sand,Clay Works,building_materials,cube,1 m³,1,666.89,,standard,true,246,1,20,2090000000078,,,Delivered by truck.,true
+PLKBUI-BM-0202,Building sand,Steel Line,building_materials,cube,1 m³,1,715.89,,standard,true,0,1,20,2090000000085,,,Delivered by truck.,true
+PLKBUI-BM-0300,Plaster sand,Rock Build,building_materials,cube,1 m³,1,646.79,,standard,true,210,1,20,2090000000092,,,Fine plaster sand.,true
+PLKBUI-BM-0301,Plaster sand,Clay Works,building_materials,cube,1 m³,1,694.09,865.59,standard,true,0,1,20,2090000000108,,,Fine plaster sand.,true
+PLKBUI-BM-0302,Plaster sand,Steel Line,building_materials,cube,1 m³,1,756.29,,standard,true,211,1,20,2090000000115,,,Fine plaster sand.,true
+PLKBUI-BM-0400,"Concrete stone, 19 mm",Rock Build,building_materials,cube,1 m³,1,694.59,,standard,true,273,1,20,2090000000122,,,Concrete stone.,true
+PLKBUI-BM-0401,"Concrete stone, 19 mm",Clay Works,building_materials,cube,1 m³,1,755.09,,standard,true,39,1,20,2090000000139,,,Concrete stone.,true
+PLKBUI-BM-0402,"Concrete stone, 19 mm",Steel Line,building_materials,cube,1 m³,1,818.99,,standard,true,175,1,20,2090000000146,,,Concrete stone.,true
+PLKBUI-BM-0500,Maxi stock bricks,Rock Build,building_materials,pallet,500 bricks,1,1593.89,1888.49,standard,true,2,1,20,2090000000153,,,"Stock bricks, a pallet.",true
+PLKBUI-BM-0501,Maxi stock bricks,Clay Works,building_materials,pallet,500 bricks,1,1735.29,,standard,true,10,1,20,2090000000160,,,"Stock bricks, a pallet.",true
+PLKBUI-BM-0502,Maxi stock bricks,Steel Line,building_materials,pallet,500 bricks,1,1830.49,,standard,true,345,1,20,2090000000177,,,"Stock bricks, a pallet.",true
+PLKBUI-BM-0600,Cement blocks,Rock Build,building_materials,pallet,100 blocks,1,1215.49,1473.79,standard,true,301,1,20,2090000000184,,,Hollow cement blocks.,true
+PLKBUI-BM-0601,Cement blocks,Clay Works,building_materials,pallet,100 blocks,1,1291.29,,standard,true,196,1,20,2090000000191,,,Hollow cement blocks.,true
+PLKBUI-BM-0602,Cement blocks,Steel Line,building_materials,pallet,100 blocks,1,1413.19,,standard,true,250,1,20,2090000000207,,,Hollow cement blocks.,true
+PLKBUI-BM-0700,"IBR roof sheet, 0.47 mm",Rock Build,building_materials,sheet,3.6 m,1,271.79,,standard,true,233,1,200,2090000000214,,,Galvanised IBR sheet.,true
+PLKBUI-BM-0701,"IBR roof sheet, 0.47 mm",Clay Works,building_materials,sheet,3.6 m,1,291.09,,standard,true,287,1,200,2090000000221,,,Galvanised IBR sheet.,true
+PLKBUI-BM-0702,"IBR roof sheet, 0.47 mm",Steel Line,building_materials,sheet,3.6 m,1,321.09,375.69,standard,true,112,1,200,2090000000238,,,Galvanised IBR sheet.,true
+PLKBUI-BM-0710,"IBR roof sheet, 0.47 mm",Rock Build,building_materials,sheet,6 m,1,432.99,,standard,true,107,1,200,2090000000245,,,Galvanised IBR sheet.,true
+PLKBUI-BM-0711,"IBR roof sheet, 0.47 mm",Clay Works,building_materials,sheet,6 m,1,472.49,567.99,standard,true,201,1,200,2090000000252,,,Galvanised IBR sheet.,true
+PLKBUI-BM-0712,"IBR roof sheet, 0.47 mm",Steel Line,building_materials,sheet,6 m,1,516.59,,standard,true,79,1,200,2090000000269,,,Galvanised IBR sheet.,true
+PLKBUI-BM-0800,Corrugated roof sheet,Rock Build,building_materials,sheet,3 m,1,207.59,,standard,true,313,1,200,2090000000276,,,Galvanised corrugated sheet.,true
+PLKBUI-BM-0801,Corrugated roof sheet,Clay Works,building_materials,sheet,3 m,1,224.79,,standard,true,6,1,200,2090000000283,,,Galvanised corrugated sheet.,true
+PLKBUI-BM-0802,Corrugated roof sheet,Steel Line,building_materials,sheet,3 m,1,235.89,,standard,true,178,1,200,2090000000290,,,Galvanised corrugated sheet.,true
+PLKBUI-BM-0900,Brickforce,Rock Build,building_materials,roll,20 m,1,37.79,,standard,true,153,1,200,2090000000306,,,"Brickforce wire, 150 mm.",true
+PLKBUI-BM-0901,Brickforce,Clay Works,building_materials,roll,20 m,1,40.89,,standard,true,348,1,200,2090000000313,,,"Brickforce wire, 150 mm.",true
+PLKBUI-BM-0902,Brickforce,Steel Line,building_materials,roll,20 m,1,44.39,,standard,true,314,1,200,2090000000320,,,"Brickforce wire, 150 mm.",true
+PLKBUI-BM-1000,Damp-proof course,Rock Build,building_materials,roll,30 m,1,92.69,112.19,standard,true,4,1,200,2090000000337,,,375 mm DPC.,true
+PLKBUI-BM-1001,Damp-proof course,Clay Works,building_materials,roll,30 m,1,102.29,,standard,true,57,1,200,2090000000344,,,375 mm DPC.,true
+PLKBUI-BM-1002,Damp-proof course,Steel Line,building_materials,roll,30 m,1,107.99,,standard,true,167,1,200,2090000000351,,,375 mm DPC.,true
+PLKBUI-BM-1100,"Timber, 38 x 114 mm",Rock Build,building_materials,length,3.6 m,1,150.49,,standard,true,317,1,200,2090000000368,,,Treated SA pine.,true
+PLKBUI-BM-1101,"Timber, 38 x 114 mm",Clay Works,building_materials,length,3.6 m,1,158.79,194.59,standard,true,292,1,200,2090000000375,,,Treated SA pine.,true
+PLKBUI-BM-1102,"Timber, 38 x 114 mm",Steel Line,building_materials,length,3.6 m,1,177.79,,standard,true,196,1,200,2090000000382,,,Treated SA pine.,true
+PLKBUI-BM-1110,"Timber, 38 x 114 mm",Rock Build,building_materials,length,6.6 m,1,269.69,,standard,true,52,1,200,2090000000399,,,Treated SA pine.,true
+PLKBUI-BM-1111,"Timber, 38 x 114 mm",Clay Works,building_materials,length,6.6 m,1,295.99,,standard,true,232,1,200,2090000000405,,,Treated SA pine.,true
+PLKBUI-BM-1112,"Timber, 38 x 114 mm",Steel Line,building_materials,length,6.6 m,1,313.39,359.89,standard,true,4,1,200,2090000000412,,,Treated SA pine.,true
+PLKBUI-TH-0000,Builder's wheelbarrow,Site Pro,tools_hardware,each,65 litre,1,836.79,,standard,true,107,1,20,2090000000429,,65,Heavy-duty wheelbarrow.,true
+PLKBUI-TH-0001,Builder's wheelbarrow,Fixit,tools_hardware,each,65 litre,1,924.29,,standard,true,237,1,20,2090000000436,,65,Heavy-duty wheelbarrow.,true
+PLKBUI-TH-0002,Builder's wheelbarrow,Iron Hand,tools_hardware,each,65 litre,1,997.69,,standard,true,150,1,20,2090000000443,,65,Heavy-duty wheelbarrow.,true
+PLKBUI-TH-0010,Builder's wheelbarrow,Site Pro,tools_hardware,each,85 litre,1,1005.29,,standard,true,52,1,20,2090000000450,,85,Heavy-duty wheelbarrow.,true
+PLKBUI-TH-0011,Builder's wheelbarrow,Fixit,tools_hardware,each,85 litre,1,1126.19,,standard,true,138,1,20,2090000000467,,85,Heavy-duty wheelbarrow.,true
+PLKBUI-TH-0012,Builder's wheelbarrow,Iron Hand,tools_hardware,each,85 litre,1,1214.09,1473.69,standard,true,203,1,20,2090000000474,,85,Heavy-duty wheelbarrow.,true
+PLKBUI-TH-0100,Round-mouth spade,Site Pro,tools_hardware,each,Standard,1,169.99,,standard,true,242,1,200,2090000000481,,,"Steel spade, wooden handle.",true
+PLKBUI-TH-0101,Round-mouth spade,Fixit,tools_hardware,each,Standard,1,179.19,,standard,true,31,1,200,2090000000498,,,"Steel spade, wooden handle.",true
+PLKBUI-TH-0102,Round-mouth spade,Iron Hand,tools_hardware,each,Standard,1,196.99,,standard,true,0,1,200,2090000000504,,,"Steel spade, wooden handle.",true
+PLKBUI-TH-0200,Claw hammer,Site Pro,tools_hardware,each,500 g,1,137.19,,standard,true,77,1,200,2090000000511,,,Fibreglass handle.,true
+PLKBUI-TH-0201,Claw hammer,Fixit,tools_hardware,each,500 g,1,148.89,,standard,true,91,1,200,2090000000528,,,Fibreglass handle.,true
+PLKBUI-TH-0202,Claw hammer,Iron Hand,tools_hardware,each,500 g,1,161.99,,standard,true,66,1,200,2090000000535,,,Fibreglass handle.,true
+PLKBUI-TH-0300,Brick trowel,Site Pro,tools_hardware,each,280 mm,1,113.19,,standard,true,167,1,200,2090000000542,,,Forged steel trowel.,true
+PLKBUI-TH-0301,Brick trowel,Fixit,tools_hardware,each,280 mm,1,120.99,148.79,standard,true,199,1,200,2090000000559,,,Forged steel trowel.,true
+PLKBUI-TH-0302,Brick trowel,Iron Hand,tools_hardware,each,280 mm,1,129.59,,standard,true,173,1,200,2090000000566,,,Forged steel trowel.,true
+PLKBUI-TH-0400,Spirit level,Site Pro,tools_hardware,each,600 mm,1,178.09,,standard,true,10,1,200,2090000000573,,,Aluminium spirit level.,true
+PLKBUI-TH-0401,Spirit level,Fixit,tools_hardware,each,600 mm,1,191.39,,standard,true,93,1,200,2090000000580,,,Aluminium spirit level.,true
+PLKBUI-TH-0402,Spirit level,Iron Hand,tools_hardware,each,600 mm,1,205.49,,standard,true,9,1,200,2090000000597,,,Aluminium spirit level.,true
+PLKBUI-TH-0410,Spirit level,Site Pro,tools_hardware,each,1200 mm,1,278.99,,standard,true,162,1,200,2090000000603,,,Aluminium spirit level.,true
+PLKBUI-TH-0411,Spirit level,Fixit,tools_hardware,each,1200 mm,1,303.29,,standard,true,364,1,200,2090000000610,,,Aluminium spirit level.,true
+PLKBUI-TH-0412,Spirit level,Iron Hand,tools_hardware,each,1200 mm,1,333.59,,standard,true,396,1,200,2090000000627,,,Aluminium spirit level.,true
+PLKBUI-TH-0500,"Wire nails, 75 mm",Site Pro,tools_hardware,box,5 kg,1,211.19,,standard,true,147,1,200,2090000000634,,5,Round wire nails.,true
+PLKBUI-TH-0501,"Wire nails, 75 mm",Fixit,tools_hardware,box,5 kg,1,230.89,,standard,true,363,1,200,2090000000641,,5,Round wire nails.,true
+PLKBUI-TH-0502,"Wire nails, 75 mm",Iron Hand,tools_hardware,box,5 kg,1,248.69,309.19,standard,true,0,1,200,2090000000658,,5,Round wire nails.,true
+PLKBUI-TH-0600,Roofing screws,Site Pro,tools_hardware,box,100 screws,1,141.39,,standard,true,3,1,200,2090000000665,,,Self-drilling roofing screws.,true
+PLKBUI-TH-0601,Roofing screws,Fixit,tools_hardware,box,100 screws,1,154.09,,standard,true,25,1,200,2090000000672,,,Self-drilling roofing screws.,true
+PLKBUI-TH-0602,Roofing screws,Iron Hand,tools_hardware,box,100 screws,1,162.89,190.39,standard,true,108,1,200,2090000000689,,,Self-drilling roofing screws.,true
+PLKBUI-TH-0700,Tape measure,Site Pro,tools_hardware,each,8 m,1,92.59,,standard,true,149,1,200,2090000000696,,,Metric tape measure.,true
+PLKBUI-TH-0701,Tape measure,Fixit,tools_hardware,each,8 m,1,101.19,,standard,true,10,1,200,2090000000702,,,Metric tape measure.,true
+PLKBUI-TH-0702,Tape measure,Iron Hand,tools_hardware,each,8 m,1,110.39,,standard,true,175,1,200,2090000000719,,,Metric tape measure.,true
+PLKBUI-TH-0800,Angle grinder,Site Pro,tools_hardware,each,115 mm,1,645.19,,standard,true,121,1,20,2090000000726,,,750 W angle grinder.,true
+PLKBUI-TH-0801,Angle grinder,Fixit,tools_hardware,each,115 mm,1,703.99,,standard,true,107,1,20,2090000000733,,,750 W angle grinder.,true
+PLKBUI-TH-0802,Angle grinder,Iron Hand,tools_hardware,each,115 mm,1,752.39,893.89,standard,true,0,1,20,2090000000740,,,750 W angle grinder.,true
+PLKBUI-TH-0900,Cutting discs,Site Pro,tools_hardware,pack,10 x 115 mm,1,113.79,,standard,true,278,1,200,2090000000757,,,Steel cutting discs.,true
+PLKBUI-TH-0901,Cutting discs,Fixit,tools_hardware,pack,10 x 115 mm,1,121.69,,standard,true,377,1,200,2090000000764,,,Steel cutting discs.,true
+PLKBUI-TH-0902,Cutting discs,Iron Hand,tools_hardware,pack,10 x 115 mm,1,131.09,,standard,true,334,1,200,2090000000771,,,Steel cutting discs.,true
+PLKBUI-TH-1000,Safety boots,Site Pro,tools_hardware,each,Size 8,1,465.09,,standard,true,158,1,200,2090000000788,,,Steel-toe safety boots.,true
+PLKBUI-TH-1001,Safety boots,Fixit,tools_hardware,each,Size 8,1,509.79,,standard,true,122,1,200,2090000000795,,,Steel-toe safety boots.,true
+PLKBUI-TH-1002,Safety boots,Iron Hand,tools_hardware,each,Size 8,1,545.79,,standard,true,292,1,200,2090000000801,,,Steel-toe safety boots.,true
+PLKBUI-PF-0000,"PVA paint, white",Colour Kasi,paint_finishes,tin,5 litre,1,232.79,,standard,true,211,1,200,2090000000818,,5,Interior/exterior PVA.,true
+PLKBUI-PF-0001,"PVA paint, white",Coat Pro,paint_finishes,tin,5 litre,1,248.19,,standard,true,152,1,200,2090000000825,,5,Interior/exterior PVA.,true
+PLKBUI-PF-0002,"PVA paint, white",Bright Wall,paint_finishes,tin,5 litre,1,269.09,,standard,true,136,1,200,2090000000832,,5,Interior/exterior PVA.,true
+PLKBUI-PF-0010,"PVA paint, white",Colour Kasi,paint_finishes,tin,20 litre,1,834.99,,standard,true,330,1,200,2090000000849,,20,Interior/exterior PVA.,true
+PLKBUI-PF-0011,"PVA paint, white",Coat Pro,paint_finishes,tin,20 litre,1,911.79,,standard,true,57,1,200,2090000000856,,20,Interior/exterior PVA.,true
+PLKBUI-PF-0012,"PVA paint, white",Bright Wall,paint_finishes,tin,20 litre,1,993.49,1121.99,standard,true,304,1,200,2090000000863,,20,Interior/exterior PVA.,true
+PLKBUI-PF-0100,"Roof paint, red oxide",Colour Kasi,paint_finishes,tin,20 litre,1,1194.09,,standard,true,366,1,200,2090000000870,,20,Roof and wall paint.,true
+PLKBUI-PF-0101,"Roof paint, red oxide",Coat Pro,paint_finishes,tin,20 litre,1,1321.19,,standard,true,9,1,200,2090000000887,,20,Roof and wall paint.,true
+PLKBUI-PF-0102,"Roof paint, red oxide",Bright Wall,paint_finishes,tin,20 litre,1,1422.79,,standard,true,4,1,200,2090000000894,,20,Roof and wall paint.,true
+PLKBUI-PF-0200,"Enamel paint, gloss white",Colour Kasi,paint_finishes,tin,5 litre,1,410.39,,standard,true,378,1,200,2090000000900,,5,For doors and trims.,true
+PLKBUI-PF-0201,"Enamel paint, gloss white",Coat Pro,paint_finishes,tin,5 litre,1,455.99,,standard,true,36,1,200,2090000000917,,5,For doors and trims.,true
+PLKBUI-PF-0202,"Enamel paint, gloss white",Bright Wall,paint_finishes,tin,5 litre,1,491.49,,standard,true,305,1,200,2090000000924,,5,For doors and trims.,true
+PLKBUI-PF-0300,Paint roller set,Colour Kasi,paint_finishes,each,225 mm,1,113.29,,standard,true,8,1,200,2090000000931,,,"Roller, tray and extension.",true
+PLKBUI-PF-0301,Paint roller set,Coat Pro,paint_finishes,each,225 mm,1,120.19,,standard,true,30,1,200,2090000000948,,,"Roller, tray and extension.",true
+PLKBUI-PF-0302,Paint roller set,Bright Wall,paint_finishes,each,225 mm,1,131.19,,standard,true,7,1,200,2090000000955,,,"Roller, tray and extension.",true
+PLKBUI-PF-0400,Paint brush set,Colour Kasi,paint_finishes,pack,5 brushes,5,92.59,,standard,true,292,1,200,2090000000962,12090000000969,,25 to 100 mm brushes.,true
+PLKBUI-PF-0401,Paint brush set,Coat Pro,paint_finishes,pack,5 brushes,5,101.09,,standard,true,9,1,200,2090000000979,12090000000976,,25 to 100 mm brushes.,true
+PLKBUI-PF-0402,Paint brush set,Bright Wall,paint_finishes,pack,5 brushes,5,108.69,,standard,true,17,1,200,2090000000986,12090000000983,,25 to 100 mm brushes.,true
+PLKBUI-PF-0500,Tile adhesive,Colour Kasi,paint_finishes,bag,20 kg,1,145.99,,standard,true,219,1,200,2090000000993,,20,Floor and wall tile adhesive.,true
+PLKBUI-PF-0501,Tile adhesive,Coat Pro,paint_finishes,bag,20 kg,1,159.69,,standard,true,307,1,200,2090000001006,,20,Floor and wall tile adhesive.,true
+PLKBUI-PF-0502,Tile adhesive,Bright Wall,paint_finishes,bag,20 kg,1,173.69,,standard,true,235,1,200,2090000001013,,20,Floor and wall tile adhesive.,true
+PLKBUI-PF-0600,"Tile grout, white",Colour Kasi,paint_finishes,bag,5 kg,1,84.89,,standard,true,223,1,200,2090000001020,,5,Fine grout.,true
+PLKBUI-PF-0601,"Tile grout, white",Coat Pro,paint_finishes,bag,5 kg,1,89.19,,standard,true,182,1,200,2090000001037,,5,Fine grout.,true
+PLKBUI-PF-0602,"Tile grout, white",Bright Wall,paint_finishes,bag,5 kg,1,98.09,,standard,true,3,1,200,2090000001044,,5,Fine grout.,true
+PLKBUI-PF-0700,Crack filler,Colour Kasi,paint_finishes,bag,2 kg,1,60.59,,standard,true,219,1,200,2090000001051,,2,Interior crack filler.,true
+PLKBUI-PF-0701,Crack filler,Coat Pro,paint_finishes,bag,2 kg,1,64.59,,standard,true,1,1,200,2090000001068,,2,Interior crack filler.,true
+PLKBUI-PF-0702,Crack filler,Bright Wall,paint_finishes,bag,2 kg,1,71.59,,standard,true,238,1,200,2090000001075,,2,Interior crack filler.,true
+PLKBUI-PL-0000,"PVC sewer pipe, 110 mm",Flow Line,plumbing,length,6 m,1,321.49,,standard,true,385,1,200,2090000001082,,,Class 34 sewer pipe.,true
+PLKBUI-PL-0001,"PVC sewer pipe, 110 mm",Hot Flow,plumbing,length,6 m,1,351.99,,standard,true,67,1,200,2090000001099,,,Class 34 sewer pipe.,true
+PLKBUI-PL-0002,"PVC sewer pipe, 110 mm",Pipe Pro,plumbing,length,6 m,1,385.09,,standard,true,242,1,200,2090000001105,,,Class 34 sewer pipe.,true
+PLKBUI-PL-0100,"PVC pipe, 50 mm",Flow Line,plumbing,length,6 m,1,149.29,,standard,true,328,1,200,2090000001112,,,Waste pipe.,true
+PLKBUI-PL-0101,"PVC pipe, 50 mm",Hot Flow,plumbing,length,6 m,1,160.29,,standard,true,277,1,200,2090000001129,,,Waste pipe.,true
+PLKBUI-PL-0102,"PVC pipe, 50 mm",Pipe Pro,plumbing,length,6 m,1,176.39,213.19,standard,true,0,1,200,2090000001136,,,Waste pipe.,true
+PLKBUI-PL-0200,"Copper pipe, 15 mm",Flow Line,plumbing,length,5.5 m,1,276.09,,standard,true,328,1,200,2090000001143,,,Class 1 copper pipe.,true
+PLKBUI-PL-0201,"Copper pipe, 15 mm",Hot Flow,plumbing,length,5.5 m,1,299.09,,standard,true,399,1,200,2090000001150,,,Class 1 copper pipe.,true
+PLKBUI-PL-0202,"Copper pipe, 15 mm",Pipe Pro,plumbing,length,5.5 m,1,322.89,,standard,true,318,1,200,2090000001167,,,Class 1 copper pipe.,true
+PLKBUI-PL-0300,"HDPE pipe, 20 mm",Flow Line,plumbing,roll,50 m,1,460.09,,standard,true,180,1,200,2090000001174,,,Water supply pipe.,true
+PLKBUI-PL-0301,"HDPE pipe, 20 mm",Hot Flow,plumbing,roll,50 m,1,513.29,,standard,true,151,1,200,2090000001181,,,Water supply pipe.,true
+PLKBUI-PL-0302,"HDPE pipe, 20 mm",Pipe Pro,plumbing,roll,50 m,1,543.99,,standard,true,377,1,200,2090000001198,,,Water supply pipe.,true
+PLKBUI-PL-0400,Close-coupled toilet suite,Flow Line,plumbing,each,White,1,1323.59,,standard,true,75,1,20,2090000001204,,,"Pan, cistern and seat.",true
+PLKBUI-PL-0401,Close-coupled toilet suite,Hot Flow,plumbing,each,White,1,1405.09,1609.89,standard,true,28,1,20,2090000001211,,,"Pan, cistern and seat.",true
+PLKBUI-PL-0402,Close-coupled toilet suite,Pipe Pro,plumbing,each,White,1,1550.49,,standard,true,10,1,20,2090000001228,,,"Pan, cistern and seat.",true
+PLKBUI-PL-0500,Electric geyser,Flow Line,plumbing,each,150 litre,1,5028.99,,standard,true,9,1,20,2090000001235,,150,SABS-approved geyser.,true
+PLKBUI-PL-0501,Electric geyser,Hot Flow,plumbing,each,150 litre,1,5527.79,,standard,true,98,1,20,2090000001242,,150,SABS-approved geyser.,true
+PLKBUI-PL-0502,Electric geyser,Pipe Pro,plumbing,each,150 litre,1,6121.89,6921.29,standard,true,267,1,20,2090000001259,,150,SABS-approved geyser.,true
+PLKBUI-PL-0510,Electric geyser,Flow Line,plumbing,each,100 litre,1,4136.79,,standard,true,181,1,20,2090000001266,,100,SABS-approved geyser.,true
+PLKBUI-PL-0511,Electric geyser,Hot Flow,plumbing,each,100 litre,1,4430.59,,standard,true,91,1,20,2090000001273,,100,SABS-approved geyser.,true
+PLKBUI-PL-0512,Electric geyser,Pipe Pro,plumbing,each,100 litre,1,4781.09,5566.09,standard,true,24,1,20,2090000001280,,100,SABS-approved geyser.,true
+PLKBUI-PL-0600,"Pillar tap, chrome",Flow Line,plumbing,each,15 mm,1,175.19,,standard,true,329,1,200,2090000001297,,,Chrome pillar tap.,true
+PLKBUI-PL-0601,"Pillar tap, chrome",Hot Flow,plumbing,each,15 mm,1,189.59,226.29,standard,true,328,1,200,2090000001303,,,Chrome pillar tap.,true
+PLKBUI-PL-0602,"Pillar tap, chrome",Pipe Pro,plumbing,each,15 mm,1,209.69,,standard,true,295,1,200,2090000001310,,,Chrome pillar tap.,true
+PLKBUI-PL-0700,Kitchen sink mixer,Flow Line,plumbing,each,Standard,1,640.59,,standard,true,161,1,20,2090000001327,,,Single-lever mixer.,true
+PLKBUI-PL-0701,Kitchen sink mixer,Hot Flow,plumbing,each,Standard,1,708.89,,standard,true,283,1,20,2090000001334,,,Single-lever mixer.,true
+PLKBUI-PL-0702,Kitchen sink mixer,Pipe Pro,plumbing,each,Standard,1,756.39,,standard,true,378,1,20,2090000001341,,,Single-lever mixer.,true
+PLKBUI-PL-0800,Stopcock,Flow Line,plumbing,each,15 mm,1,121.39,,standard,true,288,1,200,2090000001358,,,Brass stopcock.,true
+PLKBUI-PL-0801,Stopcock,Hot Flow,plumbing,each,15 mm,1,130.59,,standard,true,365,1,200,2090000001365,,,Brass stopcock.,true
+PLKBUI-PL-0802,Stopcock,Pipe Pro,plumbing,each,15 mm,1,140.49,,standard,true,15,1,200,2090000001372,,,Brass stopcock.,true
+PLKBUI-PL-0900,Thread tape,Flow Line,plumbing,pack,10 rolls,10,46.79,,standard,true,180,1,200,2090000001389,12090000001386,,PTFE thread tape.,true
+PLKBUI-PL-0901,Thread tape,Hot Flow,plumbing,pack,10 rolls,10,50.19,,standard,true,14,1,200,2090000001396,12090000001393,,PTFE thread tape.,true
+PLKBUI-PL-0902,Thread tape,Pipe Pro,plumbing,pack,10 rolls,10,55.49,,standard,true,120,1,200,2090000001402,12090000001409,,PTFE thread tape.,true
+PLKBUI-EL-0000,"Surfix cable, 2.5 mm",Wire Co,electrical,roll,100 m,1,1396.19,,standard,true,250,1,200,2090000001419,,,Twin and earth cable.,true
+PLKBUI-EL-0001,"Surfix cable, 2.5 mm",Bright Home,electrical,roll,100 m,1,1493.09,,standard,true,69,1,200,2090000001426,,,Twin and earth cable.,true
+PLKBUI-EL-0002,"Surfix cable, 2.5 mm",Volt Safe,electrical,roll,100 m,1,1634.79,,standard,true,92,1,200,2090000001433,,,Twin and earth cable.,true
+PLKBUI-EL-0100,"Surfix cable, 1.5 mm",Wire Co,electrical,roll,100 m,1,913.89,,standard,true,0,1,200,2090000001440,,,Twin and earth cable.,true
+PLKBUI-EL-0101,"Surfix cable, 1.5 mm",Bright Home,electrical,roll,100 m,1,1015.49,,standard,true,9,1,200,2090000001457,,,Twin and earth cable.,true
+PLKBUI-EL-0102,"Surfix cable, 1.5 mm",Volt Safe,electrical,roll,100 m,1,1103.29,,standard,true,2,1,200,2090000001464,,,Twin and earth cable.,true
+PLKBUI-EL-0200,"LED bulb, 9 W",Wire Co,electrical,pack,10 bulbs,10,167.69,,standard,true,0,1,200,2090000001471,12090000001478,,"Cool white, B22.",true
+PLKBUI-EL-0201,"LED bulb, 9 W",Bright Home,electrical,pack,10 bulbs,10,184.69,,standard,true,10,1,200,2090000001488,12090000001485,,"Cool white, B22.",true
+PLKBUI-EL-0202,"LED bulb, 9 W",Volt Safe,electrical,pack,10 bulbs,10,199.79,,standard,true,326,1,200,2090000001495,12090000001492,,"Cool white, B22.",true
+PLKBUI-EL-0300,Double switched socket,Wire Co,electrical,each,100 x 100 mm,1,64.89,,standard,true,162,1,200,2090000001501,,,Double switched socket.,true
+PLKBUI-EL-0301,Double switched socket,Bright Home,electrical,each,100 x 100 mm,1,69.59,,standard,true,48,1,200,2090000001518,,,Double switched socket.,true
+PLKBUI-EL-0302,Double switched socket,Volt Safe,electrical,each,100 x 100 mm,1,77.69,,standard,true,1,1,200,2090000001525,,,Double switched socket.,true
+PLKBUI-EL-0400,"Light switch, 1-lever",Wire Co,electrical,each,100 x 50 mm,1,32.89,,standard,true,147,1,200,2090000001532,,,One-lever switch.,true
+PLKBUI-EL-0401,"Light switch, 1-lever",Bright Home,electrical,each,100 x 50 mm,1,35.19,42.49,standard,true,10,1,200,2090000001549,,,One-lever switch.,true
+PLKBUI-EL-0402,"Light switch, 1-lever",Volt Safe,electrical,each,100 x 50 mm,1,37.69,,standard,true,220,1,200,2090000001556,,,One-lever switch.,true
+PLKBUI-EL-0500,Distribution board,Wire Co,electrical,each,8-way,1,564.49,,standard,true,120,1,20,2090000001563,,,Surface-mount DB.,true
+PLKBUI-EL-0501,Distribution board,Bright Home,electrical,each,8-way,1,613.19,,standard,true,239,1,20,2090000001570,,,Surface-mount DB.,true
+PLKBUI-EL-0502,Distribution board,Volt Safe,electrical,each,8-way,1,664.19,,standard,true,316,1,20,2090000001587,,,Surface-mount DB.,true
+PLKBUI-EL-0510,Distribution board,Wire Co,electrical,each,12-way,1,749.79,,standard,true,0,1,20,2090000001594,,,Surface-mount DB.,true
+PLKBUI-EL-0511,Distribution board,Bright Home,electrical,each,12-way,1,822.69,,standard,true,331,1,20,2090000001600,,,Surface-mount DB.,true
+PLKBUI-EL-0512,Distribution board,Volt Safe,electrical,each,12-way,1,864.69,,standard,true,9,1,20,2090000001617,,,Surface-mount DB.,true
+PLKBUI-EL-0600,Circuit breaker,Wire Co,electrical,each,20 A,1,84.49,,standard,true,391,1,200,2090000001624,,,Single-pole breaker.,true
+PLKBUI-EL-0601,Circuit breaker,Bright Home,electrical,each,20 A,1,92.49,,standard,true,26,1,200,2090000001631,,,Single-pole breaker.,true
+PLKBUI-EL-0602,Circuit breaker,Volt Safe,electrical,each,20 A,1,98.29,,standard,true,262,1,200,2090000001648,,,Single-pole breaker.,true
+PLKBUI-EL-0700,Earth leakage unit,Wire Co,electrical,each,63 A,1,416.39,,standard,true,208,1,200,2090000001655,,,30 mA earth leakage.,true
+PLKBUI-EL-0701,Earth leakage unit,Bright Home,electrical,each,63 A,1,462.79,,standard,true,247,1,200,2090000001662,,,30 mA earth leakage.,true
+PLKBUI-EL-0702,Earth leakage unit,Volt Safe,electrical,each,63 A,1,482.49,589.09,standard,true,205,1,200,2090000001679,,,30 mA earth leakage.,true
+PLKBUI-EL-0800,"PVC conduit, 20 mm",Wire Co,electrical,length,4 m,1,22.89,,standard,true,251,1,200,2090000001686,,,Conduit pipe.,true
+PLKBUI-EL-0801,"PVC conduit, 20 mm",Bright Home,electrical,length,4 m,1,25.39,,standard,true,101,1,200,2090000001693,,,Conduit pipe.,true
+PLKBUI-EL-0802,"PVC conduit, 20 mm",Volt Safe,electrical,length,4 m,1,27.29,,standard,true,186,1,200,2090000001709,,,Conduit pipe.,true
+PLKBUI-EL-0900,Insulation tape,Wire Co,electrical,pack,10 rolls,10,56.49,,standard,true,6,1,200,2090000001716,12090000001713,,Black insulation tape.,true
+PLKBUI-EL-0901,Insulation tape,Bright Home,electrical,pack,10 rolls,10,59.79,,standard,true,152,1,200,2090000001723,12090000001720,,Black insulation tape.,true
+PLKBUI-EL-0902,Insulation tape,Volt Safe,electrical,pack,10 rolls,10,65.69,,standard,true,4,1,200,2090000001730,12090000001737,,Black insulation tape.,true

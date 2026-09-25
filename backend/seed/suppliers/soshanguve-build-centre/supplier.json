@@ -1,0 +1,54 @@
+{
+  "external_id": "SOSHBUILD-001",
+  "trading_name": "Soshanguve Build Centre",
+  "legal_name": "Soshanguve Build Centre (Pty) Ltd",
+  "about": "Building materials and hardware for builders in Soshanguve, Ga-Rankuwa and Mabopane.",
+  "vat_number": null,
+  "orders_email": "orders@soshanguve-build-centre.example.com",
+  "phone": null,
+  "brand_color": "#6A4B2A",
+  "collection_address": {
+    "street": "88 Aubrey Matlala Road",
+    "suburb": "Soshanguve",
+    "city": "Pretoria",
+    "province": "Gauteng",
+    "postal_code": "0152",
+    "latitude": -25.5292,
+    "longitude": 28.1017
+  },
+  "hours": [
+    {
+      "days": "mon-fri",
+      "open": "07:00",
+      "close": "17:00"
+    },
+    {
+      "days": "sat",
+      "open": "08:00",
+      "close": "13:00"
+    }
+  ],
+  "delivery": {
+    "offers": true,
+    "radius_km": 30,
+    "fee_cents": 25000,
+    "free_over_cents": 500000
+  },
+  "collect": true,
+  "payments": {
+    "in_app": true,
+    "cash": true,
+    "cash_limit_cents": 800000
+  },
+  "minimum_order_cents": 80000,
+  "categories": [
+    "building_materials",
+    "tools_hardware",
+    "plumbing",
+    "electrical",
+    "paint_finishes"
+  ],
+  "payout": {
+    "merchant_id": null
+  }
+}

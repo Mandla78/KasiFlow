@@ -65,7 +65,7 @@ def test_every_seed_supplier_loads_cleanly(app):
             r = load_directory(folder, source="seed", verified=True)
             assert r.failed == 0, (folder.name, r.errors[:3])
             assert r.created == expected
-        assert Supplier.query.count() == 7
+        assert Supplier.query.count() == 11
         assert Product.query.count() > 800
         assert all(s.verified_at is not None for s in Supplier.query.all())
 

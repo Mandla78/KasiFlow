@@ -1,0 +1,214 @@
+product_code,name,brand,category,unit,pack_size,units_per_pack,price_rands,compare_at_rands,vat_rate,vat_included,stock,min_qty,max_qty,unit_barcode,case_barcode,weight_kg,description,active
+MOLEFE-FG-0000,Super maize meal,Kasi Gold,food_grocery,bag,10 kg,1,86.89,,zero,true,57,1,200,2100000000005,,10,Fine white maize meal for pap.,true
+MOLEFE-FG-0001,Super maize meal,Mill Street,food_grocery,bag,10 kg,1,93.39,,zero,true,98,1,200,2100000000012,,10,Fine white maize meal for pap.,true
+MOLEFE-FG-0002,Super maize meal,Harvest Tin,food_grocery,bag,10 kg,1,103.29,116.29,zero,true,325,1,200,2100000000029,,10,Fine white maize meal for pap.,true
+MOLEFE-FG-0010,Super maize meal,Kasi Gold,food_grocery,bag,25 kg,1,199.49,,zero,true,0,1,200,2100000000036,,25,Fine white maize meal for pap.,true
+MOLEFE-FG-0011,Super maize meal,Mill Street,food_grocery,bag,25 kg,1,222.39,,zero,true,262,1,200,2100000000043,,25,Fine white maize meal for pap.,true
+MOLEFE-FG-0012,Super maize meal,Harvest Tin,food_grocery,bag,25 kg,1,238.59,,zero,true,380,1,200,2100000000050,,25,Fine white maize meal for pap.,true
+MOLEFE-FG-0100,Long grain parboiled rice,Kasi Gold,food_grocery,bag,2 kg,1,38.99,,zero,true,215,1,200,2100000000067,,2,Non-sticky parboiled rice.,true
+MOLEFE-FG-0101,Long grain parboiled rice,Mill Street,food_grocery,bag,2 kg,1,42.19,,zero,true,260,1,200,2100000000074,,2,Non-sticky parboiled rice.,true
+MOLEFE-FG-0102,Long grain parboiled rice,Harvest Tin,food_grocery,bag,2 kg,1,44.99,,zero,true,239,1,200,2100000000081,,2,Non-sticky parboiled rice.,true
+MOLEFE-FG-0110,Long grain parboiled rice,Kasi Gold,food_grocery,bag,10 kg,1,165.99,,zero,true,276,1,200,2100000000098,,10,Non-sticky parboiled rice.,true
+MOLEFE-FG-0111,Long grain parboiled rice,Mill Street,food_grocery,bag,10 kg,1,179.89,,zero,true,287,1,200,2100000000104,,10,Non-sticky parboiled rice.,true
+MOLEFE-FG-0112,Long grain parboiled rice,Harvest Tin,food_grocery,bag,10 kg,1,190.69,223.29,zero,true,388,1,200,2100000000111,,10,Non-sticky parboiled rice.,true
+MOLEFE-FG-0200,Cake flour,Kasi Gold,food_grocery,bag,2.5 kg,1,40.59,,standard,true,268,1,200,2100000000128,,2.5,White cake flour for baking and vetkoek.,true
+MOLEFE-FG-0201,Cake flour,Mill Street,food_grocery,bag,2.5 kg,1,44.29,,standard,true,8,1,200,2100000000135,,2.5,White cake flour for baking and vetkoek.,true
+MOLEFE-FG-0202,Cake flour,Harvest Tin,food_grocery,bag,2.5 kg,1,49.39,,standard,true,92,1,200,2100000000142,,2.5,White cake flour for baking and vetkoek.,true
+MOLEFE-FG-0210,Cake flour,Kasi Gold,food_grocery,bag,10 kg,1,134.09,,standard,true,9,1,200,2100000000159,,10,White cake flour for baking and vetkoek.,true
+MOLEFE-FG-0211,Cake flour,Mill Street,food_grocery,bag,10 kg,1,145.79,,standard,true,0,1,200,2100000000166,,10,White cake flour for baking and vetkoek.,true
+MOLEFE-FG-0212,Cake flour,Harvest Tin,food_grocery,bag,10 kg,1,158.69,,standard,true,101,1,200,2100000000173,,10,White cake flour for baking and vetkoek.,true
+MOLEFE-FG-0300,White sugar,Kasi Gold,food_grocery,bag,2.5 kg,1,58.59,,standard,true,51,1,200,2100000000180,,2.5,Refined white sugar.,true
+MOLEFE-FG-0301,White sugar,Mill Street,food_grocery,bag,2.5 kg,1,61.39,,standard,true,294,1,200,2100000000197,,2.5,Refined white sugar.,true
+MOLEFE-FG-0302,White sugar,Harvest Tin,food_grocery,bag,2.5 kg,1,67.19,,standard,true,349,1,200,2100000000203,,2.5,Refined white sugar.,true
+MOLEFE-FG-0310,White sugar,Kasi Gold,food_grocery,bag,10 kg,1,211.99,237.89,standard,true,24,1,200,2100000000210,,10,Refined white sugar.,true
+MOLEFE-FG-0311,White sugar,Mill Street,food_grocery,bag,10 kg,1,227.99,,standard,true,395,1,200,2100000000227,,10,Refined white sugar.,true
+MOLEFE-FG-0312,White sugar,Harvest Tin,food_grocery,bag,10 kg,1,244.19,,standard,true,0,1,200,2100000000234,,10,Refined white sugar.,true
+MOLEFE-FG-0400,Brown sugar,Kasi Gold,food_grocery,bag,2 kg,1,42.99,,standard,true,4,1,200,2100000000241,,2,Soft brown sugar.,true
+MOLEFE-FG-0401,Brown sugar,Mill Street,food_grocery,bag,2 kg,1,46.89,,standard,true,21,1,200,2100000000258,,2,Soft brown sugar.,true
+MOLEFE-FG-0402,Brown sugar,Harvest Tin,food_grocery,bag,2 kg,1,50.99,,standard,true,209,1,200,2100000000265,,2,Soft brown sugar.,true
+MOLEFE-FG-0500,Sunflower cooking oil,Kasi Gold,food_grocery,bottle,2 litre,1,66.59,82.19,zero,true,9,1,200,2100000000272,,2,Pure sunflower oil.,true
+MOLEFE-FG-0501,Sunflower cooking oil,Mill Street,food_grocery,bottle,2 litre,1,72.49,,zero,true,0,1,200,2100000000289,,2,Pure sunflower oil.,true
+MOLEFE-FG-0502,Sunflower cooking oil,Harvest Tin,food_grocery,bottle,2 litre,1,77.39,89.59,zero,true,399,1,200,2100000000296,,2,Pure sunflower oil.,true
+MOLEFE-FG-0510,Sunflower cooking oil,Kasi Gold,food_grocery,bottle,5 litre,1,140.99,168.69,zero,true,280,1,200,2100000000302,,5,Pure sunflower oil.,true
+MOLEFE-FG-0511,Sunflower cooking oil,Mill Street,food_grocery,bottle,5 litre,1,158.59,189.49,zero,true,304,1,200,2100000000319,,5,Pure sunflower oil.,true
+MOLEFE-FG-0512,Sunflower cooking oil,Harvest Tin,food_grocery,bottle,5 litre,1,170.49,,zero,true,388,1,200,2100000000326,,5,Pure sunflower oil.,true
+MOLEFE-FG-0600,Baked beans in tomato sauce,Kasi Gold,food_grocery,case,24 x 410 g,24,285.59,321.89,standard,true,10,1,200,2100000000333,12100000000330,9.84,A case of 24 tins.,true
+MOLEFE-FG-0601,Baked beans in tomato sauce,Mill Street,food_grocery,case,24 x 410 g,24,312.69,,standard,true,9,1,200,2100000000340,12100000000347,9.84,A case of 24 tins.,true
+MOLEFE-FG-0602,Baked beans in tomato sauce,Harvest Tin,food_grocery,case,24 x 410 g,24,340.59,,standard,true,230,1,200,2100000000357,12100000000354,9.84,A case of 24 tins.,true
+MOLEFE-FG-0700,Pilchards in tomato sauce,Kasi Gold,food_grocery,case,24 x 400 g,24,569.49,,zero,true,10,1,200,2100000000364,12100000000361,9.6,"Canned pilchards, a case of 24.",true
+MOLEFE-FG-0701,Pilchards in tomato sauce,Mill Street,food_grocery,case,24 x 400 g,24,628.49,705.79,zero,true,371,1,200,2100000000371,12100000000378,9.6,"Canned pilchards, a case of 24.",true
+MOLEFE-FG-0702,Pilchards in tomato sauce,Harvest Tin,food_grocery,case,24 x 400 g,24,675.29,,zero,true,0,1,200,2100000000388,12100000000385,9.6,"Canned pilchards, a case of 24.",true
+MOLEFE-FG-0800,Chicken instant noodles,Kasi Gold,food_grocery,case,40 x 73 g,40,188.99,226.39,standard,true,204,1,200,2100000000395,12100000000392,2.92,Chicken-flavoured instant noodles.,true
+MOLEFE-FG-0801,Chicken instant noodles,Mill Street,food_grocery,case,40 x 73 g,40,209.09,,standard,true,284,1,200,2100000000401,12100000000408,2.92,Chicken-flavoured instant noodles.,true
+MOLEFE-FG-0802,Chicken instant noodles,Harvest Tin,food_grocery,case,40 x 73 g,40,223.29,269.39,standard,true,173,1,200,2100000000418,12100000000415,2.92,Chicken-flavoured instant noodles.,true
+MOLEFE-FG-0900,Samp,Kasi Gold,food_grocery,bag,5 kg,1,73.29,,zero,true,4,1,200,2100000000425,,5,Crushed dried maize kernels.,true
+MOLEFE-FG-0901,Samp,Mill Street,food_grocery,bag,5 kg,1,79.19,,zero,true,15,1,200,2100000000432,,5,Crushed dried maize kernels.,true
+MOLEFE-FG-0902,Samp,Harvest Tin,food_grocery,bag,5 kg,1,83.79,,zero,true,3,1,200,2100000000449,,5,Crushed dried maize kernels.,true
+MOLEFE-FG-1000,Sugar beans,Kasi Gold,food_grocery,bag,2 kg,1,62.29,,zero,true,268,1,200,2100000000456,,2,Dried speckled sugar beans.,true
+MOLEFE-FG-1001,Sugar beans,Mill Street,food_grocery,bag,2 kg,1,67.29,,zero,true,135,1,200,2100000000463,,2,Dried speckled sugar beans.,true
+MOLEFE-FG-1002,Sugar beans,Harvest Tin,food_grocery,bag,2 kg,1,74.29,,zero,true,185,1,200,2100000000470,,2,Dried speckled sugar beans.,true
+MOLEFE-FG-1100,Black tea bags,Kasi Gold,food_grocery,pack,100 bags,100,51.89,,standard,true,41,1,200,2100000000487,12100000000484,,Tagless black tea bags.,true
+MOLEFE-FG-1101,Black tea bags,Mill Street,food_grocery,pack,100 bags,100,56.99,,standard,true,92,1,200,2100000000494,12100000000491,,Tagless black tea bags.,true
+MOLEFE-FG-1102,Black tea bags,Harvest Tin,food_grocery,pack,100 bags,100,62.39,,standard,true,393,1,200,2100000000500,12100000000507,,Tagless black tea bags.,true
+MOLEFE-FG-1110,Black tea bags,Kasi Gold,food_grocery,pack,200 bags,200,96.69,115.49,standard,true,0,1,200,2100000000517,12100000000514,,Tagless black tea bags.,true
+MOLEFE-FG-1111,Black tea bags,Mill Street,food_grocery,pack,200 bags,200,105.69,,standard,true,336,1,200,2100000000524,12100000000521,,Tagless black tea bags.,true
+MOLEFE-FG-1112,Black tea bags,Harvest Tin,food_grocery,pack,200 bags,200,112.89,,standard,true,383,1,200,2100000000531,12100000000538,,Tagless black tea bags.,true
+MOLEFE-FG-1200,Instant coffee,Kasi Gold,food_grocery,tin,250 g,1,84.79,,standard,true,88,1,200,2100000000548,,,Granulated instant coffee.,true
+MOLEFE-FG-1201,Instant coffee,Mill Street,food_grocery,tin,250 g,1,93.89,,standard,true,360,1,200,2100000000555,,,Granulated instant coffee.,true
+MOLEFE-FG-1202,Instant coffee,Harvest Tin,food_grocery,tin,250 g,1,102.89,,standard,true,379,1,200,2100000000562,,,Granulated instant coffee.,true
+MOLEFE-FG-1300,Iodated table salt,Kasi Gold,food_grocery,case,24 x 500 g,24,114.89,,standard,true,142,1,200,2100000000579,12100000000576,12,Fine iodated salt.,true
+MOLEFE-FG-1301,Iodated table salt,Mill Street,food_grocery,case,24 x 500 g,24,123.09,,standard,true,287,1,200,2100000000586,12100000000583,12,Fine iodated salt.,true
+MOLEFE-FG-1302,Iodated table salt,Harvest Tin,food_grocery,case,24 x 500 g,24,136.79,,standard,true,7,1,200,2100000000593,12100000000590,12,Fine iodated salt.,true
+MOLEFE-FG-1400,"Peanut butter, smooth",Kasi Gold,food_grocery,case,12 x 400 g,12,405.59,,standard,true,356,1,200,2100000000609,12100000000606,4.8,Smooth peanut butter.,true
+MOLEFE-FG-1401,"Peanut butter, smooth",Mill Street,food_grocery,case,12 x 400 g,12,432.49,,standard,true,0,1,200,2100000000616,12100000000613,4.8,Smooth peanut butter.,true
+MOLEFE-FG-1402,"Peanut butter, smooth",Harvest Tin,food_grocery,case,12 x 400 g,12,469.89,,standard,true,3,1,200,2100000000623,12100000000620,4.8,Smooth peanut butter.,true
+MOLEFE-FG-1500,Apricot jam,Kasi Gold,food_grocery,case,12 x 450 g,12,344.09,,standard,true,45,1,200,2100000000630,12100000000637,5.4,Smooth apricot jam.,true
+MOLEFE-FG-1501,Apricot jam,Mill Street,food_grocery,case,12 x 450 g,12,369.39,,standard,true,297,1,200,2100000000647,12100000000644,5.4,Smooth apricot jam.,true
+MOLEFE-FG-1502,Apricot jam,Harvest Tin,food_grocery,case,12 x 450 g,12,409.39,471.79,standard,true,241,1,200,2100000000654,12100000000651,5.4,Smooth apricot jam.,true
+MOLEFE-BV-0000,Cola soft drink,Fizz Co,beverages,case,24 x 330 ml cans,24,179.89,,standard,true,43,1,200,2100000000661,12100000000668,7.92,"Cold drink, a full case.",true
+MOLEFE-BV-0001,Cola soft drink,Clear Spring,beverages,case,24 x 330 ml cans,24,199.29,,standard,true,224,1,200,2100000000678,12100000000675,7.92,"Cold drink, a full case.",true
+MOLEFE-BV-0002,Cola soft drink,Sunny Farm,beverages,case,24 x 330 ml cans,24,215.19,,standard,true,114,1,200,2100000000685,12100000000682,7.92,"Cold drink, a full case.",true
+MOLEFE-BV-0010,Cola soft drink,Fizz Co,beverages,case,12 x 2 litre,12,245.49,,standard,true,1,1,200,2100000000692,12100000000699,24,"Cold drink, a full case.",true
+MOLEFE-BV-0011,Cola soft drink,Clear Spring,beverages,case,12 x 2 litre,12,273.29,,standard,true,0,1,200,2100000000708,12100000000705,24,"Cold drink, a full case.",true
+MOLEFE-BV-0012,Cola soft drink,Sunny Farm,beverages,case,12 x 2 litre,12,295.59,,standard,true,138,1,200,2100000000715,12100000000712,24,"Cold drink, a full case.",true
+MOLEFE-BV-0100,Orange soft drink,Fizz Co,beverages,case,24 x 330 ml cans,24,174.69,,standard,true,225,1,200,2100000000722,12100000000729,7.92,Orange-flavoured cold drink.,true
+MOLEFE-BV-0101,Orange soft drink,Clear Spring,beverages,case,24 x 330 ml cans,24,187.69,,standard,true,77,1,200,2100000000739,12100000000736,7.92,Orange-flavoured cold drink.,true
+MOLEFE-BV-0102,Orange soft drink,Sunny Farm,beverages,case,24 x 330 ml cans,24,199.99,,standard,true,168,1,200,2100000000746,12100000000743,7.92,Orange-flavoured cold drink.,true
+MOLEFE-BV-0110,Orange soft drink,Fizz Co,beverages,case,12 x 2 litre,12,232.19,273.59,standard,true,0,1,200,2100000000753,12100000000750,24,Orange-flavoured cold drink.,true
+MOLEFE-BV-0111,Orange soft drink,Clear Spring,beverages,case,12 x 2 litre,12,251.29,287.19,standard,true,94,1,200,2100000000760,12100000000767,24,Orange-flavoured cold drink.,true
+MOLEFE-BV-0112,Orange soft drink,Sunny Farm,beverages,case,12 x 2 litre,12,265.29,,standard,true,283,1,200,2100000000777,12100000000774,24,Orange-flavoured cold drink.,true
+MOLEFE-BV-0200,Lemon-lime soft drink,Fizz Co,beverages,case,24 x 330 ml cans,24,175.29,,standard,true,342,1,200,2100000000784,12100000000781,7.92,Lemon-lime cold drink.,true
+MOLEFE-BV-0201,Lemon-lime soft drink,Clear Spring,beverages,case,24 x 330 ml cans,24,190.59,,standard,true,355,1,200,2100000000791,12100000000798,7.92,Lemon-lime cold drink.,true
+MOLEFE-BV-0202,Lemon-lime soft drink,Sunny Farm,beverages,case,24 x 330 ml cans,24,202.69,,standard,true,259,1,200,2100000000807,12100000000804,7.92,Lemon-lime cold drink.,true
+MOLEFE-BV-0300,Still water,Fizz Co,beverages,case,24 x 500 ml,24,94.49,,standard,true,366,1,200,2100000000814,12100000000811,12,Still spring water.,true
+MOLEFE-BV-0301,Still water,Clear Spring,beverages,case,24 x 500 ml,24,103.89,,standard,true,114,1,200,2100000000821,12100000000828,12,Still spring water.,true
+MOLEFE-BV-0302,Still water,Sunny Farm,beverages,case,24 x 500 ml,24,112.59,,standard,true,9,1,200,2100000000838,12100000000835,12,Still spring water.,true
+MOLEFE-BV-0310,Still water,Fizz Co,beverages,case,6 x 5 litre,6,116.39,,standard,true,215,1,200,2100000000845,12100000000842,30,Still spring water.,true
+MOLEFE-BV-0311,Still water,Clear Spring,beverages,case,6 x 5 litre,6,124.09,,standard,true,236,1,200,2100000000852,12100000000859,30,Still spring water.,true
+MOLEFE-BV-0312,Still water,Sunny Farm,beverages,case,6 x 5 litre,6,133.99,,standard,true,10,1,200,2100000000869,12100000000866,30,Still spring water.,true
+MOLEFE-BV-0400,Sparkling water,Fizz Co,beverages,case,24 x 500 ml,24,116.49,,standard,true,203,1,200,2100000000876,12100000000873,12,Sparkling spring water.,true
+MOLEFE-BV-0401,Sparkling water,Clear Spring,beverages,case,24 x 500 ml,24,124.89,,standard,true,251,1,200,2100000000883,12100000000880,12,Sparkling spring water.,true
+MOLEFE-BV-0402,Sparkling water,Sunny Farm,beverages,case,24 x 500 ml,24,132.69,,standard,true,252,1,200,2100000000890,12100000000897,12,Sparkling spring water.,true
+MOLEFE-BV-0500,Fruit juice blend,Fizz Co,beverages,case,6 x 1 litre,6,122.59,,standard,true,152,1,200,2100000000906,12100000000903,6,100% fruit juice blend.,true
+MOLEFE-BV-0501,Fruit juice blend,Clear Spring,beverages,case,6 x 1 litre,6,132.79,,standard,true,151,1,200,2100000000913,12100000000910,6,100% fruit juice blend.,true
+MOLEFE-BV-0502,Fruit juice blend,Sunny Farm,beverages,case,6 x 1 litre,6,147.59,,standard,true,6,1,200,2100000000920,12100000000927,6,100% fruit juice blend.,true
+MOLEFE-BV-0510,Fruit juice blend,Fizz Co,beverages,case,24 x 200 ml,24,154.89,,standard,true,0,1,200,2100000000937,12100000000934,4.8,100% fruit juice blend.,true
+MOLEFE-BV-0511,Fruit juice blend,Clear Spring,beverages,case,24 x 200 ml,24,165.59,206.59,standard,true,382,1,200,2100000000944,12100000000941,4.8,100% fruit juice blend.,true
+MOLEFE-BV-0512,Fruit juice blend,Sunny Farm,beverages,case,24 x 200 ml,24,179.19,203.69,standard,true,367,1,200,2100000000951,12100000000958,4.8,100% fruit juice blend.,true
+MOLEFE-BV-0600,Dairy fruit mix drink,Fizz Co,beverages,case,12 x 500 ml,12,162.29,,standard,true,109,1,200,2100000000968,12100000000965,6,Fruit and dairy blend.,true
+MOLEFE-BV-0601,Dairy fruit mix drink,Clear Spring,beverages,case,12 x 500 ml,12,174.19,,standard,true,367,1,200,2100000000975,12100000000972,6,Fruit and dairy blend.,true
+MOLEFE-BV-0602,Dairy fruit mix drink,Sunny Farm,beverages,case,12 x 500 ml,12,190.99,,standard,true,286,1,200,2100000000982,12100000000989,6,Fruit and dairy blend.,true
+MOLEFE-BV-0700,Energy drink,Fizz Co,beverages,case,24 x 500 ml,24,343.59,,standard,true,63,1,200,2100000000999,12100000000996,12,Energy drink cans.,true
+MOLEFE-BV-0701,Energy drink,Clear Spring,beverages,case,24 x 500 ml,24,377.39,,standard,true,175,1,200,2100000001002,12100000001009,12,Energy drink cans.,true
+MOLEFE-BV-0702,Energy drink,Sunny Farm,beverages,case,24 x 500 ml,24,398.09,,standard,true,107,1,200,2100000001019,12100000001016,12,Energy drink cans.,true
+MOLEFE-BV-0800,"Cordial, orange",Fizz Co,beverages,case,6 x 1 litre,6,141.79,,standard,true,78,1,200,2100000001026,12100000001023,6,Dilute to taste.,true
+MOLEFE-BV-0801,"Cordial, orange",Clear Spring,beverages,case,6 x 1 litre,6,156.59,175.59,standard,true,394,1,200,2100000001033,12100000001030,6,Dilute to taste.,true
+MOLEFE-BV-0802,"Cordial, orange",Sunny Farm,beverages,case,6 x 1 litre,6,167.69,191.29,standard,true,157,1,200,2100000001040,12100000001047,6,Dilute to taste.,true
+MOLEFE-BV-0900,"Mageu, original",Fizz Co,beverages,case,6 x 1 litre,6,105.69,,standard,true,268,1,200,2100000001057,12100000001054,6,Traditional fermented maize drink.,true
+MOLEFE-BV-0901,"Mageu, original",Clear Spring,beverages,case,6 x 1 litre,6,115.29,,standard,true,338,1,200,2100000001064,12100000001061,6,Traditional fermented maize drink.,true
+MOLEFE-BV-0902,"Mageu, original",Sunny Farm,beverages,case,6 x 1 litre,6,121.39,,standard,true,54,1,200,2100000001071,12100000001078,6,Traditional fermented maize drink.,true
+MOLEFE-BV-1000,"Iced tea, peach",Fizz Co,beverages,case,12 x 500 ml,12,134.89,,standard,true,135,1,200,2100000001088,12100000001085,6,Peach iced tea.,true
+MOLEFE-BV-1001,"Iced tea, peach",Clear Spring,beverages,case,12 x 500 ml,12,143.79,,standard,true,224,1,200,2100000001095,12100000001092,6,Peach iced tea.,true
+MOLEFE-BV-1002,"Iced tea, peach",Sunny Farm,beverages,case,12 x 500 ml,12,158.39,184.39,standard,true,23,1,200,2100000001101,12100000001108,6,Peach iced tea.,true
+MOLEFE-SN-0000,"Potato chips, salt & vinegar",Crunch Kasi,snacks_confectionery,case,48 x 36 g,48,228.09,,standard,true,93,1,200,2100000001118,12100000001115,1.728,Crisp potato chips.,true
+MOLEFE-SN-0001,"Potato chips, salt & vinegar",Candy Corner,snacks_confectionery,case,48 x 36 g,48,247.69,,standard,true,0,1,200,2100000001125,12100000001122,1.728,Crisp potato chips.,true
+MOLEFE-SN-0002,"Potato chips, salt & vinegar",Cocoa Joy,snacks_confectionery,case,48 x 36 g,48,272.99,,standard,true,184,1,200,2100000001132,12100000001139,1.728,Crisp potato chips.,true
+MOLEFE-SN-0010,"Potato chips, salt & vinegar",Crunch Kasi,snacks_confectionery,case,20 x 125 g,20,292.79,,standard,true,207,1,200,2100000001149,12100000001146,2.5,Crisp potato chips.,true
+MOLEFE-SN-0011,"Potato chips, salt & vinegar",Candy Corner,snacks_confectionery,case,20 x 125 g,20,318.49,,standard,true,89,1,200,2100000001156,12100000001153,2.5,Crisp potato chips.,true
+MOLEFE-SN-0012,"Potato chips, salt & vinegar",Cocoa Joy,snacks_confectionery,case,20 x 125 g,20,334.79,,standard,true,93,1,200,2100000001163,12100000001160,2.5,Crisp potato chips.,true
+MOLEFE-SN-0100,"Potato chips, cheese & onion",Crunch Kasi,snacks_confectionery,case,48 x 36 g,48,228.49,,standard,true,207,1,200,2100000001170,12100000001177,1.728,Crisp potato chips.,true
+MOLEFE-SN-0101,"Potato chips, cheese & onion",Candy Corner,snacks_confectionery,case,48 x 36 g,48,248.49,,standard,true,236,1,200,2100000001187,12100000001184,1.728,Crisp potato chips.,true
+MOLEFE-SN-0102,"Potato chips, cheese & onion",Cocoa Joy,snacks_confectionery,case,48 x 36 g,48,273.49,313.89,standard,true,276,1,200,2100000001194,12100000001191,1.728,Crisp potato chips.,true
+MOLEFE-SN-0200,"Maize snacks, cheese",Crunch Kasi,snacks_confectionery,case,50 x 25 g,50,126.49,,standard,true,0,1,200,2100000001200,12100000001207,1.25,Cheese-flavoured maize puffs.,true
+MOLEFE-SN-0201,"Maize snacks, cheese",Candy Corner,snacks_confectionery,case,50 x 25 g,50,135.59,,standard,true,249,1,200,2100000001217,12100000001214,1.25,Cheese-flavoured maize puffs.,true
+MOLEFE-SN-0202,"Maize snacks, cheese",Cocoa Joy,snacks_confectionery,case,50 x 25 g,50,147.09,166.69,standard,true,156,1,200,2100000001224,12100000001221,1.25,Cheese-flavoured maize puffs.,true
+MOLEFE-SN-0300,"Maize snacks, spicy",Crunch Kasi,snacks_confectionery,case,50 x 25 g,50,122.39,,standard,true,269,1,200,2100000001231,12100000001238,1.25,Spicy maize puffs.,true
+MOLEFE-SN-0301,"Maize snacks, spicy",Candy Corner,snacks_confectionery,case,50 x 25 g,50,133.39,,standard,true,35,1,200,2100000001248,12100000001245,1.25,Spicy maize puffs.,true
+MOLEFE-SN-0302,"Maize snacks, spicy",Cocoa Joy,snacks_confectionery,case,50 x 25 g,50,146.59,,standard,true,309,1,200,2100000001255,12100000001252,1.25,Spicy maize puffs.,true
+MOLEFE-SN-0400,Fruit lollipops,Crunch Kasi,snacks_confectionery,pack,100 pieces,100,58.69,,standard,true,90,1,200,2100000001262,12100000001269,,Assorted fruit lollipops.,true
+MOLEFE-SN-0401,Fruit lollipops,Candy Corner,snacks_confectionery,pack,100 pieces,100,62.69,,standard,true,4,1,200,2100000001279,12100000001276,,Assorted fruit lollipops.,true
+MOLEFE-SN-0402,Fruit lollipops,Cocoa Joy,snacks_confectionery,pack,100 pieces,100,66.79,,standard,true,168,1,200,2100000001286,12100000001283,,Assorted fruit lollipops.,true
+MOLEFE-SN-0500,Milk chocolate bars,Crunch Kasi,snacks_confectionery,case,24 x 40 g,24,207.09,257.19,standard,true,245,1,200,2100000001293,12100000001290,0.96,Milk chocolate bars.,true
+MOLEFE-SN-0501,Milk chocolate bars,Candy Corner,snacks_confectionery,case,24 x 40 g,24,230.39,265.69,standard,true,210,1,200,2100000001309,12100000001306,0.96,Milk chocolate bars.,true
+MOLEFE-SN-0502,Milk chocolate bars,Cocoa Joy,snacks_confectionery,case,24 x 40 g,24,247.29,,standard,true,106,1,200,2100000001316,12100000001313,0.96,Milk chocolate bars.,true
+MOLEFE-SN-0600,Mint chewing gum,Crunch Kasi,snacks_confectionery,pack,100 pieces,100,48.09,,standard,true,36,1,200,2100000001323,12100000001320,,Single mint gum pieces.,true
+MOLEFE-SN-0601,Mint chewing gum,Candy Corner,snacks_confectionery,pack,100 pieces,100,52.59,,standard,true,311,1,200,2100000001330,12100000001337,,Single mint gum pieces.,true
+MOLEFE-SN-0602,Mint chewing gum,Cocoa Joy,snacks_confectionery,pack,100 pieces,100,57.09,,standard,true,95,1,200,2100000001347,12100000001344,,Single mint gum pieces.,true
+MOLEFE-SN-0700,Toffees,Crunch Kasi,snacks_confectionery,pack,100 pieces,100,43.39,,standard,true,33,1,200,2100000001354,12100000001351,,Individually wrapped toffees.,true
+MOLEFE-SN-0701,Toffees,Candy Corner,snacks_confectionery,pack,100 pieces,100,46.79,,standard,true,375,1,200,2100000001361,12100000001368,,Individually wrapped toffees.,true
+MOLEFE-SN-0702,Toffees,Cocoa Joy,snacks_confectionery,pack,100 pieces,100,50.69,,standard,true,367,1,200,2100000001378,12100000001375,,Individually wrapped toffees.,true
+MOLEFE-SN-0800,Marie biscuits,Crunch Kasi,snacks_confectionery,case,12 x 200 g,12,169.49,,standard,true,167,1,200,2100000001385,12100000001382,2.4,Plain tea biscuits.,true
+MOLEFE-SN-0801,Marie biscuits,Candy Corner,snacks_confectionery,case,12 x 200 g,12,190.69,,standard,true,334,1,200,2100000001392,12100000001399,2.4,Plain tea biscuits.,true
+MOLEFE-SN-0802,Marie biscuits,Cocoa Joy,snacks_confectionery,case,12 x 200 g,12,201.59,,standard,true,0,1,200,2100000001408,12100000001405,2.4,Plain tea biscuits.,true
+MOLEFE-SN-0900,"Cream biscuits, vanilla",Crunch Kasi,snacks_confectionery,case,12 x 200 g,12,192.29,234.59,standard,true,234,1,200,2100000001415,12100000001412,2.4,Vanilla cream biscuits.,true
+MOLEFE-SN-0901,"Cream biscuits, vanilla",Candy Corner,snacks_confectionery,case,12 x 200 g,12,207.19,,standard,true,322,1,200,2100000001422,12100000001429,2.4,Vanilla cream biscuits.,true
+MOLEFE-SN-0902,"Cream biscuits, vanilla",Cocoa Joy,snacks_confectionery,case,12 x 200 g,12,226.09,,standard,true,387,1,200,2100000001439,12100000001436,2.4,Vanilla cream biscuits.,true
+MOLEFE-SN-1000,Salted peanuts,Crunch Kasi,snacks_confectionery,case,24 x 50 g,24,143.09,,standard,true,212,1,200,2100000001446,12100000001443,1.2,Roasted salted peanuts.,true
+MOLEFE-SN-1001,Salted peanuts,Candy Corner,snacks_confectionery,case,24 x 50 g,24,154.19,,standard,true,353,1,200,2100000001453,12100000001450,1.2,Roasted salted peanuts.,true
+MOLEFE-SN-1002,Salted peanuts,Cocoa Joy,snacks_confectionery,case,24 x 50 g,24,168.69,209.39,standard,true,252,1,200,2100000001460,12100000001467,1.2,Roasted salted peanuts.,true
+MOLEFE-HC-0000,Dishwashing liquid,Sparkle,household_cleaning,case,12 x 750 ml,12,227.59,,standard,true,314,1,200,2100000001477,12100000001474,9,Lemon dishwashing liquid.,true
+MOLEFE-HC-0001,Dishwashing liquid,Bright Wash,household_cleaning,case,12 x 750 ml,12,250.89,299.49,standard,true,17,1,200,2100000001484,12100000001481,9,Lemon dishwashing liquid.,true
+MOLEFE-HC-0002,Dishwashing liquid,Pure White,household_cleaning,case,12 x 750 ml,12,265.29,,standard,true,315,1,200,2100000001491,12100000001498,9,Lemon dishwashing liquid.,true
+MOLEFE-HC-0010,Dishwashing liquid,Sparkle,household_cleaning,case,4 x 5 litre,4,292.89,,standard,true,207,1,200,2100000001507,12100000001504,20,Lemon dishwashing liquid.,true
+MOLEFE-HC-0011,Dishwashing liquid,Bright Wash,household_cleaning,case,4 x 5 litre,4,317.79,,standard,true,71,1,200,2100000001514,12100000001511,20,Lemon dishwashing liquid.,true
+MOLEFE-HC-0012,Dishwashing liquid,Pure White,household_cleaning,case,4 x 5 litre,4,334.99,,standard,true,275,1,200,2100000001521,12100000001528,20,Lemon dishwashing liquid.,true
+MOLEFE-HC-0100,Hand washing powder,Sparkle,household_cleaning,bag,2 kg,1,70.99,81.89,standard,true,164,1,200,2100000001538,,2,Washing powder for hand wash.,true
+MOLEFE-HC-0101,Hand washing powder,Bright Wash,household_cleaning,bag,2 kg,1,77.09,,standard,true,76,1,200,2100000001545,,2,Washing powder for hand wash.,true
+MOLEFE-HC-0102,Hand washing powder,Pure White,household_cleaning,bag,2 kg,1,82.89,99.99,standard,true,146,1,200,2100000001552,,2,Washing powder for hand wash.,true
+MOLEFE-HC-0110,Hand washing powder,Sparkle,household_cleaning,bag,5 kg,1,161.29,,standard,true,78,1,200,2100000001569,,5,Washing powder for hand wash.,true
+MOLEFE-HC-0111,Hand washing powder,Bright Wash,household_cleaning,bag,5 kg,1,176.39,209.29,standard,true,162,1,200,2100000001576,,5,Washing powder for hand wash.,true
+MOLEFE-HC-0112,Hand washing powder,Pure White,household_cleaning,bag,5 kg,1,193.09,,standard,true,185,1,200,2100000001583,,5,Washing powder for hand wash.,true
+MOLEFE-HC-0200,Thick bleach,Sparkle,household_cleaning,case,12 x 750 ml,12,171.79,,standard,true,6,1,200,2100000001590,12100000001597,9,Thick household bleach.,true
+MOLEFE-HC-0201,Thick bleach,Bright Wash,household_cleaning,case,12 x 750 ml,12,184.19,209.29,standard,true,153,1,200,2100000001606,12100000001603,9,Thick household bleach.,true
+MOLEFE-HC-0202,Thick bleach,Pure White,household_cleaning,case,12 x 750 ml,12,200.09,,standard,true,129,1,200,2100000001613,12100000001610,9,Thick household bleach.,true
+MOLEFE-HC-0300,Multi-purpose cleaner,Sparkle,household_cleaning,case,12 x 750 ml,12,208.69,,standard,true,91,1,200,2100000001620,12100000001627,9,"Cleans floors, tiles and counters.",true
+MOLEFE-HC-0301,Multi-purpose cleaner,Bright Wash,household_cleaning,case,12 x 750 ml,12,224.59,279.19,standard,true,46,1,200,2100000001637,12100000001634,9,"Cleans floors, tiles and counters.",true
+MOLEFE-HC-0302,Multi-purpose cleaner,Pure White,household_cleaning,case,12 x 750 ml,12,249.69,291.69,standard,true,0,1,200,2100000001644,12100000001641,9,"Cleans floors, tiles and counters.",true
+MOLEFE-HC-0400,"Toilet paper, 1-ply",Sparkle,household_cleaning,pack,48 rolls,48,179.79,,standard,true,123,1,200,2100000001651,12100000001658,,Single-ply toilet rolls.,true
+MOLEFE-HC-0401,"Toilet paper, 1-ply",Bright Wash,household_cleaning,pack,48 rolls,48,201.89,,standard,true,310,1,200,2100000001668,12100000001665,,Single-ply toilet rolls.,true
+MOLEFE-HC-0402,"Toilet paper, 1-ply",Pure White,household_cleaning,pack,48 rolls,48,217.59,,standard,true,387,1,200,2100000001675,12100000001672,,Single-ply toilet rolls.,true
+MOLEFE-HC-0500,"Toilet paper, 2-ply",Sparkle,household_cleaning,pack,24 rolls,24,169.99,,standard,true,168,1,200,2100000001682,12100000001689,,Two-ply toilet rolls.,true
+MOLEFE-HC-0501,"Toilet paper, 2-ply",Bright Wash,household_cleaning,pack,24 rolls,24,184.59,,standard,true,168,1,200,2100000001699,12100000001696,,Two-ply toilet rolls.,true
+MOLEFE-HC-0502,"Toilet paper, 2-ply",Pure White,household_cleaning,pack,24 rolls,24,199.99,,standard,true,10,1,200,2100000001705,12100000001702,,Two-ply toilet rolls.,true
+MOLEFE-HC-0600,Bath soap bars,Sparkle,household_cleaning,case,48 x 150 g,48,313.49,,standard,true,20,1,200,2100000001712,12100000001719,7.2,Family soap bars.,true
+MOLEFE-HC-0601,Bath soap bars,Bright Wash,household_cleaning,case,48 x 150 g,48,340.89,,standard,true,3,1,200,2100000001729,12100000001726,7.2,Family soap bars.,true
+MOLEFE-HC-0602,Bath soap bars,Pure White,household_cleaning,case,48 x 150 g,48,368.09,441.39,standard,true,280,1,200,2100000001736,12100000001733,7.2,Family soap bars.,true
+MOLEFE-HC-0700,Laundry bar soap,Sparkle,household_cleaning,case,24 x 500 g,24,286.89,353.89,standard,true,306,1,200,2100000001743,12100000001740,12,Blue laundry bars.,true
+MOLEFE-HC-0701,Laundry bar soap,Bright Wash,household_cleaning,case,24 x 500 g,24,311.79,,standard,true,162,1,200,2100000001750,12100000001757,12,Blue laundry bars.,true
+MOLEFE-HC-0702,Laundry bar soap,Pure White,household_cleaning,case,24 x 500 g,24,342.19,,standard,true,0,1,200,2100000001767,12100000001764,12,Blue laundry bars.,true
+MOLEFE-HC-0800,Floor polish,Sparkle,household_cleaning,case,12 x 400 ml,12,338.19,,standard,true,196,1,200,2100000001774,12100000001771,4.8,Red floor polish.,true
+MOLEFE-HC-0801,Floor polish,Bright Wash,household_cleaning,case,12 x 400 ml,12,381.29,,standard,true,183,1,200,2100000001781,12100000001788,4.8,Red floor polish.,true
+MOLEFE-HC-0802,Floor polish,Pure White,household_cleaning,case,12 x 400 ml,12,400.89,,standard,true,86,1,200,2100000001798,12100000001795,4.8,Red floor polish.,true
+MOLEFE-HC-0900,Scouring pads,Sparkle,household_cleaning,pack,50 pads,50,94.99,111.19,standard,true,249,1,200,2100000001804,12100000001801,,Green scouring pads.,true
+MOLEFE-HC-0901,Scouring pads,Bright Wash,household_cleaning,pack,50 pads,50,104.49,,standard,true,139,1,200,2100000001811,12100000001818,,Green scouring pads.,true
+MOLEFE-HC-0902,Scouring pads,Pure White,household_cleaning,pack,50 pads,50,110.59,,standard,true,105,1,200,2100000001828,12100000001825,,Green scouring pads.,true
+MOLEFE-HC-1000,"Refuse bags, black",Sparkle,household_cleaning,bundle,200 bags,200,171.29,208.29,standard,true,313,1,200,2100000001835,12100000001832,,Heavy-duty black bags.,true
+MOLEFE-HC-1001,"Refuse bags, black",Bright Wash,household_cleaning,bundle,200 bags,200,187.49,222.09,standard,true,360,1,200,2100000001842,12100000001849,,Heavy-duty black bags.,true
+MOLEFE-HC-1002,"Refuse bags, black",Pure White,household_cleaning,bundle,200 bags,200,201.19,,standard,true,297,1,200,2100000001859,12100000001856,,Heavy-duty black bags.,true
+MOLEFE-BK-0000,"White bread, sliced",Kasi Bakers,bakery,crate,10 x 700 g,10,150.79,182.19,standard,true,89,1,200,2100000001866,12100000001863,7,"Baked fresh daily, sliced.",true
+MOLEFE-BK-0001,"White bread, sliced",Morning Loaf,bakery,crate,10 x 700 g,10,167.09,,standard,true,291,1,200,2100000001873,12100000001870,7,"Baked fresh daily, sliced.",true
+MOLEFE-BK-0002,"White bread, sliced",Oven Gold,bakery,crate,10 x 700 g,10,176.69,,standard,true,287,1,200,2100000001880,12100000001887,7,"Baked fresh daily, sliced.",true
+MOLEFE-BK-0100,"Brown bread, sliced",Kasi Bakers,bakery,crate,10 x 700 g,10,145.59,167.59,zero,true,0,1,200,2100000001897,12100000001894,7,"Baked fresh daily, sliced.",true
+MOLEFE-BK-0101,"Brown bread, sliced",Morning Loaf,bakery,crate,10 x 700 g,10,156.69,,zero,true,75,1,200,2100000001903,12100000001900,7,"Baked fresh daily, sliced.",true
+MOLEFE-BK-0102,"Brown bread, sliced",Oven Gold,bakery,crate,10 x 700 g,10,169.79,,zero,true,187,1,200,2100000001910,12100000001917,7,"Baked fresh daily, sliced.",true
+MOLEFE-BK-0200,Whole-wheat bread,Kasi Bakers,bakery,crate,10 x 700 g,10,162.29,,zero,true,278,1,200,2100000001927,12100000001924,7,Baked fresh daily.,true
+MOLEFE-BK-0201,Whole-wheat bread,Morning Loaf,bakery,crate,10 x 700 g,10,175.39,216.29,zero,true,368,1,200,2100000001934,12100000001931,7,Baked fresh daily.,true
+MOLEFE-BK-0202,Whole-wheat bread,Oven Gold,bakery,crate,10 x 700 g,10,193.09,,zero,true,140,1,200,2100000001941,12100000001948,7,Baked fresh daily.,true
+MOLEFE-BK-0300,Hot dog rolls,Kasi Bakers,bakery,pack,6 x 6 rolls,1,85.69,,standard,true,32,1,200,2100000001958,,,Soft rolls.,true
+MOLEFE-BK-0301,Hot dog rolls,Morning Loaf,bakery,pack,6 x 6 rolls,1,95.39,107.79,standard,true,234,1,200,2100000001965,,,Soft rolls.,true
+MOLEFE-BK-0302,Hot dog rolls,Oven Gold,bakery,pack,6 x 6 rolls,1,102.29,,standard,true,372,1,200,2100000001972,,,Soft rolls.,true
+MOLEFE-BK-0400,Burger buns,Kasi Bakers,bakery,pack,6 x 6 buns,1,90.19,,standard,true,273,1,200,2100000001989,,,Soft sesame buns.,true
+MOLEFE-BK-0401,Burger buns,Morning Loaf,bakery,pack,6 x 6 buns,1,99.99,,standard,true,0,1,200,2100000001996,,,Soft sesame buns.,true
+MOLEFE-BK-0402,Burger buns,Oven Gold,bakery,pack,6 x 6 buns,1,108.29,,standard,true,346,1,200,2100000002009,,,Soft sesame buns.,true
+MOLEFE-BK-0500,Vetkoek,Kasi Bakers,bakery,tray,24 pieces,24,68.29,,standard,true,262,1,200,2100000002016,12100000002013,,Made fresh every morning.,true
+MOLEFE-BK-0501,Vetkoek,Morning Loaf,bakery,tray,24 pieces,24,73.69,,standard,true,159,1,200,2100000002023,12100000002020,,Made fresh every morning.,true
+MOLEFE-BK-0502,Vetkoek,Oven Gold,bakery,tray,24 pieces,24,80.69,,standard,true,53,1,200,2100000002030,12100000002037,,Made fresh every morning.,true
+MOLEFE-BK-0600,Scones,Kasi Bakers,bakery,tray,24 pieces,24,90.39,,standard,true,23,1,200,2100000002047,12100000002044,,Plain scones.,true
+MOLEFE-BK-0601,Scones,Morning Loaf,bakery,tray,24 pieces,24,101.69,123.69,standard,true,97,1,200,2100000002054,12100000002051,,Plain scones.,true
+MOLEFE-BK-0602,Scones,Oven Gold,bakery,tray,24 pieces,24,108.29,,standard,true,351,1,200,2100000002061,12100000002068,,Plain scones.,true
+MOLEFE-BK-0700,"Muffins, assorted",Kasi Bakers,bakery,tray,12 pieces,12,80.39,,standard,true,130,1,200,2100000002078,12100000002075,,Chocolate and bran muffins.,true
+MOLEFE-BK-0701,"Muffins, assorted",Morning Loaf,bakery,tray,12 pieces,12,86.89,99.99,standard,true,0,1,200,2100000002085,12100000002082,,Chocolate and bran muffins.,true
+MOLEFE-BK-0702,"Muffins, assorted",Oven Gold,bakery,tray,12 pieces,12,95.29,109.29,standard,true,362,1,200,2100000002092,12100000002099,,Chocolate and bran muffins.,true
+MOLEFE-BK-0800,"Rusks, buttermilk",Kasi Bakers,bakery,case,6 x 500 g,6,233.69,266.19,standard,true,91,1,200,2100000002108,12100000002105,3,Buttermilk rusks.,true
+MOLEFE-BK-0801,"Rusks, buttermilk",Morning Loaf,bakery,case,6 x 500 g,6,254.29,,standard,true,241,1,200,2100000002115,12100000002112,3,Buttermilk rusks.,true
+MOLEFE-BK-0802,"Rusks, buttermilk",Oven Gold,bakery,case,6 x 500 g,6,269.09,,standard,true,264,1,200,2100000002122,12100000002129,3,Buttermilk rusks.,true
