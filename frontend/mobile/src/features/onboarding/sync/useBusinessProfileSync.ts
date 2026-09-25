@@ -3,9 +3,9 @@
  *
  *  1. After sign-in (or app start while signed in): read the server's
  *     profile and apply it. A new phone gets its answers back.
- *  2. Once the business is active: every change (onboarding finished, an
- *     edit from Business profile, a tool switched) is saved, one quiet
- *     request after the edits settle.
+ *  2. Every change is saved, one quiet request after the edits settle:
+ *     each onboarding step as it's done (so leaving half-way loses
+ *     nothing), then edits from Business profile and switched tools.
  *
  * Nothing is saved before step 1 has finished for THIS account, so an
  * empty profile on a fresh phone can never overwrite what the server
@@ -53,11 +53,11 @@ export function useBusinessProfileSync() {
       });
   }, [loaded, signedIn, email, fetchedFor]);
 
-  // 2. Save changes once active.
+  // 2. Save changes (during onboarding too).
   const payload = JSON.stringify(toServer(profile));
   const registration = JSON.stringify(profile.registration);
   useEffect(() => {
-    if (USE_MOCK_AUTH || status !== 'active' || !fetched || payload === lastSent.current) return;
+    if (USE_MOCK_AUTH || !signedIn || !fetched || payload === lastSent.current) return;
     const t = setTimeout(() => {
       businessProfileApi
         .save(JSON.parse(payload))
@@ -72,5 +72,5 @@ export function useBusinessProfileSync() {
         });
     }, SETTLE_MS);
     return () => clearTimeout(t);
-  }, [status, fetched, payload, registration, updateProfile]);
+  }, [signedIn, fetched, payload, registration, updateProfile]);
 }

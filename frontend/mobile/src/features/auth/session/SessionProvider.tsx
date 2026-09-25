@@ -16,6 +16,8 @@ import { createContext, ReactNode, useContext, useEffect, useMemo, useState } fr
 
 import { BUSINESS_TYPES, BusinessType, defaultCategories, ToolKey, TradeKey } from '@/constants/businessTypes';
 
+import { USE_MOCK_AUTH } from '@/constants/config';
+import { businessProfileApi, fromServer } from '@/features/onboarding/api/businessProfileApi';
 import { setSessionEndedHandler } from '@/shared/api/client';
 
 import { authApi } from '../api/authApi';
@@ -173,10 +175,13 @@ export function SessionProvider({ children }: { children: ReactNode }) {
           return { status: onboarded || s.status === 'active' ? 'active' : s.status, profile };
         }),
       signedIn: (profile) => {
-        // Same account on this phone before? Restore its onboarding answers.
-        loadLastProfile().then((last) => {
-          const merged = last && last.email === profile.email ? { ...last, ...pickServerFields(profile) } : profile;
-          setState({ status: isOnboarded(merged) ? 'active' : 'onboarding', profile: merged });
+        // The answers saved on the server win (another phone, a reinstall,
+        // steps left half-done); this phone's last answers fill any gaps.
+        const saved = USE_MOCK_AUTH ? Promise.resolve(null) : businessProfileApi.get().catch(() => null);
+        Promise.all([loadLastProfile(), saved]).then(([last, server]) => {
+          let merged = last && last.email === profile.email ? { ...last, ...pickServerFields(profile) } : profile;
+          if (server) merged = { ...merged, ...fromServer(server) };
+          setState({ status: server?.onboarded || isOnboarded(merged) ? 'active' : 'onboarding', profile: merged });
         });
       },
       signOut: () => {
