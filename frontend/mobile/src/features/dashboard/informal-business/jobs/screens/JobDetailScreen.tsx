@@ -3,7 +3,6 @@ import { router, useFocusEffect, useLocalSearchParams } from 'expo-router';
 import { useCallback, useState } from 'react';
 import { ActivityIndicator, Pressable, StyleSheet, Text, View } from 'react-native';
 
-import { USE_MOCK_AUTH } from '@/constants/config';
 import { ApiError } from '@/shared/api/client';
 import { Button } from '@/shared/components/Button';
 import { Card, IconTile, InfoNote, ListRow } from '@/shared/components/Parts';
@@ -12,7 +11,7 @@ import { Title } from '@/shared/components/Text';
 import { formatRand } from '@/shared/lib/money';
 import { colors, fonts } from '@/shared/theme/tokens';
 
-import { jobsApi } from '../api/jobsApi';
+import { jobsApi, PRACTICE_SIGN_OFF } from '../api/jobsApi';
 import { PaidProgress } from '../components/PaidProgress';
 import { SignOffSheet } from '../components/SignOffSheet';
 import { StageStep } from '../components/StageStep';
@@ -124,7 +123,7 @@ export default function JobDetailScreen() {
         </InfoNote>
       ) : null}
 
-      {USE_MOCK_AUTH && stage?.status === 'waiting' ? (
+      {PRACTICE_SIGN_OFF && stage?.status === 'waiting' ? (
         <Pressable
           accessibilityRole="button"
           onPress={() => router.push({ pathname: '/informal-business/jobs/[id]/sign-off-practice', params: { id: job.id, stageId: stage.id } })}

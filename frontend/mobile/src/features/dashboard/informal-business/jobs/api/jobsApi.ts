@@ -6,3 +6,9 @@
 import { mockJobsApi } from './mockJobsApi';
 
 export const jobsApi = mockJobsApi;
+
+/**
+ * The in-app practice sign-off (playing the client) exists only while jobs
+ * run on the mock; with the backend, the client uses the real web page.
+ */
+export const PRACTICE_SIGN_OFF = true;
