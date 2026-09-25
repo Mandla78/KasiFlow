@@ -1,14 +1,19 @@
 STATUS -- Risuna's tools (update in every PR)
 
 DONE
-  -
+  - Credit book frontend (mock), PR 1: list with both tabs, totals,
+    due-today / overdue; new credit sale (new or existing customer,
+    WhatsApp receipt); add supplier debt; entry detail with history;
+    part / full repayment; correction; cancel an entry made by mistake;
+    WhatsApp reminder. Hook suppliersOwedFromOrders() returns [].
 
 IN PROGRESS
-  -
+  - CONTRACT_credit_book.txt: proposed, waiting for Mandla
 
 BLOCKED (and on what)
-  -
+  - Credit book backend: on the contract being approved
 
 NEXT
-  - Credit book frontend (mock), PR 1
-  - CONTRACT_credit_book.txt
+  - Credit book backend + switch the mock to real (after the contract)
+  - Jobs frontend (mock)
+  - Home / Account live lines from creditBookApi.summary() (file 08)
