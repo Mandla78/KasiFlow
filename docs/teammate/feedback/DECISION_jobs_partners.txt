@@ -67,9 +67,8 @@ WHAT CHANGES IN PLAN 15
 
 
 WHERE IT IS
-  App on sample data: branch risuna/jobs-network (PR, on top of PR 6).
-  Hidden on the real API (NETWORK_READY) until the backend in
-  CONTRACT_jobs_v2.txt exists.
+  Branch risuna/jobs-network (PR 7, on top of PR 6): the app, and the
+  backend in CONTRACT_jobs_v2.txt (migration 0016_builder_network).
 
 
 DECISION: approved by Mandla (verbal, relayed by Risuna, 25 Sep 2026).

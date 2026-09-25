@@ -5,10 +5,12 @@ CONTRACT -- JOBS v2: BUILDER PROFILES, PARTNERS ON JOBS, HELP POSTS
 TOOL:            The builder network (15_JOBS_BUILDER_NETWORK_PLAN.txt as
                  changed by DECISION_jobs_partners.txt)
 AUTHOR / DATE:   Risuna, 25 September 2026
-STATUS:          proposed. The app side is built on the mocks (branch
-                 risuna/jobs-network); field names below are the snake_case
-                 twins of network/types.ts, so switching to the real API
-                 changes no screen.
+STATUS:          built (branch risuna/jobs-network, PR 7): backend
+                 domains/informal_trader/builder_network + migration
+                 0016_builder_network, the app on it (httpNetworkApi).
+                 Field names are the snake_case twins of network/types.ts.
+                 Sample builders for development: flask builders seed
+                 [--me EMAIL] (refused outside development).
 
 
 0. RULES THE SERVER ENFORCES (the app only mirrors them)
@@ -202,7 +204,8 @@ STATUS:          proposed. The app side is built on the mocks (branch
 ---------------------------------------------------------------------------
   Mock (EXPO_PUBLIC_USE_MOCK_API=true): all of the above, with sample
   builders and "Test: answer as ..." playing the other builder. Real API
-  (false): the network stays hidden (NETWORK_READY) until these
-  endpoints exist; then an httpNetworkApi replaces the mock.
+  (false): httpNetworkApi, on these endpoints. To try it alone on the real
+  backend: flask builders seed --me <your builder email> (sample builders
+  around your pin; Sipho is your partner and invites you onto a job).
 
 DECISION:

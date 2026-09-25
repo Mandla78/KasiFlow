@@ -27,9 +27,9 @@ IN PROGRESS
     CONTRACT_bin.txt (waiting for Mandla). On the real API, History uses
     the existing endpoints and Delete/Bin stay hidden (BIN_READY) until
     phase 2 (backend) is approved and built.
-  - Jobs v2, the builder network, phase 1 = frontend on the mocks
-    (risuna/jobs-network, on top of PR 6; 15_JOBS_BUILDER_NETWORK_PLAN.txt
-    as changed by DECISION_jobs_partners.txt -- Mandla's verbal yes):
+  - Jobs v2, the builder network, app + backend (PR 7,
+    risuna/jobs-network, on top of PR 6; 15_JOBS_BUILDER_NETWORK_PLAN.txt
+    as changed by DECISION_jobs_partners.txt -- approved by Mandla):
     Tabs My jobs / Builders / Suppliers. On a job, "Bring in a partner":
     stages, trade, when, and their pay (fixed or per day, and when it's
     paid) with a private "you keep" line; then invite a partner, a saved
@@ -43,10 +43,16 @@ IN PROGRESS
     of client-confirmed builds (slideshow per build), Invite to a job,
     Save, Report, Block. No "connect". Explainable ranking and the pay
     rules are tested (lib/recommend.ts, lib/pay.ts). "Test: answer as
-    Thabo" plays the other builder on the mock. Hidden on the real API
-    (NETWORK_READY) until the backend. Sample photos: free Pexels, no
-    faces (assets/sample-work). Not yet: "ask for more" (counter-offer),
-    videos (need expo-video, a native module -> a new app build).
+    Thabo" plays the other builder on the mock. Backend per
+    CONTRACT_jobs_v2.txt: domains/informal_trader/builder_network,
+    migration 0016_builder_network (8 tables, pay rules as CHECKs too),
+    92 tests (flows, ranking = the app's cases, security, hostile
+    input); the app on it via httpNetworkApi. flask builders seed
+    [--me EMAIL] makes sample builders for development (photos to
+    <root>/dev-seed/builders on Cloudinary). Sample photos: free Pexels,
+    no faces (assets/sample-work). Not yet: "ask for more"
+    (counter-offer), videos (need expo-video, a native module -> a new
+    app build).
 
 BLOCKED (and on what)
   - (none; the Idempotency-Key header and the deep-JSON crash are fixed on main)
@@ -59,9 +65,6 @@ FINDINGS / NEEDS / QUESTIONS FOR MANDLA
   - FINDING_whatsapp_ip_links.txt, QUESTION_bluetooth_sales.txt (roadmap)
 
 NEXT (round 2, see ../14_ROUND_2_BRIEF.txt and ../15_JOBS_BUILDER_NETWORK_PLAN.txt)
-  - builder network phase 2: CONTRACT_jobs_v2.txt, then the backend
-    (profiles, saves, partners on jobs with pay, partner payments,
-    blocks, reports, help posts, builds)
   - history + bin phase 2 (backend) once CONTRACT_bin.txt is approved
   - after Sunday: crew on a job, short videos, the order book,
     demand_signals() per tool
