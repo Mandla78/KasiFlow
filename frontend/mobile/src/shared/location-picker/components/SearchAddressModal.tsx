@@ -8,14 +8,20 @@ import { useAddressSearch } from '../hooks';
 import { geocodingApi } from '../services/geocodingApi';
 import type { LatLng } from '../types';
 
-type Props = { visible: boolean; onClose: () => void; onPicked: (c: LatLng) => void };
+type Props = {
+  visible: boolean;
+  onClose: () => void;
+  onPicked: (c: LatLng) => void;
+  /** Not found? Go to the map and place the pin by hand. */
+  onPinInstead: () => void;
+};
 
 /**
  * Search is its own screen, not a bar squeezed above the map (TruConnect's
  * live testing: the dropdown fought the map for space). Picking a result
  * hands its coordinates to the map, where the pin can still be adjusted.
  */
-export function SearchAddressModal({ visible, onClose, onPicked }: Props) {
+export function SearchAddressModal({ visible, onClose, onPicked, onPinInstead }: Props) {
   const { query, setQuery, suggestions, loading, sessionToken } = useAddressSearch();
 
   async function pick(id: string) {
@@ -60,7 +66,14 @@ export function SearchAddressModal({ visible, onClose, onPicked }: Props) {
             </Pressable>
           ))}
           {query.trim() && !loading && suggestions.length === 0 ? (
-            <Text style={styles.empty}>No matches. Close this and drop a pin on the map instead.</Text>
+            <Text style={styles.empty}>No matches. Many township stands aren&apos;t on maps yet: place the pin yourself.</Text>
+          ) : null}
+          {query.trim() && !loading ? (
+            // Always offered: the address may exist but not be on the map.
+            <Pressable onPress={onPinInstead} style={styles.row}>
+              <Feather name="crosshair" size={16} color={colors.ink} />
+              <Text style={styles.name}>Place the pin myself on the map</Text>
+            </Pressable>
           ) : null}
         </ScrollView>
       </SafeAreaView>

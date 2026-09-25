@@ -90,6 +90,7 @@ Commit the migration file with the model change, so everyone else gets it with `
 | `POST /me/close-account` | password required; ends all sessions and phone keys |
 | `GET /me/business-profile` | the trader's sign-up answers (`null` before the first save) |
 | `PATCH /me/business-profile` | save sections: `business`, `registration` (CIPC **number** only; the server runs the check and sets the status), `location`, `buying`, `tools` |
+| `GET /geocoding/suggest`, `/geocoding/retrieve`, `/geocoding/reverse` | address search for the location picker: our backend calls Mapbox (`MAPBOX_TOKEN`), the app never sees the token; South Africa only; the user always confirms the pin |
 
 **Two-factor sign-in:** the password plus either a trusted phone or a code sent to the email. A phone becomes trusted by entering an emailed code (sign-up counts); it stays trusted for 90 days of not being used, until the owner signs out other phones, or until the account is closed. Only the HMAC of the trusted-phone token is stored.
 
