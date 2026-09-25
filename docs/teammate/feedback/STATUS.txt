@@ -27,20 +27,35 @@ IN PROGRESS
     CONTRACT_bin.txt (waiting for Mandla). On the real API, History uses
     the existing endpoints and Delete/Bin stay hidden (BIN_READY) until
     phase 2 (backend) is approved and built.
+  - Jobs v2, the builder network, phase 1 = frontend on the mocks
+    (risuna/jobs-network, on top of PR 6; 15_JOBS_BUILDER_NETWORK_PLAN.txt):
+    Jobs has For you / Jobs / Suppliers tabs. For you: who wants to
+    connect, builders you may know (swipe, with the reason), your help
+    posts, help wanted near you, your people with WhatsApp + Call,
+    suppliers "Coming soon". Builder profile with proof numbers, "why you
+    see them" and a full-screen work slideshow; Connect (mutual), Report,
+    Block. My builder profile: trades (up to 3), travel km, "Show me to
+    other builders" (off by default), which photos are shown. Help post
+    from a job -> interested builders -> pick -> WhatsApp with the job's
+    details. Explainable recommendation (lib/recommend.ts, tested). On
+    the real API it stays hidden (NETWORK_READY) until the backend.
+    Sample work photos: free Pexels photos, no faces (assets/sample-work).
+    Not yet: crew on a job, videos (need expo-video, a native module ->
+    a new app build; will ask first).
 
 BLOCKED (and on what)
-  - The app sending Idempotency-Key: a header option in api()
-    (NEEDS_api_client_headers.txt)
+  - (none; the Idempotency-Key header and the deep-JSON crash are fixed on main)
 
-FINDINGS / NEEDS FOR MANDLA
-  - FINDING_deep_json_crash.txt: a deeply nested JSON body crashes every
-    route (the NUL guard in src/__init__.py)
+FINDINGS / NEEDS / QUESTIONS FOR MANDLA
+  - QUESTION_trades.txt: the new trades list (painter/tiler split; bricklayer,
+    roofer, welder, glazier)
   - FINDING_stage_photos.txt: camera-only and hashing on the server
   - NEEDS_camera_permission_text.txt, NEEDS_shared_components.txt
   - FINDING_whatsapp_ip_links.txt, QUESTION_bluetooth_sales.txt (roadmap)
 
-NEXT (round 2, see ../14_ROUND_2_BRIEF.txt -- replaces the line below)
-  - history + bin phase 2 (backend) once CONTRACT_bin.txt is approved;
-    order book end to end; jobs v2;
+NEXT (round 2, see ../14_ROUND_2_BRIEF.txt and ../15_JOBS_BUILDER_NETWORK_PLAN.txt)
+  - builder network phase 2: CONTRACT_jobs_v2.txt, then the backend
+    (profiles, connections, blocks, reports, help posts, showcase)
+  - history + bin phase 2 (backend) once CONTRACT_bin.txt is approved
+  - after Sunday: crew on a job, short videos, the order book,
     demand_signals() per tool
-  - (was) My record screen (mock) + share
