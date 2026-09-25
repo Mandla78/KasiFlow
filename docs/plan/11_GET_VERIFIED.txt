@@ -1,0 +1,141 @@
+===========================================================================
+PLAN 11 -- GET VERIFIED (the verified badge)
+Written 25 September 2026. A hint, like every plan file.
+===========================================================================
+
+THE IDEA IN ONE LINE
+
+  Sign-up stays short: it feeds the supplier recommendation engine and
+  tells us what kind of business this is. The VERIFIED BADGE is separate:
+  WE award it after a proper review of what the trader submits through
+  More -> Business profile -> "Get verified". It never blocks using the app.
+
+
+1. THE FLOW
+---------------------------------------------------------------------------
+
+  Trader: Business profile -> Get verified
+    -> a checklist of steps for their business type (s2); each step shows
+       Not started / Submitted / Approved / Needs attention (+ reason)
+    -> documents and photos uploaded PRIVATELY (s4), straight to Cloudinary
+    -> "Submit for review": we answer within 24 hours
+
+  Us (a reviewer, not the app): a small admin review page (s5)
+    -> sees the application, opens each document through a link that
+       expires in minutes, checks it (and any official register), then
+       Approve / Reject with a reason per step
+
+  Approved -> the badge (Business profile, More, every tab's avatar, and
+  what suppliers see). Rejected -> the trader sees what to fix and can
+  resubmit.
+
+  After the decision, the documents are DELETED (s6). We keep only the
+  decision: what was checked, how, by whom, when.
+
+
+2. WHAT WE ASK FOR (by business type; all within "Get verified")
+---------------------------------------------------------------------------
+
+  EVERYONE
+    - Full name as on the ID document
+    - ID document: SA ID (book/card) or passport, plus for foreign
+      nationals the permit that allows running a business
+    - A selfie holding the ID (camera only), so we can match the person
+      to the document
+    - Phone number, confirmed by a code (SMS, when the provider is chosen)
+    - Proof the business is where the pin says:
+        a shop-front / yard photo taken IN THE APP with the camera, which
+        records the time and the GPS position (compared with the pin)
+        + one of: utility bill, lease, letter from the ward councillor or
+        traditional authority (common in townships), municipal permit
+
+  SPAZA SHOPS
+    - Municipal spaza shop registration (required since late 2024) /
+      trading permit / Certificate of Acceptability (food), if they have it
+
+  BUILDERS AND TRADES
+    - NHBRC registration (home builders), CIDB grading (contractors),
+      PIRB card (plumbers), electrician registration -- whichever applies;
+      we check the number on the public register where one exists
+
+  REGISTERED COMPANIES (already built)
+    - CIPC number, checked automatically, director-name match
+
+  ALSO COUNTED (earned, not uploaded)
+    - First delivery completed at the pin with a supplier's driver
+      (both sides confirm): proves the place exists
+    - Months trading and "confirmed by both" entries in My record
+
+
+3. WHAT THE BADGE MEANS
+---------------------------------------------------------------------------
+
+  One badge, "Verified". Only after a reviewer approved the EVERYONE
+  steps + any that apply to their type. Suppliers see "Verified" and the
+  date, not the documents. The badge can be withdrawn (and is audited).
+  CIPC-only verification (today's badge) becomes one step of this, not
+  the badge on its own.
+
+
+4. PRIVATE UPLOADS (Cloudinary)
+---------------------------------------------------------------------------
+
+  - Folder: akayza/informal-trader/{key}/verification/{application-key}/
+  - Uploaded as AUTHENTICATED (not public): no permanent public URL
+    exists. Viewing needs a signed URL we create per view that expires in
+    minutes, only for a reviewer.
+  - Same flow as the profile photo (shared.media start/finish: the
+    server checks the real file, ownership, size, daily limit), plus
+    PDFs allowed for documents, and the malware scan switched ON for
+    this folder before launch.
+  - Camera-only for the selfie and the shop-front photo.
+
+
+5. THE REVIEWER SIDE (admin)
+---------------------------------------------------------------------------
+
+  - A reviewer role, separate accounts, two-factor always on.
+  - A queue: oldest first, "due in X hours" against the 24-hour promise.
+  - Every document view is audited (verification.document_viewed,
+    already declared), every decision too (supplier_approved /
+    revoked-style events for traders).
+  - Reviewers see only what the step needs; no download button.
+
+
+6. RETENTION (goes in the Privacy Policy)
+---------------------------------------------------------------------------
+
+  - Documents and verification photos are deleted from Cloudinary within
+    7 days of the decision (approved or rejected), by a scheduled job;
+    the deletion is audited (verification.document_deleted).
+  - Kept: decision, date, reviewer, which steps passed, document TYPE
+    (e.g. "SA ID card"), never the ID number or the image.
+  - A trader can withdraw an application; its documents are deleted.
+  - Privacy Policy + Terms get a "Verification" section: what we collect,
+    why, who sees it, how long, and that it is optional. New document
+    version -> users accept it again (consent versions already recorded).
+
+
+7. SECURITY BY DESIGN (checklist)
+---------------------------------------------------------------------------
+
+  - Minimum data; optional; clear purpose (POPIA)
+  - Authenticated storage, expiring view links, no public URLs
+  - IDOR: a trader sees only their own application; reviewers only
+    through the review page
+  - Rate limits on submission and uploads; malware scan on documents
+  - Audit: submitted, viewed, approved, rejected, withdrawn, deleted
+  - No ID numbers or document contents in logs or the audit trail
+  - Deletion job with evidence; withdrawal honoured
+
+
+8. BUILD ORDER (after the supplier core)
+---------------------------------------------------------------------------
+
+  1. Backend: verification application + steps + private uploads
+  2. App: Get verified checklist, upload steps, status, resubmit
+  3. Reviewer page (web, like the reset page) with expiring views
+  4. Deletion job + Privacy Policy/Terms section + re-consent
+  5. SMS phone check (needs a provider: decision + cost)
+  Open decisions: SMS provider; whether to use an identity-check service
+  (Home Affairs + liveness) instead of manual ID review later.
