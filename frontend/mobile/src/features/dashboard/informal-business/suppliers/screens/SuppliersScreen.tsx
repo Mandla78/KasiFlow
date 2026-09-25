@@ -1,9 +1,9 @@
 import { router } from 'expo-router';
 import { Feather } from '@expo/vector-icons';
 import { useEffect, useState } from 'react';
-import { ActivityIndicator, Pressable, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
+import { ActivityIndicator, StyleSheet, Text, TextInput, View } from 'react-native';
 
-import { CategoryCode, categoryByCode } from '@/constants/categories';
+import { CategoryCode } from '@/constants/categories';
 import { areaOf, isVerified } from '@/features/auth/profile';
 import { useSession } from '@/features/auth/session/SessionProvider';
 import { Screen } from '@/shared/components/Screen';
@@ -11,6 +11,8 @@ import { Overline } from '@/shared/components/Text';
 import { TopBar } from '@/shared/components/TopBar';
 import { colors, fonts, radius } from '@/shared/theme/tokens';
 
+import { useCartSupplierIds } from '../../cart/lib/cartStore';
+import { CategoryChips } from '../../catalogue/components/CategoryChips';
 import { supplierMatchApi } from '../api/supplierMatchApi';
 import { SupplierCard } from '../components/SupplierCard';
 import type { SupplierMatch } from '../types';
@@ -27,6 +29,7 @@ export default function SuppliersScreen() {
   const [failed, setFailed] = useState(false);
   const [chip, setChip] = useState<CategoryCode | 'all'>('all');
   const [query, setQuery] = useState('');
+  const hasCart = useCartSupplierIds().length > 0;
 
   const place = profile.location;
   useEffect(() => {
@@ -52,7 +55,6 @@ export default function SuppliersScreen() {
   );
   const yours = shown.filter((m) => profile.supplierIds.includes(m.id));
   const near = shown.filter((m) => !profile.supplierIds.includes(m.id));
-  const chips: (CategoryCode | 'all')[] = ['all', ...profile.categories];
 
   return (
     <Screen tab>
@@ -63,7 +65,7 @@ export default function SuppliersScreen() {
         initial={profile.businessName[0] ?? 'A'}
         title="Suppliers"
         subtitle={areaOf(profile) ? `Near ${areaOf(profile)}` : undefined}
-        action={{ icon: 'package', label: 'My orders', onPress: () => router.push('/informal-business/orders') }}
+        action={{ icon: 'shopping-cart', label: 'Your carts', dot: hasCart, onPress: () => router.push('/informal-business/cart') }}
       />
       <View style={styles.search}>
         <Feather name="search" size={16} color={colors.textMuted} />
@@ -75,13 +77,8 @@ export default function SuppliersScreen() {
           style={styles.searchInput}
         />
       </View>
-      <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ gap: 8 }}>
-        {chips.map((c) => (
-          <Pressable key={c} onPress={() => setChip(c)} style={[styles.chip, chip === c && styles.chipOn]}>
-            <Text style={[styles.chipText, chip === c && { color: colors.white }]}>{c === 'all' ? 'All' : categoryByCode(c).label}</Text>
-          </Pressable>
-        ))}
-      </ScrollView>
+      {/* The categories this trader buys (from sign-up / Business profile). */}
+      <CategoryChips categories={profile.categories} value={chip} onChange={setChip} />
 
       {!matches && !failed ? (
         <View style={styles.loading}>
@@ -132,17 +129,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 14,
   },
   searchInput: { flex: 1, height: '100%', fontFamily: fonts.medium, fontSize: 14.5, color: colors.text, outlineWidth: 0 },
-  chip: {
-    paddingHorizontal: 16,
-    height: 38,
-    borderRadius: radius.pill,
-    borderWidth: 1,
-    borderColor: colors.line,
-    backgroundColor: colors.white,
-    justifyContent: 'center',
-  },
-  chipOn: { backgroundColor: colors.ink, borderColor: colors.ink },
-  chipText: { fontFamily: fonts.semibold, fontSize: 13, color: colors.text },
   loading: { alignItems: 'center', gap: 10, paddingVertical: 30 },
   muted: { fontFamily: fonts.body, fontSize: 13, lineHeight: 18, color: colors.textMuted },
   empty: { fontFamily: fonts.body, fontSize: 13.5, lineHeight: 19, color: colors.textMuted, textAlign: 'center', paddingVertical: 20 },

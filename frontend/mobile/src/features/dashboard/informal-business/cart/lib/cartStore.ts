@@ -56,3 +56,9 @@ export function useCart(supplierId: string): Cart {
 }
 
 const EMPTY: CartLine[] = [];
+
+/** Suppliers that have something in their cart (for the cart icon and Your carts). */
+export function useCartSupplierIds(): string[] {
+  const all = useSyncExternalStore(subscribe, () => carts);
+  return Object.keys(all).filter((id) => all[id].length > 0);
+}
