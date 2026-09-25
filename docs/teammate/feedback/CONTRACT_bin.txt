@@ -1,0 +1,109 @@
+===========================================================================
+CONTRACT -- HISTORY + BIN (credit book and jobs)
+===========================================================================
+
+TOOL:            History and bin for the credit book and jobs
+                 (docs/teammate/14_ROUND_2_BRIEF.txt, section 1)
+AUTHOR / DATE:   Risuna, Friday 25 September 2026
+STATUS:          proposed (the app side is built on the mocks: branch
+                 risuna/tools-bin)
+
+
+0. THE RULE
+---------------------------------------------------------------------------
+
+  "Delete" moves an item to the BIN: hidden from the trader only. The row
+  stays (BaseModel.soft_delete(): is_deleted + deleted_at); nothing is
+  ever hard-deleted. A binned item leaves every list, Home, Account and
+  every total. It can be restored for 30 days; after that it is still in
+  the database, just no longer shown in the bin (computed from deleted_at,
+  no job needed).
+
+  What a delete never removes: payments recorded on a credit entry, and
+  stages a client confirmed (with their sign-offs and photos). They stay
+  in the trader's record and in any shared record link. The confirm sheet
+  says so ("The R20 paid back stays in your record." / "Stages Mokoena
+  family confirmed stay in your record and in any record you share.").
+
+
+1. ENDPOINTS (all per signed-in trader, per-trader rate limits, audited)
+---------------------------------------------------------------------------
+
+  CREDIT BOOK (/api/v1/me/credit-book)
+    GET    /history?q=              finished entries: paid + cancelled, not
+                                    binned, newest activity first; q = the
+                                    customer's name (contains, % _ plain);
+                                    max 200        -> {entries: [entry]}
+    DELETE /entries/{id}            move to the bin      -> 200 {}
+                                    404 if not yours or already binned
+    POST   /entries/{id}/restore    back from the bin    -> 200 {entry}
+                                    404 if not in the bin's 30-day view
+    GET    /bin                     binned in the last 30 days, newest
+                                    first                -> {entries: [entry]}
+    entry gains "binned_at": null | datetime.
+    Everything else (list, get, summary, customers' owes_cents, payments,
+    corrections) treats a binned entry as not there: 404 on get/pay/
+    correct, excluded from totals.
+
+  JOBS (/api/v1/me/jobs)
+    GET    /history?q=              done jobs, not binned, newest first;
+                                    q = job title or client name
+                                    -> {jobs: [job]}
+    DELETE /{id}                    move to the bin      -> 200 {}
+    POST   /{id}/restore            -> 200 {job}
+    GET    /bin                     -> {jobs: [job]}
+    job gains "binned_at". A binned job: not in list/summary; 404 on get,
+    photo, sign-off. A sign-off link already sent for one of its stages
+    keeps working for the client (their answer still lands in the record),
+    unless you'd rather revoke open links on delete -- question 2.
+
+  Rate limits: history/bin 120/min, delete/restore 30/min (per trader).
+
+
+2. DATA
+---------------------------------------------------------------------------
+
+  No new tables and no migration: credit_entries and jobs already have
+  is_deleted + deleted_at (BaseModel). Add an index on (user_id,
+  deleted_at) if the bin query needs it. Payments, corrections, stages
+  and sign-offs are never touched by a delete.
+
+
+3. AUDIT (no names, no phones)
+---------------------------------------------------------------------------
+
+  credit.entry_binned {entry_id}, credit.entry_restored {entry_id}
+  job.binned {job_id}, job.restored {job_id}
+
+
+4. SECURITY
+---------------------------------------------------------------------------
+
+  IDOR: every query by user_id (tests: another trader gets 404 on delete,
+  restore, and sees nothing in history/bin). Input: q CleanText 0..60.
+  Privacy: history search stays on the trader's own data.
+
+
+5. WHAT THE APP DOES TODAY
+---------------------------------------------------------------------------
+
+  Mock (EXPO_PUBLIC_USE_MOCK_API=true): all of the above -- History
+  (search), Delete from an entry or job with the confirm sheet, "Moved to
+  the bin. Undo" for 5 s, Bin with Restore and the 30-day note.
+  Real backend (false): History works now from the existing list
+  endpoints (paid entries / done jobs; cancelled entries come with GET
+  /history); the Delete and Bin controls stay hidden until these
+  endpoints exist (BIN_READY in creditBookApi.ts / jobsApi.ts).
+
+
+6. QUESTIONS FOR MANDLA
+---------------------------------------------------------------------------
+
+  1. OK that history moves paid-back entries off the credit book's main
+     list (it shows only who still owes), and done jobs off the jobs list?
+  2. Binning a job with an open sign-off link: keep the link working (my
+     proposal: the client's answer still counts) or revoke it?
+  3. After 30 days: computed from deleted_at (my proposal), or a
+     purged_from_view_at column?
+
+DECISION:
