@@ -6,9 +6,20 @@
  */
 import type { ImageSourcePropType } from 'react-native';
 
+import type { Offer } from '../types';
 import type { Trade } from '../lib/trades';
 
-export type SampleWork = { file: ImageSourcePropType; stageName: string; jobTitle: string; suburb: string; daysAgo: number };
+export type SampleStage = { name: string; photo?: ImageSourcePropType };
+
+export type SampleBuild = {
+  title: string;
+  suburb: string;
+  daysAgo: number;
+  /** Every stage was confirmed by the client; only some have photos shown. */
+  stages: SampleStage[];
+  /** Builder ids of the partners on it ("me" is the signed-in builder). */
+  with?: string[];
+};
 
 export type SampleBuilder = {
   id: string;
@@ -22,12 +33,12 @@ export type SampleBuilder = {
   about: string;
   phone: string;
   confirmedStages: number;
-  jobsDone: number;
+  buildsConfirmed: number;
   joinedDaysAgo: number;
   activeDaysAgo: number;
-  /** Who they're connected to ("me" is the signed-in builder). */
-  connections: string[];
-  work: SampleWork[];
+  /** Who they've worked a job with. */
+  partners: string[];
+  builds: SampleBuild[];
 };
 
 const photos = {
@@ -60,14 +71,19 @@ export const SAMPLE_BUILDERS: SampleBuilder[] = [
     about: 'Bathrooms, kitchens and geysers. Neat work, on time.',
     phone: '0761234501',
     confirmedStages: 12,
-    jobsDone: 5,
+    buildsConfirmed: 5,
     joinedDaysAgo: 300,
     activeDaysAgo: 1,
-    connections: ['bld-sipho', 'bld-kagiso'],
-    work: [
-      { file: photos.bathroomPipes, stageName: 'Bathroom pipes', jobTitle: 'Bathroom extension', suburb: 'Ivory Park', daysAgo: 12 },
-      { file: photos.pipesUnderSink, stageName: 'Kitchen sink and pipes', jobTitle: 'Kitchen redo', suburb: 'Tembisa', daysAgo: 40 },
-      { file: photos.waterPipe, stageName: 'Yard tap line', jobTitle: 'Water to the back rooms', suburb: 'Rabie Ridge', daysAgo: 75 },
+    partners: ['bld-sipho', 'bld-kagiso'],
+    builds: [
+      {
+        title: 'Bathroom extension',
+        suburb: 'Ivory Park',
+        daysAgo: 12,
+        with: ['bld-sipho'],
+        stages: [{ name: 'Drains' }, { name: 'Bathroom pipes', photo: photos.bathroomPipes }, { name: 'Water line', photo: photos.waterPipe }, { name: 'Taps and geyser' }],
+      },
+      { title: 'Kitchen redo', suburb: 'Tembisa', daysAgo: 40, with: ['bld-kagiso'], stages: [{ name: 'Old pipes out' }, { name: 'Sink and pipes', photo: photos.pipesUnderSink }, { name: 'Final' }] },
     ],
   },
   {
@@ -82,11 +98,19 @@ export const SAMPLE_BUILDERS: SampleBuilder[] = [
     about: 'Rooms, boundary walls and extensions.',
     phone: '0831234502',
     confirmedStages: 18,
-    jobsDone: 7,
+    buildsConfirmed: 7,
     joinedDaysAgo: 250,
     activeDaysAgo: 3,
-    connections: ['me', 'bld-thabo', 'bld-palesa'],
-    work: [{ file: photos.brickWall, stageName: 'Walls', jobTitle: 'Two-room extension', suburb: 'Tembisa', daysAgo: 20 }],
+    partners: ['me', 'bld-thabo', 'bld-palesa', 'bld-andile'],
+    builds: [
+      {
+        title: 'Two-room extension',
+        suburb: 'Tembisa',
+        daysAgo: 20,
+        with: ['bld-palesa'],
+        stages: [{ name: 'Foundation' }, { name: 'Walls', photo: photos.brickWall }, { name: 'Roof' }, { name: 'Plaster and paint' }, { name: 'Final' }],
+      },
+    ],
   },
   {
     id: 'bld-palesa',
@@ -100,11 +124,11 @@ export const SAMPLE_BUILDERS: SampleBuilder[] = [
     about: 'House wiring, plugs and DB boards. Certificate of compliance.',
     phone: '0721234503',
     confirmedStages: 8,
-    jobsDone: 4,
+    buildsConfirmed: 4,
     joinedDaysAgo: 180,
     activeDaysAgo: 6,
-    connections: ['bld-sipho'],
-    work: [{ file: photos.plugBoxes, stageName: 'Plug points', jobTitle: 'Room extension wiring', suburb: 'Birch Acres', daysAgo: 18 }],
+    partners: ['bld-sipho'],
+    builds: [{ title: 'Room extension wiring', suburb: 'Birch Acres', daysAgo: 18, stages: [{ name: 'Conduits' }, { name: 'Plug points', photo: photos.plugBoxes }, { name: 'DB board' }] }],
   },
   {
     id: 'bld-kagiso',
@@ -118,13 +142,13 @@ export const SAMPLE_BUILDERS: SampleBuilder[] = [
     about: 'Floor and wall tiles, straight lines.',
     phone: '0791234504',
     confirmedStages: 15,
-    jobsDone: 6,
+    buildsConfirmed: 6,
     joinedDaysAgo: 210,
     activeDaysAgo: 2,
-    connections: ['bld-thabo'],
-    work: [
-      { file: photos.floorTiles, stageName: 'Floor tiles', jobTitle: 'Lounge floor', suburb: 'Rabie Ridge', daysAgo: 9 },
-      { file: photos.tileLevelling, stageName: 'Kitchen floor', jobTitle: 'Kitchen redo', suburb: 'Tembisa', daysAgo: 33 },
+    partners: ['bld-thabo'],
+    builds: [
+      { title: 'Lounge floor', suburb: 'Rabie Ridge', daysAgo: 9, stages: [{ name: 'Screed' }, { name: 'Floor tiles', photo: photos.floorTiles }] },
+      { title: 'Kitchen redo', suburb: 'Tembisa', daysAgo: 38, with: ['bld-thabo'], stages: [{ name: 'Kitchen floor', photo: photos.tileLevelling }, { name: 'Splashback' }] },
     ],
   },
   {
@@ -139,11 +163,11 @@ export const SAMPLE_BUILDERS: SampleBuilder[] = [
     about: 'Roof trusses, sheeting and tiles.',
     phone: '0741234505',
     confirmedStages: 22,
-    jobsDone: 9,
+    buildsConfirmed: 9,
     joinedDaysAgo: 400,
     activeDaysAgo: 1,
-    connections: [],
-    work: [{ file: photos.roofTrusses, stageName: 'Roof trusses', jobTitle: 'Four-room house', suburb: 'Olifantsfontein', daysAgo: 15 }],
+    partners: [],
+    builds: [{ title: 'Four-room house roof', suburb: 'Olifantsfontein', daysAgo: 15, stages: [{ name: 'Wall plates' }, { name: 'Roof trusses', photo: photos.roofTrusses }, { name: 'Sheeting' }] }],
   },
   {
     id: 'bld-bongani',
@@ -157,11 +181,11 @@ export const SAMPLE_BUILDERS: SampleBuilder[] = [
     about: 'Gates, burglar bars and steel carports.',
     phone: '0781234506',
     confirmedStages: 9,
-    jobsDone: 4,
+    buildsConfirmed: 4,
     joinedDaysAgo: 150,
     activeDaysAgo: 10,
-    connections: [],
-    work: [{ file: photos.steelRoof, stageName: 'Steel frame and roof', jobTitle: 'Carport', suburb: 'Midrand', daysAgo: 25 }],
+    partners: [],
+    builds: [{ title: 'Carport', suburb: 'Midrand', daysAgo: 25, stages: [{ name: 'Posts' }, { name: 'Steel frame and roof', photo: photos.steelRoof }] }],
   },
   {
     id: 'bld-neo',
@@ -175,11 +199,11 @@ export const SAMPLE_BUILDERS: SampleBuilder[] = [
     about: 'Brick paving and walls.',
     phone: '0711234507',
     confirmedStages: 3,
-    jobsDone: 1,
+    buildsConfirmed: 1,
     joinedDaysAgo: 20,
     activeDaysAgo: 2,
-    connections: [],
-    work: [{ file: photos.paving, stageName: 'Paving', jobTitle: 'Driveway', suburb: 'Ebony Park', daysAgo: 6 }],
+    partners: [],
+    builds: [{ title: 'Driveway', suburb: 'Ebony Park', daysAgo: 6, stages: [{ name: 'Levelling' }, { name: 'Paving', photo: photos.paving }] }],
   },
   {
     id: 'bld-zanele',
@@ -193,11 +217,11 @@ export const SAMPLE_BUILDERS: SampleBuilder[] = [
     about: 'Inside and outside painting.',
     phone: '0631234508',
     confirmedStages: 0,
-    jobsDone: 0,
+    buildsConfirmed: 0,
     joinedDaysAgo: 8,
     activeDaysAgo: 1,
-    connections: [],
-    work: [],
+    partners: [],
+    builds: [],
   },
   {
     id: 'bld-refilwe',
@@ -211,11 +235,11 @@ export const SAMPLE_BUILDERS: SampleBuilder[] = [
     about: 'Houses from foundation to roof.',
     phone: '0821234509',
     confirmedStages: 30,
-    jobsDone: 11,
+    buildsConfirmed: 11,
     joinedDaysAgo: 500,
     activeDaysAgo: 4,
-    connections: [],
-    work: [],
+    partners: [],
+    builds: [],
   },
   {
     id: 'bld-pieter',
@@ -229,11 +253,11 @@ export const SAMPLE_BUILDERS: SampleBuilder[] = [
     about: 'Windows, doors and mirrors cut to size.',
     phone: '0841234510',
     confirmedStages: 5,
-    jobsDone: 2,
+    buildsConfirmed: 2,
     joinedDaysAgo: 15,
     activeDaysAgo: 5,
-    connections: [],
-    work: [],
+    partners: [],
+    builds: [],
   },
   {
     id: 'bld-andile',
@@ -247,26 +271,35 @@ export const SAMPLE_BUILDERS: SampleBuilder[] = [
     about: 'Wiring for new rooms and repairs.',
     phone: '0601234511',
     confirmedStages: 4,
-    jobsDone: 2,
+    buildsConfirmed: 2,
     joinedDaysAgo: 60,
     activeDaysAgo: 0,
-    connections: ['bld-sipho'],
-    work: [],
+    partners: ['bld-sipho'],
+    builds: [],
   },
 ];
 
-/** "Your" earlier work, as if from a finished job (the mock has no photos of its own). */
-export const MY_EARLIER_WORK: SampleWork[] = [
-  { file: photos.blockWall, stageName: 'Boundary wall', jobTitle: 'Wall and gate', suburb: 'Tembisa', daysAgo: 45 },
+/** "Your" earlier build, as if from a finished job (the mock's jobs have no photos of their own). */
+export const MY_EARLIER_BUILDS: SampleBuild[] = [
+  { title: 'Wall and gate', suburb: 'Tembisa', daysAgo: 45, with: ['bld-sipho'], stages: [{ name: 'Footings' }, { name: 'Boundary wall', photo: photos.blockWall }, { name: 'Gate posts' }] },
 ];
 
-/** Other builders' open help posts. */
-export const SAMPLE_POSTS: { id: string; ownerId: string; trade: Trade; what: string; startsInDays: number; days: number }[] = [
-  { id: 'hp-musa', ownerId: 'bld-musa', trade: 'general_builder', what: 'Walls up before the roof', startsInDays: 3, days: 4 },
-  { id: 'hp-kagiso', ownerId: 'bld-kagiso', trade: 'plumber', what: 'Move a shower drain', startsInDays: 1, days: 1 },
-  { id: 'hp-refilwe', ownerId: 'bld-refilwe', trade: 'electrician', what: 'Wire a new room', startsInDays: 2, days: 2 },
-  { id: 'hp-bongani', ownerId: 'bld-bongani', trade: 'bricklayer', what: 'Brick pillars for a gate', startsInDays: 5, days: 2 },
+/** Other builders' open help posts, each with its pay. */
+export const SAMPLE_POSTS: { id: string; ownerId: string; trade: Trade; what: string; startsInDays: number; offer: Offer }[] = [
+  { id: 'hp-musa', ownerId: 'bld-musa', trade: 'general_builder', what: 'Walls up before the roof', startsInDays: 3, offer: { kind: 'fixed', amountCents: 600_000, days: 4, paidWhen: 'end' } },
+  { id: 'hp-kagiso', ownerId: 'bld-kagiso', trade: 'plumber', what: 'Move a shower drain', startsInDays: 1, offer: { kind: 'per_day', amountCents: 70_000, days: 1, paidWhen: 'daily' } },
+  { id: 'hp-refilwe', ownerId: 'bld-refilwe', trade: 'electrician', what: 'Wire a new room', startsInDays: 2, offer: { kind: 'fixed', amountCents: 280_000, days: 2, paidWhen: 'stage_confirmed' } },
+  { id: 'hp-bongani', ownerId: 'bld-bongani', trade: 'bricklayer', what: 'Brick pillars for a gate', startsInDays: 5, offer: { kind: 'per_day', amountCents: 55_000, days: 2, paidWhen: 'daily' } },
 ];
 
-/** Who asked to connect with "me". */
-export const SAMPLE_REQUESTS = ['bld-andile'];
+/** Sipho invites "me" onto his job. */
+export const SAMPLE_INVITE = {
+  id: 'inv-sipho',
+  ownerId: 'bld-sipho',
+  jobTitle: 'Boundary wall and gate',
+  suburb: 'Clayville',
+  stageNames: ['Foundation', 'Walls'],
+  trade: 'general_builder' as Trade,
+  startsInDays: 2,
+  offer: { kind: 'fixed', amountCents: 350_000, days: 4, paidWhen: 'stage_confirmed' } as Offer,
+};
