@@ -4,12 +4,14 @@ import { StyleSheet, Text, View } from 'react-native';
 import { Card, Tag } from '@/shared/components/Parts';
 import { colors, fonts } from '@/shared/theme/tokens';
 
+import { paidWhenText, payShort } from '../lib/pay';
 import { neededText, postDetails } from '../lib/postText';
 import type { HelpPost } from '../types';
 
-/** "Plumber needed · Move a shower drain / Rabie Ridge · 5.7 km · from tomorrow · 1 day". */
+/** "Plumber needed · Move a shower drain / R700 a day, every day / Rabie Ridge · 5.7 km · from tomorrow · 1 day". */
 export function HelpPostCard({ post, onPress }: { post: HelpPost; onPress: () => void }) {
   const answered = post.responses.length;
+  const by = post.mine ? '' : `${post.owner?.name.split(' ')[0] ?? ''} · `;
   return (
     <Card onPress={onPress} style={{ gap: 6 }}>
       <View style={styles.head}>
@@ -26,9 +28,12 @@ export function HelpPostCard({ post, onPress }: { post: HelpPost; onPress: () =>
       <Text style={styles.what} numberOfLines={2}>
         {post.what}
       </Text>
+      <Text style={styles.pay}>
+        {payShort(post.offer)}, {paidWhenText(post.offer.paidWhen, [post.what])}
+      </Text>
       <Text style={styles.details}>
-        {post.mine ? '' : `${post.owner?.name.split(' ')[0] ?? ''} · `}
-        {postDetails(post)}
+        {by}
+        {postDetails({ ...post, days: post.offer.days })}
       </Text>
     </Card>
   );
@@ -38,5 +43,6 @@ const styles = StyleSheet.create({
   head: { flexDirection: 'row', alignItems: 'center', gap: 8 },
   title: { flex: 1, fontFamily: fonts.bold, fontSize: 15.5, color: colors.text },
   what: { fontFamily: fonts.medium, fontSize: 14, color: colors.text },
+  pay: { fontFamily: fonts.bold, fontSize: 14, color: colors.jade },
   details: { fontFamily: fonts.body, fontSize: 13, color: colors.textMuted },
 });
