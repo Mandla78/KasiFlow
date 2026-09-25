@@ -1,19 +1,26 @@
 STATUS -- Risuna's tools (update in every PR)
 
 DONE
-  - Credit book frontend (mock), PR 1: list with both tabs, totals,
-    due-today / overdue; new credit sale (new or existing customer,
-    WhatsApp receipt); add supplier debt; entry detail with history;
-    part / full repayment; correction; cancel an entry made by mistake;
-    WhatsApp reminder. Hook suppliersOwedFromOrders() returns [].
+  - Credit book frontend (mock), PR 1
+  - Credit book: approved (DECISION_credit_book.txt) and built end to end
+    on risuna/credit-book-api: customers only, paper-book dates, add a
+    cellphone; backend with migration 0011_credit_book, per-trader rate
+    limits, idempotency, audit without names/phones; the app on the real
+    API (httpCreditBookApi) when EXPO_PUBLIC_USE_MOCK_API=false.
+    Tests: 220 backend (incl. hostile input), 62 jest (the lib checks).
 
 IN PROGRESS
-  - CONTRACT_credit_book.txt: proposed, waiting for Mandla
+  -
 
 BLOCKED (and on what)
-  - Credit book backend: on the contract being approved
+  - The app sending Idempotency-Key: a header option in api()
+    (NEEDS_api_client_headers.txt)
+
+FINDINGS FOR MANDLA
+  - FINDING_deep_json_crash.txt: a deeply nested JSON body crashes every
+    route (the NUL guard in src/__init__.py)
 
 NEXT
-  - Credit book backend + switch the mock to real (after the contract)
-  - Jobs frontend (mock)
+  - Jobs frontend (mock): jobs, stage photos (camera only), practice
+    sign-off, house records
   - Home / Account live lines from creditBookApi.summary() (file 08)
