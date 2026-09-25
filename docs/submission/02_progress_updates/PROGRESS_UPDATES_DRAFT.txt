@@ -3,6 +3,51 @@
 Short, concrete, with substance. Mentors read these and reply.
 ===========================================================================
 
+THE SONKE FORM (4 fields; we submit it THREE times)
+  Where is your team? (0-10)
+  What has been accomplished by the team so far?
+  What will you focus on next?
+  What challenges are you facing?
+  Plan: #1 identity (Fri 23:59) -> #2 the business tools (Sat 23:59) ->
+  #3 suppliers and ordering. No product name, no description of the idea.
+
+
+#1 -- FRIDAY 23:59  (identity only; everything below is built and tested)
+
+  WHERE IS YOUR TEAM?   3
+
+  WHAT HAS BEEN ACCOMPLISHED?
+  Our secure account foundation is complete, end to end (mobile app +
+  backend), with 271 automated tests:
+  - Sign-up with email and password, confirmed by a 6-digit email code
+    (expires in 15 minutes, 5 tries), sent through real email templates;
+    codes are never written to logs.
+  - Sign-in with short-lived access tokens (15 min) and refresh tokens
+    that rotate on every use; sessions can be viewed and signed out
+    remotely ("sign out other phones").
+  - Two-step check on a new phone: an email code, then the phone is
+    trusted for 90 days.
+  - Forgot password: a one-use reset link (30 minutes) that works from
+    the email on any device.
+  - Protection: rate limits on every account route, lockout after 5
+    failed sign-ins (15 min), strict input checks (hidden characters,
+    fake names, oversized values refused), passwords hashed, secrets
+    only in environment settings.
+  - Privacy: download my data, close my account, consent recorded at
+    sign-up, unverified accounts cleaned up automatically, and an
+    append-only audit trail of every security event.
+
+  WHAT WILL YOU FOCUS ON NEXT?
+  The business tools traders use every day, built on this foundation,
+  then connecting traders to their suppliers.
+
+  WHAT CHALLENGES ARE YOU FACING?
+  - Links in messages: WhatsApp doesn't open links that point at a local
+    development address, so we moved all links to a secure https address.
+  - Running the full test suite takes about 12 minutes on our laptops;
+    we run it before every merge anyway.
+
+
 TEMPLATE
   Milestone:   what now works end to end (one line)
   Built:       3-5 bullets, each a thing a user can do
