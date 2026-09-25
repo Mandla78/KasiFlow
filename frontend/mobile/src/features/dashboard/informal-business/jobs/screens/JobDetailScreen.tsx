@@ -11,7 +11,9 @@ import { Title } from '@/shared/components/Text';
 import { formatRand } from '@/shared/lib/money';
 import { colors, fonts } from '@/shared/theme/tokens';
 
-import { jobsApi, PRACTICE_SIGN_OFF } from '../api/jobsApi';
+import { BinConfirmSheet } from '@/features/dashboard/informal-business/credit-book/components/BinConfirmSheet';
+
+import { BIN_READY, jobsApi, PRACTICE_SIGN_OFF } from '../api/jobsApi';
 import { PaidProgress } from '../components/PaidProgress';
 import { SignOffSheet } from '../components/SignOffSheet';
 import { StageStep } from '../components/StageStep';
@@ -29,6 +31,7 @@ export default function JobDetailScreen() {
   const [failure, setFailure] = useState<'missing' | 'network' | null>(null);
   const [picked, setPicked] = useState<string | null>(null);
   const [signOff, setSignOff] = useState(false);
+  const [binning, setBinning] = useState(false);
   const [note, setNote] = useState('');
 
   const load = useCallback(() => {
@@ -142,6 +145,29 @@ export default function JobDetailScreen() {
           last
         />
       </Card>
+
+      {BIN_READY ? (
+        <Pressable accessibilityRole="button" onPress={() => setBinning(true)} style={styles.practice}>
+          <Feather name="trash-2" size={15} color={colors.garnet} />
+          <Text style={[styles.practiceText, { color: colors.garnet }]}>Move this job to the bin</Text>
+        </Pressable>
+      ) : null}
+
+      {binning ? (
+        <BinConfirmSheet
+          title={`Delete ${job.title}?`}
+          keeps={
+            job.stages.some((s) => s.status === 'confirmed')
+              ? `Stages ${job.clientName} confirmed stay in your record and in any record you share.`
+              : undefined
+          }
+          onClose={() => setBinning(false)}
+          onConfirm={async () => {
+            await jobsApi.moveToBin(job.id);
+            router.dismissTo({ pathname: '/informal-business/jobs', params: { binned: job.id } });
+          }}
+        />
+      ) : null}
 
       {signOff && stage ? (
         <SignOffSheet
