@@ -49,6 +49,7 @@ describe('distance and parts', () => {
     expect(kmText(km)).toMatch(/^3\.\d km$/);
     expect(kmText(14.6)).toBe('15 km');
     expect(kmText(9.96)).toBe('10 km');
+    expect(kmText(Number.NaN)).toBe('near you');
   });
 
   it('gives no closeness past your travel distance', () => {

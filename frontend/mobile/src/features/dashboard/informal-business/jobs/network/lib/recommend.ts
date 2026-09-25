@@ -53,8 +53,9 @@ export function distanceKm(a: At, b: At): number {
   return 6371 * 2 * Math.asin(Math.sqrt(h));
 }
 
-/** 3.2 -> "3.2 km", 9.96 -> "10 km", 14.6 -> "15 km". */
+/** 3.2 -> "3.2 km", 9.96 -> "10 km", 14.6 -> "15 km"; no pin to measure from -> "near you". */
 export function kmText(km: number): string {
+  if (!Number.isFinite(km)) return 'near you';
   const tenths = Math.round(km * 10) / 10;
   return `${tenths < 10 ? tenths.toFixed(1) : tenths.toFixed(0)} km`;
 }
