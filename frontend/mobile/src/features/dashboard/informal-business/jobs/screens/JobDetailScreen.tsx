@@ -15,6 +15,7 @@ import { BinConfirmSheet } from '@/features/dashboard/informal-business/credit-b
 
 import { BIN_READY, jobsApi, PRACTICE_SIGN_OFF } from '../api/jobsApi';
 import { PaidProgress } from '../components/PaidProgress';
+import { NETWORK_READY } from '../network/api/networkApi';
 import { SignOffSheet } from '../components/SignOffSheet';
 import { StageStep } from '../components/StageStep';
 import { confirmedCents, currentStage } from '../lib/stages';
@@ -142,8 +143,17 @@ export default function JobDetailScreen() {
           title="House record"
           subtitle="This job's stages with photos and sign-offs"
           onPress={() => router.push({ pathname: '/informal-business/jobs/[id]/record', params: { id: job.id } })}
-          last
+          last={!NETWORK_READY || job.status !== 'active'}
         />
+        {NETWORK_READY && job.status === 'active' ? (
+          <ListRow
+            icon="users"
+            title="Need help on this job?"
+            subtitle="Ask for a plumber, electrician, roofer... Builders near the job see it."
+            onPress={() => router.push({ pathname: '/informal-business/jobs/[id]/help', params: { id: job.id } })}
+            last
+          />
+        ) : null}
       </Card>
 
       {BIN_READY ? (
