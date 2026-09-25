@@ -30,4 +30,8 @@ from src.domains.identity.auth.api import routes as _auth_routes  # noqa: E402,F
 from src.domains.informal_trader.business_profile.api import routes as _business_profile_routes  # noqa: E402,F401
 from src.domains.informal_trader.credit_book.api import routes as _credit_book_routes  # noqa: E402,F401
 from src.domains.informal_trader.jobs.api import routes as _jobs_routes  # noqa: E402,F401
+from src.domains.commerce.orders.api import routes as _orders_routes  # noqa: E402,F401
+from src.domains.supplier.catalogue.api import routes as _catalogue_routes  # noqa: E402,F401
+from src.domains.supplier.connections.api import routes as _connections_routes  # noqa: E402,F401
+from src.domains.supplier.recommendation.api import routes as _recommendation_routes  # noqa: E402,F401
 from src.shared.geocoding import routes as _geocoding_routes  # noqa: E402,F401

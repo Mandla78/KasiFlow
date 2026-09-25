@@ -13,6 +13,8 @@ from typing import Any, Optional
 
 from src.core.base_model import utcnow
 from src.shared.audit.event_types.supplier import SupplierAuditEvent as E
+from src.shared.constants.commerce_policy import cash_limit_for
+from src.shared.media.public_urls import delivery_url
 
 from ..models import Supplier
 from ..repositories import supplier_repository as repo
@@ -64,3 +66,36 @@ def initials(name: str) -> str:
     if len(words) >= 2:
         return (words[0][0] + words[1][0]).upper()
     return (words[0][:2] if words else name[:2]).upper()
+
+
+def area(s: Supplier) -> str:
+    """Short place name for lists: "Tembisa"."""
+    return s.suburb or s.city
+
+
+def public_view(s: Supplier) -> dict:
+    """What a TRADER may see. Never: the orders email, phone, legal name,
+    VAT number or payout id (those are for us and the supplier's system)."""
+    return {
+        "id": str(s.id),
+        "name": s.trading_name,
+        "initials": initials(s.trading_name),
+        "color": s.brand_color,
+        "logo_url": delivery_url(s.logo_url, 200) if s.logo_url else None,
+        "verified": s.verified_at is not None,
+        "about": s.about or "",
+        "area": area(s),
+        "address": ", ".join(p for p in (s.street, s.suburb, s.city, s.postal_code) if p),
+        "hours": s.hours,
+        "delivers": s.delivers,
+        "delivery_radius_km": s.delivery_radius_km,
+        "delivery_fee_cents": s.delivery_fee_cents,
+        "free_delivery_over_cents": s.free_delivery_over_cents,
+        "collect": s.collect,
+        "accepts_in_app": s.accepts_in_app,
+        "accepts_cash": s.accepts_cash,
+        # Ours applied on top of theirs (shared/constants/commerce_policy.py).
+        "cash_limit_cents": cash_limit_for(s.accepts_cash, s.cash_limit_cents),
+        "minimum_order_cents": s.minimum_order_cents,
+        "categories": s.categories,
+    }

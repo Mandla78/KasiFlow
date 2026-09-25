@@ -1,6 +1,7 @@
 /**
  * MOCK orders, doing what the server will (docs/supplier/04):
- *  - prices every line from the CATALOGUE, never from the cart
+ *  - prices every line from the CATALOGUE, never from the cart (the active
+ *    one: the server's when EXPO_PUBLIC_USE_MOCK_API=false, else the mock)
  *  - enforces the supplier's minimum order, what it accepts, and the cash
  *    rules (R1,000 per order, 2 waiting at a time: ../lib/cashPolicy)
  *  - adds the delivery fee unless the order is over the free-delivery total
@@ -15,8 +16,10 @@
 import { formatRand } from '@/shared/lib/money';
 
 import { notify } from '../../notifications/lib/notificationStore';
-import { findMockProduct } from '../../catalogue/api/mockCatalogueData';
-import { findMockSupplier } from '../../suppliers/api/mockSupplierData';
+import { catalogueApi } from '../../catalogue/api/catalogueApi';
+import type { Product } from '../../catalogue/types';
+import { supplierApi } from '../../suppliers/api/supplierApi';
+import type { Supplier } from '../../suppliers/types';
 import { cashLimitFor, MAX_OPEN_CASH_ORDERS } from '../lib/cashPolicy';
 import { isActive } from '../lib/status';
 import { Order, OrderError, OrderEvent, OrderLine, OrdersApi, OrderStatus } from '../types';
@@ -81,13 +84,14 @@ function announce(o: Order) {
 export const mockOrdersApi: OrdersApi = {
   async place(input) {
     await wait(900);
-    const supplier = findMockSupplier(input.supplierId);
+    const supplier: Supplier | null = await supplierApi.get(input.supplierId).catch(() => null);
     if (!supplier) throw new OrderError('NOT_FOUND', 'This supplier is no longer available.');
     if (input.payment === 'cash' && !supplier.cash) throw new OrderError('NOT_ACCEPTED', `${supplier.name} doesn't take cash.`);
     if (input.payment === 'in_app' && !supplier.payfast) throw new OrderError('NOT_ACCEPTED', `${supplier.name} doesn't take payment in the app.`);
 
-    const lines: OrderLine[] = input.lines.map(({ productId, qty }) => {
-      const p = findMockProduct(productId);
+    const products = await Promise.all(input.lines.map(({ productId }) => catalogueApi.product(productId).catch((): Product | null => null)));
+    const lines: OrderLine[] = input.lines.map(({ productId, qty }, i) => {
+      const p = products[i];
       if (!p || p.supplierId !== supplier.id) throw new OrderError('NOT_FOUND', 'A product in your cart is no longer available.');
       if (p.stock === 'out') throw new OrderError('OUT_OF_STOCK', `${p.name} is out of stock. Remove it and try again.`);
       return { productId, name: p.name, packSize: p.packSize, unit: p.unit, qty, priceCents: p.priceCents, lineTotalCents: p.priceCents * qty };
@@ -117,7 +121,7 @@ export const mockOrdersApi: OrdersApi = {
       payment: input.payment,
       paymentStatus: input.payment === 'in_app' ? 'unpaid' : 'cash_due',
       fulfilment: input.fulfilment,
-      address: input.fulfilment === 'collect' ? supplier.address : input.deliveryAddress ?? '',
+      address: input.fulfilment === 'collect' ? supplier.address : input.deliveryAddress ?? 'Your business address',
       lines,
       subtotalCents,
       deliveryFeeCents,

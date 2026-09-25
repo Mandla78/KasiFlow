@@ -8,6 +8,12 @@
                                    products.csv per sub-folder) through the
                                    same checks a supplier's own system gets.
                                    Default: seed/suppliers. Development only.
+    flask orders move REF STATUS   play the supplier's side of an order
+                                   (accepted, rejected, out_for_delivery,
+                                   ready_for_collection, delivered,
+                                   collected) until suppliers' own systems
+                                   do it through the integration API.
+                                   Development only.
 """
 from __future__ import annotations
 
@@ -61,3 +67,27 @@ def register_cli(app: Flask) -> None:
             raise click.ClickException(f"{failed} supplier feed(s) refused.")
 
     app.cli.add_command(suppliers)
+
+    orders = AppGroup("orders", help="Orders (development tools).")
+
+    @orders.command("move")
+    @click.argument("reference")
+    @click.argument("status")
+    def move(reference: str, status: str) -> None:
+        """Move order REFERENCE (e.g. AKZ-2026-000101) to STATUS as the supplier would."""
+        if app.config.get("ENV_NAME") not in ("development", "testing"):
+            raise click.ClickException("Only in development: suppliers move real orders from their own systems.")
+        from src.core.exceptions import AppError
+        from src.domains.commerce.orders.repositories import order_repository
+        from src.domains.commerce.orders.services import order_service
+
+        order = order_repository.by_reference(reference.strip().upper())
+        if order is None:
+            raise click.ClickException(f"No order {reference}.")
+        try:
+            order_service.supplier_move(order.id, status)
+        except AppError as e:
+            raise click.ClickException(e.message) from None
+        click.echo(f"  {order.reference}: now {status.replace('_', ' ')}")
+
+    app.cli.add_command(orders)

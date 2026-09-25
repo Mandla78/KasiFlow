@@ -28,7 +28,7 @@ import type { SupplierMatch } from '../types';
  */
 export default function SuppliersScreen() {
   const { profile } = useSession();
-  const { isConnected, ask, sheet } = useConnect();
+  const { isConnected, ask, sheet, syncFromServer } = useConnect();
   const [matches, setMatches] = useState<SupplierMatch[] | null>(null);
   const [failed, setFailed] = useState(false);
   const [chip, setChip] = useState<CategoryCode | 'all'>('all');
@@ -47,6 +47,11 @@ export default function SuppliersScreen() {
       live = false;
     };
   }, [place, profile.categories, profile.buying]);
+
+  // The server knows the connections (in mock mode the profile does).
+  useEffect(() => {
+    if (matches?.some((m) => m.connected !== undefined)) syncFromServer(matches.filter((m) => m.connected).map((m) => m.id));
+  }, [matches, syncFromServer]);
 
   const q = query.trim().toLowerCase();
   const shown = (matches ?? []).filter(

@@ -1,187 +1,187 @@
-product_code,name,brand,category,unit,pack_size,units_per_pack,price_rands,compare_at_rands,vat_rate,vat_included,stock,min_qty,max_qty,unit_barcode,case_barcode,weight_kg,description,active
-SOWETO-FG-0000,Super maize meal,Kasi Gold,food_grocery,bag,10 kg,1,81.59,99.39,zero,true,218,1,200,2070000000001,,10,Fine white maize meal for pap.,true
-SOWETO-FG-0001,Super maize meal,Mill Street,food_grocery,bag,10 kg,1,88.49,,zero,true,212,1,200,2070000000018,,10,Fine white maize meal for pap.,true
-SOWETO-FG-0002,Super maize meal,Harvest Tin,food_grocery,bag,10 kg,1,95.59,,zero,true,4,1,200,2070000000025,,10,Fine white maize meal for pap.,true
-SOWETO-FG-0010,Super maize meal,Kasi Gold,food_grocery,bag,25 kg,1,188.59,222.49,zero,true,138,1,200,2070000000032,,25,Fine white maize meal for pap.,true
-SOWETO-FG-0011,Super maize meal,Mill Street,food_grocery,bag,25 kg,1,200.99,,zero,true,279,1,200,2070000000049,,25,Fine white maize meal for pap.,true
-SOWETO-FG-0012,Super maize meal,Harvest Tin,food_grocery,bag,25 kg,1,219.19,,zero,true,0,1,200,2070000000056,,25,Fine white maize meal for pap.,true
-SOWETO-FG-0100,Long grain parboiled rice,Kasi Gold,food_grocery,bag,2 kg,1,35.79,,zero,true,300,1,200,2070000000063,,2,Non-sticky parboiled rice.,true
-SOWETO-FG-0101,Long grain parboiled rice,Mill Street,food_grocery,bag,2 kg,1,39.09,,zero,true,0,1,200,2070000000070,,2,Non-sticky parboiled rice.,true
-SOWETO-FG-0102,Long grain parboiled rice,Harvest Tin,food_grocery,bag,2 kg,1,41.79,50.19,zero,true,302,1,200,2070000000087,,2,Non-sticky parboiled rice.,true
-SOWETO-FG-0110,Long grain parboiled rice,Kasi Gold,food_grocery,bag,10 kg,1,151.89,,zero,true,1,1,200,2070000000094,,10,Non-sticky parboiled rice.,true
-SOWETO-FG-0111,Long grain parboiled rice,Mill Street,food_grocery,bag,10 kg,1,165.99,190.69,zero,true,74,1,200,2070000000100,,10,Non-sticky parboiled rice.,true
-SOWETO-FG-0112,Long grain parboiled rice,Harvest Tin,food_grocery,bag,10 kg,1,176.59,,zero,true,352,1,200,2070000000117,,10,Non-sticky parboiled rice.,true
-SOWETO-FG-0200,Cake flour,Kasi Gold,food_grocery,bag,2.5 kg,1,37.69,,standard,true,27,1,200,2070000000124,,2.5,White cake flour for baking and vetkoek.,true
-SOWETO-FG-0201,Cake flour,Mill Street,food_grocery,bag,2.5 kg,1,42.39,,standard,true,77,1,200,2070000000131,,2.5,White cake flour for baking and vetkoek.,true
-SOWETO-FG-0202,Cake flour,Harvest Tin,food_grocery,bag,2.5 kg,1,44.29,,standard,true,335,1,200,2070000000148,,2.5,White cake flour for baking and vetkoek.,true
-SOWETO-FG-0210,Cake flour,Kasi Gold,food_grocery,bag,10 kg,1,125.29,150.29,standard,true,208,1,200,2070000000155,,10,White cake flour for baking and vetkoek.,true
-SOWETO-FG-0211,Cake flour,Mill Street,food_grocery,bag,10 kg,1,136.39,,standard,true,286,1,200,2070000000162,,10,White cake flour for baking and vetkoek.,true
-SOWETO-FG-0212,Cake flour,Harvest Tin,food_grocery,bag,10 kg,1,149.19,,standard,true,271,1,200,2070000000179,,10,White cake flour for baking and vetkoek.,true
-SOWETO-FG-0300,White sugar,Kasi Gold,food_grocery,bag,2.5 kg,1,53.19,,standard,true,150,1,200,2070000000186,,2.5,Refined white sugar.,true
-SOWETO-FG-0301,White sugar,Mill Street,food_grocery,bag,2.5 kg,1,57.59,,standard,true,388,1,200,2070000000193,,2.5,Refined white sugar.,true
-SOWETO-FG-0302,White sugar,Harvest Tin,food_grocery,bag,2.5 kg,1,63.59,,standard,true,390,1,200,2070000000209,,2.5,Refined white sugar.,true
-SOWETO-FG-0310,White sugar,Kasi Gold,food_grocery,bag,10 kg,1,192.49,218.29,standard,true,0,1,200,2070000000216,,10,Refined white sugar.,true
-SOWETO-FG-0311,White sugar,Mill Street,food_grocery,bag,10 kg,1,216.79,,standard,true,43,1,200,2070000000223,,10,Refined white sugar.,true
-SOWETO-FG-0312,White sugar,Harvest Tin,food_grocery,bag,10 kg,1,227.29,255.09,standard,true,18,1,200,2070000000230,,10,Refined white sugar.,true
-SOWETO-FG-0400,Brown sugar,Kasi Gold,food_grocery,bag,2 kg,1,39.69,48.89,standard,true,0,1,200,2070000000247,,2,Soft brown sugar.,true
-SOWETO-FG-0401,Brown sugar,Mill Street,food_grocery,bag,2 kg,1,43.59,53.09,standard,true,17,1,200,2070000000254,,2,Soft brown sugar.,true
-SOWETO-FG-0402,Brown sugar,Harvest Tin,food_grocery,bag,2 kg,1,46.49,,standard,true,3,1,200,2070000000261,,2,Soft brown sugar.,true
-SOWETO-FG-0500,Sunflower cooking oil,Kasi Gold,food_grocery,bottle,2 litre,1,62.39,71.99,zero,true,358,1,200,2070000000278,,2,Pure sunflower oil.,true
-SOWETO-FG-0501,Sunflower cooking oil,Mill Street,food_grocery,bottle,2 litre,1,68.79,,zero,true,180,1,200,2070000000285,,2,Pure sunflower oil.,true
-SOWETO-FG-0502,Sunflower cooking oil,Harvest Tin,food_grocery,bottle,2 litre,1,72.49,,zero,true,284,1,200,2070000000292,,2,Pure sunflower oil.,true
-SOWETO-FG-0510,Sunflower cooking oil,Kasi Gold,food_grocery,bottle,5 litre,1,133.99,,zero,true,169,1,200,2070000000308,,5,Pure sunflower oil.,true
-SOWETO-FG-0511,Sunflower cooking oil,Mill Street,food_grocery,bottle,5 litre,1,146.99,,zero,true,66,1,200,2070000000315,,5,Pure sunflower oil.,true
-SOWETO-FG-0512,Sunflower cooking oil,Harvest Tin,food_grocery,bottle,5 litre,1,159.39,,zero,true,341,1,200,2070000000322,,5,Pure sunflower oil.,true
-SOWETO-FG-0600,Baked beans in tomato sauce,Kasi Gold,food_grocery,case,24 x 410 g,24,268.19,,standard,true,322,1,200,2070000000339,12070000000336,9.84,A case of 24 tins.,true
-SOWETO-FG-0601,Baked beans in tomato sauce,Mill Street,food_grocery,case,24 x 410 g,24,286.59,,standard,true,291,1,200,2070000000346,12070000000343,9.84,A case of 24 tins.,true
-SOWETO-FG-0602,Baked beans in tomato sauce,Harvest Tin,food_grocery,case,24 x 410 g,24,314.29,,standard,true,181,1,200,2070000000353,12070000000350,9.84,A case of 24 tins.,true
-SOWETO-FG-0700,Pilchards in tomato sauce,Kasi Gold,food_grocery,case,24 x 400 g,24,545.09,610.79,zero,true,76,1,200,2070000000360,12070000000367,9.6,"Canned pilchards, a case of 24.",true
-SOWETO-FG-0701,Pilchards in tomato sauce,Mill Street,food_grocery,case,24 x 400 g,24,570.19,,zero,true,162,1,200,2070000000377,12070000000374,9.6,"Canned pilchards, a case of 24.",true
-SOWETO-FG-0702,Pilchards in tomato sauce,Harvest Tin,food_grocery,case,24 x 400 g,24,616.09,,zero,true,9,1,200,2070000000384,12070000000381,9.6,"Canned pilchards, a case of 24.",true
-SOWETO-FG-0800,Chicken instant noodles,Kasi Gold,food_grocery,case,40 x 73 g,40,181.09,,standard,true,93,1,200,2070000000391,12070000000398,2.92,Chicken-flavoured instant noodles.,true
-SOWETO-FG-0801,Chicken instant noodles,Mill Street,food_grocery,case,40 x 73 g,40,194.19,,standard,true,31,1,200,2070000000407,12070000000404,2.92,Chicken-flavoured instant noodles.,true
-SOWETO-FG-0802,Chicken instant noodles,Harvest Tin,food_grocery,case,40 x 73 g,40,211.89,,standard,true,381,1,200,2070000000414,12070000000411,2.92,Chicken-flavoured instant noodles.,true
-SOWETO-FG-0900,Samp,Kasi Gold,food_grocery,bag,5 kg,1,67.29,,zero,true,380,1,200,2070000000421,,5,Crushed dried maize kernels.,true
-SOWETO-FG-0901,Samp,Mill Street,food_grocery,bag,5 kg,1,73.19,82.09,zero,true,287,1,200,2070000000438,,5,Crushed dried maize kernels.,true
-SOWETO-FG-0902,Samp,Harvest Tin,food_grocery,bag,5 kg,1,77.49,,zero,true,288,1,200,2070000000445,,5,Crushed dried maize kernels.,true
-SOWETO-FG-1000,Sugar beans,Kasi Gold,food_grocery,bag,2 kg,1,59.09,,zero,true,206,1,200,2070000000452,,2,Dried speckled sugar beans.,true
-SOWETO-FG-1001,Sugar beans,Mill Street,food_grocery,bag,2 kg,1,62.39,,zero,true,87,1,200,2070000000469,,2,Dried speckled sugar beans.,true
-SOWETO-FG-1002,Sugar beans,Harvest Tin,food_grocery,bag,2 kg,1,67.79,,zero,true,132,1,200,2070000000476,,2,Dried speckled sugar beans.,true
-SOWETO-FG-1100,Black tea bags,Kasi Gold,food_grocery,pack,100 bags,100,48.39,,standard,true,305,1,200,2070000000483,12070000000480,,Tagless black tea bags.,true
-SOWETO-FG-1101,Black tea bags,Mill Street,food_grocery,pack,100 bags,100,52.69,,standard,true,210,1,200,2070000000490,12070000000497,,Tagless black tea bags.,true
-SOWETO-FG-1102,Black tea bags,Harvest Tin,food_grocery,pack,100 bags,100,56.99,,standard,true,187,1,200,2070000000506,12070000000503,,Tagless black tea bags.,true
-SOWETO-FG-1110,Black tea bags,Kasi Gold,food_grocery,pack,200 bags,200,88.89,100.99,standard,true,252,1,200,2070000000513,12070000000510,,Tagless black tea bags.,true
-SOWETO-FG-1111,Black tea bags,Mill Street,food_grocery,pack,200 bags,200,96.79,,standard,true,8,1,200,2070000000520,12070000000527,,Tagless black tea bags.,true
-SOWETO-FG-1112,Black tea bags,Harvest Tin,food_grocery,pack,200 bags,200,103.79,,standard,true,348,1,200,2070000000537,12070000000534,,Tagless black tea bags.,true
-SOWETO-FG-1200,Instant coffee,Kasi Gold,food_grocery,tin,250 g,1,80.09,,standard,true,9,1,200,2070000000544,,,Granulated instant coffee.,true
-SOWETO-FG-1201,Instant coffee,Mill Street,food_grocery,tin,250 g,1,88.09,,standard,true,286,1,200,2070000000551,,,Granulated instant coffee.,true
-SOWETO-FG-1202,Instant coffee,Harvest Tin,food_grocery,tin,250 g,1,92.79,,standard,true,154,1,200,2070000000568,,,Granulated instant coffee.,true
-SOWETO-FG-1300,Iodated table salt,Kasi Gold,food_grocery,case,24 x 500 g,24,108.59,,standard,true,6,1,200,2070000000575,12070000000572,12,Fine iodated salt.,true
-SOWETO-FG-1301,Iodated table salt,Mill Street,food_grocery,case,24 x 500 g,24,117.79,137.59,standard,true,153,1,200,2070000000582,12070000000589,12,Fine iodated salt.,true
-SOWETO-FG-1302,Iodated table salt,Harvest Tin,food_grocery,case,24 x 500 g,24,125.79,148.99,standard,true,4,1,200,2070000000599,12070000000596,12,Fine iodated salt.,true
-SOWETO-FG-1400,"Peanut butter, smooth",Kasi Gold,food_grocery,case,12 x 400 g,12,369.89,,standard,true,5,1,200,2070000000605,12070000000602,4.8,Smooth peanut butter.,true
-SOWETO-FG-1401,"Peanut butter, smooth",Mill Street,food_grocery,case,12 x 400 g,12,410.89,,standard,true,3,1,200,2070000000612,12070000000619,4.8,Smooth peanut butter.,true
-SOWETO-FG-1402,"Peanut butter, smooth",Harvest Tin,food_grocery,case,12 x 400 g,12,447.19,518.29,standard,true,274,1,200,2070000000629,12070000000626,4.8,Smooth peanut butter.,true
-SOWETO-FG-1500,Apricot jam,Kasi Gold,food_grocery,case,12 x 450 g,12,317.49,371.59,standard,true,8,1,200,2070000000636,12070000000633,5.4,Smooth apricot jam.,true
-SOWETO-FG-1501,Apricot jam,Mill Street,food_grocery,case,12 x 450 g,12,346.79,,standard,true,237,1,200,2070000000643,12070000000640,5.4,Smooth apricot jam.,true
-SOWETO-FG-1502,Apricot jam,Harvest Tin,food_grocery,case,12 x 450 g,12,371.09,,standard,true,120,1,200,2070000000650,12070000000657,5.4,Smooth apricot jam.,true
-SOWETO-BV-0000,Cola soft drink,Fizz Co,beverages,case,24 x 330 ml cans,24,168.89,200.69,standard,true,282,1,200,2070000000667,12070000000664,7.92,"Cold drink, a full case.",true
-SOWETO-BV-0001,Cola soft drink,Clear Spring,beverages,case,24 x 330 ml cans,24,183.59,,standard,true,0,1,200,2070000000674,12070000000671,7.92,"Cold drink, a full case.",true
-SOWETO-BV-0002,Cola soft drink,Sunny Farm,beverages,case,24 x 330 ml cans,24,198.89,,standard,true,386,1,200,2070000000681,12070000000688,7.92,"Cold drink, a full case.",true
-SOWETO-BV-0010,Cola soft drink,Fizz Co,beverages,case,12 x 2 litre,12,232.39,,standard,true,297,1,200,2070000000698,12070000000695,24,"Cold drink, a full case.",true
-SOWETO-BV-0011,Cola soft drink,Clear Spring,beverages,case,12 x 2 litre,12,254.49,286.69,standard,true,295,1,200,2070000000704,12070000000701,24,"Cold drink, a full case.",true
-SOWETO-BV-0012,Cola soft drink,Sunny Farm,beverages,case,12 x 2 litre,12,275.29,,standard,true,164,1,200,2070000000711,12070000000718,24,"Cold drink, a full case.",true
-SOWETO-BV-0100,Orange soft drink,Fizz Co,beverages,case,24 x 330 ml cans,24,158.69,,standard,true,310,1,200,2070000000728,12070000000725,7.92,Orange-flavoured cold drink.,true
-SOWETO-BV-0101,Orange soft drink,Clear Spring,beverages,case,24 x 330 ml cans,24,173.69,,standard,true,262,1,200,2070000000735,12070000000732,7.92,Orange-flavoured cold drink.,true
-SOWETO-BV-0102,Orange soft drink,Sunny Farm,beverages,case,24 x 330 ml cans,24,190.59,,standard,true,233,1,200,2070000000742,12070000000749,7.92,Orange-flavoured cold drink.,true
-SOWETO-BV-0110,Orange soft drink,Fizz Co,beverages,case,12 x 2 litre,12,216.89,,standard,true,270,1,200,2070000000759,12070000000756,24,Orange-flavoured cold drink.,true
-SOWETO-BV-0111,Orange soft drink,Clear Spring,beverages,case,12 x 2 litre,12,230.89,,standard,true,209,1,200,2070000000766,12070000000763,24,Orange-flavoured cold drink.,true
-SOWETO-BV-0112,Orange soft drink,Sunny Farm,beverages,case,12 x 2 litre,12,248.19,,standard,true,327,1,200,2070000000773,12070000000770,24,Orange-flavoured cold drink.,true
-SOWETO-BV-0200,Lemon-lime soft drink,Fizz Co,beverages,case,24 x 330 ml cans,24,159.69,,standard,true,284,1,200,2070000000780,12070000000787,7.92,Lemon-lime cold drink.,true
-SOWETO-BV-0201,Lemon-lime soft drink,Clear Spring,beverages,case,24 x 330 ml cans,24,173.39,,standard,true,246,1,200,2070000000797,12070000000794,7.92,Lemon-lime cold drink.,true
-SOWETO-BV-0202,Lemon-lime soft drink,Sunny Farm,beverages,case,24 x 330 ml cans,24,191.59,,standard,true,291,1,200,2070000000803,12070000000800,7.92,Lemon-lime cold drink.,true
-SOWETO-BV-0300,Still water,Fizz Co,beverages,case,24 x 500 ml,24,87.99,100.89,standard,true,174,1,200,2070000000810,12070000000817,12,Still spring water.,true
-SOWETO-BV-0301,Still water,Clear Spring,beverages,case,24 x 500 ml,24,95.09,,standard,true,141,1,200,2070000000827,12070000000824,12,Still spring water.,true
-SOWETO-BV-0302,Still water,Sunny Farm,beverages,case,24 x 500 ml,24,106.39,,standard,true,203,1,200,2070000000834,12070000000831,12,Still spring water.,true
-SOWETO-BV-0310,Still water,Fizz Co,beverages,case,6 x 5 litre,6,106.29,,standard,true,2,1,200,2070000000841,12070000000848,30,Still spring water.,true
-SOWETO-BV-0311,Still water,Clear Spring,beverages,case,6 x 5 litre,6,116.99,,standard,true,25,1,200,2070000000858,12070000000855,30,Still spring water.,true
-SOWETO-BV-0312,Still water,Sunny Farm,beverages,case,6 x 5 litre,6,125.19,,standard,true,25,1,200,2070000000865,12070000000862,30,Still spring water.,true
-SOWETO-BV-0400,Sparkling water,Fizz Co,beverages,case,24 x 500 ml,24,104.99,,standard,true,329,1,200,2070000000872,12070000000879,12,Sparkling spring water.,true
-SOWETO-BV-0401,Sparkling water,Clear Spring,beverages,case,24 x 500 ml,24,116.79,,standard,true,0,1,200,2070000000889,12070000000886,12,Sparkling spring water.,true
-SOWETO-BV-0402,Sparkling water,Sunny Farm,beverages,case,24 x 500 ml,24,124.09,148.09,standard,true,263,1,200,2070000000896,12070000000893,12,Sparkling spring water.,true
-SOWETO-BV-0500,Fruit juice blend,Fizz Co,beverages,case,6 x 1 litre,6,116.29,,standard,true,362,1,200,2070000000902,12070000000909,6,100% fruit juice blend.,true
-SOWETO-BV-0501,Fruit juice blend,Clear Spring,beverages,case,6 x 1 litre,6,126.49,146.69,standard,true,254,1,200,2070000000919,12070000000916,6,100% fruit juice blend.,true
-SOWETO-BV-0502,Fruit juice blend,Sunny Farm,beverages,case,6 x 1 litre,6,135.79,,standard,true,379,1,200,2070000000926,12070000000923,6,100% fruit juice blend.,true
-SOWETO-BV-0510,Fruit juice blend,Fizz Co,beverages,case,24 x 200 ml,24,142.49,,standard,true,217,1,200,2070000000933,12070000000930,4.8,100% fruit juice blend.,true
-SOWETO-BV-0511,Fruit juice blend,Clear Spring,beverages,case,24 x 200 ml,24,157.39,,standard,true,0,1,200,2070000000940,12070000000947,4.8,100% fruit juice blend.,true
-SOWETO-BV-0512,Fruit juice blend,Sunny Farm,beverages,case,24 x 200 ml,24,167.59,207.59,standard,true,238,1,200,2070000000957,12070000000954,4.8,100% fruit juice blend.,true
-SOWETO-BV-0600,Dairy fruit mix drink,Fizz Co,beverages,case,12 x 500 ml,12,153.69,,standard,true,2,1,200,2070000000964,12070000000961,6,Fruit and dairy blend.,true
-SOWETO-BV-0601,Dairy fruit mix drink,Clear Spring,beverages,case,12 x 500 ml,12,164.59,,standard,true,260,1,200,2070000000971,12070000000978,6,Fruit and dairy blend.,true
-SOWETO-BV-0602,Dairy fruit mix drink,Sunny Farm,beverages,case,12 x 500 ml,12,175.99,,standard,true,342,1,200,2070000000988,12070000000985,6,Fruit and dairy blend.,true
-SOWETO-BV-0700,Energy drink,Fizz Co,beverages,case,24 x 500 ml,24,320.79,,standard,true,367,1,200,2070000000995,12070000000992,12,Energy drink cans.,true
-SOWETO-BV-0701,Energy drink,Clear Spring,beverages,case,24 x 500 ml,24,353.59,423.69,standard,true,382,1,200,2070000001008,12070000001005,12,Energy drink cans.,true
-SOWETO-BV-0702,Energy drink,Sunny Farm,beverages,case,24 x 500 ml,24,369.99,,standard,true,300,1,200,2070000001015,12070000001012,12,Energy drink cans.,true
-SOWETO-BV-0800,"Cordial, orange",Fizz Co,beverages,case,6 x 1 litre,6,135.79,,standard,true,400,1,200,2070000001022,12070000001029,6,Dilute to taste.,true
-SOWETO-BV-0801,"Cordial, orange",Clear Spring,beverages,case,6 x 1 litre,6,144.09,,standard,true,323,1,200,2070000001039,12070000001036,6,Dilute to taste.,true
-SOWETO-BV-0802,"Cordial, orange",Sunny Farm,beverages,case,6 x 1 litre,6,155.99,,standard,true,337,1,200,2070000001046,12070000001043,6,Dilute to taste.,true
-SOWETO-BV-0900,"Mageu, original",Fizz Co,beverages,case,6 x 1 litre,6,97.19,113.69,standard,true,322,1,200,2070000001053,12070000001050,6,Traditional fermented maize drink.,true
-SOWETO-BV-0901,"Mageu, original",Clear Spring,beverages,case,6 x 1 litre,6,107.49,,standard,true,222,1,200,2070000001060,12070000001067,6,Traditional fermented maize drink.,true
-SOWETO-BV-0902,"Mageu, original",Sunny Farm,beverages,case,6 x 1 litre,6,114.29,,standard,true,108,1,200,2070000001077,12070000001074,6,Traditional fermented maize drink.,true
-SOWETO-BV-1000,"Iced tea, peach",Fizz Co,beverages,case,12 x 500 ml,12,123.69,143.19,standard,true,293,1,200,2070000001084,12070000001081,6,Peach iced tea.,true
-SOWETO-BV-1001,"Iced tea, peach",Clear Spring,beverages,case,12 x 500 ml,12,137.09,,standard,true,373,1,200,2070000001091,12070000001098,6,Peach iced tea.,true
-SOWETO-BV-1002,"Iced tea, peach",Sunny Farm,beverages,case,12 x 500 ml,12,146.19,,standard,true,4,1,200,2070000001107,12070000001104,6,Peach iced tea.,true
-SOWETO-HC-0000,Dishwashing liquid,Sparkle,household_cleaning,case,12 x 750 ml,12,216.09,,standard,true,361,1,200,2070000001114,12070000001111,9,Lemon dishwashing liquid.,true
-SOWETO-HC-0001,Dishwashing liquid,Bright Wash,household_cleaning,case,12 x 750 ml,12,228.69,,standard,true,45,1,200,2070000001121,12070000001128,9,Lemon dishwashing liquid.,true
-SOWETO-HC-0002,Dishwashing liquid,Pure White,household_cleaning,case,12 x 750 ml,12,247.09,,standard,true,341,1,200,2070000001138,12070000001135,9,Lemon dishwashing liquid.,true
-SOWETO-HC-0010,Dishwashing liquid,Sparkle,household_cleaning,case,4 x 5 litre,4,270.19,,standard,true,241,1,200,2070000001145,12070000001142,20,Lemon dishwashing liquid.,true
-SOWETO-HC-0011,Dishwashing liquid,Bright Wash,household_cleaning,case,4 x 5 litre,4,285.99,,standard,true,170,1,200,2070000001152,12070000001159,20,Lemon dishwashing liquid.,true
-SOWETO-HC-0012,Dishwashing liquid,Pure White,household_cleaning,case,4 x 5 litre,4,312.39,,standard,true,341,1,200,2070000001169,12070000001166,20,Lemon dishwashing liquid.,true
-SOWETO-HC-0100,Hand washing powder,Sparkle,household_cleaning,bag,2 kg,1,66.59,,standard,true,1,1,200,2070000001176,,2,Washing powder for hand wash.,true
-SOWETO-HC-0101,Hand washing powder,Bright Wash,household_cleaning,bag,2 kg,1,71.79,,standard,true,381,1,200,2070000001183,,2,Washing powder for hand wash.,true
-SOWETO-HC-0102,Hand washing powder,Pure White,household_cleaning,bag,2 kg,1,78.29,,standard,true,176,1,200,2070000001190,,2,Washing powder for hand wash.,true
-SOWETO-HC-0110,Hand washing powder,Sparkle,household_cleaning,bag,5 kg,1,153.09,,standard,true,292,1,200,2070000001206,,5,Washing powder for hand wash.,true
-SOWETO-HC-0111,Hand washing powder,Bright Wash,household_cleaning,bag,5 kg,1,161.49,,standard,true,310,1,200,2070000001213,,5,Washing powder for hand wash.,true
-SOWETO-HC-0112,Hand washing powder,Pure White,household_cleaning,bag,5 kg,1,179.79,,standard,true,245,1,200,2070000001220,,5,Washing powder for hand wash.,true
-SOWETO-HC-0200,Thick bleach,Sparkle,household_cleaning,case,12 x 750 ml,12,159.39,,standard,true,106,1,200,2070000001237,12070000001234,9,Thick household bleach.,true
-SOWETO-HC-0201,Thick bleach,Bright Wash,household_cleaning,case,12 x 750 ml,12,172.09,,standard,true,302,1,200,2070000001244,12070000001241,9,Thick household bleach.,true
-SOWETO-HC-0202,Thick bleach,Pure White,household_cleaning,case,12 x 750 ml,12,185.39,,standard,true,281,1,200,2070000001251,12070000001258,9,Thick household bleach.,true
-SOWETO-HC-0300,Multi-purpose cleaner,Sparkle,household_cleaning,case,12 x 750 ml,12,195.79,,standard,true,111,1,200,2070000001268,12070000001265,9,"Cleans floors, tiles and counters.",true
-SOWETO-HC-0301,Multi-purpose cleaner,Bright Wash,household_cleaning,case,12 x 750 ml,12,212.69,246.49,standard,true,233,1,200,2070000001275,12070000001272,9,"Cleans floors, tiles and counters.",true
-SOWETO-HC-0302,Multi-purpose cleaner,Pure White,household_cleaning,case,12 x 750 ml,12,231.99,,standard,true,0,1,200,2070000001282,12070000001289,9,"Cleans floors, tiles and counters.",true
-SOWETO-HC-0400,"Toilet paper, 1-ply",Sparkle,household_cleaning,pack,48 rolls,48,169.19,,standard,true,5,1,200,2070000001299,12070000001296,,Single-ply toilet rolls.,true
-SOWETO-HC-0401,"Toilet paper, 1-ply",Bright Wash,household_cleaning,pack,48 rolls,48,182.09,,standard,true,245,1,200,2070000001305,12070000001302,,Single-ply toilet rolls.,true
-SOWETO-HC-0402,"Toilet paper, 1-ply",Pure White,household_cleaning,pack,48 rolls,48,200.89,,standard,true,111,1,200,2070000001312,12070000001319,,Single-ply toilet rolls.,true
-SOWETO-HC-0500,"Toilet paper, 2-ply",Sparkle,household_cleaning,pack,24 rolls,24,157.29,180.49,standard,true,224,1,200,2070000001329,12070000001326,,Two-ply toilet rolls.,true
-SOWETO-HC-0501,"Toilet paper, 2-ply",Bright Wash,household_cleaning,pack,24 rolls,24,177.39,214.29,standard,true,355,1,200,2070000001336,12070000001333,,Two-ply toilet rolls.,true
-SOWETO-HC-0502,"Toilet paper, 2-ply",Pure White,household_cleaning,pack,24 rolls,24,190.19,,standard,true,376,1,200,2070000001343,12070000001340,,Two-ply toilet rolls.,true
-SOWETO-HC-0600,Bath soap bars,Sparkle,household_cleaning,case,48 x 150 g,48,294.39,,standard,true,3,1,200,2070000001350,12070000001357,7.2,Family soap bars.,true
-SOWETO-HC-0601,Bath soap bars,Bright Wash,household_cleaning,case,48 x 150 g,48,317.19,,standard,true,326,1,200,2070000001367,12070000001364,7.2,Family soap bars.,true
-SOWETO-HC-0602,Bath soap bars,Pure White,household_cleaning,case,48 x 150 g,48,339.49,381.09,standard,true,377,1,200,2070000001374,12070000001371,7.2,Family soap bars.,true
-SOWETO-HC-0700,Laundry bar soap,Sparkle,household_cleaning,case,24 x 500 g,24,266.49,,standard,true,14,1,200,2070000001381,12070000001388,12,Blue laundry bars.,true
-SOWETO-HC-0701,Laundry bar soap,Bright Wash,household_cleaning,case,24 x 500 g,24,295.79,367.99,standard,true,120,1,200,2070000001398,12070000001395,12,Blue laundry bars.,true
-SOWETO-HC-0702,Laundry bar soap,Pure White,household_cleaning,case,24 x 500 g,24,309.59,,standard,true,59,1,200,2070000001404,12070000001401,12,Blue laundry bars.,true
-SOWETO-HC-0800,Floor polish,Sparkle,household_cleaning,case,12 x 400 ml,12,325.19,,standard,true,290,1,200,2070000001411,12070000001418,4.8,Red floor polish.,true
-SOWETO-HC-0801,Floor polish,Bright Wash,household_cleaning,case,12 x 400 ml,12,353.19,,standard,true,10,1,200,2070000001428,12070000001425,4.8,Red floor polish.,true
-SOWETO-HC-0802,Floor polish,Pure White,household_cleaning,case,12 x 400 ml,12,372.49,,standard,true,372,1,200,2070000001435,12070000001432,4.8,Red floor polish.,true
-SOWETO-HC-0900,Scouring pads,Sparkle,household_cleaning,pack,50 pads,50,88.09,,standard,true,327,1,200,2070000001442,12070000001449,,Green scouring pads.,true
-SOWETO-HC-0901,Scouring pads,Bright Wash,household_cleaning,pack,50 pads,50,96.09,111.79,standard,true,185,1,200,2070000001459,12070000001456,,Green scouring pads.,true
-SOWETO-HC-0902,Scouring pads,Pure White,household_cleaning,pack,50 pads,50,105.69,,standard,true,34,1,200,2070000001466,12070000001463,,Green scouring pads.,true
-SOWETO-HC-1000,"Refuse bags, black",Sparkle,household_cleaning,bundle,200 bags,200,157.39,,standard,true,288,1,200,2070000001473,12070000001470,,Heavy-duty black bags.,true
-SOWETO-HC-1001,"Refuse bags, black",Bright Wash,household_cleaning,bundle,200 bags,200,173.49,194.49,standard,true,160,1,200,2070000001480,12070000001487,,Heavy-duty black bags.,true
-SOWETO-HC-1002,"Refuse bags, black",Pure White,household_cleaning,bundle,200 bags,200,188.69,,standard,true,399,1,200,2070000001497,12070000001494,,Heavy-duty black bags.,true
-SOWETO-SN-0000,"Potato chips, salt & vinegar",Crunch Kasi,snacks_confectionery,case,48 x 36 g,48,217.69,243.99,standard,true,23,1,200,2070000001503,12070000001500,1.728,Crisp potato chips.,true
-SOWETO-SN-0001,"Potato chips, salt & vinegar",Candy Corner,snacks_confectionery,case,48 x 36 g,48,233.39,,standard,true,3,1,200,2070000001510,12070000001517,1.728,Crisp potato chips.,true
-SOWETO-SN-0002,"Potato chips, salt & vinegar",Cocoa Joy,snacks_confectionery,case,48 x 36 g,48,255.09,,standard,true,60,1,200,2070000001527,12070000001524,1.728,Crisp potato chips.,true
-SOWETO-SN-0010,"Potato chips, salt & vinegar",Crunch Kasi,snacks_confectionery,case,20 x 125 g,20,265.29,,standard,true,129,1,200,2070000001534,12070000001531,2.5,Crisp potato chips.,true
-SOWETO-SN-0011,"Potato chips, salt & vinegar",Candy Corner,snacks_confectionery,case,20 x 125 g,20,287.89,,standard,true,25,1,200,2070000001541,12070000001548,2.5,Crisp potato chips.,true
-SOWETO-SN-0012,"Potato chips, salt & vinegar",Cocoa Joy,snacks_confectionery,case,20 x 125 g,20,314.79,,standard,true,177,1,200,2070000001558,12070000001555,2.5,Crisp potato chips.,true
-SOWETO-SN-0100,"Potato chips, cheese & onion",Crunch Kasi,snacks_confectionery,case,48 x 36 g,48,216.49,,standard,true,304,1,200,2070000001565,12070000001562,1.728,Crisp potato chips.,true
-SOWETO-SN-0101,"Potato chips, cheese & onion",Candy Corner,snacks_confectionery,case,48 x 36 g,48,231.69,,standard,true,246,1,200,2070000001572,12070000001579,1.728,Crisp potato chips.,true
-SOWETO-SN-0102,"Potato chips, cheese & onion",Cocoa Joy,snacks_confectionery,case,48 x 36 g,48,246.49,,standard,true,123,1,200,2070000001589,12070000001586,1.728,Crisp potato chips.,true
-SOWETO-SN-0200,"Maize snacks, cheese",Crunch Kasi,snacks_confectionery,case,50 x 25 g,50,115.39,,standard,true,191,1,200,2070000001596,12070000001593,1.25,Cheese-flavoured maize puffs.,true
-SOWETO-SN-0201,"Maize snacks, cheese",Candy Corner,snacks_confectionery,case,50 x 25 g,50,126.29,,standard,true,327,1,200,2070000001602,12070000001609,1.25,Cheese-flavoured maize puffs.,true
-SOWETO-SN-0202,"Maize snacks, cheese",Cocoa Joy,snacks_confectionery,case,50 x 25 g,50,133.59,,standard,true,299,1,200,2070000001619,12070000001616,1.25,Cheese-flavoured maize puffs.,true
-SOWETO-SN-0300,"Maize snacks, spicy",Crunch Kasi,snacks_confectionery,case,50 x 25 g,50,113.69,,standard,true,341,1,200,2070000001626,12070000001623,1.25,Spicy maize puffs.,true
-SOWETO-SN-0301,"Maize snacks, spicy",Candy Corner,snacks_confectionery,case,50 x 25 g,50,123.79,,standard,true,10,1,200,2070000001633,12070000001630,1.25,Spicy maize puffs.,true
-SOWETO-SN-0302,"Maize snacks, spicy",Cocoa Joy,snacks_confectionery,case,50 x 25 g,50,135.79,,standard,true,399,1,200,2070000001640,12070000001647,1.25,Spicy maize puffs.,true
-SOWETO-SN-0400,Fruit lollipops,Crunch Kasi,snacks_confectionery,pack,100 pieces,100,53.39,,standard,true,80,1,200,2070000001657,12070000001654,,Assorted fruit lollipops.,true
-SOWETO-SN-0401,Fruit lollipops,Candy Corner,snacks_confectionery,pack,100 pieces,100,57.39,,standard,true,176,1,200,2070000001664,12070000001661,,Assorted fruit lollipops.,true
-SOWETO-SN-0402,Fruit lollipops,Cocoa Joy,snacks_confectionery,pack,100 pieces,100,63.89,,standard,true,83,1,200,2070000001671,12070000001678,,Assorted fruit lollipops.,true
-SOWETO-SN-0500,Milk chocolate bars,Crunch Kasi,snacks_confectionery,case,24 x 40 g,24,194.39,,standard,true,216,1,200,2070000001688,12070000001685,0.96,Milk chocolate bars.,true
-SOWETO-SN-0501,Milk chocolate bars,Candy Corner,snacks_confectionery,case,24 x 40 g,24,210.29,,standard,true,367,1,200,2070000001695,12070000001692,0.96,Milk chocolate bars.,true
-SOWETO-SN-0502,Milk chocolate bars,Cocoa Joy,snacks_confectionery,case,24 x 40 g,24,225.99,,standard,true,352,1,200,2070000001701,12070000001708,0.96,Milk chocolate bars.,true
-SOWETO-SN-0600,Mint chewing gum,Crunch Kasi,snacks_confectionery,pack,100 pieces,100,45.19,,standard,true,96,1,200,2070000001718,12070000001715,,Single mint gum pieces.,true
-SOWETO-SN-0601,Mint chewing gum,Candy Corner,snacks_confectionery,pack,100 pieces,100,48.29,,standard,true,355,1,200,2070000001725,12070000001722,,Single mint gum pieces.,true
-SOWETO-SN-0602,Mint chewing gum,Cocoa Joy,snacks_confectionery,pack,100 pieces,100,51.89,,standard,true,86,1,200,2070000001732,12070000001739,,Single mint gum pieces.,true
-SOWETO-SN-0700,Toffees,Crunch Kasi,snacks_confectionery,pack,100 pieces,100,40.59,45.89,standard,true,293,1,200,2070000001749,12070000001746,,Individually wrapped toffees.,true
-SOWETO-SN-0701,Toffees,Candy Corner,snacks_confectionery,pack,100 pieces,100,44.09,53.39,standard,true,335,1,200,2070000001756,12070000001753,,Individually wrapped toffees.,true
-SOWETO-SN-0702,Toffees,Cocoa Joy,snacks_confectionery,pack,100 pieces,100,47.19,,standard,true,48,1,200,2070000001763,12070000001760,,Individually wrapped toffees.,true
-SOWETO-SN-0800,Marie biscuits,Crunch Kasi,snacks_confectionery,case,12 x 200 g,12,161.09,,standard,true,66,1,200,2070000001770,12070000001777,2.4,Plain tea biscuits.,true
-SOWETO-SN-0801,Marie biscuits,Candy Corner,snacks_confectionery,case,12 x 200 g,12,172.59,,standard,true,262,1,200,2070000001787,12070000001784,2.4,Plain tea biscuits.,true
-SOWETO-SN-0802,Marie biscuits,Cocoa Joy,snacks_confectionery,case,12 x 200 g,12,185.09,,standard,true,157,1,200,2070000001794,12070000001791,2.4,Plain tea biscuits.,true
-SOWETO-SN-0900,"Cream biscuits, vanilla",Crunch Kasi,snacks_confectionery,case,12 x 200 g,12,180.39,,standard,true,0,1,200,2070000001800,12070000001807,2.4,Vanilla cream biscuits.,true
-SOWETO-SN-0901,"Cream biscuits, vanilla",Candy Corner,snacks_confectionery,case,12 x 200 g,12,197.29,234.29,standard,true,200,1,200,2070000001817,12070000001814,2.4,Vanilla cream biscuits.,true
-SOWETO-SN-0902,"Cream biscuits, vanilla",Cocoa Joy,snacks_confectionery,case,12 x 200 g,12,205.39,251.69,standard,true,32,1,200,2070000001824,12070000001821,2.4,Vanilla cream biscuits.,true
-SOWETO-SN-1000,Salted peanuts,Crunch Kasi,snacks_confectionery,case,24 x 50 g,24,135.29,,standard,true,338,1,200,2070000001831,12070000001838,1.2,Roasted salted peanuts.,true
-SOWETO-SN-1001,Salted peanuts,Candy Corner,snacks_confectionery,case,24 x 50 g,24,144.59,,standard,true,144,1,200,2070000001848,12070000001845,1.2,Roasted salted peanuts.,true
-SOWETO-SN-1002,Salted peanuts,Cocoa Joy,snacks_confectionery,case,24 x 50 g,24,157.69,,standard,true,257,1,200,2070000001855,12070000001852,1.2,Roasted salted peanuts.,true
+product_code,name,brand,category,unit,pack_size,units_per_pack,price_rands,compare_at_rands,vat_rate,vat_included,stock,min_qty,max_qty,unit_barcode,case_barcode,weight_kg,description,active,image_1
+SOWETO-FG-0000,Super maize meal,Kasi Gold,food_grocery,bag,10 kg,1,81.59,99.39,zero,true,218,1,200,2070000000001,,10,Fine white maize meal for pap.,true,
+SOWETO-FG-0001,Super maize meal,Mill Street,food_grocery,bag,10 kg,1,88.49,,zero,true,212,1,200,2070000000018,,10,Fine white maize meal for pap.,true,
+SOWETO-FG-0002,Super maize meal,Harvest Tin,food_grocery,bag,10 kg,1,95.59,,zero,true,4,1,200,2070000000025,,10,Fine white maize meal for pap.,true,
+SOWETO-FG-0010,Super maize meal,Kasi Gold,food_grocery,bag,25 kg,1,188.59,222.49,zero,true,138,1,200,2070000000032,,25,Fine white maize meal for pap.,true,
+SOWETO-FG-0011,Super maize meal,Mill Street,food_grocery,bag,25 kg,1,200.99,,zero,true,279,1,200,2070000000049,,25,Fine white maize meal for pap.,true,
+SOWETO-FG-0012,Super maize meal,Harvest Tin,food_grocery,bag,25 kg,1,219.19,,zero,true,0,1,200,2070000000056,,25,Fine white maize meal for pap.,true,
+SOWETO-FG-0100,Long grain parboiled rice,Kasi Gold,food_grocery,bag,2 kg,1,35.79,,zero,true,300,1,200,2070000000063,,2,Non-sticky parboiled rice.,true,
+SOWETO-FG-0101,Long grain parboiled rice,Mill Street,food_grocery,bag,2 kg,1,39.09,,zero,true,0,1,200,2070000000070,,2,Non-sticky parboiled rice.,true,
+SOWETO-FG-0102,Long grain parboiled rice,Harvest Tin,food_grocery,bag,2 kg,1,41.79,50.19,zero,true,302,1,200,2070000000087,,2,Non-sticky parboiled rice.,true,
+SOWETO-FG-0110,Long grain parboiled rice,Kasi Gold,food_grocery,bag,10 kg,1,151.89,,zero,true,1,1,200,2070000000094,,10,Non-sticky parboiled rice.,true,
+SOWETO-FG-0111,Long grain parboiled rice,Mill Street,food_grocery,bag,10 kg,1,165.99,190.69,zero,true,74,1,200,2070000000100,,10,Non-sticky parboiled rice.,true,
+SOWETO-FG-0112,Long grain parboiled rice,Harvest Tin,food_grocery,bag,10 kg,1,176.59,,zero,true,352,1,200,2070000000117,,10,Non-sticky parboiled rice.,true,
+SOWETO-FG-0200,Cake flour,Kasi Gold,food_grocery,bag,2.5 kg,1,37.69,,standard,true,27,1,200,2070000000124,,2.5,White cake flour for baking and vetkoek.,true,
+SOWETO-FG-0201,Cake flour,Mill Street,food_grocery,bag,2.5 kg,1,42.39,,standard,true,77,1,200,2070000000131,,2.5,White cake flour for baking and vetkoek.,true,
+SOWETO-FG-0202,Cake flour,Harvest Tin,food_grocery,bag,2.5 kg,1,44.29,,standard,true,335,1,200,2070000000148,,2.5,White cake flour for baking and vetkoek.,true,
+SOWETO-FG-0210,Cake flour,Kasi Gold,food_grocery,bag,10 kg,1,125.29,150.29,standard,true,208,1,200,2070000000155,,10,White cake flour for baking and vetkoek.,true,
+SOWETO-FG-0211,Cake flour,Mill Street,food_grocery,bag,10 kg,1,136.39,,standard,true,286,1,200,2070000000162,,10,White cake flour for baking and vetkoek.,true,
+SOWETO-FG-0212,Cake flour,Harvest Tin,food_grocery,bag,10 kg,1,149.19,,standard,true,271,1,200,2070000000179,,10,White cake flour for baking and vetkoek.,true,
+SOWETO-FG-0300,White sugar,Kasi Gold,food_grocery,bag,2.5 kg,1,53.19,,standard,true,150,1,200,2070000000186,,2.5,Refined white sugar.,true,
+SOWETO-FG-0301,White sugar,Mill Street,food_grocery,bag,2.5 kg,1,57.59,,standard,true,388,1,200,2070000000193,,2.5,Refined white sugar.,true,
+SOWETO-FG-0302,White sugar,Harvest Tin,food_grocery,bag,2.5 kg,1,63.59,,standard,true,390,1,200,2070000000209,,2.5,Refined white sugar.,true,
+SOWETO-FG-0310,White sugar,Kasi Gold,food_grocery,bag,10 kg,1,192.49,218.29,standard,true,0,1,200,2070000000216,,10,Refined white sugar.,true,
+SOWETO-FG-0311,White sugar,Mill Street,food_grocery,bag,10 kg,1,216.79,,standard,true,43,1,200,2070000000223,,10,Refined white sugar.,true,
+SOWETO-FG-0312,White sugar,Harvest Tin,food_grocery,bag,10 kg,1,227.29,255.09,standard,true,18,1,200,2070000000230,,10,Refined white sugar.,true,
+SOWETO-FG-0400,Brown sugar,Kasi Gold,food_grocery,bag,2 kg,1,39.69,48.89,standard,true,0,1,200,2070000000247,,2,Soft brown sugar.,true,
+SOWETO-FG-0401,Brown sugar,Mill Street,food_grocery,bag,2 kg,1,43.59,53.09,standard,true,17,1,200,2070000000254,,2,Soft brown sugar.,true,
+SOWETO-FG-0402,Brown sugar,Harvest Tin,food_grocery,bag,2 kg,1,46.49,,standard,true,3,1,200,2070000000261,,2,Soft brown sugar.,true,
+SOWETO-FG-0500,Sunflower cooking oil,Kasi Gold,food_grocery,bottle,2 litre,1,62.39,71.99,zero,true,358,1,200,2070000000278,,2,Pure sunflower oil.,true,
+SOWETO-FG-0501,Sunflower cooking oil,Mill Street,food_grocery,bottle,2 litre,1,68.79,,zero,true,180,1,200,2070000000285,,2,Pure sunflower oil.,true,
+SOWETO-FG-0502,Sunflower cooking oil,Harvest Tin,food_grocery,bottle,2 litre,1,72.49,,zero,true,284,1,200,2070000000292,,2,Pure sunflower oil.,true,
+SOWETO-FG-0510,Sunflower cooking oil,Kasi Gold,food_grocery,bottle,5 litre,1,133.99,,zero,true,169,1,200,2070000000308,,5,Pure sunflower oil.,true,
+SOWETO-FG-0511,Sunflower cooking oil,Mill Street,food_grocery,bottle,5 litre,1,146.99,,zero,true,66,1,200,2070000000315,,5,Pure sunflower oil.,true,
+SOWETO-FG-0512,Sunflower cooking oil,Harvest Tin,food_grocery,bottle,5 litre,1,159.39,,zero,true,341,1,200,2070000000322,,5,Pure sunflower oil.,true,
+SOWETO-FG-0600,Baked beans in tomato sauce,Kasi Gold,food_grocery,case,24 x 410 g,24,268.19,,standard,true,322,1,200,2070000000339,12070000000336,9.84,A case of 24 tins.,true,
+SOWETO-FG-0601,Baked beans in tomato sauce,Mill Street,food_grocery,case,24 x 410 g,24,286.59,,standard,true,291,1,200,2070000000346,12070000000343,9.84,A case of 24 tins.,true,
+SOWETO-FG-0602,Baked beans in tomato sauce,Harvest Tin,food_grocery,case,24 x 410 g,24,314.29,,standard,true,181,1,200,2070000000353,12070000000350,9.84,A case of 24 tins.,true,
+SOWETO-FG-0700,Pilchards in tomato sauce,Kasi Gold,food_grocery,case,24 x 400 g,24,545.09,610.79,zero,true,76,1,200,2070000000360,12070000000367,9.6,"Canned pilchards, a case of 24.",true,
+SOWETO-FG-0701,Pilchards in tomato sauce,Mill Street,food_grocery,case,24 x 400 g,24,570.19,,zero,true,162,1,200,2070000000377,12070000000374,9.6,"Canned pilchards, a case of 24.",true,
+SOWETO-FG-0702,Pilchards in tomato sauce,Harvest Tin,food_grocery,case,24 x 400 g,24,616.09,,zero,true,9,1,200,2070000000384,12070000000381,9.6,"Canned pilchards, a case of 24.",true,
+SOWETO-FG-0800,Chicken instant noodles,Kasi Gold,food_grocery,case,40 x 73 g,40,181.09,,standard,true,93,1,200,2070000000391,12070000000398,2.92,Chicken-flavoured instant noodles.,true,
+SOWETO-FG-0801,Chicken instant noodles,Mill Street,food_grocery,case,40 x 73 g,40,194.19,,standard,true,31,1,200,2070000000407,12070000000404,2.92,Chicken-flavoured instant noodles.,true,
+SOWETO-FG-0802,Chicken instant noodles,Harvest Tin,food_grocery,case,40 x 73 g,40,211.89,,standard,true,381,1,200,2070000000414,12070000000411,2.92,Chicken-flavoured instant noodles.,true,
+SOWETO-FG-0900,Samp,Kasi Gold,food_grocery,bag,5 kg,1,67.29,,zero,true,380,1,200,2070000000421,,5,Crushed dried maize kernels.,true,
+SOWETO-FG-0901,Samp,Mill Street,food_grocery,bag,5 kg,1,73.19,82.09,zero,true,287,1,200,2070000000438,,5,Crushed dried maize kernels.,true,
+SOWETO-FG-0902,Samp,Harvest Tin,food_grocery,bag,5 kg,1,77.49,,zero,true,288,1,200,2070000000445,,5,Crushed dried maize kernels.,true,
+SOWETO-FG-1000,Sugar beans,Kasi Gold,food_grocery,bag,2 kg,1,59.09,,zero,true,206,1,200,2070000000452,,2,Dried speckled sugar beans.,true,
+SOWETO-FG-1001,Sugar beans,Mill Street,food_grocery,bag,2 kg,1,62.39,,zero,true,87,1,200,2070000000469,,2,Dried speckled sugar beans.,true,
+SOWETO-FG-1002,Sugar beans,Harvest Tin,food_grocery,bag,2 kg,1,67.79,,zero,true,132,1,200,2070000000476,,2,Dried speckled sugar beans.,true,
+SOWETO-FG-1100,Black tea bags,Kasi Gold,food_grocery,pack,100 bags,100,48.39,,standard,true,305,1,200,2070000000483,12070000000480,,Tagless black tea bags.,true,
+SOWETO-FG-1101,Black tea bags,Mill Street,food_grocery,pack,100 bags,100,52.69,,standard,true,210,1,200,2070000000490,12070000000497,,Tagless black tea bags.,true,
+SOWETO-FG-1102,Black tea bags,Harvest Tin,food_grocery,pack,100 bags,100,56.99,,standard,true,187,1,200,2070000000506,12070000000503,,Tagless black tea bags.,true,
+SOWETO-FG-1110,Black tea bags,Kasi Gold,food_grocery,pack,200 bags,200,88.89,100.99,standard,true,252,1,200,2070000000513,12070000000510,,Tagless black tea bags.,true,
+SOWETO-FG-1111,Black tea bags,Mill Street,food_grocery,pack,200 bags,200,96.79,,standard,true,8,1,200,2070000000520,12070000000527,,Tagless black tea bags.,true,
+SOWETO-FG-1112,Black tea bags,Harvest Tin,food_grocery,pack,200 bags,200,103.79,,standard,true,348,1,200,2070000000537,12070000000534,,Tagless black tea bags.,true,
+SOWETO-FG-1200,Instant coffee,Kasi Gold,food_grocery,tin,250 g,1,80.09,,standard,true,9,1,200,2070000000544,,,Granulated instant coffee.,true,
+SOWETO-FG-1201,Instant coffee,Mill Street,food_grocery,tin,250 g,1,88.09,,standard,true,286,1,200,2070000000551,,,Granulated instant coffee.,true,
+SOWETO-FG-1202,Instant coffee,Harvest Tin,food_grocery,tin,250 g,1,92.79,,standard,true,154,1,200,2070000000568,,,Granulated instant coffee.,true,
+SOWETO-FG-1300,Iodated table salt,Kasi Gold,food_grocery,case,24 x 500 g,24,108.59,,standard,true,6,1,200,2070000000575,12070000000572,12,Fine iodated salt.,true,
+SOWETO-FG-1301,Iodated table salt,Mill Street,food_grocery,case,24 x 500 g,24,117.79,137.59,standard,true,153,1,200,2070000000582,12070000000589,12,Fine iodated salt.,true,
+SOWETO-FG-1302,Iodated table salt,Harvest Tin,food_grocery,case,24 x 500 g,24,125.79,148.99,standard,true,4,1,200,2070000000599,12070000000596,12,Fine iodated salt.,true,
+SOWETO-FG-1400,"Peanut butter, smooth",Kasi Gold,food_grocery,case,12 x 400 g,12,369.89,,standard,true,5,1,200,2070000000605,12070000000602,4.8,Smooth peanut butter.,true,
+SOWETO-FG-1401,"Peanut butter, smooth",Mill Street,food_grocery,case,12 x 400 g,12,410.89,,standard,true,3,1,200,2070000000612,12070000000619,4.8,Smooth peanut butter.,true,
+SOWETO-FG-1402,"Peanut butter, smooth",Harvest Tin,food_grocery,case,12 x 400 g,12,447.19,518.29,standard,true,274,1,200,2070000000629,12070000000626,4.8,Smooth peanut butter.,true,
+SOWETO-FG-1500,Apricot jam,Kasi Gold,food_grocery,case,12 x 450 g,12,317.49,371.59,standard,true,8,1,200,2070000000636,12070000000633,5.4,Smooth apricot jam.,true,
+SOWETO-FG-1501,Apricot jam,Mill Street,food_grocery,case,12 x 450 g,12,346.79,,standard,true,237,1,200,2070000000643,12070000000640,5.4,Smooth apricot jam.,true,
+SOWETO-FG-1502,Apricot jam,Harvest Tin,food_grocery,case,12 x 450 g,12,371.09,,standard,true,120,1,200,2070000000650,12070000000657,5.4,Smooth apricot jam.,true,
+SOWETO-BV-0000,Cola soft drink,Fizz Co,beverages,case,24 x 330 ml cans,24,168.89,200.69,standard,true,282,1,200,2070000000667,12070000000664,7.92,"Cold drink, a full case.",true,
+SOWETO-BV-0001,Cola soft drink,Clear Spring,beverages,case,24 x 330 ml cans,24,183.59,,standard,true,0,1,200,2070000000674,12070000000671,7.92,"Cold drink, a full case.",true,
+SOWETO-BV-0002,Cola soft drink,Sunny Farm,beverages,case,24 x 330 ml cans,24,198.89,,standard,true,386,1,200,2070000000681,12070000000688,7.92,"Cold drink, a full case.",true,
+SOWETO-BV-0010,Cola soft drink,Fizz Co,beverages,case,12 x 2 litre,12,232.39,,standard,true,297,1,200,2070000000698,12070000000695,24,"Cold drink, a full case.",true,
+SOWETO-BV-0011,Cola soft drink,Clear Spring,beverages,case,12 x 2 litre,12,254.49,286.69,standard,true,295,1,200,2070000000704,12070000000701,24,"Cold drink, a full case.",true,
+SOWETO-BV-0012,Cola soft drink,Sunny Farm,beverages,case,12 x 2 litre,12,275.29,,standard,true,164,1,200,2070000000711,12070000000718,24,"Cold drink, a full case.",true,
+SOWETO-BV-0100,Orange soft drink,Fizz Co,beverages,case,24 x 330 ml cans,24,158.69,,standard,true,310,1,200,2070000000728,12070000000725,7.92,Orange-flavoured cold drink.,true,
+SOWETO-BV-0101,Orange soft drink,Clear Spring,beverages,case,24 x 330 ml cans,24,173.69,,standard,true,262,1,200,2070000000735,12070000000732,7.92,Orange-flavoured cold drink.,true,
+SOWETO-BV-0102,Orange soft drink,Sunny Farm,beverages,case,24 x 330 ml cans,24,190.59,,standard,true,233,1,200,2070000000742,12070000000749,7.92,Orange-flavoured cold drink.,true,
+SOWETO-BV-0110,Orange soft drink,Fizz Co,beverages,case,12 x 2 litre,12,216.89,,standard,true,270,1,200,2070000000759,12070000000756,24,Orange-flavoured cold drink.,true,
+SOWETO-BV-0111,Orange soft drink,Clear Spring,beverages,case,12 x 2 litre,12,230.89,,standard,true,209,1,200,2070000000766,12070000000763,24,Orange-flavoured cold drink.,true,
+SOWETO-BV-0112,Orange soft drink,Sunny Farm,beverages,case,12 x 2 litre,12,248.19,,standard,true,327,1,200,2070000000773,12070000000770,24,Orange-flavoured cold drink.,true,
+SOWETO-BV-0200,Lemon-lime soft drink,Fizz Co,beverages,case,24 x 330 ml cans,24,159.69,,standard,true,284,1,200,2070000000780,12070000000787,7.92,Lemon-lime cold drink.,true,
+SOWETO-BV-0201,Lemon-lime soft drink,Clear Spring,beverages,case,24 x 330 ml cans,24,173.39,,standard,true,246,1,200,2070000000797,12070000000794,7.92,Lemon-lime cold drink.,true,
+SOWETO-BV-0202,Lemon-lime soft drink,Sunny Farm,beverages,case,24 x 330 ml cans,24,191.59,,standard,true,291,1,200,2070000000803,12070000000800,7.92,Lemon-lime cold drink.,true,
+SOWETO-BV-0300,Still water,Fizz Co,beverages,case,24 x 500 ml,24,87.99,100.89,standard,true,174,1,200,2070000000810,12070000000817,12,Still spring water.,true,
+SOWETO-BV-0301,Still water,Clear Spring,beverages,case,24 x 500 ml,24,95.09,,standard,true,141,1,200,2070000000827,12070000000824,12,Still spring water.,true,
+SOWETO-BV-0302,Still water,Sunny Farm,beverages,case,24 x 500 ml,24,106.39,,standard,true,203,1,200,2070000000834,12070000000831,12,Still spring water.,true,
+SOWETO-BV-0310,Still water,Fizz Co,beverages,case,6 x 5 litre,6,106.29,,standard,true,2,1,200,2070000000841,12070000000848,30,Still spring water.,true,
+SOWETO-BV-0311,Still water,Clear Spring,beverages,case,6 x 5 litre,6,116.99,,standard,true,25,1,200,2070000000858,12070000000855,30,Still spring water.,true,
+SOWETO-BV-0312,Still water,Sunny Farm,beverages,case,6 x 5 litre,6,125.19,,standard,true,25,1,200,2070000000865,12070000000862,30,Still spring water.,true,
+SOWETO-BV-0400,Sparkling water,Fizz Co,beverages,case,24 x 500 ml,24,104.99,,standard,true,329,1,200,2070000000872,12070000000879,12,Sparkling spring water.,true,
+SOWETO-BV-0401,Sparkling water,Clear Spring,beverages,case,24 x 500 ml,24,116.79,,standard,true,0,1,200,2070000000889,12070000000886,12,Sparkling spring water.,true,
+SOWETO-BV-0402,Sparkling water,Sunny Farm,beverages,case,24 x 500 ml,24,124.09,148.09,standard,true,263,1,200,2070000000896,12070000000893,12,Sparkling spring water.,true,
+SOWETO-BV-0500,Fruit juice blend,Fizz Co,beverages,case,6 x 1 litre,6,116.29,,standard,true,362,1,200,2070000000902,12070000000909,6,100% fruit juice blend.,true,
+SOWETO-BV-0501,Fruit juice blend,Clear Spring,beverages,case,6 x 1 litre,6,126.49,146.69,standard,true,254,1,200,2070000000919,12070000000916,6,100% fruit juice blend.,true,
+SOWETO-BV-0502,Fruit juice blend,Sunny Farm,beverages,case,6 x 1 litre,6,135.79,,standard,true,379,1,200,2070000000926,12070000000923,6,100% fruit juice blend.,true,
+SOWETO-BV-0510,Fruit juice blend,Fizz Co,beverages,case,24 x 200 ml,24,142.49,,standard,true,217,1,200,2070000000933,12070000000930,4.8,100% fruit juice blend.,true,
+SOWETO-BV-0511,Fruit juice blend,Clear Spring,beverages,case,24 x 200 ml,24,157.39,,standard,true,0,1,200,2070000000940,12070000000947,4.8,100% fruit juice blend.,true,
+SOWETO-BV-0512,Fruit juice blend,Sunny Farm,beverages,case,24 x 200 ml,24,167.59,207.59,standard,true,238,1,200,2070000000957,12070000000954,4.8,100% fruit juice blend.,true,
+SOWETO-BV-0600,Dairy fruit mix drink,Fizz Co,beverages,case,12 x 500 ml,12,153.69,,standard,true,2,1,200,2070000000964,12070000000961,6,Fruit and dairy blend.,true,
+SOWETO-BV-0601,Dairy fruit mix drink,Clear Spring,beverages,case,12 x 500 ml,12,164.59,,standard,true,260,1,200,2070000000971,12070000000978,6,Fruit and dairy blend.,true,
+SOWETO-BV-0602,Dairy fruit mix drink,Sunny Farm,beverages,case,12 x 500 ml,12,175.99,,standard,true,342,1,200,2070000000988,12070000000985,6,Fruit and dairy blend.,true,
+SOWETO-BV-0700,Energy drink,Fizz Co,beverages,case,24 x 500 ml,24,320.79,,standard,true,367,1,200,2070000000995,12070000000992,12,Energy drink cans.,true,
+SOWETO-BV-0701,Energy drink,Clear Spring,beverages,case,24 x 500 ml,24,353.59,423.69,standard,true,382,1,200,2070000001008,12070000001005,12,Energy drink cans.,true,
+SOWETO-BV-0702,Energy drink,Sunny Farm,beverages,case,24 x 500 ml,24,369.99,,standard,true,300,1,200,2070000001015,12070000001012,12,Energy drink cans.,true,
+SOWETO-BV-0800,"Cordial, orange",Fizz Co,beverages,case,6 x 1 litre,6,135.79,,standard,true,400,1,200,2070000001022,12070000001029,6,Dilute to taste.,true,
+SOWETO-BV-0801,"Cordial, orange",Clear Spring,beverages,case,6 x 1 litre,6,144.09,,standard,true,323,1,200,2070000001039,12070000001036,6,Dilute to taste.,true,
+SOWETO-BV-0802,"Cordial, orange",Sunny Farm,beverages,case,6 x 1 litre,6,155.99,,standard,true,337,1,200,2070000001046,12070000001043,6,Dilute to taste.,true,
+SOWETO-BV-0900,"Mageu, original",Fizz Co,beverages,case,6 x 1 litre,6,97.19,113.69,standard,true,322,1,200,2070000001053,12070000001050,6,Traditional fermented maize drink.,true,
+SOWETO-BV-0901,"Mageu, original",Clear Spring,beverages,case,6 x 1 litre,6,107.49,,standard,true,222,1,200,2070000001060,12070000001067,6,Traditional fermented maize drink.,true,
+SOWETO-BV-0902,"Mageu, original",Sunny Farm,beverages,case,6 x 1 litre,6,114.29,,standard,true,108,1,200,2070000001077,12070000001074,6,Traditional fermented maize drink.,true,
+SOWETO-BV-1000,"Iced tea, peach",Fizz Co,beverages,case,12 x 500 ml,12,123.69,143.19,standard,true,293,1,200,2070000001084,12070000001081,6,Peach iced tea.,true,
+SOWETO-BV-1001,"Iced tea, peach",Clear Spring,beverages,case,12 x 500 ml,12,137.09,,standard,true,373,1,200,2070000001091,12070000001098,6,Peach iced tea.,true,
+SOWETO-BV-1002,"Iced tea, peach",Sunny Farm,beverages,case,12 x 500 ml,12,146.19,,standard,true,4,1,200,2070000001107,12070000001104,6,Peach iced tea.,true,
+SOWETO-HC-0000,Dishwashing liquid,Sparkle,household_cleaning,case,12 x 750 ml,12,216.09,,standard,true,361,1,200,2070000001114,12070000001111,9,Lemon dishwashing liquid.,true,
+SOWETO-HC-0001,Dishwashing liquid,Bright Wash,household_cleaning,case,12 x 750 ml,12,228.69,,standard,true,45,1,200,2070000001121,12070000001128,9,Lemon dishwashing liquid.,true,
+SOWETO-HC-0002,Dishwashing liquid,Pure White,household_cleaning,case,12 x 750 ml,12,247.09,,standard,true,341,1,200,2070000001138,12070000001135,9,Lemon dishwashing liquid.,true,
+SOWETO-HC-0010,Dishwashing liquid,Sparkle,household_cleaning,case,4 x 5 litre,4,270.19,,standard,true,241,1,200,2070000001145,12070000001142,20,Lemon dishwashing liquid.,true,
+SOWETO-HC-0011,Dishwashing liquid,Bright Wash,household_cleaning,case,4 x 5 litre,4,285.99,,standard,true,170,1,200,2070000001152,12070000001159,20,Lemon dishwashing liquid.,true,
+SOWETO-HC-0012,Dishwashing liquid,Pure White,household_cleaning,case,4 x 5 litre,4,312.39,,standard,true,341,1,200,2070000001169,12070000001166,20,Lemon dishwashing liquid.,true,
+SOWETO-HC-0100,Hand washing powder,Sparkle,household_cleaning,bag,2 kg,1,66.59,,standard,true,1,1,200,2070000001176,,2,Washing powder for hand wash.,true,
+SOWETO-HC-0101,Hand washing powder,Bright Wash,household_cleaning,bag,2 kg,1,71.79,,standard,true,381,1,200,2070000001183,,2,Washing powder for hand wash.,true,
+SOWETO-HC-0102,Hand washing powder,Pure White,household_cleaning,bag,2 kg,1,78.29,,standard,true,176,1,200,2070000001190,,2,Washing powder for hand wash.,true,
+SOWETO-HC-0110,Hand washing powder,Sparkle,household_cleaning,bag,5 kg,1,153.09,,standard,true,292,1,200,2070000001206,,5,Washing powder for hand wash.,true,
+SOWETO-HC-0111,Hand washing powder,Bright Wash,household_cleaning,bag,5 kg,1,161.49,,standard,true,310,1,200,2070000001213,,5,Washing powder for hand wash.,true,
+SOWETO-HC-0112,Hand washing powder,Pure White,household_cleaning,bag,5 kg,1,179.79,,standard,true,245,1,200,2070000001220,,5,Washing powder for hand wash.,true,
+SOWETO-HC-0200,Thick bleach,Sparkle,household_cleaning,case,12 x 750 ml,12,159.39,,standard,true,106,1,200,2070000001237,12070000001234,9,Thick household bleach.,true,
+SOWETO-HC-0201,Thick bleach,Bright Wash,household_cleaning,case,12 x 750 ml,12,172.09,,standard,true,302,1,200,2070000001244,12070000001241,9,Thick household bleach.,true,
+SOWETO-HC-0202,Thick bleach,Pure White,household_cleaning,case,12 x 750 ml,12,185.39,,standard,true,281,1,200,2070000001251,12070000001258,9,Thick household bleach.,true,
+SOWETO-HC-0300,Multi-purpose cleaner,Sparkle,household_cleaning,case,12 x 750 ml,12,195.79,,standard,true,111,1,200,2070000001268,12070000001265,9,"Cleans floors, tiles and counters.",true,
+SOWETO-HC-0301,Multi-purpose cleaner,Bright Wash,household_cleaning,case,12 x 750 ml,12,212.69,246.49,standard,true,233,1,200,2070000001275,12070000001272,9,"Cleans floors, tiles and counters.",true,
+SOWETO-HC-0302,Multi-purpose cleaner,Pure White,household_cleaning,case,12 x 750 ml,12,231.99,,standard,true,0,1,200,2070000001282,12070000001289,9,"Cleans floors, tiles and counters.",true,
+SOWETO-HC-0400,"Toilet paper, 1-ply",Sparkle,household_cleaning,pack,48 rolls,48,169.19,,standard,true,5,1,200,2070000001299,12070000001296,,Single-ply toilet rolls.,true,
+SOWETO-HC-0401,"Toilet paper, 1-ply",Bright Wash,household_cleaning,pack,48 rolls,48,182.09,,standard,true,245,1,200,2070000001305,12070000001302,,Single-ply toilet rolls.,true,
+SOWETO-HC-0402,"Toilet paper, 1-ply",Pure White,household_cleaning,pack,48 rolls,48,200.89,,standard,true,111,1,200,2070000001312,12070000001319,,Single-ply toilet rolls.,true,
+SOWETO-HC-0500,"Toilet paper, 2-ply",Sparkle,household_cleaning,pack,24 rolls,24,157.29,180.49,standard,true,224,1,200,2070000001329,12070000001326,,Two-ply toilet rolls.,true,
+SOWETO-HC-0501,"Toilet paper, 2-ply",Bright Wash,household_cleaning,pack,24 rolls,24,177.39,214.29,standard,true,355,1,200,2070000001336,12070000001333,,Two-ply toilet rolls.,true,
+SOWETO-HC-0502,"Toilet paper, 2-ply",Pure White,household_cleaning,pack,24 rolls,24,190.19,,standard,true,376,1,200,2070000001343,12070000001340,,Two-ply toilet rolls.,true,
+SOWETO-HC-0600,Bath soap bars,Sparkle,household_cleaning,case,48 x 150 g,48,294.39,,standard,true,3,1,200,2070000001350,12070000001357,7.2,Family soap bars.,true,
+SOWETO-HC-0601,Bath soap bars,Bright Wash,household_cleaning,case,48 x 150 g,48,317.19,,standard,true,326,1,200,2070000001367,12070000001364,7.2,Family soap bars.,true,
+SOWETO-HC-0602,Bath soap bars,Pure White,household_cleaning,case,48 x 150 g,48,339.49,381.09,standard,true,377,1,200,2070000001374,12070000001371,7.2,Family soap bars.,true,
+SOWETO-HC-0700,Laundry bar soap,Sparkle,household_cleaning,case,24 x 500 g,24,266.49,,standard,true,14,1,200,2070000001381,12070000001388,12,Blue laundry bars.,true,
+SOWETO-HC-0701,Laundry bar soap,Bright Wash,household_cleaning,case,24 x 500 g,24,295.79,367.99,standard,true,120,1,200,2070000001398,12070000001395,12,Blue laundry bars.,true,
+SOWETO-HC-0702,Laundry bar soap,Pure White,household_cleaning,case,24 x 500 g,24,309.59,,standard,true,59,1,200,2070000001404,12070000001401,12,Blue laundry bars.,true,
+SOWETO-HC-0800,Floor polish,Sparkle,household_cleaning,case,12 x 400 ml,12,325.19,,standard,true,290,1,200,2070000001411,12070000001418,4.8,Red floor polish.,true,
+SOWETO-HC-0801,Floor polish,Bright Wash,household_cleaning,case,12 x 400 ml,12,353.19,,standard,true,10,1,200,2070000001428,12070000001425,4.8,Red floor polish.,true,
+SOWETO-HC-0802,Floor polish,Pure White,household_cleaning,case,12 x 400 ml,12,372.49,,standard,true,372,1,200,2070000001435,12070000001432,4.8,Red floor polish.,true,
+SOWETO-HC-0900,Scouring pads,Sparkle,household_cleaning,pack,50 pads,50,88.09,,standard,true,327,1,200,2070000001442,12070000001449,,Green scouring pads.,true,
+SOWETO-HC-0901,Scouring pads,Bright Wash,household_cleaning,pack,50 pads,50,96.09,111.79,standard,true,185,1,200,2070000001459,12070000001456,,Green scouring pads.,true,
+SOWETO-HC-0902,Scouring pads,Pure White,household_cleaning,pack,50 pads,50,105.69,,standard,true,34,1,200,2070000001466,12070000001463,,Green scouring pads.,true,
+SOWETO-HC-1000,"Refuse bags, black",Sparkle,household_cleaning,bundle,200 bags,200,157.39,,standard,true,288,1,200,2070000001473,12070000001470,,Heavy-duty black bags.,true,
+SOWETO-HC-1001,"Refuse bags, black",Bright Wash,household_cleaning,bundle,200 bags,200,173.49,194.49,standard,true,160,1,200,2070000001480,12070000001487,,Heavy-duty black bags.,true,
+SOWETO-HC-1002,"Refuse bags, black",Pure White,household_cleaning,bundle,200 bags,200,188.69,,standard,true,399,1,200,2070000001497,12070000001494,,Heavy-duty black bags.,true,
+SOWETO-SN-0000,"Potato chips, salt & vinegar",Crunch Kasi,snacks_confectionery,case,48 x 36 g,48,217.69,243.99,standard,true,23,1,200,2070000001503,12070000001500,1.728,Crisp potato chips.,true,
+SOWETO-SN-0001,"Potato chips, salt & vinegar",Candy Corner,snacks_confectionery,case,48 x 36 g,48,233.39,,standard,true,3,1,200,2070000001510,12070000001517,1.728,Crisp potato chips.,true,
+SOWETO-SN-0002,"Potato chips, salt & vinegar",Cocoa Joy,snacks_confectionery,case,48 x 36 g,48,255.09,,standard,true,60,1,200,2070000001527,12070000001524,1.728,Crisp potato chips.,true,
+SOWETO-SN-0010,"Potato chips, salt & vinegar",Crunch Kasi,snacks_confectionery,case,20 x 125 g,20,265.29,,standard,true,129,1,200,2070000001534,12070000001531,2.5,Crisp potato chips.,true,
+SOWETO-SN-0011,"Potato chips, salt & vinegar",Candy Corner,snacks_confectionery,case,20 x 125 g,20,287.89,,standard,true,25,1,200,2070000001541,12070000001548,2.5,Crisp potato chips.,true,
+SOWETO-SN-0012,"Potato chips, salt & vinegar",Cocoa Joy,snacks_confectionery,case,20 x 125 g,20,314.79,,standard,true,177,1,200,2070000001558,12070000001555,2.5,Crisp potato chips.,true,
+SOWETO-SN-0100,"Potato chips, cheese & onion",Crunch Kasi,snacks_confectionery,case,48 x 36 g,48,216.49,,standard,true,304,1,200,2070000001565,12070000001562,1.728,Crisp potato chips.,true,
+SOWETO-SN-0101,"Potato chips, cheese & onion",Candy Corner,snacks_confectionery,case,48 x 36 g,48,231.69,,standard,true,246,1,200,2070000001572,12070000001579,1.728,Crisp potato chips.,true,
+SOWETO-SN-0102,"Potato chips, cheese & onion",Cocoa Joy,snacks_confectionery,case,48 x 36 g,48,246.49,,standard,true,123,1,200,2070000001589,12070000001586,1.728,Crisp potato chips.,true,
+SOWETO-SN-0200,"Maize snacks, cheese",Crunch Kasi,snacks_confectionery,case,50 x 25 g,50,115.39,,standard,true,191,1,200,2070000001596,12070000001593,1.25,Cheese-flavoured maize puffs.,true,
+SOWETO-SN-0201,"Maize snacks, cheese",Candy Corner,snacks_confectionery,case,50 x 25 g,50,126.29,,standard,true,327,1,200,2070000001602,12070000001609,1.25,Cheese-flavoured maize puffs.,true,
+SOWETO-SN-0202,"Maize snacks, cheese",Cocoa Joy,snacks_confectionery,case,50 x 25 g,50,133.59,,standard,true,299,1,200,2070000001619,12070000001616,1.25,Cheese-flavoured maize puffs.,true,
+SOWETO-SN-0300,"Maize snacks, spicy",Crunch Kasi,snacks_confectionery,case,50 x 25 g,50,113.69,,standard,true,341,1,200,2070000001626,12070000001623,1.25,Spicy maize puffs.,true,
+SOWETO-SN-0301,"Maize snacks, spicy",Candy Corner,snacks_confectionery,case,50 x 25 g,50,123.79,,standard,true,10,1,200,2070000001633,12070000001630,1.25,Spicy maize puffs.,true,
+SOWETO-SN-0302,"Maize snacks, spicy",Cocoa Joy,snacks_confectionery,case,50 x 25 g,50,135.79,,standard,true,399,1,200,2070000001640,12070000001647,1.25,Spicy maize puffs.,true,
+SOWETO-SN-0400,Fruit lollipops,Crunch Kasi,snacks_confectionery,pack,100 pieces,100,53.39,,standard,true,80,1,200,2070000001657,12070000001654,,Assorted fruit lollipops.,true,
+SOWETO-SN-0401,Fruit lollipops,Candy Corner,snacks_confectionery,pack,100 pieces,100,57.39,,standard,true,176,1,200,2070000001664,12070000001661,,Assorted fruit lollipops.,true,
+SOWETO-SN-0402,Fruit lollipops,Cocoa Joy,snacks_confectionery,pack,100 pieces,100,63.89,,standard,true,83,1,200,2070000001671,12070000001678,,Assorted fruit lollipops.,true,
+SOWETO-SN-0500,Milk chocolate bars,Crunch Kasi,snacks_confectionery,case,24 x 40 g,24,194.39,,standard,true,216,1,200,2070000001688,12070000001685,0.96,Milk chocolate bars.,true,
+SOWETO-SN-0501,Milk chocolate bars,Candy Corner,snacks_confectionery,case,24 x 40 g,24,210.29,,standard,true,367,1,200,2070000001695,12070000001692,0.96,Milk chocolate bars.,true,
+SOWETO-SN-0502,Milk chocolate bars,Cocoa Joy,snacks_confectionery,case,24 x 40 g,24,225.99,,standard,true,352,1,200,2070000001701,12070000001708,0.96,Milk chocolate bars.,true,
+SOWETO-SN-0600,Mint chewing gum,Crunch Kasi,snacks_confectionery,pack,100 pieces,100,45.19,,standard,true,96,1,200,2070000001718,12070000001715,,Single mint gum pieces.,true,
+SOWETO-SN-0601,Mint chewing gum,Candy Corner,snacks_confectionery,pack,100 pieces,100,48.29,,standard,true,355,1,200,2070000001725,12070000001722,,Single mint gum pieces.,true,
+SOWETO-SN-0602,Mint chewing gum,Cocoa Joy,snacks_confectionery,pack,100 pieces,100,51.89,,standard,true,86,1,200,2070000001732,12070000001739,,Single mint gum pieces.,true,
+SOWETO-SN-0700,Toffees,Crunch Kasi,snacks_confectionery,pack,100 pieces,100,40.59,45.89,standard,true,293,1,200,2070000001749,12070000001746,,Individually wrapped toffees.,true,
+SOWETO-SN-0701,Toffees,Candy Corner,snacks_confectionery,pack,100 pieces,100,44.09,53.39,standard,true,335,1,200,2070000001756,12070000001753,,Individually wrapped toffees.,true,
+SOWETO-SN-0702,Toffees,Cocoa Joy,snacks_confectionery,pack,100 pieces,100,47.19,,standard,true,48,1,200,2070000001763,12070000001760,,Individually wrapped toffees.,true,
+SOWETO-SN-0800,Marie biscuits,Crunch Kasi,snacks_confectionery,case,12 x 200 g,12,161.09,,standard,true,66,1,200,2070000001770,12070000001777,2.4,Plain tea biscuits.,true,
+SOWETO-SN-0801,Marie biscuits,Candy Corner,snacks_confectionery,case,12 x 200 g,12,172.59,,standard,true,262,1,200,2070000001787,12070000001784,2.4,Plain tea biscuits.,true,
+SOWETO-SN-0802,Marie biscuits,Cocoa Joy,snacks_confectionery,case,12 x 200 g,12,185.09,,standard,true,157,1,200,2070000001794,12070000001791,2.4,Plain tea biscuits.,true,
+SOWETO-SN-0900,"Cream biscuits, vanilla",Crunch Kasi,snacks_confectionery,case,12 x 200 g,12,180.39,,standard,true,0,1,200,2070000001800,12070000001807,2.4,Vanilla cream biscuits.,true,
+SOWETO-SN-0901,"Cream biscuits, vanilla",Candy Corner,snacks_confectionery,case,12 x 200 g,12,197.29,234.29,standard,true,200,1,200,2070000001817,12070000001814,2.4,Vanilla cream biscuits.,true,
+SOWETO-SN-0902,"Cream biscuits, vanilla",Cocoa Joy,snacks_confectionery,case,12 x 200 g,12,205.39,251.69,standard,true,32,1,200,2070000001824,12070000001821,2.4,Vanilla cream biscuits.,true,
+SOWETO-SN-1000,Salted peanuts,Crunch Kasi,snacks_confectionery,case,24 x 50 g,24,135.29,,standard,true,338,1,200,2070000001831,12070000001838,1.2,Roasted salted peanuts.,true,
+SOWETO-SN-1001,Salted peanuts,Candy Corner,snacks_confectionery,case,24 x 50 g,24,144.59,,standard,true,144,1,200,2070000001848,12070000001845,1.2,Roasted salted peanuts.,true,
+SOWETO-SN-1002,Salted peanuts,Cocoa Joy,snacks_confectionery,case,24 x 50 g,24,157.69,,standard,true,257,1,200,2070000001855,12070000001852,1.2,Roasted salted peanuts.,true,

@@ -3,14 +3,14 @@ import { StyleSheet, Text, View } from 'react-native';
 
 import { colors, fonts } from '@/shared/theme/tokens';
 
-import { STEP_LABEL, stepsFor, when } from '../lib/status';
+import { isStopped, STEP_LABEL, stepsFor, when } from '../lib/status';
 import type { Order } from '../types';
 
 /** The order's steps, done ones ticked with their time. */
 export function StatusTimeline({ order }: { order: Order }) {
   const steps = stepsFor(order);
   const doneAt = (s: string) => order.events.find((e) => e.status === s)?.at;
-  const stopped = order.status === 'cancelled' || order.status === 'rejected';
+  const stopped = isStopped(order);
 
   return (
     <View style={{ gap: 0 }}>

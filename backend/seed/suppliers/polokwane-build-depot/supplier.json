@@ -1,0 +1,55 @@
+{
+  "external_id": "PLKBUILD-001",
+  "trading_name": "Polokwane Build Depot",
+  "legal_name": "Polokwane Build Depot (Pty) Ltd",
+  "about": "Cement, bricks, roofing, plumbing and electrical for builders across Polokwane and Mankweng.",
+  "vat_number": null,
+  "orders_email": "orders@polokwane-build-depot.example.com",
+  "phone": null,
+  "brand_color": "#5B4636",
+  "logo_url": null,
+  "collection_address": {
+    "street": "27 Industria Road",
+    "suburb": "Polokwane Industrial",
+    "city": "Polokwane",
+    "province": "Limpopo",
+    "postal_code": "0699",
+    "latitude": -23.8923,
+    "longitude": 29.4481
+  },
+  "hours": [
+    {
+      "days": "mon-fri",
+      "open": "07:00",
+      "close": "17:00"
+    },
+    {
+      "days": "sat",
+      "open": "08:00",
+      "close": "13:00"
+    }
+  ],
+  "delivery": {
+    "offers": true,
+    "radius_km": 45,
+    "fee_cents": 30000,
+    "free_over_cents": 600000
+  },
+  "collect": true,
+  "payments": {
+    "in_app": true,
+    "cash": true,
+    "cash_limit_cents": 1000000
+  },
+  "minimum_order_cents": 100000,
+  "categories": [
+    "building_materials",
+    "tools_hardware",
+    "paint_finishes",
+    "plumbing",
+    "electrical"
+  ],
+  "payout": {
+    "merchant_id": null
+  }
+}

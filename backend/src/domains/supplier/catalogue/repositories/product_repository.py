@@ -2,8 +2,12 @@
 from __future__ import annotations
 
 import uuid
+from typing import Optional
+
+from sqlalchemy import case, func, or_, update
 
 from src.extensions import db
+from src.shared.validation.identifiers import escape_like_pattern
 
 from ..models import Product
 
@@ -17,3 +21,37 @@ def all_for_supplier(supplier_id: uuid.UUID) -> dict[str, Product]:
 def add(product: Product) -> Product:
     db.session.add(product)
     return product
+
+
+def page_for_supplier(supplier_id: uuid.UUID, *, category: Optional[str], q: str, offset: int, limit: int) -> tuple[list[Product], int]:
+    """Active products, in stock first, then by name. (total, for paging)"""
+    query = Product.query.filter_by(supplier_id=supplier_id, active=True, is_deleted=False)
+    if category:
+        query = query.filter(Product.category == category)
+    if q:
+        pattern = f"%{escape_like_pattern(q.lower())}%"
+        query = query.filter(
+            or_(func.lower(Product.name).like(pattern, escape="\\"), func.lower(func.coalesce(Product.brand, "")).like(pattern, escape="\\"))
+        )
+    total = query.count()
+    rows = query.order_by(case((Product.stock_qty > 0, 0), else_=1), func.lower(Product.name), Product.pack_size).offset(offset).limit(limit).all()
+    return rows, total
+
+
+def active_by_id(product_id: uuid.UUID) -> Optional[Product]:
+    return Product.query.filter_by(id=product_id, active=True, is_deleted=False).first()
+
+
+def take_stock(product_id: uuid.UUID, qty: int) -> bool:
+    """Atomically takes qty off stock, only if that much is left (no race
+    can sell the same last bag twice). False = not enough."""
+    result = db.session.execute(
+        update(Product)
+        .where(Product.id == product_id, Product.active.is_(True), Product.is_deleted.is_(False), Product.stock_qty >= qty)
+        .values(stock_qty=Product.stock_qty - qty)
+    )
+    return result.rowcount == 1
+
+
+def give_back_stock(product_id: uuid.UUID, qty: int) -> None:
+    db.session.execute(update(Product).where(Product.id == product_id).values(stock_qty=Product.stock_qty + qty))

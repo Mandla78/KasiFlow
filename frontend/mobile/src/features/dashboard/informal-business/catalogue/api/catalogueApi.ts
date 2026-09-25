@@ -1,8 +1,11 @@
 /**
- * Products and categories. Mock for now (docs/supplier/02); the HTTP
- * version calls GET /suppliers/{id}/products and GET /products/{id}.
+ * Products and categories: the server (GET /suppliers/{id}/products,
+ * GET /products/{id}), or the mock.
  */
+import { USE_MOCK_AUTH } from '@/constants/config';
+
 import type { CatalogueApi, Product } from '../types';
+import { httpCatalogueApi } from './httpCatalogueApi';
 import { findMockProduct, MOCK_PRODUCTS } from './mockCatalogueData';
 
 const wait = (ms = 350) => new Promise((r) => setTimeout(r, ms));
@@ -28,4 +31,4 @@ const mockCatalogueApi: CatalogueApi = {
   },
 };
 
-export const catalogueApi: CatalogueApi = mockCatalogueApi;
+export const catalogueApi: CatalogueApi = USE_MOCK_AUTH ? mockCatalogueApi : httpCatalogueApi;

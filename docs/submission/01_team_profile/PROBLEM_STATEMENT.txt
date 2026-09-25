@@ -61,10 +61,12 @@ THE FIVE PARTS (what the organisers asked for)
    (c) suppliers can't reconcile what drivers collect or what's owed.
 
 3. WHERE
-   South African townships: at the spaza counter, on building sites, on
-   the phone and WhatsApp, and at the door when stock, work and cash
-   change hands. We start in Gauteng townships (Tembisa, Ivory Park) and
-   Limpopo, where our team is.
+   Across all nine provinces: in townships, informal settlements, rural
+   villages and small towns -- at the spaza counter, on building sites and
+   in clients' homes and backyards, on the phone and WhatsApp, and at the
+   door when stock, work and cash change hands.
+   (The demo places in the seed data are test data for sign-up and the
+   Suppliers tab, not our market: never put them here.)
 
 4. WHY IT MATTERS AT SCALE
    - R900 billion township economy; R180 billion through spaza shops.

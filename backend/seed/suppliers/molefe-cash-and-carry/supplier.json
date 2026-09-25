@@ -1,0 +1,55 @@
+{
+  "external_id": "MOLEFE-001",
+  "trading_name": "Molefe Cash & Carry",
+  "legal_name": "Molefe Cash & Carry (Pty) Ltd",
+  "about": "Groceries and drinks by the case for traders in Ga-Rankuwa, Mabopane and Soshanguve.",
+  "vat_number": null,
+  "orders_email": "orders@molefe-cash-and-carry.example.com",
+  "phone": null,
+  "brand_color": "#2E4A7D",
+  "logo_url": null,
+  "collection_address": {
+    "street": "Shop 2, Old Brits Road",
+    "suburb": "Ga-Rankuwa",
+    "city": "Pretoria",
+    "province": "Gauteng",
+    "postal_code": "0208",
+    "latitude": -25.6061,
+    "longitude": 27.9853
+  },
+  "hours": [
+    {
+      "days": "mon-fri",
+      "open": "07:00",
+      "close": "17:00"
+    },
+    {
+      "days": "sat",
+      "open": "08:00",
+      "close": "13:00"
+    }
+  ],
+  "delivery": {
+    "offers": true,
+    "radius_km": 20,
+    "fee_cents": 3500,
+    "free_over_cents": 150000
+  },
+  "collect": true,
+  "payments": {
+    "in_app": true,
+    "cash": true,
+    "cash_limit_cents": 400000
+  },
+  "minimum_order_cents": 40000,
+  "categories": [
+    "food_grocery",
+    "beverages",
+    "snacks_confectionery",
+    "household_cleaning",
+    "bakery"
+  ],
+  "payout": {
+    "merchant_id": null
+  }
+}

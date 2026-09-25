@@ -1,4 +1,7 @@
-/** Which SupplierMatchApi the app uses. Swap to the HTTP version when the backend engine is ready. */
+/** Which SupplierMatchApi the app uses: the server's recommendation engine, or the mock. */
+import { USE_MOCK_AUTH } from '@/constants/config';
+
+import { httpSupplierMatchApi } from './httpSupplierApis';
 import { mockSupplierMatchApi } from './mockSupplierMatchApi';
 
-export const supplierMatchApi = mockSupplierMatchApi;
+export const supplierMatchApi = USE_MOCK_AUTH ? mockSupplierMatchApi : httpSupplierMatchApi;

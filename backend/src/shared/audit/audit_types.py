@@ -25,6 +25,7 @@ from src.shared.audit.event_types.auth import AuthAuditEvent
 from src.shared.audit.event_types.admin import AdminAuditEvent
 from src.shared.audit.event_types.business import BusinessAuditEvent
 from src.shared.audit.event_types.catalogue import CatalogueAuditEvent
+from src.shared.audit.event_types.commerce import CommerceAuditEvent
 from src.shared.audit.event_types.network import NetworkAuditEvent
 from src.shared.audit.event_types.platform import PlatformAuditEvent
 from src.shared.audit.event_types.supplier import SupplierAuditEvent
@@ -39,6 +40,7 @@ AuditEventNameType = Union[
     AdminAuditEvent,
     AuthAuditEvent,
     CatalogueAuditEvent,
+    CommerceAuditEvent,
     BusinessAuditEvent,
     NetworkAuditEvent,
     PlatformAuditEvent,
@@ -57,6 +59,7 @@ class AuditDomain(str, enum.Enum):
     TRUST = "trust"
     VERIFICATION = "verification"
     CATALOGUE = "catalogue"
+    COMMERCE = "commerce"
     PLATFORM = "platform"
     SECURITY = "security"
     # Added for network/connections (file.txt Phase 1) -- a

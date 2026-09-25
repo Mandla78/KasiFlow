@@ -1,0 +1,292 @@
+===========================================================================
+TEAMMATE 15 -- JOBS v2: THE BUILDER NETWORK
+Risuna's idea, approved by Mandla (Friday 25 September 2026, night).
+This replaces "3. JOBS beyond CRUD" in 14_ROUND_2_BRIEF.txt as the jobs
+plan. Read with feedback/FEEDBACK_jobs_beyond_crud.txt (the builder
+problems and the WhatsApp photo idea still apply).
+===========================================================================
+
+THE IDEA
+  Akayza already has builders. A builder rarely works alone: a general
+  builder needs a plumber for the bathroom, an electrician for the wiring,
+  a painter at the end -- and today finds them through word of mouth and
+  WhatsApp groups, with no way to see their work first.
+
+  Jobs becomes a place where builders FIND each other, SEE each other's
+  real work (photos and short videos of finished stages, confirmed by
+  clients), CONNECT, and WORK TOGETHER on a job. Talking happens where
+  they already talk: WhatsApp and phone calls.
+
+  After suppliers, this is the second feature that makes Akayza more than
+  a tool: a network with proof. (Suppliers for a job come later; Mandla
+  wires that tab.)
+
+  RULE: clear and simple. Big photos, few words, one obvious action per
+  screen. A builder on a site with dusty hands must manage it.
+
+
+---------------------------------------------------------------------------
+1. THE SCREENS
+---------------------------------------------------------------------------
+
+  Jobs gets three tabs at the TOP (a segmented bar under the title):
+
+      [ For you ]   [ Jobs ]   [ Suppliers ]
+
+  FOR YOU  (the new front page of the tool)
+    a) BUILDERS YOU MAY KNOW -- a row you swipe LEFT/RIGHT: round photo (or
+       initials), name, trade, area, one reason line:
+         "Plumber · Tembisa · 3 km"
+         "Works with Sipho, who you know"
+         "12 stages confirmed by clients"
+       Tap -> their profile. "Connect" on the card.
+    b) HELP WANTED NEAR YOU -- posts from builders who need someone of
+       YOUR trade: "Plumber needed · bathroom · Ivory Park · from Mon,
+       2 days". Tap -> "I'm interested".
+    c) YOUR PEOPLE -- builders you're connected to, with WhatsApp and Call
+       buttons right on the row.
+    d) SUPPLIERS FOR YOUR JOBS -- one row, placeholder until Mandla wires it
+       ("Coming soon" card, no fake data).
+
+  JOBS  (what exists today, made clearer)
+    Your jobs list as now, plus on each job:
+      - CREW: the builders working with you on it (faces in a row,
+        "+ Add someone").
+      - "NEED HELP ON THIS JOB?" -> make a help-wanted post from it (the
+        trade, what for, when, how long; the area comes from the job).
+    Job detail: stages as today; a stage can be given to a crew member
+    ("Bathroom plumbing -- Thabo").
+
+  SUPPLIERS  (Mandla, later)
+    Suppliers for this builder's jobs and stages (materials per stage ->
+    suppliers that deliver to the site). Leave a placeholder screen.
+
+  BUILDER PROFILE  (someone else's)
+    Photo or initials, name, trades, area (suburb only), since when on
+    Akayza, proof numbers ("24 stages confirmed by clients", "8 jobs
+    done"), and WORK: finished jobs as a SLIDESHOW (swipe photos and short
+    videos full-screen, the stage name under each). Buttons: Connect (or
+    WhatsApp + Call once connected), and ... -> Report / Block.
+
+  MY BUILDER PROFILE  (your own)
+    Trades (several allowed), a one-line "what I do", how far you travel,
+    "Show me to other builders" (on/off), and WHICH finished jobs and
+    photos/videos appear in your work (you choose; nothing is public by
+    default).
+
+
+---------------------------------------------------------------------------
+2. WORK SHOWCASE (photos and short videos, Cloudinary)
+---------------------------------------------------------------------------
+  - Source: the stage photos jobs already take (camera only, hashed by the
+    server) -- so the showcase is REAL work with a client's sign-off, not
+    photos off the internet. That is the trust story; say it on the
+    profile: "Photos from jobs confirmed by clients".
+  - Short videos (new): up to 30 seconds and 50 MB, camera only, uploaded
+    the same way as photos (shared.media signed upload, the job's own
+    folder). Cloudinary's free plan refuses videos over 100 MB; our cap
+    keeps uploads fast on mobile data and bandwidth costs low. Show a
+    poster frame; play on tap, never autoplay (data costs).
+  - The builder picks what's shown (per photo / video). A client's home
+    is private: no street address on the showcase, only the suburb; a tip
+    when choosing: "Avoid faces and house numbers". Location metadata is
+    stripped (check Cloudinary's upload settings; test it).
+  - The slideshow loads small versions first (Cloudinary transformations:
+    width-limited, auto quality) -- a profile must open on slow data.
+
+
+---------------------------------------------------------------------------
+3. CONNECTING BUILDERS
+---------------------------------------------------------------------------
+  - A builder connection is MUTUAL (unlike connecting to a supplier):
+    request -> the other accepts or ignores. Pending requests show on
+    For you ("Thabo wants to connect").
+  - Phone numbers are shown ONLY between connected builders (or between a
+    help-wanted poster and someone they picked, section 5). Before that:
+    name, trade, area and work only.
+  - Block: they disappear for you and can't find you or message you
+    through Akayza. Report: a reason list; reports are reviewed by us
+    (store them; the review screen is later).
+  - Limits: 30 connection requests a day per builder; the same person
+    can't be asked again for 30 days after ignoring.
+
+
+---------------------------------------------------------------------------
+4. WORKING TOGETHER ON A JOB (crew)
+---------------------------------------------------------------------------
+  - The job owner adds a CONNECTED builder to a job, with a role
+    ("Plumbing") and optionally the stages they're doing. The builder
+    accepts; the job then shows in their Jobs tab marked "Crew".
+  - What crew see: the job title, the suburb, their stages, and photos of
+    those stages. NOT: the client's name or phone, the job's total or the
+    other stages' money -- unless the owner shares them later (not now).
+  - A crew member can take the photo for their own stage; the sign-off
+    still goes from the owner to the client (one client relationship).
+  - This is also proof for the crew member: stages they did, confirmed by
+    the client, count on THEIR profile too ("Worked on 3 jobs with
+    Nomsa Builders").
+
+
+---------------------------------------------------------------------------
+5. HELP WANTED POSTS
+---------------------------------------------------------------------------
+  - From a job: trade needed, what for (short text), start date, how many
+    days, the job's suburb (never the address). Expires after 7 days or
+    when filled.
+  - Shown to builders of that trade within their travel distance, on
+    For you, best matches first (section 6).
+  - "I'm interested" -> the poster sees who responded (with their work and
+    proof) and picks -> both get each other's number: WhatsApp / Call.
+  - Limits: 5 open posts per builder; 20 "I'm interested" a day.
+  - No payment through us for now: builders agree between themselves.
+
+
+---------------------------------------------------------------------------
+6. THE RECOMMENDATION (explainable, like the supplier engine)
+---------------------------------------------------------------------------
+  "Builders you may know" and help-post matching score each candidate and
+  SHOW the top reason. No black box.
+
+    score =
+      trade fit            30  complementary trades rank highest (general
+                               builder <-> plumber, electrician, painter,
+                               tiler, carpenter); the same trade scores
+                               lower but still counts (overflow work)
+    + closeness          20  distance between home areas / active sites,
+                               within the builder's travel distance
+    + mutual connections 20  number of builders you both know (how
+                               LinkedIn's "people you may know" works:
+                               "triadic closure" -- people with many
+                               shared connections tend to connect)
+    + proof              20  stages confirmed by clients (log-scaled so a
+                               few big builders don't take over)
+    + activity           10  active in the last 30 days
+
+  Rules:
+    - Never show: people you blocked or who blocked you, people who
+      turned "Show me" off, yourself, existing connections.
+    - Cold start (a new builder with no connections): trade fit +
+      closeness only, reason "Plumber · 3 km".
+    - Fairness: don't let the same 3 builders fill every row -- after the
+      top 3, mix in newer builders (they need their first connection too).
+    - Help posts: trade must match; then closeness, proof, activity.
+  Keep it in plain Python like the supplier engine (a few thousand
+  builders need no machine learning). Later (with real data): weight
+  tuning from which suggestions get accepted.
+
+
+---------------------------------------------------------------------------
+7. PRIVACY, SAFETY, ETHICS (POPIA)
+---------------------------------------------------------------------------
+  - Visibility is a choice with a clear reason: "Show me to other builders
+    so they can find you and see your work." Consent is specific and can
+    be withdrawn any time (then the profile disappears at once).
+  - Minimum shown: name, trades, suburb, proof numbers, chosen work. Never:
+    the exact location, clients' names or numbers, the builder's own
+    phone (until connected).
+  - Photos/videos of clients' homes: builder-chosen, no address, metadata
+    stripped.
+  - Abuse: block, report, rate limits, audit every connect/accept/report
+    (no names or phones in the audit).
+  - All queries scoped to current_user(); tests prove a builder can't see
+    another's pending requests, crew-only job details or a blocked
+    person.
+
+
+---------------------------------------------------------------------------
+8. DATA AND API (sketch -- propose the real one in CONTRACT_jobs_v2.txt)
+---------------------------------------------------------------------------
+  Tables (trader schema):
+    builder_profiles     user_id, trades[], about, travel_km, visible,
+                         visible_changed_at
+    builder_connections  requester_id, addressee_id, status
+                         (pending/accepted/ignored), responded_at
+    builder_blocks       blocker_id, blocked_id
+    builder_reports      reporter_id, reported_id, reason, note
+    job_crew             job_id, builder_id, role, status (invited/
+                         accepted/left), stage_ids[]
+    help_posts           job_id, user_id, trade, what, starts_on, days,
+                         suburb, lat/lng (rounded), status, expires_at
+    help_responses       post_id, builder_id, status (interested/picked)
+    showcase_items       user_id, job_id, stage_id, media public_id,
+                         kind (photo/video), position, visible
+
+  API (all @auth_required, rate-limited, scoped):
+    GET  /me/builder-profile, PATCH /me/builder-profile
+    GET  /builders/for-you            (people you may know + help posts
+                                       + your people, one call for the tab)
+    GET  /builders/<id>               (profile + showcase)
+    POST /builders/<id>/connect, POST /me/builder-requests/<id>/accept|ignore
+    POST /builders/<id>/block, POST /builders/<id>/report
+    POST /me/jobs/<id>/crew, POST /me/crew-invites/<id>/accept
+    POST /me/jobs/<id>/help-posts, POST /help-posts/<id>/interested,
+    POST /me/help-posts/<id>/pick/<builder_id>
+    showcase: sign/finish upload like stage photos; PATCH visibility/order
+
+  Contact (app only, no backend): Linking.openURL(
+    "https://wa.me/27XXXXXXXXX?text=" + encodeURIComponent(msg)) and
+    "tel:+27XXXXXXXXX". Numbers stored E.164; strip the "+" for wa.me.
+    Core React Native; no new native module.
+
+
+---------------------------------------------------------------------------
+9. WHAT WE NEED (and who)
+---------------------------------------------------------------------------
+  Risuna (all of jobs v2, including what touches shared code)
+    - everything above, in this order: builder profile + visibility ->
+      showcase from existing stage photos (photos only first) -> For you
+      with "builders you may know" -> connect + WhatsApp/Call -> help
+      posts -> crew on a job -> short videos.
+    - Video uploads: a "job_video" purpose in shared.media with the 50 MB
+      cap and its tests. shared/ is Mandla's area, so write
+      NEEDS_job_video.txt with the exact change first, then make it in
+      your PR (Mandla reviews it there).
+    - TRADES list: today general_builder, plumber, electrician, carpenter,
+      painter_tiler, other_trade. Propose the new list (e.g. split
+      painter/tiler; add bricklayer, roofer, welder, glazier) in
+      QUESTION_trades.txt; after Mandla's yes, change the backend and app
+      constants in your PR, with a data migration for existing profiles.
+  Mandla (the supplier side only)
+    - The Suppliers tab and "suppliers for your jobs", wired AFTER the
+      supplier work in progress is done. Until then: the placeholder card
+      and screen, no fake data.
+  Both
+    - Report review: where reports go before we have an admin screen
+      (propose: an email to us, no personal details in it).
+
+
+---------------------------------------------------------------------------
+10. FOR SUNDAY (cut to what shows the idea)
+---------------------------------------------------------------------------
+  MUST: For you with builders you may know (with reasons), a builder
+  profile with the work slideshow (photos), connect + WhatsApp/Call,
+  one help-wanted post flow.
+  NICE: crew on a job, videos.
+  DEMO STORY: "Nomsa's crew needs a plumber in Ivory Park. She posts from
+  her job; Thabo, a plumber 3 km away with 12 client-confirmed stages,
+  taps I'm interested; she opens his work, picks him, WhatsApp opens."
+
+
+---------------------------------------------------------------------------
+QUESTIONS BUILDERS WILL ASK (answer them in the UI)
+---------------------------------------------------------------------------
+  "Will other builders steal my clients?"      -> clients' names and numbers
+                                                  are never shown.
+  "Who can see my phone number?"               -> only builders you connect
+                                                  with or pick.
+  "Can I hide my work?"                        -> you choose every photo;
+                                                  hide everything any time.
+  "What if someone is fake?"                   -> proof comes from clients'
+                                                  sign-offs; report and block.
+  "Does it cost money / data?"                 -> free; small photos first,
+                                                  videos only on tap.
+
+---------------------------------------------------------------------------
+SOURCES
+---------------------------------------------------------------------------
+  WhatsApp click to chat (wa.me): https://faq.whatsapp.com/5913398998672934
+  Cloudinary file size limits:    https://support.cloudinary.com/hc/en-us/articles/202520592-Do-you-have-a-file-size-limit
+  Triadic closure / people you may know:
+    https://blogs.cornell.edu/info2040/2014/09/09/linkedin-the-online-triadic-closure-tool/
+    https://www.pnas.org/doi/10.1073/pnas.2404590122
+  POPIA consent: https://termly.io/resources/articles/south-africas-protection-of-personal-information-act/

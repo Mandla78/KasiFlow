@@ -19,8 +19,9 @@ export const MAPBOX_PUBLIC_TOKEN: string = process.env.EXPO_PUBLIC_MAPBOX_TOKEN 
 export const API_BASE_URL: string = process.env.EXPO_PUBLIC_API_URL ?? 'http://localhost:5000/api/v1';
 
 /**
- * Sign-in against the real backend (false) or the mock (true, the default).
- * Only identity is wired so far; onboarding and suppliers stay mocked.
+ * The real backend (false) or the mocks (true, the default), for sign-in,
+ * onboarding, the tools and the supplier screens. Orders are still mocked
+ * (they price from whichever catalogue is active).
  */
 export const USE_MOCK_AUTH: boolean = process.env.EXPO_PUBLIC_USE_MOCK_API !== 'false';
 
