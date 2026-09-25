@@ -1,0 +1,102 @@
+===========================================================================
+DECISION -- CREDIT BOOK (review of risuna/credit-book-ui)
+From: Mandla, Friday 25 September 2026
+This file REPLACES the review comment on the pull request where they differ
+(the supplier-debt change below came after that comment).
+===========================================================================
+
+STATUS: approved to build the backend, with the changes below.
+Great work: the UI is clean, matches our design and rules, typecheck and
+lint are clean, and every screen works against the mock.
+
+
+0. THE BIG ONE -- THE CREDIT BOOK IS CUSTOMERS ONLY
+---------------------------------------------------------------------------
+
+  Remove supplier debts completely:
+    - the "I owe suppliers" tab and CreditTabs (show the customer list
+      directly)
+    - the "Add supplier debt" screen and its route
+      (app/.../credit-book/supplier-debt.tsx)
+    - kind / supplier_debt / supplier_name from types.ts, the mock, the
+      contract and the backend. credit_entries always has a customer_id;
+      there is no kind column.
+
+  Why: money between a trader and a supplier only exists through an ORDER
+  (paid in the app, cash confirmed by both sides at delivery, or stock
+  taken on credit). That is the supplier/order mechanism Mandla is
+  building. A hand-typed supplier debt would invent a supplier and a debt
+  the supplier never confirmed, which breaks "confirmed by both".
+  "What you owe suppliers" will come from real orders, on Mandla's side
+  (docs/teammate/01 seam c, updated).
+
+
+1. FOLDERS -- everything inside the credit book folder
+---------------------------------------------------------------------------
+
+  Frontend (already right; keep it):
+    frontend/mobile/src/features/dashboard/informal-business/credit-book/
+        types.ts  api/  components/  lib/  screens/
+    frontend/mobile/src/app/(dashboard)/informal-business/credit-book/
+        route files, one line each
+
+  Backend (new code only here):
+    backend/src/domains/informal_trader/credit_book/
+        constants.py      statuses, limits (R100,000 max, dates)
+        models/           credit_customer.py, credit_entry.py,
+                          credit_payment.py, credit_correction.py
+        schemas/          credit_book_schemas.py (unknown=RAISE)
+        repositories/     credit_book_repository.py (every query takes user_id)
+        services/         credit_book_service.py, credit_audit.py
+        api/routes.py     thin: validate -> service -> answer
+    backend/tests/domains/informal_trader/test_credit_book.py
+    backend/migrations/versions/0011_credit_book.py
+
+  Outside that folder, ONE line each in: src/__init__.py (models),
+  src/api/__init__.py (routes), tests/conftest.py (TRADER_TABLES), and
+  your credit.* events in src/shared/audit/event_types/business.py.
+
+
+2. REQUIRED CHANGES
+---------------------------------------------------------------------------
+
+  - Rebase first: git fetch && git rebase origin/main. Sign-up changed
+    (email + password only; the business name is in step 1, "Your
+    business"), and these docs changed.
+  - Migration: 0011_credit_book (0010 is taken).
+  - Paper book: an optional given_on up to 1 year back (default today),
+    due_on >= given_on, due_on may be in the past -- a trader copying
+    their paper book enters credit that is already overdue. Mock and the
+    New credit sale screen too ("Earlier" is enough).
+  - Customer names: CleanText from src/shared/validation/text.py, at
+    least one letter, no hidden/control characters (nicknames fine).
+  - Rate limits per USER, not per IP (Flask-Limiter key from the signed-in
+    user id), or two traders on one spaza Wi-Fi share a limit.
+  - Tests: another trader gets 404 on every route; overpaying refused;
+    two payments at once can't overpay; the same Idempotency-Key never
+    adds twice; every validation limit; the audit trail never contains
+    names or phone numbers; plus hostile-input tests for your text fields
+    (see tests/domains/identity/test_hostile_input.py).
+  - python -m pytest -q all green.
+
+
+3. YOUR QUESTIONS
+---------------------------------------------------------------------------
+
+  1. /me/credit-book/entries -- yes.
+  2. written_off -- later.
+  3. Migration -- 0011, not 0010.
+  4. PATCH /me/credit-book/customers/{id} for the phone -- now (WhatsApp
+     reminders are the core value).
+  5. Correcting a paid entry upwards re-opens it -- yes; the history shows why.
+  6. jest-expo for the lib/ tests -- yes, dev dependency only. Keep the
+     63 checks.
+
+
+4. WHEN DONE
+---------------------------------------------------------------------------
+
+  A PR from risuna/credit-book-api into main, with the checklist from
+  docs/teammate/12_DEFINITION_OF_DONE.txt, feedback/STATUS.txt updated,
+  and the app switched from the mock to the real API
+  (httpCreditBookApi.ts) in the same PR.
