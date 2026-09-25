@@ -1,0 +1,61 @@
+===========================================================================
+SIGNALS -- what a builder's jobs say they'll buy (for the supplier engine)
+===========================================================================
+
+FROM / DATE:   Risuna, Saturday 26 September 2026
+FOR:           Mandla (14_ROUND_2_BRIEF.txt §4: "Mandla wires it")
+BRANCH:        risuna/signals (from main)
+
+
+THE FUNCTION (read-only, in the jobs domain; never a repository)
+
+    from src.domains.informal_trader.jobs.services import jobs_service
+    jobs_service.demand_signals(user) ->
+      {"categories": {"building_materials": 0.6, "plumbing": 0.4},
+       "active_sites": [{"lat": -26.0, "lng": 28.23}],
+       "next_stages": ["walls", "roof"]}
+
+  categories    shares (sum 1.0, 2 decimals, biggest first) of the work
+                STILL TO DO: every stage not yet confirmed counts with its
+                amount. Its name picks the categories ("Bathroom pipes" ->
+                plumbing, "Roof" -> building_materials + tools_hardware,
+                "Plug points" -> electrical, "Floor tiles" ->
+                paint_finishes, "Gate" -> tools_hardware +
+                building_materials). A name we don't recognise ("Deposit")
+                falls back to the builder's trade (the same trade ->
+                categories as the app's TRADES). No open stages: the trade
+                alone. Codes are shared/constants/categories.py.
+  active_sites  where to deliver: jobs have no pin of their own yet, so
+                it's the builder's business pin, rounded to 0.01 (~1 km),
+                and only while they have an active job. Empty otherwise.
+  next_stages   the next unconfirmed stage of each active job, lower case,
+                each once, newest job first, at most 5.
+
+  Done jobs and jobs in the bin don't count.
+
+
+PRIVACY (tested)
+  The builder's own data for the builder's own suggestions. Shares only:
+  no client names or phones, no job titles, no amounts, no suburb or
+  street. Never send it to a supplier; use it to rank for this builder.
+  The app should say it in plain words: "Your jobs help us suggest
+  suppliers for what you need."
+
+
+HOW YOU MIGHT USE IT (your call)
+  - Rank suppliers higher when they sell the top categories AND deliver
+    to an active site; a reason line like "Your next stage is walls:
+    Mahlangu Wholesale has cement and bricks".
+  - In a supplier's catalogue, show those categories first.
+
+
+TESTS
+  backend/tests/domains/informal_trader/test_jobs_signals.py (16): stage
+  words, weighting by what's left, trade fallback, rounded site, next
+  stages, done jobs ignored, no pin, no client data or money, each builder
+  only their own.
+
+
+ORDER BOOK SIGNALS
+  Come with the order book's backend (CONTRACT_order_book.txt proposes
+  order_book_service.demand_signals from menu ingredients x units sold).

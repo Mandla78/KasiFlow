@@ -5,6 +5,7 @@ jobs -- a builder's jobs, paid in stages.
   get_job(user, id)
   create_job(user, data)     with stages that add up to the total
   summary(user)              for Home and the Account tile
+  demand_signals(user)       what the open work needs (supplier engine; jobs_signals.py)
   view(job)                  a job as the app sees it
 
 Every call acts on the signed-in user only; "not yours" is the same 404 as
@@ -21,6 +22,7 @@ from src.shared.audit.event_types.business import BusinessAuditEvent as E
 from ..models import Job, JobStage
 from ..repositories import jobs_repository as repo
 from . import jobs_audit
+from .jobs_signals import demand_signals  # noqa: F401 -- the supplier engine reads it here
 
 
 def job_or_404(user, job_id: uuid.UUID) -> Job:
@@ -111,3 +113,4 @@ def _stage_view(s: JobStage) -> dict:
         "sign_off_sent_at": s.sign_off_sent_at.isoformat() if s.sign_off_sent_at else None,
         "confirmed_at": s.confirmed_at.isoformat() if s.confirmed_at else None,
     }
+
