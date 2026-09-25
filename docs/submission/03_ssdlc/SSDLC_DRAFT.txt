@@ -1,77 +1,152 @@
 ===========================================================================
-[DRAFT -- changes as we build] SSDLC -- SECURITY (due Sat 12:30) -- PASTE INTO SONKE
-Source of truth for pasting (moved here from 06). (est.) = estimate.
+[DRAFT] SSDLC -- SECURITY (due Sat 12:30) -- PASTE INTO SONKE
+Rewritten Fri 25 Sep to match what is BUILT AND TESTED. Anything not built
+yet is under "PLANNED" and says so. Update the numbers before pasting.
 ===========================================================================
 
-8. SSDLC -- PASTE INTO SONKE (due Sat 12:30)
----------------------------------------------------------------------------
+SECURITY REQUIREMENTS (RISK ASSESSMENT)
 
-  SECURITY REQUIREMENTS (RISK ASSESSMENT)
-    Assets: owners' books (credit book names and amounts), sealed
-    records, per-phone signing keys, share links, payment data.
-    Main risks: fabricated or edited records; malicious file uploads;
-    automated attacks on sign-in and public pages; a stolen phone
-    used to confirm cash; a runner or driver pocketing cash;
-    leaked customer debts; share links forwarded or leaked; fake
-    payment notifications; phone clocks set back; colluding accounts.
-    Requirements: the server trusts nothing a phone claims about trust
-    -- phones send signed facts, the server decides confirmation,
-    flags and disputes. We never hold money (PayFast). POPIA: consent
-    for every share, data minimisation, customers' names never leave
-    the owner's books. The reputation is not a credit score and never
-    locks a tool.
+  Assets: traders' accounts and sessions; their business details and
+  books (customer names and amounts stay private to the trader); photos
+  and documents; payment status of orders; the two-sided record.
 
-  THREAT MODELLING & DESIGN REVIEW
-    Spoofing: per-phone Ed25519 key in the Android keystore; a new
-    phone switches the old key off; a new SIM changes nothing.
-    Tampering: every event hash-chained (SHA-256) and signed;
-    re-verified on every record view; any break freezes the record.
-    Repudiation: actions are signed with the phone's registered key
-    (proof of possession at registration) and audit-logged; a payment
-    counts as confirmed only when our server has verified the payment
-    provider's signed notification.
-    Information disclosure: amounts never broadcast in the clear
-    (salted commitment + HMAC match tag); share links are 128-bit
-    tokens stored only as hashes; the owner chooses what a link shows.
-    Denial of service: rate limits on every auth route, capped input
-    sizes, Cloudflare in front; idempotency keys make retries safe
-    (a repeated request is never processed twice).
-    Elevation of privilege: every API route pins a role; identity
-    comes only from the verified token; object-level checks on every
-    record read.
-    Honest limits: a hash chain proves a record was not changed after
-    sealing, not that it was true when entered. A handshake proves both
-    parties signed the same amount, not that the notes were real.
+  Main risks: account takeover (guessed, leaked or reused passwords, a
+  stolen phone, a stolen token); fishing for which emails have accounts;
+  one user reading another's data (IDOR); injection (SQL, email header,
+  template, script); junk or malicious input crashing the service;
+  forged callbacks from our providers; malicious or oversized uploads;
+  personal data leaking into logs; automated abuse of sign-in and search.
 
-  DEVELOPMENT (SECURE CODING PRACTICES)
-    One canonical JSON rule and a shared test vector in Python and
-    TypeScript; money as integer cents; hashes over stored canonical
-    bytes, never over database JSON. Parameterised queries only.
-    Secrets from environment variables with no fallback defaults; debug
-    mode off outside local machines. Input validation on every
-    endpoint; rate limits on sign-in codes and PIN attempts. Pinned
-    dependencies. Secret scanning before every push. All AI-assisted
-    code is reviewed by a team member before merge.
+  Requirements we set ourselves:
+  - The server trusts nothing the phone claims: identity only from a
+    verified token; verification results (e.g. the company check) set
+    only by the server; upload details taken from the storage provider,
+    not from the phone.
+  - POPIA: collect only what we can verify or need; consent versions
+    recorded at sign-up; users can download their data and close their
+    account; unconfirmed sign-ups deleted after 7 days.
+  - We never hold money: payments go through a licensed provider.
 
-  SECURITY TESTING
-    Cross-language test vector (with a non-ASCII string and a genesis
-    event); signature, chain-link and hash checks with deliberately
-    broken events; replayed and duplicate uploads; clock-skew cases;
-    IDOR test (a second account cannot read another's record or
-    shares); expired and revoked share links; sign-in code brute force;
-    tamper_demo.py as an automated test; dependency audit (pip-audit,
-    npm audit) and secret scan.
 
-  ASSESSMENT & SECURE INTEGRATION
-    Cloudflare sits in front of every public endpoint: TLS, DDoS
-    protection, managed WAF rules, rate limits and bot rules; the
-    origin accepts traffic only from Cloudflare. Every upload is
-    scanned for malware (Cloudinary + Perception Point) and stays
-    hidden until approved. The public checker page runs as its own process with read-only
-    database access and a single route; only it is exposed through the
-    tunnel -- the API is not reachable from the internet. PayFast
-    payment notifications validated (signature, amount, server
-    confirmation) before an order is marked paid. Stolen phone: the
-    key is revoked server-side and a new chain segment starts. Chain
-    breaks are cleared only by manual review. Before any real launch: POPIA legal review, external
-    penetration test, encryption of context keys at rest.
+THREAT MODELLING & DESIGN REVIEW (STRIDE -- what is built)
+
+  Spoofing
+  - Passwords: bcrypt; 8-64 characters and at most 72 bytes, with upper,
+    lower, digit and symbol, checked by the server (not only the app).
+  - Two-factor sign-in: on a phone not seen before, the right password
+    only earns a one-time code by email, bound to a random challenge
+    held by that phone; the phone is then trusted with a random token
+    (only its HMAC stored), revocable from the Security screen.
+  - Lockout after 5 wrong passwords, revealed only to someone who then
+    gives the right one.
+  - No account enumeration: sign-up, sign-in, resend and forgot-password
+    answer identically whether or not the email exists, with equal
+    timing (a dummy password check runs for unknown emails).
+
+  Tampering
+  - Append-only audit trail, enforced by database triggers (rows cannot
+    be updated or deleted, not even by the app).
+  - Provider callbacks (Cloudinary) verified by signature, refused when
+    older than 2 hours (replay) -- a forged call gets 401 (tested live).
+  - Uploaded files are checked with the provider itself before they are
+    accepted: real size and URL, and the upload must have been started by
+    the same user for the same purpose.
+
+  Repudiation
+  - Every identity action is audited: who, which session, which phone,
+    success or failure and why -- never passwords, codes or tokens.
+
+  Information disclosure
+  - Secrets stored only as hashes: bcrypt for passwords; HMAC-SHA256 for
+    email codes, reset tickets and trusted-phone tokens.
+  - No secrets in logs, even in development (an automated test fails the
+    build if a code ever appears in the logs).
+  - Security headers on every response: no content sniffing, no framing,
+    no referrer, no caching. The password-reset page carries the ticket
+    with no-referrer and no-store.
+  - Provider keys (Mapbox, Cloudinary) stay on the server; the app never
+    receives them. Storage folders use HMAC keys, never database ids.
+
+  Denial of service
+  - Rate limits on every sensitive route (sign-in 5/min per IP+email,
+    sign-up 5/hour, codes, resets, search, uploads), 1 MB request cap,
+    a daily upload quota per account, and a daily cap on company checks.
+
+  Elevation of privilege
+  - Every route pins who may call it (signed-in trader, supplier, or a
+    public page holding a one-time ticket).
+  - Every query is scoped to the signed-in user from the token; a user id
+    from the request is never trusted (IDOR tests prove another trader
+    gets nothing).
+  - Sessions: 15-minute access tokens; refresh tokens rotate, and reusing
+    an old one ends the session (theft detection); every request checks
+    the session is still live, so sign-out and password changes cut
+    access off immediately.
+  - The identity code is sealed: an automated architecture test fails if
+    any other part of the system reaches into its internals.
+
+
+DEVELOPMENT (SECURE CODING PRACTICES)
+
+  - SQL injection: all database access goes through SQLAlchemy with
+    bound parameters; no SQL is ever built from user input. Tested with
+    injection strings in every text field.
+  - Mass assignment: strict request schemas reject unknown fields, so a
+    client can't set a field it shouldn't (e.g. its own verified status).
+  - Input hygiene: text is Unicode-normalised and trimmed; control,
+    invisible and right-to-left-override characters are refused; a
+    request carrying a NUL character is refused before any code runs;
+    names must be real names (letters; no emoji; business names without
+    digits); money is integer cents; coordinates must be real numbers
+    inside range (NaN/Infinity refused).
+  - Injection into emails: email templates escape user text; email
+    addresses are validated so header injection (CR/LF) can't pass.
+  - Configuration: secrets only from environment variables; production
+    refuses to start with short secrets (< 32 characters), without real
+    email, without media keys, or without an https public address.
+  - Process: every change on a feature branch; pull requests reviewed by
+    the lead before merging into main; all AI-assisted code is reviewed
+    by a team member before merge; database migrations reviewed and
+    checked against the models.
+
+
+SECURITY TESTING (automated, run before every merge)
+
+  - 338 backend tests, including 210 hostile-input tests: malformed and
+    injected emails (SQL, CR/LF header injection, script), emoji,
+    control and invisible characters, template injection, wrong JSON
+    types, broken bodies, NaN/Infinity, very long values. Rule: refuse,
+    never crash, never accept junk, never leak whether an account exists.
+  - These tests found and we fixed three real bugs: long/emoji passwords
+    crashing bcrypt (over 72 bytes), a NUL character crashing the
+    database write, and invisible characters accepted as a name.
+  - IDOR, rate-limit, lockout, two-factor, refresh-token reuse, password
+    reset (one use, expiry), account closure, data export (no secrets),
+    audit-trail immutability, and architecture-boundary tests.
+  - End-to-end: a script checks the real media provider (signed upload,
+    verification, forged callback refused, genuine one accepted,
+    clean-up); browser runs of sign-up, two-factor, profile and restore.
+
+
+ASSESSMENT & SECURE INTEGRATION -- PLANNED (not built yet)
+
+  - Cloudflare in front of the API: TLS, WAF, DDoS protection, bot rules;
+    the origin accepts traffic only from Cloudflare. HSTS.
+  - Shared rate-limit store (Redis) so limits hold across servers.
+  - Malware scanning of every upload (Cloudinary + Perception Point) with
+    files hidden until approved -- the approval path is built and tested;
+    switched on once the add-on is enabled.
+  - Payments: PayFast notifications validated (signature, amount, server
+    confirmation) before an order is marked paid.
+  - Supplier system integration (ERP): scoped, hashed API keys with
+    rotation and revocation, signed requests, per-key limits.
+  - Two-sided proof: records sealed with hashes and phone-held signing
+    keys (the server check for phone keys is built; the phone side comes
+    with the next app build).
+  - Refusing known leaked passwords; dependency and secret scanning in CI;
+    an external penetration test and a POPIA legal review before launch.
+
+  Honest limits: a record proves what both sides confirmed, not that it
+  was true; email as a second factor is only as safe as the email
+  account; a signed-link confirmation is weaker than two signed phones,
+  and we label it as such.
