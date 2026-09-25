@@ -1,5 +1,5 @@
 import { Feather } from '@expo/vector-icons';
-import { useLocalSearchParams } from 'expo-router';
+import { router, useLocalSearchParams } from 'expo-router';
 import { ComponentProps, useEffect, useState } from 'react';
 import { ActivityIndicator, Pressable, StyleSheet, Text, View } from 'react-native';
 
@@ -12,7 +12,8 @@ import { Money, Overline, Title } from '@/shared/components/Text';
 import { formatRand } from '@/shared/lib/money';
 import { colors, fonts } from '@/shared/theme/tokens';
 
-import { creditBookApi } from '../api/creditBookApi';
+import { BIN_READY, creditBookApi } from '../api/creditBookApi';
+import { BinConfirmSheet } from '../components/BinConfirmSheet';
 import { CorrectionSheet } from '../components/CorrectionSheet';
 import { PhoneSheet } from '../components/PhoneSheet';
 import { RepaymentSheet } from '../components/RepaymentSheet';
@@ -28,7 +29,7 @@ export default function EntryDetailScreen() {
   const { profile } = useSession();
   const [entry, setEntry] = useState<CreditEntryDetail | null>(null);
   const [failure, setFailure] = useState<'missing' | 'network' | null>(null);
-  const [sheet, setSheet] = useState<'repay' | 'correct' | 'phone' | null>(null);
+  const [sheet, setSheet] = useState<'repay' | 'correct' | 'phone' | 'bin' | null>(null);
   const [note, setNote] = useState<{ text: string; ok: boolean } | null>(null);
   const [attempt, setAttempt] = useState(0);
   const today = todayIso();
@@ -150,7 +151,13 @@ export default function EntryDetailScreen() {
           <HistoryRow key={h.id} item={h} today={today} last={i === history.length - 1} />
         ))}
       </Card>
-      <Text style={styles.footnote}>Nothing in the book can be deleted. Mistakes are corrected, and the history keeps both.</Text>
+      <Text style={styles.footnote}>Mistakes are corrected, and the history keeps both. Moving an entry to the bin only hides it from you.</Text>
+      {BIN_READY ? (
+        <Pressable accessibilityRole="button" onPress={() => setSheet('bin')} style={styles.correct}>
+          <Feather name="trash-2" size={15} color={colors.garnet} />
+          <Text style={[styles.correctText, { color: colors.garnet }]}>Move to the bin</Text>
+        </Pressable>
+      ) : null}
 
       {sheet === 'repay' ? (
         <RepaymentSheet
@@ -175,6 +182,17 @@ export default function EntryDetailScreen() {
           customer={entry.customer}
           onClose={() => setSheet(null)}
           onSaved={(c) => saved({ ...entry, customer: { ...entry.customer, phone: c.phone } }, `Saved. You can now remind ${c.name} on WhatsApp.`)}
+        />
+      ) : null}
+      {sheet === 'bin' ? (
+        <BinConfirmSheet
+          title={`Delete ${entry.customer.name}'s entry?`}
+          keeps={entry.paidCents > 0 ? `The ${formatRand(entry.paidCents)} paid back stays in your record.` : undefined}
+          onClose={() => setSheet(null)}
+          onConfirm={async () => {
+            await creditBookApi.moveToBin(entry.id);
+            router.dismissTo({ pathname: '/informal-business/credit-book', params: { binned: entry.id } });
+          }}
         />
       ) : null}
     </Screen>

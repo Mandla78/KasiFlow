@@ -3,25 +3,27 @@ import { useCallback, useState } from 'react';
 import { ActivityIndicator, StyleSheet, Text, View } from 'react-native';
 
 import { Button } from '@/shared/components/Button';
-import { Card, IconTile, InfoNote } from '@/shared/components/Parts';
+import { Card, IconTile, InfoNote, ListRow } from '@/shared/components/Parts';
 import { Screen } from '@/shared/components/Screen';
-import { Overline, Title } from '@/shared/components/Text';
+import { Title } from '@/shared/components/Text';
 import { formatRand } from '@/shared/lib/money';
 import { colors, fonts } from '@/shared/theme/tokens';
 
 import { creditBookApi } from '../api/creditBookApi';
 import { EntryRow } from '../components/EntryRow';
 import { SummaryHeader } from '../components/SummaryHeader';
+import { UndoSnackbar } from '../components/UndoSnackbar';
 import { todayIso } from '../lib/dueDates';
 import { CreditEntry } from '../types';
 
 /**
- * Credit book (PDF p2): customers who owe the trader. Open entries first,
- * soonest due on top (late ones first of all), then what was paid back.
- * After a save, the new entry is shown on top.
+ * Credit book (PDF p2): customers who still owe the trader, soonest due on
+ * top (late ones first of all). Finished entries (paid back, cancelled)
+ * live in History; deleted ones in the bin. After a save, the new entry is
+ * shown on top; after a delete, an Undo bar.
  */
 export default function CreditBookScreen() {
-  const params = useLocalSearchParams<{ saved?: string }>();
+  const params = useLocalSearchParams<{ saved?: string; binned?: string }>();
   const [entries, setEntries] = useState<CreditEntry[] | null>(null);
   const [failed, setFailed] = useState(false);
   const [today, setToday] = useState(todayIso());
@@ -32,7 +34,7 @@ export default function CreditBookScreen() {
     setToday(todayIso());
     creditBookApi
       .list()
-      .then((rows) => live && setEntries(rows))
+      .then((rows) => live && setEntries(rows.filter((e) => e.status === 'open')))
       .catch(() => live && setFailed(true));
     return () => {
       live = false;
@@ -40,12 +42,15 @@ export default function CreditBookScreen() {
   }, []);
   useFocusEffect(load);
 
-  const all = entries ?? [];
-  const saved = all.find((e) => e.id === params.saved);
-  const rest = all.filter((e) => e !== saved);
-  const open = rest.filter((e) => e.status === 'open');
-  const paid = rest.filter((e) => e.status === 'paid');
-  const counted = all.filter((e) => e.status === 'open');
+  const forgetBinned = useCallback(() => router.setParams({ binned: '' }), []);
+  const undoBin = useCallback(async () => {
+    if (params.binned) await creditBookApi.restore(params.binned);
+    load();
+  }, [params.binned, load]);
+
+  const open = entries ?? [];
+  const saved = open.find((e) => e.id === params.saved);
+  const rest = open.filter((e) => e !== saved);
 
   const openEntry = (e: CreditEntry) => {
     // The "Saved" note is for the moment you come back; once you move on, it goes.
@@ -54,7 +59,14 @@ export default function CreditBookScreen() {
   };
 
   return (
-    <Screen back footer={<Button title="Credit sale" icon="plus" onPress={() => router.push('/informal-business/credit-book/new')} />}>
+    <Screen
+      back
+      footer={
+        <>
+          {params.binned ? <UndoSnackbar message="Moved to the bin." onUndo={undoBin} onDone={forgetBinned} /> : null}
+          <Button title="Credit sale" icon="plus" onPress={() => router.push('/informal-business/credit-book/new')} />
+        </>
+      }>
       <Title>Credit book</Title>
 
       {failed ? (
@@ -71,9 +83,9 @@ export default function CreditBookScreen() {
         <>
           <SummaryHeader
             label="Total owed to you"
-            totalCents={counted.reduce((s, e) => s + e.outstandingCents, 0)}
-            dueToday={counted.filter((e) => e.dueOn === today).length}
-            overdue={counted.filter((e) => e.dueOn < today).length}
+            totalCents={open.reduce((s, e) => s + e.outstandingCents, 0)}
+            dueToday={open.filter((e) => e.dueOn === today).length}
+            overdue={open.filter((e) => e.dueOn < today).length}
           />
 
           {saved ? (
@@ -87,31 +99,30 @@ export default function CreditBookScreen() {
             </View>
           ) : null}
 
-          {all.length === 0 ? (
+          {open.length === 0 ? (
             <Card style={styles.center}>
               <IconTile name="book-open" size={44} />
-              <Text style={styles.muted}>No one owes you anything yet. When someone takes goods now and pays later, add it here.</Text>
+              <Text style={styles.muted}>No one owes you anything right now. When someone takes goods now and pays later, add it here.</Text>
             </Card>
           ) : null}
 
-          {open.length ? (
+          {rest.length ? (
             <Card style={styles.group}>
-              {open.map((e, i) => (
-                <EntryRow key={e.id} entry={e} today={today} onPress={() => openEntry(e)} last={i === open.length - 1} />
+              {rest.map((e, i) => (
+                <EntryRow key={e.id} entry={e} today={today} onPress={() => openEntry(e)} last={i === rest.length - 1} />
               ))}
             </Card>
           ) : null}
 
-          {paid.length ? (
-            <>
-              <Overline>Paid back</Overline>
-              <Card style={styles.group}>
-                {paid.map((e, i) => (
-                  <EntryRow key={e.id} entry={e} today={today} onPress={() => openEntry(e)} last={i === paid.length - 1} />
-                ))}
-              </Card>
-            </>
-          ) : null}
+          <Card style={{ paddingVertical: 4 }}>
+            <ListRow
+              icon="clock"
+              title="History"
+              subtitle="Paid back and cancelled, and the bin"
+              onPress={() => router.push('/informal-business/credit-book/history')}
+              last
+            />
+          </Card>
 
           <InfoNote icon="lock">Customer names stay private to you. Suppliers never see them.</InfoNote>
         </>
