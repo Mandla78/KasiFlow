@@ -81,13 +81,20 @@ What's yours, what isn't, and exactly where the two meet
        change in both constants/businessTypes.ts and the backend's
        business_profile constants: ask Mandla (feedback/).
 
-  c) "I OWE SUPPLIERS" (credit book, second tab)
-       Some of those debts will come from real ORDERS (supplier gave
-       stock on credit). Orders are Mandla's. For now:
-         - the trader can ADD a supplier debt by hand (your data), and
-         - leave a clearly marked hook: suppliersOwedFromOrders() in your
-           api, returning [] in the mock. Mandla fills it when orders
-           exist. Show both in one list, labelled by source.
+  c) WHAT THE TRADER OWES SUPPLIERS -- NOT IN THE CREDIT BOOK
+       (Changed 25 Sep; earlier versions said to let traders add supplier
+       debts by hand. Don't.)
+       Money between a trader and a supplier only exists through an
+       ORDER: paid digitally, or cash confirmed by both sides at
+       delivery, or stock taken on credit from the supplier. That is
+       Mandla's supplier/order mechanism, still being built. A hand-typed
+       supplier debt would invent a supplier and a debt the supplier
+       never confirmed, which breaks "confirmed by both".
+         - The credit book is CUSTOMERS ONLY ("Customers owe me").
+         - No "I owe suppliers" tab, no supplier_debt kind, no
+           "Add supplier debt" screen.
+         - Mandla adds "What you owe suppliers" from real orders later
+           (its own screen/section, fed by the orders API).
 
   d) MY RECORD
        The record counts things confirmed by both sides. Your tools feed
@@ -107,7 +114,8 @@ What's yours, what isn't, and exactly where the two meet
        Stage photos are CAMERA ONLY (never the gallery) -- file 07.
 
   f) NOTIFICATIONS / HOME NUMBERS
-       Home shows "you owe suppliers" (from c) and "cash taken today"
+       Home shows "you owe suppliers" (Mandla's, from orders: leave it
+       mocked and marked) and "cash taken today"
        (roadmap/tally). Use your own api functions; if a number comes
        from orders, mock it and mark it.
 

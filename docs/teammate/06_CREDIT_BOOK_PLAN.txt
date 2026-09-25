@@ -12,18 +12,20 @@ Spaza default tool. NEVER CUT from the demo.
 ---------------------------------------------------------------------------
 
   CREDIT BOOK (p2)  /informal-business/credit-book
-    Two tabs: "Customers owe me" | "I owe suppliers"
-    Header: total outstanding for the tab; "2 due today"; "1 overdue"
+    Customers who owe the trader (no supplier tab: file 01 seam c)
+    Header: total owed to you; "2 due today"; "1 overdue"
     List: name, what they took (short), amount left, due ("Today",
           "Fri", "Month-end", "3 days late" in amber)
-    Big button: "New credit sale" (customers tab) / "Add supplier debt"
+    Big button: "New credit sale"
     Tap a row -> ENTRY DETAIL
 
   NEW CREDIT SALE (p3)  /informal-business/credit-book/new
     Customer: pick an existing one or type a new name (+ optional phone)
     Amount (rand)
     What they took (optional, short)
-    Pays back on: Today / Friday / Month-end / Pick a date
+    Given on: today, or earlier (up to a year back, to copy in the
+      paper book)
+    Pays back on: Today / Friday / Month-end / Pick a date (may be past)
     [x] Send WhatsApp receipt  (only if a phone is set)
     Note under the form: "Customer names stay private to you."
     Save -> back to the list, new entry on top
@@ -37,9 +39,8 @@ Spaza default tool. NEVER CUT from the demo.
   CUSTOMER  /informal-business/credit-book/customers/[id]  (nice-to-have)
     All entries for one customer, total owed, "paid on time" count
 
-  I OWE SUPPLIERS tab
-    Hand-added debts (supplier name, amount, due) + the hook
-    suppliersOwedFromOrders() (file 01, seam c), mocked as []
+  (No "I owe suppliers" tab: what the trader owes suppliers comes from
+  real orders, Mandla's side -- file 01 seam c.)
 
 
 2. DATA (proposal; put the final shape in your contract)
@@ -47,9 +48,8 @@ Spaza default tool. NEVER CUT from the demo.
 
   credit_customers  id, user_id (the trader), name (<=60), phone (SA,
                     optional), created_at, deleted_at
-  credit_entries    id, user_id, kind: customer_debt | supplier_debt,
-                    customer_id (customer_debt) or supplier_name
-                    (supplier_debt, <=80), amount_cents (>0, <= 10,000,000),
+  credit_entries    id, user_id, customer_id, amount_cents (>0,
+                    <= 10,000,000),
                     description (<=120), given_on, due_on, status: open |
                     paid | written_off, corrects_entry_id (nullable)
   credit_payments   id, entry_id, user_id, amount_cents (>0, <= remaining),
@@ -61,8 +61,8 @@ Spaza default tool. NEVER CUT from the demo.
 3. API (proposal)
 ---------------------------------------------------------------------------
 
-  GET    /me/credit-book?kind=customer_debt|supplier_debt&status=open
-  POST   /me/credit-book/entries             new sale or supplier debt
+  GET    /me/credit-book/entries?status=open
+  POST   /me/credit-book/entries             new credit sale
   GET    /me/credit-book/entries/{id}
   POST   /me/credit-book/entries/{id}/payments
   POST   /me/credit-book/entries/{id}/corrections

@@ -9,8 +9,9 @@ WHAT YOU OWN
 
     THE TOOLS, end to end, in the informal-business (trader) app:
 
-      Credit book      "Customers owe me" / "I owe suppliers", new credit
-                       sale, repayments, WhatsApp reminder/receipt
+      Credit book      customers who owe the trader: new credit sale,
+                       repayments, corrections, WhatsApp reminder/receipt
+                       (NOT supplier debts: see 01 seam c)
       Jobs             builders: job with stages, camera-only stage
                        photos, the client sign-off link, house records
       My record        the trader's record screen + share link (the parts
