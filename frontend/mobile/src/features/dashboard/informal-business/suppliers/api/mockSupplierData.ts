@@ -90,11 +90,11 @@ export const MOCK_SUPPLIERS: MockSupplier[] = [
   },
   {
     id: 'sw', name: 'Soweto Cash & Carry', initials: 'SC', color: '#4A4E8A', area: 'Soweto',
-    about: 'Groceries, drinks and prepaid airtime for Soweto traders.',
+    about: 'Groceries, drinks and snacks for Soweto traders.',
     address: '9 Chris Hani Road, Soweto, 1818',
     latitude: -26.24, longitude: 27.9, hours: [WEEKDAYS, SATURDAY],
     deliveryRadiusKm: 20, deliveryFeeCents: 4000, freeDeliveryOverCents: 150000, collect: true,
-    categories: ['food_grocery', 'beverages', 'household_cleaning', 'airtime_electricity'],
+    categories: ['food_grocery', 'beverages', 'household_cleaning', 'snacks_confectionery'],
     payfast: true, cash: true, cashLimitCents: 400000, minOrderCents: 40000, verified: true, logoUrl: null,
   },
 ];

@@ -63,7 +63,7 @@ export type PlaceOrderInput = {
 
 export class OrderError extends Error {
   constructor(
-    public code: 'BELOW_MINIMUM' | 'OUT_OF_STOCK' | 'CASH_LIMIT' | 'NOT_VERIFIED' | 'NOT_ACCEPTED' | 'NOT_FOUND' | 'TOO_LATE',
+    public code: 'BELOW_MINIMUM' | 'OUT_OF_STOCK' | 'CASH_LIMIT' | 'NOT_ACCEPTED' | 'NOT_FOUND' | 'TOO_LATE',
     message: string,
   ) {
     super(message);

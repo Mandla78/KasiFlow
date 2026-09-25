@@ -206,7 +206,7 @@ export default function SupplierScreen() {
         <ScrollView contentContainerStyle={{ gap: 12 }}>
           <View style={styles.nameRow}>
             <Text style={styles.sheetTitle}>{s.name}</Text>
-            {s.verified ? <VerifiedBadge size={18} /> : null}
+            {s.verified ? <VerifiedBadge size={20} /> : null}
           </View>
           {s.verified ? <Text style={styles.muted}>Verified supplier</Text> : null}
           <Text style={styles.about}>{s.about}</Text>

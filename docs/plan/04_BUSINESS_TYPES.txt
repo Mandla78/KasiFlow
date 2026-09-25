@@ -94,16 +94,19 @@ the category list had to grow. It's the list the Suppliers tab,
 the supplier data files and the Suppliers tab depend on, so it
 FREEZES THURSDAY with the contract.
 
-  COUNT: 22 categories (was 16).
+  COUNT: 21 categories (was 16).
+    (Airtime & Electricity was removed on 2026-09-25: prepaid airtime and
+    electricity are vouchers sold through a vending service, not stock a
+    trader orders from a supplier. It can come back later as its own
+    feature, not a product category.)
     KEPT (14)     Food & Grocery, Beverages, Snacks & Confectionery,
                   Bakery, Dairy & Chilled, Fresh Produce, Meat & Frozen,
                   Household & Cleaning, Personal Care, Baby & Family,
                   Packaging & Disposable, Stationery & School,
                   Clothing & Apparel, Other
-    NEW (8)       Building Materials, Plumbing, Electrical,
+    NEW (7)       Building Materials, Plumbing, Electrical,
                   Tools & Hardware, Paint & Finishes      (builders)
                   Fragrances & Beauty, Phone Accessories  (resellers)
-                  Airtime & Electricity                   (spaza)
     REPLACED (2)  "Hardware & General" -> the five building categories
                   "Electronics & Accessories" -> Phone Accessories
 
@@ -125,11 +128,11 @@ FREEZES THURSDAY with the contract.
                      Phone Accessories, Stationery & School
       (Every trader can still browse every category.)
     - The backend's supplier/product loader validates against it.
-    - A fallback ICON per category (22 lucide icons) for any product
+    - A fallback ICON per category (21 icons) for any product
       without a photo, so the product grid never shows a broken image.
 
-  DEMO COVERAGE: the three demo suppliers fill 17 of the 22.
-    Empty in the demo: Bakery, Fresh Produce, Airtime & Electricity,
+  DEMO COVERAGE: the three demo suppliers fill 17 of the 21.
+    Empty in the demo: Bakery, Fresh Produce,
     Stationery & School, Other. Their chips stay hidden, which is
     correct behaviour, not a gap.
 

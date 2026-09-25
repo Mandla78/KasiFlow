@@ -2,13 +2,12 @@
  * MOCK orders, doing what the server will (docs/supplier/04):
  *  - prices every line from the CATALOGUE, never from the cart
  *  - enforces the supplier's minimum order, what it accepts, and the cash
- *    limit (theirs, never over our R5,000 cap: ../lib/cashPolicy)
+ *    rules (R1,000 per order, 2 waiting at a time: ../lib/cashPolicy)
  *  - adds the delivery fee unless the order is over the free-delivery total
  * Digital payment: the order waits for payment and nothing reaches the
  * supplier until it's paid (the payment step comes with the payment
  * provider). Cash: the order goes to the supplier and waits for them to
- * accept. Only verified businesses may order with cash; the server checks
- * that from the session (the mock can't, the checkout screen does).
+ * accept.
  * Cash orders then move on by themselves so the whole flow can be shown
  * without a backend: accepted after 20 s -> on its way / ready after 60 s
  * -> delivered / collected after 120 s, each with an in-app notification.
@@ -18,7 +17,8 @@ import { formatRand } from '@/shared/lib/money';
 import { notify } from '../../notifications/lib/notificationStore';
 import { findMockProduct } from '../../catalogue/api/mockCatalogueData';
 import { findMockSupplier } from '../../suppliers/api/mockSupplierData';
-import { cashLimitFor } from '../lib/cashPolicy';
+import { cashLimitFor, MAX_OPEN_CASH_ORDERS } from '../lib/cashPolicy';
+import { isActive } from '../lib/status';
 import { Order, OrderError, OrderEvent, OrderLine, OrdersApi, OrderStatus } from '../types';
 
 const wait = (ms = 500) => new Promise((r) => setTimeout(r, ms));
@@ -101,7 +101,10 @@ export const mockOrdersApi: OrdersApi = {
     const totalCents = subtotalCents + deliveryFeeCents;
     const cashLimit = cashLimitFor(supplier);
     if (input.payment === 'cash' && cashLimit !== null && totalCents > cashLimit) {
-      throw new OrderError('CASH_LIMIT', `${supplier.name} accepts cash up to ${formatRand(cashLimit)} per order. Pay digitally instead.`);
+      throw new OrderError('CASH_LIMIT', `Cash is up to ${formatRand(cashLimit)} per order. Pay digitally instead.`);
+    }
+    if (input.payment === 'cash' && orders.map(advanced).filter((o) => o.payment === 'cash' && isActive(o)).length >= MAX_OPEN_CASH_ORDERS) {
+      throw new OrderError('CASH_LIMIT', `You can have ${MAX_OPEN_CASH_ORDERS} cash orders waiting at a time. Pay digitally for this one.`);
     }
 
     const now = new Date().toISOString();

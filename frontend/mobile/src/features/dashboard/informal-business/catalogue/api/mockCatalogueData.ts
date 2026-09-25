@@ -74,10 +74,6 @@ const TEMPLATES: Partial<Record<CategoryCode, Template[]>> = {
     T('Plastic carry bags', 'Pack It', 'bundle', '1000 bags', 189.99, 'Size 24 carry bags.', 1),
     T('Bread bags', 'Pack It', 'bundle', '1000 bags', 99.99, 'Clear bread bags.', 1),
   ],
-  airtime_electricity: [
-    T('Prepaid airtime float', 'Voucher Hub', 'float', 'R1,000 airtime', 970.0, 'Sell airtime to customers from your float.', 1),
-    T('Prepaid electricity float', 'Voucher Hub', 'float', 'R1,000 electricity', 975.0, 'Sell electricity tokens from your float.', 1),
-  ],
   building_materials: [
     T('Cement, 42.5N', 'Rock Build', 'bag', '50 kg', 109.99, 'General-purpose cement.', 3),
     T('Building sand', 'Rock Build', 'cube', '1 m³', 649.99, 'Delivered by truck.', 1),

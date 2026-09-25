@@ -28,7 +28,7 @@ export function SupplierCard({
           <Text style={styles.name} numberOfLines={1}>
             {match.name}
           </Text>
-          {match.verified ? <VerifiedBadge size={15} /> : null}
+          {match.verified ? <VerifiedBadge size={17} /> : null}
         </View>
         <Text style={styles.muted} numberOfLines={1}>
           {match.area} · {match.distanceKm < 10 ? match.distanceKm.toFixed(1) : match.distanceKm.toFixed(0)} km

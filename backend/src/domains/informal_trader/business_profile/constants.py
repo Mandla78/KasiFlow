@@ -12,7 +12,7 @@ YEARS_TRADING = ("under_1", "1_3", "3_plus")
 CATEGORIES = (
     "food_grocery", "beverages", "snacks_confectionery", "bakery", "dairy_chilled", "fresh_produce",
     "meat_frozen", "household_cleaning", "personal_care", "baby_family", "packaging_disposable",
-    "airtime_electricity", "stationery_school", "clothing_apparel", "fragrances_beauty", "phone_accessories",
+    "stationery_school", "clothing_apparel", "fragrances_beauty", "phone_accessories",
     "building_materials", "plumbing", "electrical", "tools_hardware", "paint_finishes", "other",
 )
 

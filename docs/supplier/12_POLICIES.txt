@@ -1,0 +1,91 @@
+AKAYZA -- ORDERING AND PAYMENT POLICIES (draft, 2026-09-25)
+===========================================================================
+
+The rules traders and suppliers agree to when they order through Akayza.
+The server enforces every number here; the app only explains them. These
+become the plain-language Terms for traders and the Supplier Agreement,
+reviewed before launch. Numbers live in ONE place in code:
+  app      frontend/mobile/src/features/dashboard/informal-business/orders/lib/cashPolicy.ts
+  server   (Phase 3) commerce policy settings, same values
+
+
+1. CONNECTING WITH A SUPPLIER
+---------------------------------------------------------------------------
+  - A trader orders only from suppliers they're connected to. Connecting
+    and disconnecting are one tap each, and both ask "are you sure?".
+  - Disconnecting empties the cart with that supplier. Past orders,
+    invoices and receipts stay in My orders.
+  - Suppliers appear only after their system is connected and their
+    business is checked; that's what the green seal means.
+
+
+2. ORDERS
+---------------------------------------------------------------------------
+  - The supplier's price when the order is placed is the price. The app
+    shows an estimate; the server prices every line again.
+  - The supplier's minimum order and delivery fee apply (free delivery
+    over their amount, if they offer it).
+  - Every order has one reference, AKZ-YYYY-NNNNNN, unique on Akayza.
+    Suppliers' own invoice numbers come from their system.
+  - The trader can cancel until the supplier accepts. After that, the
+    supplier decides (and refunds a digital payment if they agree).
+
+
+3. DIGITAL PAYMENT (recommended)
+---------------------------------------------------------------------------
+  - Card or instant EFT on the payment provider's secure page. Akayza
+    never sees or stores card details.
+  - The order waits for payment; the supplier only sees it once it's paid.
+    An unpaid order is cancelled automatically after 24 hours.
+  - The money goes to the supplier through the provider's split; our
+    commission comes off in that split (07_PAYMENTS_AND_PAYOUTS.txt).
+  - No limit per order beyond the provider's own.
+
+
+4. CASH
+---------------------------------------------------------------------------
+  - Offered whenever the supplier takes cash, to every trader. It's never
+    greyed out: if an order breaks a rule, choosing cash says which one
+    and how to fix it.
+  - Up to R1,000 per order (or the supplier's own limit if it's lower).
+    Why: a cash order costs the trader nothing up front, so a fake or
+    abandoned order costs the supplier a wasted trip. R1,000 keeps that
+    risk small; bigger orders are paid digitally, up front.
+  - At most 2 cash orders waiting at a time (placed, not yet delivered or
+    collected). Stops one account flooding suppliers with orders.
+  - The supplier's system accepts a cash order before it goes out
+    ("Waiting for the supplier"). It can say no.
+  - On handover, both sides confirm the amount (the order pass). A
+    mismatch opens a dispute.
+  - Refused at the door / not collected: recorded against the trader.
+    Two in 30 days pauses cash for that trader for 30 days (digital still
+    works). [to build with the cash handshake, Phase 5]
+  - Commission on cash: there's no payment to split, so confirmed cash
+    orders are invoiced to the supplier monthly. In the Supplier
+    Agreement.
+
+
+5. VERIFICATION
+---------------------------------------------------------------------------
+  - Traders: ordering (digital and cash within the limits above) doesn't
+    need verification. The green seal shows CIPC-checked businesses to
+    suppliers. Higher cash limits for verified traders are an option for
+    later, not now.
+  - Suppliers: always checked before they appear (integration + business
+    documents).
+
+
+6. DISPUTES AND REFUNDS
+---------------------------------------------------------------------------
+  - Wrong, short or damaged delivery: report from the order within 48
+    hours; the supplier answers in the app. Everything is kept on the
+    order's audit trail.
+  - Digital refunds go back the way they were paid, only once the
+    provider confirms.
+
+
+7. OPEN QUESTIONS (to settle before launch)
+---------------------------------------------------------------------------
+  - Commission rate(s), and whether it differs for cash.
+  - Who pays the payment provider's fee.
+  - Whether suppliers may set a lower cash limit than R1,000 per trader.

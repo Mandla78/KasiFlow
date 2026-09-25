@@ -9,7 +9,7 @@ type Props = {
   title: string;
   subtitle?: string;
   action?: { icon: ComponentProps<typeof Feather>['name']; label: string; onPress: () => void; dot?: boolean };
-  /** A small blue tick on the avatar (CIPC-verified business). */
+  /** A small green tick on the avatar (CIPC-verified business). */
   verified?: boolean;
   /** Tapping the avatar opens the business profile. */
   onAvatarPress?: () => void;
@@ -62,7 +62,7 @@ const styles = StyleSheet.create({
     width: 16,
     height: 16,
     borderRadius: 8,
-    backgroundColor: colors.accent,
+    backgroundColor: colors.jade,
     borderWidth: 2,
     borderColor: colors.porcelain,
     alignItems: 'center',

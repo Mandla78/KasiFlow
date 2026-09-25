@@ -42,7 +42,7 @@ export const BUSINESS_TYPES: Record<BusinessType, TypeConfig> = {
     subtitle: 'A shop selling groceries and everyday goods',
     icon: 'shopping-bag',
     tools: { creditBook: true, orderStock: true, myRecord: true, jobs: false },
-    categories: ['food_grocery', 'beverages', 'snacks_confectionery', 'household_cleaning', 'personal_care', 'airtime_electricity'],
+    categories: ['food_grocery', 'beverages', 'snacks_confectionery', 'household_cleaning', 'personal_care'],
   },
   other: {
     label: 'Other',

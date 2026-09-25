@@ -33,6 +33,7 @@ FILES IN THIS FOLDER
   09_BUILD_ORDER_AND_TIMELINE.txt    phases to Sunday 09:00 and what's cut
   10_RESEARCH_NOTES.txt         sources, and what is still to verify
   11_QA_DEFENCE.txt             the questions judges will ask, and answers
+  12_POLICIES.txt               ordering, payment and cash rules (draft Terms)
 
 
 WHERE WE START, AND WHY

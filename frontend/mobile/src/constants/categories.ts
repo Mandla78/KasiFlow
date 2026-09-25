@@ -1,5 +1,5 @@
 /**
- * The 22 product categories (docs/plan/04_BUSINESS_TYPES.txt section 4).
+ * The 21 product categories (docs/plan/04_BUSINESS_TYPES.txt section 4).
  * Frozen: the backend validates against the same codes, and the supplier
  * engine matches traders to suppliers on them. Change both together.
  */
@@ -22,7 +22,6 @@ export type CategoryCode =
   | 'packaging_disposable'
   | 'stationery_school'
   | 'clothing_apparel'
-  | 'airtime_electricity'
   | 'fragrances_beauty'
   | 'phone_accessories'
   | 'building_materials'
@@ -46,7 +45,6 @@ export const CATEGORIES: Category[] = [
   { code: 'personal_care', label: 'Personal Care', icon: 'smile', group: 'shop' },
   { code: 'baby_family', label: 'Baby & Family', icon: 'heart', group: 'shop' },
   { code: 'packaging_disposable', label: 'Packaging & Disposables', icon: 'package', group: 'shop' },
-  { code: 'airtime_electricity', label: 'Airtime & Electricity', icon: 'zap', group: 'shop' },
   { code: 'stationery_school', label: 'Stationery & School', icon: 'edit-3', group: 'resell' },
   { code: 'clothing_apparel', label: 'Clothing & Apparel', icon: 'shopping-cart', group: 'resell' },
   { code: 'fragrances_beauty', label: 'Fragrances & Beauty', icon: 'star', group: 'resell' },

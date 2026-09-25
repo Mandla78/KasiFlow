@@ -2,12 +2,12 @@ import { router, useLocalSearchParams } from 'expo-router';
 import { useEffect, useState } from 'react';
 import { ActivityIndicator, StyleSheet, Text, View } from 'react-native';
 
-import { isVerified } from '@/features/auth/profile';
 import type { Place } from '@/features/auth/types';
 import { useSession } from '@/features/auth/session/SessionProvider';
 import { Button } from '@/shared/components/Button';
 import { Card } from '@/shared/components/Parts';
 import { Screen } from '@/shared/components/Screen';
+import { Sheet } from '@/shared/components/Sheet';
 import { Overline } from '@/shared/components/Text';
 import { AddressPickerField, formatPlace } from '@/shared/location-picker/components/AddressPickerField';
 import { formatRand } from '@/shared/lib/money';
@@ -15,7 +15,8 @@ import { colors, fonts, radius } from '@/shared/theme/tokens';
 
 import { clearCart, estimatedTotal, useCart } from '../../cart/lib/cartStore';
 import { ordersApi } from '../../orders/api/ordersApi';
-import { cashLimitFor } from '../../orders/lib/cashPolicy';
+import { CASH_RULES, cashLimitFor, MAX_OPEN_CASH_ORDERS } from '../../orders/lib/cashPolicy';
+import { isActive } from '../../orders/lib/status';
 import { Fulfilment, OrderError, PaymentMethod } from '../../orders/types';
 import { supplierApi } from '../../suppliers/api/supplierApi';
 import type { Supplier } from '../../suppliers/types';
@@ -30,8 +31,9 @@ const TITLES = ['How you get it', 'How you pay', 'Check and place your order'];
  * 2 how to pay, 3 review and place. The server prices the order again when
  * it's placed; what's shown here is the estimate.
  * Paying: digital (card / instant EFT) is recommended and goes on to the
- * secure payment step. Cash shows only if the supplier takes it, and only
- * verified businesses can use it, up to the limit (../../orders/lib/cashPolicy).
+ * secure payment step. Cash shows whenever the supplier takes it and is
+ * never greyed out; if this order breaks a cash rule, choosing it says
+ * which one and how to fix it (../../orders/lib/cashPolicy).
  */
 export default function CheckoutScreen() {
   const { supplierId } = useLocalSearchParams<{ supplierId: string }>();
@@ -45,6 +47,16 @@ export default function CheckoutScreen() {
   const [payment, setPayment] = useState<PaymentMethod | null>(null);
   const [error, setError] = useState('');
   const [busy, setBusy] = useState(false);
+  const [openCash, setOpenCash] = useState(0);
+  const [cashHelp, setCashHelp] = useState(false);
+
+  useEffect(() => {
+    // Cash orders still waiting (placed, not yet delivered or collected).
+    ordersApi
+      .list()
+      .then((all) => setOpenCash(all.filter((o) => o.payment === 'cash' && isActive(o)).length))
+      .catch(() => setOpenCash(0));
+  }, []);
 
   useEffect(() => {
     if (!supplierId) return;
@@ -70,9 +82,16 @@ export default function CheckoutScreen() {
   const deliveryFee = fulfilment === 'delivery' && !free ? supplier.deliveryFeeCents : 0;
   const total = subtotal + deliveryFee;
   const cashLimit = cashLimitFor(supplier);
-  const verified = isVerified(profile);
   const overCashLimit = cashLimit !== null && total > cashLimit;
-  const cashAllowed = cashLimit !== null && verified && !overCashLimit;
+  const tooManyCash = openCash >= MAX_OPEN_CASH_ORDERS;
+  const cashProblem =
+    cashLimit === null
+      ? ''
+      : overCashLimit
+        ? `Cash is up to ${formatRand(cashLimit)} per order and this order is ${formatRand(total)}. Pay digitally, or remove ${formatRand(total - cashLimit)} to pay cash.`
+        : tooManyCash
+          ? `You have ${openCash} cash orders waiting. Once one is delivered or collected, you can pay cash again. Pay digitally for this one.`
+          : '';
   const cashTitle = fulfilment === 'collect' ? 'Cash when you collect' : 'Cash on delivery';
   const businessAddress = profile.location ? formatPlace(profile.location) : '';
   const deliveryAddress = where === 'other' && otherPlace ? formatPlace(otherPlace) : businessAddress;
@@ -81,8 +100,8 @@ export default function CheckoutScreen() {
   const stepError =
     step === 1 && fulfilment === 'delivery' && where === 'other' && !otherPlace
       ? 'Set the delivery address, or choose your business address.'
-      : step === 2 && payment === 'cash' && !cashAllowed
-        ? "Cash isn't available for this order. Choose digital payment."
+      : step === 2 && payment === 'cash' && cashProblem
+        ? cashProblem
         : '';
 
   function back() {
@@ -179,17 +198,15 @@ export default function CheckoutScreen() {
             <OptionCard
               icon="dollar-sign"
               title={cashTitle}
-              line={
-                !verified
-                  ? 'For verified businesses only. Get verified in your Business profile.'
-                  : overCashLimit
-                    ? `This supplier accepts cash up to ${formatRand(cashLimit)} per order`
-                    : `This supplier accepts cash up to ${formatRand(cashLimit)}. They accept the order first.`
-              }
+              line={`This supplier accepts cash up to ${formatRand(cashLimit)} per order. They accept the order first.`}
               selected={payment === 'cash'}
-              disabled={!cashAllowed}
               onPress={() => setPayment('cash')}
             />
+          ) : null}
+          {cashLimit !== null ? (
+            <Text style={styles.link} onPress={() => setCashHelp(true)} accessibilityRole="button">
+              How cash works
+            </Text>
           ) : null}
         </View>
       ) : null}
@@ -198,7 +215,7 @@ export default function CheckoutScreen() {
         <View style={{ gap: 12 }}>
           <Card style={{ gap: 10 }}>
             <Summary label={fulfilment === 'collect' ? 'Collect at' : 'Deliver to'} value={fulfilment === 'collect' ? `${supplier.address} (${hours})` : deliveryAddress} onEdit={() => setStep(1)} />
-            <View style={styles.rule} />
+            <View style={styles.divider} />
             <Summary
               label="Pay"
               value={payment === 'in_app' ? 'Digital payment: you pay on the next screen' : `${cashTitle}, once ${supplier.name} accepts the order`}
@@ -214,7 +231,7 @@ export default function CheckoutScreen() {
                 <Text style={styles.amount}>{formatRand(l.seenPriceCents * l.qty)}</Text>
               </View>
             ))}
-            <View style={styles.rule} />
+            <View style={styles.divider} />
             <View style={styles.row}>
               <Text style={styles.item}>Delivery</Text>
               <Text style={styles.amount}>{fulfilment === 'collect' ? '—' : deliveryFee ? formatRand(deliveryFee) : 'Free'}</Text>
@@ -229,6 +246,16 @@ export default function CheckoutScreen() {
       ) : null}
 
       {stepError ? <Text style={styles.error}>{stepError}</Text> : null}
+      <Sheet visible={cashHelp} onClose={() => setCashHelp(false)}>
+        <Text style={styles.sheetTitle}>How cash works</Text>
+        {CASH_RULES.map((r) => (
+          <Text key={r} style={styles.rule}>
+            •  {r}
+          </Text>
+        ))}
+        <Text style={styles.small}>Digital payment has no limit and your order goes straight to the supplier once it&apos;s paid.</Text>
+        <Button title="Got it" variant="secondary" onPress={() => setCashHelp(false)} />
+      </Sheet>
       {error ? <Text style={styles.error}>{error}</Text> : null}
     </Screen>
   );
@@ -253,7 +280,10 @@ const styles = StyleSheet.create({
   row: { flexDirection: 'row', justifyContent: 'space-between', gap: 10 },
   item: { flex: 1, fontFamily: fonts.medium, fontSize: 13.5, color: colors.text },
   amount: { fontFamily: fonts.semibold, fontSize: 13.5, color: colors.text },
-  rule: { height: 1, backgroundColor: colors.line },
+  divider: { height: 1, backgroundColor: colors.line },
+  link: { fontFamily: fonts.bold, fontSize: 13, color: colors.accentDeep, paddingVertical: 4 },
+  sheetTitle: { fontFamily: fonts.display, fontSize: 19, color: colors.ink },
+  rule: { fontFamily: fonts.body, fontSize: 14, lineHeight: 20, color: colors.text },
   totalLabel: { fontFamily: fonts.bold, fontSize: 15, color: colors.ink },
   total: { fontFamily: fonts.display, fontSize: 20, color: colors.ink },
   summaryLabel: { fontFamily: fonts.semibold, fontSize: 12.5, color: colors.textMuted },
