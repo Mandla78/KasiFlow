@@ -100,7 +100,7 @@ class BaseConfig:
     PASSWORD_RESET_EXPIRY_MINUTES = int(os.environ.get("PASSWORD_RESET_EXPIRY_MINUTES", 30))
     # The backend's public address, used in links inside emails (email apps
     # strip akayza:// links, so the reset button opens {APP_BASE_URL}/reset-password).
-    # Development: the ngrok URL, so the link opens on a phone. Production: https.
+    # Development: the PC's Wi-Fi address (like the app's API URL). Production: https.
     APP_BASE_URL = os.environ.get("APP_BASE_URL", "http://localhost:5000").rstrip("/")
 
     # The legal document versions a new account must accept. Must match the
