@@ -31,3 +31,36 @@ export interface SupplierMatchApi {
   /** Suppliers who fit this trader, best first, each with its reasons. */
   matchSuppliers(input: MatchInput): Promise<SupplierMatch[]>;
 }
+
+/** When a supplier is open, e.g. { days: 'Mon-Fri', open: '07:00', close: '17:00' }. */
+export type OpeningHours = { days: string; open: string; close: string };
+
+/** A supplier's page: who they are and how they sell. */
+export type Supplier = {
+  id: string;
+  name: string;
+  initials: string;
+  color: string;
+  about: string;
+  area: string;
+  /** Where to collect, as one line. */
+  address: string;
+  hours: OpeningHours[];
+  delivers: boolean;
+  deliveryRadiusKm: number;
+  deliveryFeeCents: number;
+  /** Delivery is free from this order total (null = never free). */
+  freeDeliveryOverCents: number | null;
+  collect: boolean;
+  payfast: boolean;
+  cash: boolean;
+  /** Most cash they take per order (null = no cash). */
+  cashLimitCents: number | null;
+  minOrderCents: number;
+  categories: CategoryCode[];
+  logoUrl: string | null;
+};
+
+export interface SupplierApi {
+  get(id: string): Promise<Supplier>;
+}

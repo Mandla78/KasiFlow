@@ -23,9 +23,9 @@ export default function Account() {
 
   const tiles: Tile[] = [
     ...(t.creditBook ? [{ icon: 'book', title: 'Credit book', line: `${formatRand(toolLines.owedToYou)} owed to you`, href: '/informal-business/credit-book' } as Tile] : []),
-    ...(t.orderStock ? [{ icon: 'package', title: builder ? 'Materials' : 'Order stock', line: `${toolLines.stockOnItsWay} on its way` } as Tile] : []),
+    ...(t.orderStock ? [{ icon: 'package', title: builder ? 'Materials' : 'Order stock', line: `${toolLines.stockOnItsWay} on its way`, href: '/informal-business/suppliers' } as Tile] : []),
     ...(t.jobs ? [{ icon: 'tool', title: 'Jobs', line: `${toolLines.activeJobs} active`, href: '/informal-business/jobs' } as Tile] : []),
-    { icon: 'file-text', title: 'My orders', line: `${toolLines.ordersThisMonth} this month` },
+    { icon: 'file-text', title: 'My orders', line: `${toolLines.ordersThisMonth} this month`, href: '/informal-business/orders' },
     { icon: 'shield', title: 'My record', line: `${toolLines.recordConfirmed} of ${toolLines.recordTotal} confirmed` },
   ];
 

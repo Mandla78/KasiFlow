@@ -63,7 +63,7 @@ export default function SuppliersScreen() {
         initial={profile.businessName[0] ?? 'A'}
         title="Suppliers"
         subtitle={areaOf(profile) ? `Near ${areaOf(profile)}` : undefined}
-        action={{ icon: 'shopping-cart', label: 'Cart', onPress: () => {} }}
+        action={{ icon: 'package', label: 'My orders', onPress: () => router.push('/informal-business/orders') }}
       />
       <View style={styles.search}>
         <Feather name="search" size={16} color={colors.textMuted} />
@@ -93,12 +93,19 @@ export default function SuppliersScreen() {
 
       {yours.length ? <Overline>Your suppliers</Overline> : null}
       {yours.map((m) => (
-        <SupplierCard key={m.id} match={m} added onToggle={() => toggle(m.id)} />
+        <SupplierCard key={m.id} match={m} added onToggle={() => toggle(m.id)} onOpen={() => router.push(`/informal-business/supplier/${m.id}`)} />
       ))}
 
       {near.length ? <Overline>Near you</Overline> : null}
       {near.map((m, i) => (
-        <SupplierCard key={m.id} match={m} added={false} best={i === 0 && !q && chip === 'all'} onToggle={() => toggle(m.id)} />
+        <SupplierCard
+          key={m.id}
+          match={m}
+          added={false}
+          best={i === 0 && !q && chip === 'all'}
+          onToggle={() => toggle(m.id)}
+          onOpen={() => router.push(`/informal-business/supplier/${m.id}`)}
+        />
       ))}
 
       {matches && shown.length === 0 ? (

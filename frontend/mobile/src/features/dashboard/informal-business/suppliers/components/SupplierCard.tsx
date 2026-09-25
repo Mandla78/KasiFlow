@@ -6,9 +6,21 @@ import { colors, fonts, radius } from '@/shared/theme/tokens';
 import type { SupplierMatch } from '../types';
 
 /** A matched supplier: who, how far, why it was picked, and Add / Added. */
-export function SupplierCard({ match, added, onToggle, best }: { match: SupplierMatch; added: boolean; onToggle: () => void; best?: boolean }) {
+export function SupplierCard({
+  match,
+  added,
+  onToggle,
+  onOpen,
+  best,
+}: {
+  match: SupplierMatch;
+  added: boolean;
+  onToggle: () => void;
+  onOpen: () => void;
+  best?: boolean;
+}) {
   return (
-    <View style={[styles.card, added && styles.cardOn]}>
+    <Pressable onPress={onOpen} accessibilityRole="button" accessibilityLabel={`Open ${match.name}`} style={[styles.card, added && styles.cardOn]}>
       <View style={styles.row}>
         <View style={[styles.logo, { backgroundColor: match.color }]}>
           <Text style={styles.logoText}>{match.initials}</Text>
@@ -47,7 +59,7 @@ export function SupplierCard({ match, added, onToggle, best }: { match: Supplier
           </View>
         ) : null}
       </View>
-    </View>
+    </Pressable>
   );
 }
 
