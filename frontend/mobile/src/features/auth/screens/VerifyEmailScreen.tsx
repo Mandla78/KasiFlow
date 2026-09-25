@@ -101,6 +101,9 @@ export default function VerifyEmail() {
         </Pressable>
       </View>
       <Text style={styles.small}>Can&apos;t see it? Check Spam or Promotions.</Text>
+      {/* Shown to everyone, so it reveals nothing: an existing account's
+          owner gets an email saying so instead of a code. */}
+      <Text style={styles.small}>Already have an Akayza account with this email? We&apos;ve emailed you how to sign in instead.</Text>
     </Screen>
   );
 }

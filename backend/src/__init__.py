@@ -102,6 +102,10 @@ def _register_blueprints(app: Flask) -> None:
     from src.api import api_bp
 
     app.register_blueprint(api_bp, url_prefix="/api/v1")
+    # The page the reset email's button opens (outside /api/v1: it must match the emailed URL).
+    from src.domains.identity.auth.api.reset_page import reset_page_bp
+
+    app.register_blueprint(reset_page_bp)
     # Cloudinary calls this one itself (HMAC-signed), not a signed-in user.
     from src.shared.media.api.webhook_routes import media_webhooks_bp
 

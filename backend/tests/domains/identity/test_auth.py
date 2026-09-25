@@ -222,7 +222,7 @@ def test_forgot_password_same_answer_and_reset_works_once(client, outbox):
     b = client.post("/api/v1/auth/forgot-password", json={"email": EMAIL})
     assert b.status_code == 202 and a.get_json()["message"] == b.get_json()["message"]
 
-    token = re.search(r"token=([A-Za-z0-9_\-]+)", outbox[-1]["html_body"]).group(1)
+    token = re.search(r"ticket=([A-Za-z0-9_\-]+)", outbox[-1]["html_body"]).group(1)
     ok = client.post("/api/v1/auth/reset-password", json={"token": token, "password": "NewPass2026#"})
     assert ok.status_code == 200
     again = client.post("/api/v1/auth/reset-password", json={"token": token, "password": "Another2026#"})
@@ -237,7 +237,7 @@ def test_forgot_password_same_answer_and_reset_works_once(client, outbox):
 def test_reset_rejects_weak_password(client, outbox):
     signed_up(client, outbox)
     client.post("/api/v1/auth/forgot-password", json={"email": EMAIL})
-    token = re.search(r"token=([A-Za-z0-9_\-]+)", outbox[-1]["html_body"]).group(1)
+    token = re.search(r"ticket=([A-Za-z0-9_\-]+)", outbox[-1]["html_body"]).group(1)
     r = client.post("/api/v1/auth/reset-password", json={"token": token, "password": "password"})
     assert r.status_code == 422 and r.get_json()["code"] == "WEAK_PASSWORD"
 

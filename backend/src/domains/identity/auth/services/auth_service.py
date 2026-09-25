@@ -441,13 +441,19 @@ def forgot_password(email: str) -> None:
         to=user.email,
         template_name="password_reset.html",
         subject="Reset your Akayza password",
-        context={"link": f"{current_app.config['PASSWORD_RESET_URL']}?token={token}", "minutes": minutes},
+        context={"link": f"{current_app.config['APP_BASE_URL']}/reset-password?ticket={token}", "minutes": minutes},
         rate_limit_key=f"password_reset:{user.email}",
         rate_limit_max=3,
         rate_limit_window_seconds=3600,
     )
     auth_audit.record(E.PASSWORD_RESET_REQUESTED, user_id=user.id, email=user.email)
     auth_audit.record(E.PASSWORD_RESET_TOKEN_CREATED, user_id=user.id, email=user.email, expires_in_minutes=minutes)
+
+
+def reset_link_is_valid(token: str) -> bool:
+    """For the reset page: is this ticket still usable? (Doesn't use it up.)"""
+    reset = PasswordReset.query.filter_by(token_hash=secrets.digest(token or "")).first()
+    return bool(reset and reset.used_at is None and reset.expires_at > utcnow())
 
 
 def reset_password(token: str, new_password: str) -> None:

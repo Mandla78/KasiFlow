@@ -98,8 +98,10 @@ class BaseConfig:
 
     # Password reset links (one use).
     PASSWORD_RESET_EXPIRY_MINUTES = int(os.environ.get("PASSWORD_RESET_EXPIRY_MINUTES", 30))
-    # Where the reset link opens: the app's deep link.
-    PASSWORD_RESET_URL = os.environ.get("PASSWORD_RESET_URL", "akayza://reset-password")
+    # The backend's public address, used in links inside emails (email apps
+    # strip akayza:// links, so the reset button opens {APP_BASE_URL}/reset-password).
+    # Development: the ngrok URL, so the link opens on a phone. Production: https.
+    APP_BASE_URL = os.environ.get("APP_BASE_URL", "http://localhost:5000").rstrip("/")
 
     # The legal document versions a new account must accept. Must match the
     # app's content/legal files; bump both when a document changes.
@@ -184,6 +186,8 @@ def get_config(env_name: str | None = None):
         mail_missing = [k for k in ("MAIL_SERVER", "MAIL_USERNAME", "MAIL_PASSWORD", "MAIL_DEFAULT_SENDER") if not os.environ.get(k)]
         if mail_missing:
             raise RuntimeError(f"Missing email settings for production: {', '.join(mail_missing)}.")
+        if not os.environ.get("APP_BASE_URL", "").startswith("https://"):
+            raise RuntimeError("APP_BASE_URL must be the https address of this backend in production.")
         if os.environ.get("MEDIA_PROVIDER", "cloudinary") != "cloudinary":
             raise RuntimeError("MEDIA_PROVIDER must be cloudinary in production.")
         media_missing = [k for k in ("CLOUDINARY_CLOUD_NAME", "CLOUDINARY_API_KEY", "CLOUDINARY_API_SECRET") if not os.environ.get(k)]
