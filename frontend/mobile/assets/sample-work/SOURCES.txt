@@ -1,0 +1,16 @@
+Sample work photos for the builder network MOCK only (never shown on the
+real API). From Pexels, free to use under the Pexels licence
+(https://www.pexels.com/license/), resized to 800 px by the Pexels CDN.
+Picked without faces, as the app tells builders to do.
+
+  paving.jpg              https://www.pexels.com/photo/4509092/
+  brick-wall.jpg          https://www.pexels.com/photo/4515180/
+  block-wall.jpg          https://www.pexels.com/photo/12276522/
+  pipes-under-sink.jpg    https://www.pexels.com/photo/6419128/
+  water-pipe-fitting.jpg  https://www.pexels.com/photo/14598653/
+  bathroom-pipes.jpg      https://www.pexels.com/photo/8488035/
+  floor-tiles.jpg         https://www.pexels.com/photo/11806486/
+  tile-levelling.jpg      https://www.pexels.com/photo/11806482/
+  steel-roof.jpg          https://www.pexels.com/photo/10682522/
+  roof-trusses.jpg        https://www.pexels.com/photo/8491084/
+  plug-boxes.jpg          https://www.pexels.com/photo/3615735/
