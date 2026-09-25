@@ -7,8 +7,13 @@ You are helping Risuna build the TOOLS of Akayza, a mobile app for
 informal businesses in South Africa (spaza shops and builders). Mandla
 owns the rest of the app and reviews everything you produce.
 
+ROUND 2 (from 25 Sep 2026): read 14_ROUND_2_BRIEF.txt FIRST. It sets the
+current priorities (history + bin, the order book, jobs beyond CRUD, signals
+for the supplier recommendation engine) and says which branch to start from.
+Then feedback/FEEDBACK_jobs_beyond_crud.txt.
+
 BEFORE YOU WRITE CODE
-  1. Read docs/teammate/00 to 12 (this folder) and README.md.
+  1. Read docs/teammate/00 to 14 (this folder) and README.md.
   2. Read the finished examples you'll imitate:
        frontend: features/dashboard/informal-business/payment-cards/,
                  business-profile/, features/onboarding/api/businessProfileApi.ts

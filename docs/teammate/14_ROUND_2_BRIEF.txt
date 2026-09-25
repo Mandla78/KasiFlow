@@ -1,0 +1,173 @@
+===========================================================================
+TEAMMATE 14 -- ROUND 2: TOOLS THAT FEED THE ENGINE
+From Mandla, Friday 25 September 2026 (evening). Read this first.
+===========================================================================
+
+Your credit book, jobs and live Home/Account are reviewed and merged into
+mandla/supplier (710 backend tests green). Thank you -- careful work.
+
+Round 2 has one idea behind it:
+
+  THE TOOLS ARE HOW WE LEARN WHAT AN INFORMAL BUSINESS NEEDS.
+  A kota shop's order book knows how many quarter loaves it goes through;
+  a builder's jobs know what's being built, where, and at which stage.
+  That data fuels the SUPPLIER RECOMMENDATION ENGINE (Mandla's side).
+
+  We recommend SUPPLIERS, not products (we are not a marketplace). Inside
+  a supplier's catalogue, the products shown first are the ones that
+  move most for THIS trader: from their tools and their past orders.
+
+So every tool must be more than CRUD: fast for the trader today, and a
+clean, private source of "what this business uses" for the engine.
+
+
+---------------------------------------------------------------------------
+PRIORITIES (in this order; deadline: final submission Sun 09:00)
+---------------------------------------------------------------------------
+
+  1. HISTORY + BIN on the credit book and jobs        small, do first
+  2. ORDER BOOK (new tool), end to end                 the main task
+  3. JOBS beyond CRUD                                  see
+                                                       feedback/FEEDBACK_jobs_beyond_crud.txt
+  4. SIGNALS for the engine (a service function per    small, last
+     tool; Mandla wires it)
+
+  Branches: risuna/tools-bin, risuna/order-book-ui, risuna/order-book-api,
+  risuna/jobs-v2. Same rules as before (11_AI_AGENT_BRIEF.txt): mock +
+  contract first, Mandla approves, then backend. Base your branches on
+  mandla/supplier (it has your merged work + the supplier side), not main,
+  until Mandla merges it into main.
+
+
+---------------------------------------------------------------------------
+1. HISTORY + BIN (credit book and jobs)
+---------------------------------------------------------------------------
+
+  WHAT THE TRADER SEES
+    - HISTORY: a list of what's finished (credit paid back / cancelled;
+      jobs done), newest first, searchable by name, with the date. A tab
+      or a row "History" on each tool's main screen.
+    - DELETE moves an item to the BIN (a row at the bottom of History):
+      "Moved to the bin. Undo" (snackbar, 5 s). In the bin: Restore, and
+      it says "Kept for 30 days, then removed from your view."
+    - A deleted item disappears from lists, Home, Account and totals.
+
+  WHAT REALLY HAPPENS (data is never lost)
+    - Delete = hidden from THE USER only. The row stays in the database
+      (BaseModel.soft_delete(): is_deleted + deleted_at). After 30 days
+      in the bin it is still kept, just no longer shown in the bin
+      either (a "binned_at" + "purged_from_view_at", or just compute
+      from deleted_at). Never a real DELETE.
+    - Why keep it: it's part of the trader's record (what was sold on
+      credit, what a client confirmed). A deleted job must not erase a
+      stage the client signed off; a deleted credit entry must not erase
+      a payment. Audit every delete and restore (no names, no phones).
+    - Rules: a stage confirmed by both, or a credit entry with payments,
+      can be binned (hidden) but its confirmed parts stay in the record
+      and in any shared record link. Say so in the confirm sheet.
+
+  API (propose in CONTRACT_bin.txt): DELETE moves to the bin,
+  POST .../restore, GET .../bin, GET .../history?q=. All scoped to
+  current_user(), rate-limited, audited.
+
+
+---------------------------------------------------------------------------
+2. ORDER BOOK (new tool) -- kota shops and food sellers first
+---------------------------------------------------------------------------
+
+  WHO: kota shops, food stalls, anyone who takes CUSTOMER orders at a
+  counter (not orders to suppliers -- that's "Order stock", Mandla's).
+  It must be FAST and CLEAR: a queue of hungry people, one person
+  cooking and taking money.
+
+  SCREENS (frontend first, mock API)
+    MENU (set up once, edit any time)
+      Items with a price: "Kota: chips, polony, cheese R35", "Russian
+      kota R45", "Chips small R15", "Cold drink R12"... Starter menus per
+      business type so setup is 30 seconds. Optional per item: its main
+      ingredients (quarter loaf, chips, polony, russian, cheese, egg...)
+      -- this is what feeds the engine (section 4).
+    NEW ORDER (the main screen: 2-3 taps)
+      Big buttons for the menu items, tap to add (tap again = +1), a
+      running total, "Paid cash" / "Paid card or EFT" / "Pay later"
+      (pay later -> offers to put it in the credit book). Order gets a
+      short number for the day: #1, #2, ...
+    QUEUE
+      Today's orders: New -> Preparing -> Ready -> Collected, one tap to
+      move each. Big number, what's in it, how long it's been waiting.
+    TODAY
+      Orders, money in (cash vs digital), best sellers, busiest hour.
+      Week view: the same per day. This is the trader's own value.
+
+  RULES
+    - Works when the signal drops: orders saved on the phone first, sent
+      when back online with an Idempotency-Key each (the app header is
+      coming from Mandla: feedback/NEEDS_api_client_headers.txt). Two
+      phones in one shop must not create duplicate order numbers
+      (the server assigns the final number; the phone shows a temporary
+      one until then) -- propose how in the contract.
+    - No customer details needed. An optional first name for the queue
+      only ("Thabo's order"), never a phone number unless the owner
+      turns on "tell customers when it's ready" (later).
+    - Money in cents; prices from the menu, totals computed on the
+      server; a price change never changes past orders (snapshot, like
+      Mandla's order lines).
+    - Tool key: "orderBook". Mandla adds it to constants/businessTypes.ts
+      and the Add-a-tool sheet (write a NEEDS_ file with the label and
+      icon you want; default ON for a "food seller" type).
+
+  BACKEND (after the contract is approved)
+    trader.order_book_items (menu), trader.order_book_orders,
+    trader.order_book_lines (snapshot name/price), per-trader rate
+    limits, idempotent writes, audit (no names). Tests: another trader
+    can't see or change your orders; retries land once; hostile input.
+
+
+---------------------------------------------------------------------------
+3. JOBS beyond CRUD
+---------------------------------------------------------------------------
+
+  Read feedback/FEEDBACK_jobs_beyond_crud.txt: builders' real problems,
+  what stops them (and their clients) using the WhatsApp sign-off, the
+  questions they'll ask, and a ranked list of improvements. Pick with
+  Mandla which 2-3 fit before Sunday; write a CONTRACT_jobs_v2.txt.
+
+
+---------------------------------------------------------------------------
+4. SIGNALS FOR THE ENGINE (small; Mandla wires it)
+---------------------------------------------------------------------------
+
+  Each tool exposes ONE read-only service function in its own domain
+  (never a repository; the domain-boundary tests enforce it):
+
+    order_book_service.demand_signals(user) ->
+      {"categories": {"bakery": 0.4, "meat_frozen": 0.3, ...},   # share
+       "weekly_units": {"quarter_loaf": 140, "chips_kg": 12, ...},
+       "since": "2026-09-01"}
+    jobs_service.demand_signals(user) ->
+      {"categories": {"building_materials": 0.6, "plumbing": 0.2},
+       "active_sites": [{"lat": -26.0, "lng": 28.2}],   # where to deliver
+       "next_stages": ["walls", "roof"]}
+
+  PRIVACY (non-negotiable): signals are the trader's own data used for
+  the trader's own suggestions. Aggregated, no customer or client names,
+  no phone numbers, never sent to a supplier. The app says it in plain
+  words: "Your tools help us suggest suppliers for what you use."
+
+  HOW MANDLA USES THEM (so you know why): suppliers who sell those
+  categories and deliver to those sites rank higher, with a reason line
+  ("You sold 140 kotas last week; Kasi Bakers delivers quarter loaves");
+  inside the supplier's catalogue, products matching those categories
+  and the trader's past orders come first.
+
+
+---------------------------------------------------------------------------
+OPEN FROM LAST ROUND
+---------------------------------------------------------------------------
+
+  - Sign-off links: APP_BASE_URL is now an https tunnel address (see
+    backend/.env.example). On Mandla's phone the link still doesn't open
+    -- please test on yours and write in FINDING_whatsapp_ip_links.txt
+    whether it works (which network, which browser, what you saw).
+  - Mandla's side is fixing: the deep-JSON crash, the Idempotency-Key
+    header option in api(), camera permission text, shared components.

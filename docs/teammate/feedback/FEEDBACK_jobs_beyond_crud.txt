@@ -1,0 +1,121 @@
+FEEDBACK -- Jobs: from a list of stages to something that solves builders' problems
+Mandla (with Claude), Friday 25 September 2026. For Risuna. Pick 2-3 with
+Mandla before Sunday; the rest is the roadmap slide.
+
+---------------------------------------------------------------------------
+WHAT WORKS TODAY (keep it)
+---------------------------------------------------------------------------
+  Jobs with stages that add up, camera-only stage photos hashed on the
+  server, a one-use sign-off link, "amounts don't match" kept. That's the
+  proof. But on its own it's a form the builder fills for us. A builder
+  opens it every day only if it saves them money, time or arguments.
+
+
+---------------------------------------------------------------------------
+THE BUILDER'S REAL PROBLEMS (why jobs exists)
+---------------------------------------------------------------------------
+  1. Getting paid: clients pay late, pay less, or say "I already paid
+     you for the roof". Cash, no slip. (Even formal construction: 89% of
+     surveyed practitioners call late and non-payment chronic.)
+  2. Scope creep: "while you're here, add a window" -- extra work agreed
+     by mouth, never paid.
+  3. Materials: the builder buys cement, bricks, sand with the client's
+     deposit; runs out mid-stage; drives around for stock; can't show the
+     client what the money went on.
+  4. Knowing if a job made money: stage payments in, materials and
+     casual workers out, nobody adds it up.
+  5. Getting the next job: no portfolio, no proof of finished work,
+     no record to show a bank or a bigger client.
+
+
+---------------------------------------------------------------------------
+WHAT STOPS THEM USING THE WHATSAPP SIGN-OFF (and questions they'll ask)
+---------------------------------------------------------------------------
+  THE CLIENT
+    - "Is this a scam?" A link from a strange address that asks for money
+      details. -> The message must look like the builder's own words,
+      show the photo, and the page must ask for NOTHING personal. A real
+      domain (not a tunnel address) before real clients.
+    - Data and airtime: the page must be tiny (no big images: a
+      compressed photo, < 100 KB total) and work on a slow phone.
+    - Age and language: one screen, big buttons, plain words; later
+      isiZulu / Sepedi / Xitsonga / Afrikaans.
+    - "Why must I type what I paid?" -> Say it: "So you both have the same
+      record. Nobody sees your number until you both answer."
+  THE BUILDER
+    - "It feels like I don't trust my client." -> Frame it as a receipt
+      FOR THE CLIENT: "Here's the photo of the roof and your receipt."
+    - "What if they never answer?" -> Reminders (the builder taps "remind",
+      we prefill a polite nudge), and the stage stays "waiting" with a date.
+    - "What if they answer a different amount?" -> Today: amounts don't
+      match. Next: both see the two amounts side by side and can fix it
+      once (one correction each, audited), or keep the disagreement on
+      record.
+    - "Is my client's number safe? Do you sell my data?" -> Plain answer
+      in the app (no, and why).
+    - "I'm on site, no signal." -> Photos wait on the phone and upload
+      later; the server time is when it arrives, the phone's time is
+      kept as "taken around".
+    - "Do I pay for this?" -> Free for traders (suppliers pay).
+
+
+---------------------------------------------------------------------------
+SEND THE PHOTO ITSELF ON WHATSAPP (not only a link)  -- researched
+---------------------------------------------------------------------------
+  A client trusts a photo of their own roof far more than a link.
+  - React Native's own Share and expo-sharing can't reliably send an
+    image AND a text caption to WhatsApp on Android (the text is dropped
+    or the image is).
+  - react-native-share's shareSingle(WHATSAPP) sends the image file with
+    the message (and the link) as its caption, straight into WhatsApp's
+    contact picker. It is a NATIVE module: it needs its config plugin in
+    app.json (android queries for com.whatsapp) and a NEW development
+    build. Per our rules that's Mandla's call (QUESTION below).
+  - Flow: download the stage photo to the cache (expo-file-system),
+    shareSingle({ social: WHATSAPP, url: fileUri, type: 'image/jpeg',
+    message }), where message already ends with the sign-off link.
+  - Fallback when WhatsApp isn't installed: today's text-only link.
+
+  QUESTION FOR MANDLA: add react-native-share (native, new dev build)?
+    Recommendation: yes -- it's the difference between "a link" and
+    "a photo of your roof, tap to confirm".
+
+
+---------------------------------------------------------------------------
+IMPROVEMENTS, RANKED (value for builders vs effort before Sunday)
+---------------------------------------------------------------------------
+  A. PHOTO IN THE WHATSAPP MESSAGE (above).               high value, small
+  B. MATERIALS PER STAGE -> SUPPLIERS NEAR THE SITE        high value, medium
+     Each stage gets an optional materials list (starter lists per stage
+     type: walls -> bricks, cement 42.5N, building sand, brickforce;
+     roof -> IBR sheets, timber, roofing screws). The job has a SITE
+     location (the address picker). This is the engine's best signal:
+     "for your Walls stage in Tembisa: Ndlovu Hardware delivers to the
+     site, 4.2 km". The trader opens the supplier with those products
+     first. (We recommend the supplier; the list only orders the
+     catalogue.) Needs: jobs_service.demand_signals (see 14, section 4).
+  C. QUOTE THE CLIENT ACCEPTS FIRST                       high value, medium
+     Before work starts, send the stages and prices as a quote link; the
+     client taps "I accept" -> price and scope are agreed on record. Kills
+     "that's not what we agreed".
+  D. EXTRA WORK (VARIATIONS)                              medium, small
+     "Add extra work" on a job: what, price; the client approves by link
+     like a sign-off. Scope creep gets paid.
+  E. JOB MONEY: IN vs OUT                                 medium, small
+     Stage payments confirmed (in) vs materials bought and workers paid
+     (out, typed by the builder) -> "This job has made R8,400 so far".
+  F. FINISHED-WORK RECORD                                 medium, later
+     A done job's photos + client confirmations become a shareable proof
+     page (like My record): the builder's portfolio for the next client
+     or a funder.
+  G. REMINDERS                                             small
+     "Remind client" prefilled WhatsApp for waiting stages; Home shows
+     "3 stages waiting on clients: R14,000".
+
+  Suggested for Sunday: A + B (the engine story: tools -> suppliers) and
+  G if time. C and D are the next slide.
+
+
+---------------------------------------------------------------------------
+DECISION:
+---------------------------------------------------------------------------

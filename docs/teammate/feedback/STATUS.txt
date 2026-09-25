@@ -34,5 +34,7 @@ FINDINGS / NEEDS FOR MANDLA
   - NEEDS_camera_permission_text.txt, NEEDS_shared_components.txt
   - FINDING_whatsapp_ip_links.txt, QUESTION_bluetooth_sales.txt (roadmap)
 
-NEXT
-  - My record screen (mock) + share
+NEXT (round 2, see ../14_ROUND_2_BRIEF.txt -- replaces the line below)
+  - history + bin (credit book, jobs); order book end to end; jobs v2;
+    demand_signals() per tool
+  - (was) My record screen (mock) + share
