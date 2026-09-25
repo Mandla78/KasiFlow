@@ -1,0 +1,29 @@
+FINDING -- WhatsApp doesn't make http://<IP>:5000/... links clickable
+Risuna, Friday 25 September 2026. Found testing job sign-off on two phones.
+
+WHAT
+  With APP_BASE_URL=http://10.181.176.8:5000 (the PC's Wi-Fi address, as
+  .env.example says), WhatsApp only highlights "10.181.176.8" in the
+  message. Tapping it opens http://10.181.176.8 -- no port, no path, no
+  ticket -- so the page never loads. The link itself is right (pasting
+  it whole into the browser works).
+
+FIX IN DEVELOPMENT (works today, nothing to install)
+  Use the same IP as a nip.io name, which resolves back to it:
+    APP_BASE_URL=http://10-181-176-8.nip.io:5000
+  WhatsApp treats it as a normal web address, port and ticket included.
+  Same Wi-Fi only, like the IP. Email reset links work the same way.
+  (Some routers block names that resolve to private addresses; then use
+  the tunnel below.)
+
+FOR THE DEMO / REAL CLIENTS
+  An https tunnel (ngrok, your static domain) in APP_BASE_URL: works
+  from any network and every app makes it clickable. Production is https
+  anyway (config.py already requires it).
+
+ASK
+  A line in .env.example (yours) next to APP_BASE_URL:
+    # For WhatsApp links, use the IP as a nip.io name:
+    # http://10-181-176-8.nip.io:5000 (bare IPs aren't clickable in WhatsApp)
+
+DECISION:
