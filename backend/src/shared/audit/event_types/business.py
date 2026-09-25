@@ -43,3 +43,10 @@ class BusinessAuditEvent(str, enum.Enum):
     PROFILE_IMAGE_UPLOADED = "business.profile_image_uploaded"
     PROFILE_IMAGE_REMOVED = "business.profile_image_removed"
     PROFILE_IMAGE_REJECTED = "business.profile_image_rejected"
+    # Credit book (informal_trader/credit_book): ids and amounts only, never names or phones
+    CREDIT_ENTRY_ADDED = "credit.entry_added"
+    CREDIT_PAYMENT_RECORDED = "credit.payment_recorded"
+    CREDIT_ENTRY_CORRECTED = "credit.entry_corrected"
+    CREDIT_ENTRY_CANCELLED = "credit.entry_cancelled"
+    CREDIT_CUSTOMER_PHONE_CHANGED = "credit.customer_phone_changed"
+    CREDIT_CUSTOMER_DELETED = "credit.customer_deleted"
