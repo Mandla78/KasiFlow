@@ -33,7 +33,7 @@ export function ProfilePhoto() {
       const saved = await businessProfileApi.uploadProfileImage(uri);
       updateProfile({ profileImageUrl: saved.profile_image_url });
     } catch (e) {
-      setError(e instanceof ApiError ? e.message : "Couldn't upload the photo. Try again.");
+      setError(e instanceof ApiError ? e.message : `Couldn't upload the photo. Try again.${__DEV__ && e instanceof Error ? ` (${e.message})` : ''}`);
     } finally {
       setBusy(false);
     }

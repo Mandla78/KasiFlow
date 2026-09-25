@@ -125,8 +125,26 @@ export const businessProfileApi = {
     } else {
       form.append('file', { uri, name: 'photo.jpg', type: 'image/jpeg' } as unknown as Blob);
     }
-    const res = await fetch(sig.upload_url, { method: 'POST', body: form });
-    if (!res.ok) throw new ApiError(res.status, 'UPLOAD_FAILED', "Couldn't upload the photo. Check your connection and try again.");
+    let res: Response;
+    try {
+      res = await fetch(sig.upload_url, { method: 'POST', body: form });
+    } catch (e) {
+      // The phone couldn't reach Cloudinary at all. In development, say why.
+      const why = __DEV__ && e instanceof Error ? ` (${e.message})` : '';
+      throw new ApiError(0, 'UPLOAD_NETWORK', `Couldn't reach the photo service. Check your connection and try again.${why}`);
+    }
+    if (!res.ok) {
+      // Cloudinary refused the file; its reason is safe to show in development.
+      let why = '';
+      if (__DEV__) {
+        try {
+          why = ` (${res.status}: ${((await res.json()) as { error?: { message?: string } }).error?.message ?? ''})`;
+        } catch {
+          why = ` (${res.status})`;
+        }
+      }
+      throw new ApiError(res.status, 'UPLOAD_FAILED', `Couldn't upload the photo. Try another photo.${why}`);
+    }
     return (await api<{ profile: ServerProfile }>('POST', '/me/business-profile/image', { public_id: sig.fields.public_id }, { auth: true }))
       .profile;
   },
