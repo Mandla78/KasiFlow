@@ -219,6 +219,34 @@ def supplier_move(order_id: uuid.UUID, to_status: str, *, note: Optional[str] = 
     return order
 
 
+def payable(user, order_id: uuid.UUID) -> Order:
+    """The trader's own order, if it can be paid now (awaiting payment, in time)."""
+    order = repo.for_user(user.id, order_id)
+    if order is None:
+        raise NotFoundError("We couldn't find that order.")
+    if order.status != "awaiting_payment" or (order.pay_by and order.pay_by <= utcnow()):
+        raise ConflictError("This order can't be paid any more.", code="NOT_PAYABLE")
+    return order
+
+
+def get_for_payment(order_id: uuid.UUID) -> Optional[Order]:
+    """For the payments feature (no trader in the request): the order, locked."""
+    return repo.by_id(order_id, lock=True)
+
+
+def mark_paid(order: Order, provider_reference: str) -> bool:
+    """A verified payment arrived: the order goes to the supplier. Returns
+    False if the order is no longer waiting (paid already, or it lapsed:
+    then the payment is recorded and must be refunded). The caller commits."""
+    if order.status != "awaiting_payment":
+        return False
+    order.status = "placed"
+    order.payment_status = "paid"
+    order.events.append(OrderEvent(status="placed", actor="system", at=utcnow(), note="Paid"))
+    order_audit.record(E.ORDER_STATUS_CHANGED, order_id=order.id, reference=order.reference, status="placed", actor="system", paid_with=provider_reference)
+    return True
+
+
 def expire_unpaid(now: Optional[datetime] = None) -> int:
     """Unpaid digital orders past their pay-by time lapse; their stock goes back."""
     now = now or utcnow()

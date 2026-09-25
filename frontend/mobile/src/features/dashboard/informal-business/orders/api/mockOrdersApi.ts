@@ -156,4 +156,8 @@ export const mockOrdersApi: OrdersApi = {
     orders = orders.map((x) => (x.id === id ? cancelled : x));
     return cancelled;
   },
+
+  async startPayment() {
+    return null; // no payment provider in mock mode
+  },
 };

@@ -85,4 +85,7 @@ export interface OrdersApi {
   list(): Promise<Order[]>;
   get(id: string): Promise<Order>;
   cancel(id: string): Promise<Order>;
+  /** A secure pay link for an unpaid digital order; null where there's no
+   *  payment provider (the mock). */
+  startPayment(id: string): Promise<string | null>;
 }

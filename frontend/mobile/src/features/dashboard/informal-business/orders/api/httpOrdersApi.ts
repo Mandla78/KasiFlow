@@ -93,6 +93,10 @@ export const httpOrdersApi: OrdersApi = {
     const data = await orCallError(api<{ order: WireOrder }>('GET', `/me/orders/${encodeURIComponent(id)}`, undefined, { auth: true }));
     return orderFromWire(data.order);
   },
+  async startPayment(id) {
+    const data = await orCallError(api<{ pay_url: string }>('POST', `/me/orders/${encodeURIComponent(id)}/pay`, undefined, { auth: true }));
+    return data.pay_url;
+  },
   async cancel(id) {
     const data = await orCallError(api<{ order: WireOrder }>('POST', `/me/orders/${encodeURIComponent(id)}/cancel`, undefined, { auth: true }));
     return orderFromWire(data.order);
