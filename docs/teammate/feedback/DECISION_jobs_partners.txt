@@ -5,8 +5,8 @@ DECISION -- Jobs v2: partners on a job, not "connect"
 WHAT:      Changes to 15_JOBS_BUILDER_NETWORK_PLAN.txt after reviewing the
            first build on sample data
 FROM:      Risuna, Friday 25 September 2026
-APPROVED:  Mandla, verbally (25 Sep 2026, per Risuna). Mandla: please
-           confirm in writing at the bottom.
+APPROVED:  Mandla, verbally (25 Sep 2026), and again after Risuna's review
+           of the build on sample data (go-ahead relayed by Risuna).
 
 
 WHY
@@ -67,9 +67,10 @@ WHAT CHANGES IN PLAN 15
 
 
 WHERE IT IS
-  App on sample data: branch risuna/jobs-network (not pushed until
-  Risuna's review). Hidden on the real API (NETWORK_READY) until the
-  backend exists.
+  App on sample data: branch risuna/jobs-network (PR, on top of PR 6).
+  Hidden on the real API (NETWORK_READY) until the backend in
+  CONTRACT_jobs_v2.txt exists.
 
 
-DECISION (Mandla, in writing):
+DECISION: approved by Mandla (verbal, relayed by Risuna, 25 Sep 2026).
+          Mandla: add a line here if anything should change.
