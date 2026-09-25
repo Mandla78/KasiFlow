@@ -12,9 +12,9 @@ import { colors, fonts, radius } from '@/shared/theme/tokens';
 const SIZE = 60;
 
 /**
- * The business's profile photo: tap to add or change it, with a small
- * "Remove" under it once there is one. Square-cropped on the phone, then
- * uploaded straight to Cloudinary (see businessProfileApi).
+ * The business's profile photo: tap to choose one from the gallery (no crop
+ * step), with a small "Remove" under it once there is one. Uploaded
+ * straight to Cloudinary (see businessProfileApi).
  */
 export function ProfilePhoto() {
   const { profile, updateProfile } = useSession();
@@ -24,7 +24,12 @@ export function ProfilePhoto() {
 
   async function pick() {
     setError('');
-    const picked = await ImagePicker.launchImageLibraryAsync({ mediaTypes: ['images'], allowsEditing: true, aspect: [1, 1], quality: 0.7 });
+    const access = await ImagePicker.requestMediaLibraryPermissionsAsync();
+    if (!access.granted) return setError('Allow access to your photos to choose one.');
+    // No crop step: Android's cropper crashed writing its file, and it's not
+    // needed -- the server shrinks every photo on the way in, and the avatar
+    // shows the middle of it.
+    const picked = await ImagePicker.launchImageLibraryAsync({ mediaTypes: ['images'], quality: 0.8 });
     if (picked.canceled || !picked.assets[0]) return;
     const uri = picked.assets[0].uri;
     if (USE_MOCK_AUTH) return updateProfile({ profileImageUrl: uri });
@@ -58,7 +63,7 @@ export function ProfilePhoto() {
       <Pressable onPress={pick} disabled={busy} accessibilityRole="button" accessibilityLabel={url ? 'Change profile photo' : 'Add profile photo'}>
         <View style={styles.avatar}>
           {url ? (
-            <Image source={{ uri: url }} style={styles.photo} />
+            <Image source={{ uri: url }} style={styles.photo} resizeMode="cover" />
           ) : (
             <Text style={styles.initial}>{(profile.businessName[0] ?? 'A').toUpperCase()}</Text>
           )}
