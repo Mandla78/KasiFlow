@@ -1,0 +1,31 @@
+FINDING -- a deeply nested JSON body crashes every route (500)
+Risuna, Friday 25 September 2026. Found by the credit book's hostile-input
+tests. Not in the credit book: in src/__init__.py (Mandla's), so I haven't
+changed it.
+
+WHAT
+  POST any /api/v1 route with Content-Type: application/json and a body
+  nested ~500 deep:  {"a":{"a":{"a": ... 1 ... }}}
+  -> RecursionError in _register_input_guard's _has_nul (src/__init__.py
+  ~line 160), which walks the parsed JSON recursively. In production that
+  is a 500; in tests it propagates. Checked on /auth/login, /auth/register,
+  /me/business-profile and all credit book writes: same crash.
+
+WHY IT MATTERS
+  Cheap to send, needs no account (login and register are public), and a
+  500 on the sign-in route is exactly what a reviewer's fuzzer reports.
+
+OPTIONS
+  a) Walk the JSON with an explicit stack (no recursion) and a depth cap:
+     deeper than, say, 32 levels -> 400 INVALID_BODY. No real request of
+     ours goes past 3 levels.
+  b) Catch RecursionError around _has_nul and answer 400.
+  I'd go with (a): it answers early and never recurses.
+
+TEST
+  tests/domains/informal_trader/test_credit_book_hostile_input.py
+  ::test_deeply_nested_json_never_crashes is marked xfail(strict=True):
+  when the guard is fixed it starts passing, pytest flags it, and the
+  mark comes off.
+
+DECISION:

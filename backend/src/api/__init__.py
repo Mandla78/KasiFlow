@@ -28,4 +28,6 @@ def health():
 from src.domains.identity.accounts.api import routes as _accounts_routes  # noqa: E402,F401
 from src.domains.identity.auth.api import routes as _auth_routes  # noqa: E402,F401
 from src.domains.informal_trader.business_profile.api import routes as _business_profile_routes  # noqa: E402,F401
+from src.domains.informal_trader.credit_book.api import routes as _credit_book_routes  # noqa: E402,F401
+from src.domains.informal_trader.jobs.api import routes as _jobs_routes  # noqa: E402,F401
 from src.shared.geocoding import routes as _geocoding_routes  # noqa: E402,F401

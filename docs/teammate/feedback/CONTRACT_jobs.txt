@@ -1,0 +1,165 @@
+===========================================================================
+CONTRACT -- JOBS (builders and trades)
+===========================================================================
+
+TOOL:            Jobs, stage photos, client sign-off, house records
+                 (docs/teammate/07_JOBS_PLAN.txt, PDF p11-p15)
+AUTHOR / DATE:   Risuna, Friday 25 September 2026
+STATUS:          approved by Mandla (verbal, 25 Sep 2026, via Risuna) and built on
+                 risuna/jobs-api, with the answers in section 6
+
+  The app's mock keeps these rules today:
+  frontend/mobile/src/features/dashboard/informal-business/jobs/
+  api/mockJobsApi.ts and lib/stages.ts (jest-tested). Wire names are
+  snake_case; the app's types.ts has the camelCase twins.
+  Money in integer cents. Timestamps ISO.
+
+
+1. ENDPOINTS
+---------------------------------------------------------------------------
+
+  All /me routes: @auth_required(dashboard="informal_business"), rate
+  limits keyed on the signed-in trader (as the credit book), marshmallow
+  unknown=RAISE, scoped to current_user(); not yours = 404.
+
+  job = { id, title, client_name, client_phone, place, total_cents,
+          status: active | done, created_at, stages: [stage] }
+  stage = { id, position, name, amount_cents,
+            status: not_started | photo_taken | waiting | confirmed | amounts_dont_match,
+            photo: {url, taken_at, sha256} | null,
+            builder_amount_cents, client_amount_cents (null until BOTH are in),
+            sign_off_sent_at, confirmed_at, client_note }
+
+  GET    /me/jobs                                  120/min
+    {jobs: [job]}  active first (newest first), then done
+
+  POST   /me/jobs                                   30/min, Idempotency-Key
+    title        CleanText 1..60, a letter
+    client_name  CleanText 1..60, a letter
+    client_phone SA cellphone -> 0XXXXXXXXX (required: the link goes there)
+    place        CleanText 0..120
+    total_cents  int 1..500,000,000 (R5,000,000)
+    stages       1..12 of {name CleanText 1..40, amount_cents int >= 1}
+                 their amounts MUST add up to total_cents
+    201 {job}; 422
+
+  GET    /me/jobs/{id}                             120/min   {job}; 404
+
+  POST   /me/jobs/{id}/stages/{sid}/photo/upload-signature     20/hour
+    one-upload form for shared.media, folder
+    folders.informal_trader_job_folder(user.id, job.id) (as the profile photo)
+  POST   /me/jobs/{id}/stages/{sid}/photo          20/hour
+    {public_id} -> uploads.finish(...); the server stamps taken_at (its
+    own clock) and stores the SHA-256 of the stored file (see
+    FINDING_stage_photos.txt). A new photo replaces the old one until the
+    stage is confirmed. 409 STAGE_CONFIRMED.
+
+  POST   /me/jobs/{id}/stages/{sid}/sign-off       30/min, Idempotency-Key
+    {builder_amount_cents: int 0..500,000,000}
+    -> 201 {job, link, message}: a new one-use link (previous ones for the
+    stage are revoked), status "waiting". message is the WhatsApp text
+    (no amount in it); the app opens wa.me to client_phone.
+    409 STAGE_CONFIRMED
+
+  GET    /me/jobs/summary                           120/min
+    {summary: {active_jobs, waiting_on_clients_cents, needs_sign_off}}
+    (Home "Waiting on clients", Account tile; file 08)
+
+  PUBLIC WEB PAGE (not /api/v1; like the password reset page)
+  GET    /sign-off?ticket=...    rate limited per IP, noindex, no-referrer,
+                                 no-store
+    Shows: business name, stage name + amount, job title, the photo.
+    Never the builder's cash amount. Same page for used / expired /
+    unknown: "This link has already been used or has expired."
+  POST   /sign-off   {ticket, answer: done | not_yet, amount_cents?, note?}
+    done: client's own amount (0..500,000,000) -> confirmed if equal to
+    the builder's, else amounts_dont_match (both kept). not_yet: note
+    CleanText 0..200 -> back to photo_taken with the note. One use.
+
+
+2. TABLES (schema "trader"; migration number to be reserved)
+---------------------------------------------------------------------------
+
+  jobs            user_id, title(60), client_name(60), client_phone(10)
+                  CHECK phone, place(120), total_cents bigint CHECK 1..5e8,
+                  status CHECK (active, done). Soft delete later (cancel).
+  job_stages      job_id, position, name(40), amount_cents CHECK > 0,
+                  status CHECK (the five), photo_public_id, photo_url,
+                  photo_sha256 char(64), photo_taken_at (server time),
+                  confirmed_at. The sum rule is checked in the service.
+  job_sign_offs   one row per link sent, NEVER deleted:
+                  stage_id, user_id, ticket_hash (HMAC, unique),
+                  builder_amount_cents, client_amount_cents, client_note,
+                  outcome (confirmed | amounts_dont_match | not_yet | NULL),
+                  sent_at, expires_at (7 days), used_at, revoked_at,
+                  via ('link'). Both numbers of every attempt stay.
+
+
+3. RULES
+---------------------------------------------------------------------------
+
+  - Stage amounts add up to the job total.
+  - Photos: camera only in the app; the server's time and the file's
+    SHA-256 are what count, not the phone's.
+  - Paid and confirmed = the sum of confirmed stages' agreed amount.
+  - The client types their own amount; neither sees the other's first.
+    Equal -> "confirmed by both" (via link: the pitch says so honestly);
+    different -> "amounts don't match", never silently fixed.
+  - A job is done when every stage is confirmed.
+  - The builder sends from their own WhatsApp; the server never messages
+    clients.
+
+
+4. SECURITY (file 05)
+---------------------------------------------------------------------------
+
+  IDOR:    every /me query by user_id; trader B gets 404 everywhere.
+  Tickets: secrets.token_urlsafe(32) (256 bits), only the HMAC stored
+           (our own helper, identity's is sealed), one use, 7 days,
+           revocable, same answer for used/expired/unknown.
+  Input:   CleanText, strict cents, sum rule, hostile-input tests.
+  Privacy: client name + phone only for the link; never in logs, audit,
+           the public page (it shows the BUSINESS name) or a shared
+           record. Photos of a client's home stay in the job folder,
+           never public listings; a shared house record needs the
+           builder to choose to share it.
+  Abuse:   per-trader limits; the public page per IP.
+  Audit:   job.created, job.stage_photo_added (sha256, no url),
+           job.sign_off_sent, job.sign_off_answered (outcome, amounts),
+           job.done. Ids and amounts only.
+
+
+5. WHAT THE APP DOES TODAY (mock)
+---------------------------------------------------------------------------
+
+  All of the above on the phone, plus a PRACTICE client page in the app
+  (marked "Test", only when EXPO_PUBLIC_USE_MOCK_API=true) so the whole
+  loop can be tried on one phone. Test links use https://akayza.test/...
+  (the .test domain never resolves). Photos stay on the phone.
+  Not yet: sharing a house record (button explains it comes with the
+  backend), importing old WhatsApp photos, editing/cancelling a job.
+
+
+6. ANSWERS USED (Mandla: correct anything here and I'll follow)
+---------------------------------------------------------------------------
+
+  1. Migration 0012_jobs.
+  2. The client's page is /sign-off?ticket=... on the API host
+     ({APP_BASE_URL}), built like the reset-password page. In development
+     APP_BASE_URL is the PC's Wi-Fi address, so a second phone on the same
+     Wi-Fi opens it.
+  3. The photo is hashed on the server: the stored file is read once from
+     Cloudinary after uploads.finish(); if it can't be read, nothing is
+     kept (503 PHOTO_CHECK_FAILED) and the builder tries again.
+  4. The camera text in app.json is yours (NEEDS_camera_permission_text).
+  5. Moving shared pieces is its own PR later (NEEDS_shared_components):
+     jobs reuses the credit book's rate-limit key and idempotency wrapper
+     for now.
+  6. Editing/cancelling a job and importing old photos: later.
+
+  Built as above, with GET /me/jobs/summary and the sign-off route named
+  POST /me/jobs/{id}/stages/{sid}/sign-off. A new link revokes the stage's
+  older ones. Stage photos are not malware-scanned yet (scanning is off
+  by default; the profile photo's scan flow can be added when it's on).
+
+DECISION:

@@ -1,0 +1,22 @@
+NEEDS -- let api() send an Idempotency-Key header
+Risuna, Friday 25 September 2026. For Mandla: shared/api/client.ts is yours.
+
+WHAT
+  The credit book server accepts Idempotency-Key on new credit sales and
+  payments (a retry after a dropped connection lands once; tested). The
+  app can't send it yet: api(method, path, body, opts) has no headers.
+
+ASK
+  An optional headers field in opts, passed through to fetch, e.g.
+    api('POST', '/me/credit-book/entries', body, { auth: true, headers: { 'Idempotency-Key': key } })
+  Retries (the token refresh retry too) must reuse the same headers.
+
+THEN (my side, one change in httpCreditBookApi.ts)
+  Make one key per tap (a uuid when the trader taps Save) and send it
+  with addSale and recordRepayment, so a retry of the same tap is safe.
+
+WHY IT MATTERS
+  Spaza signal drops. Without it, "Save credit sale" that times out and
+  is tapped again can add the sale twice.
+
+DECISION:

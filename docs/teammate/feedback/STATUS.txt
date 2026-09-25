@@ -1,14 +1,38 @@
 STATUS -- Risuna's tools (update in every PR)
 
 DONE
-  -
+  - Credit book frontend (mock), PR 1
+  - Credit book: approved (DECISION_credit_book.txt) and built end to end
+    on risuna/credit-book-api (PR 2): customers only, paper-book dates,
+    add a cellphone; backend with migration 0011_credit_book, per-trader
+    rate limits, idempotency, audit without names/phones; the app on the
+    real API when EXPO_PUBLIC_USE_MOCK_API=false.
+  - Jobs frontend (mock), risuna/jobs-ui (PR 3): jobs list, new job with
+    stages that add up, job detail (stages as steps), stage photo (camera
+    only, launchCameraAsync), send sign-off on WhatsApp, a practice
+    client page (Test), "amounts don't match" kept, house records.
+  - Jobs backend (approved verbally, 25 Sep), risuna/jobs-api (PR 4):
+    migration 0012_jobs, stage photos kept with the server's time and a
+    server-side SHA-256, one-use sign-off links (HMAC-stored), the
+    client's /sign-off page, the app on the real API.
+  - Home and Account live (PR 5, risuna/home-account-live): real numbers
+    from the credit book and jobs summaries, a real Today list, buttons
+    straight to the new-sale / new-job forms, a working Add-a-tool sheet;
+    order numbers stay marked "sample".
 
 IN PROGRESS
   -
 
 BLOCKED (and on what)
-  -
+  - The app sending Idempotency-Key: a header option in api()
+    (NEEDS_api_client_headers.txt)
+
+FINDINGS / NEEDS FOR MANDLA
+  - FINDING_deep_json_crash.txt: a deeply nested JSON body crashes every
+    route (the NUL guard in src/__init__.py)
+  - FINDING_stage_photos.txt: camera-only and hashing on the server
+  - NEEDS_camera_permission_text.txt, NEEDS_shared_components.txt
+  - FINDING_whatsapp_ip_links.txt, QUESTION_bluetooth_sales.txt (roadmap)
 
 NEXT
-  - Credit book frontend (mock), PR 1
-  - CONTRACT_credit_book.txt
+  - My record screen (mock) + share

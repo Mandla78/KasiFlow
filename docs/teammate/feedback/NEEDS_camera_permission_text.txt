@@ -1,0 +1,18 @@
+NEEDS -- the camera permission text in app.json
+Risuna, Friday 25 September 2026. For Mandla: app.json is yours.
+
+WHAT
+  expo-image-picker's cameraPermission in app.json says:
+    "Akayza uses your camera to photograph business documents, like your
+     trading permit."
+  Jobs now uses the camera for stage photos too, so the prompt a builder
+  sees (iOS shows this text) doesn't say why we're asking.
+
+ASK
+  Something like:
+    "Akayza uses your camera for stage photos on your jobs and to
+     photograph business documents, like your trading permit."
+  It's native config: it lands with the next phone build, no rush for
+  Android (Android doesn't show this text).
+
+DECISION:

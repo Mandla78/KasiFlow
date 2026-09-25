@@ -1,0 +1,180 @@
+===========================================================================
+CONTRACT -- CREDIT BOOK
+===========================================================================
+
+TOOL:            Credit book (docs/teammate/06_CREDIT_BOOK_PLAN.txt)
+AUTHOR / DATE:   Risuna, Friday 25 September 2026
+STATUS:          approved by Mandla (25 Sep 2026), with the changes in
+                 DECISION_credit_book.txt -- this file now matches what
+                 is built (branch risuna/credit-book-api)
+
+  CUSTOMERS ONLY. What a trader owes suppliers comes from real orders
+  (Mandla's side), never typed by hand here.
+
+  Code: backend/src/domains/informal_trader/credit_book/
+        frontend/mobile/src/features/dashboard/informal-business/credit-book/
+  Field names below are the wire names (snake_case); the app's types.ts
+  has the camelCase twins, mapped only in api/httpCreditBookApi.ts.
+
+  Money is integer CENTS. Dates are ISO days ("2026-09-25").
+  "Today" on the server = today in Africa/Johannesburg.
+
+
+1. ENDPOINTS  (all under /api/v1/me/credit-book)
+---------------------------------------------------------------------------
+
+  Every route: @auth_required(dashboard="informal_business"), a rate
+  limit PER SIGNED-IN TRADER (api/limits.py: the key comes from the
+  token, not the IP), a marshmallow schema with unknown=RAISE, and every
+  query scoped to current_user(). Not found, not yours and a malformed
+  id are the same 404.
+
+  --- The entry, as every endpoint returns it ---------------------------
+
+    entry = {
+      id, customer: {id, name, phone},
+      amount_cents        int     the amount after any corrections
+      paid_cents          int     sum of payments
+      outstanding_cents   int     amount - paid (0 when cancelled)
+      description         string  "" when none
+      given_on, due_on    date
+      status              "open" | "paid" | "cancelled"
+      created_at          datetime
+    }
+    entry_detail = entry + {history: [ oldest first, append-only
+        {id, type: "given",      on, recorded_at, amount_cents}   (the ORIGINAL amount)
+        {id, type: "repayment",  on, recorded_at, amount_cents}
+        {id, type: "correction", on, recorded_at, reason, before: {amount_cents, due_on, description}, after: {...}}
+        {id, type: "cancelled",  on, recorded_at, reason} ]}
+
+  GET    /entries?status=open|paid|all           120/min
+    200 {entries: [entry]}  open first by due_on (late first), then paid
+    (newest first). Default open + paid; cancelled only in history. Max 500.
+
+  POST   /entries                                 60/min, Idempotency-Key
+    customer_id: uuid  OR  customer: {name, phone}   exactly one
+      name   CleanText, 1..60, at least one letter, no hidden/control chars
+      phone  SA cellphone (082 123 4567, +27 82...) -> 0XXXXXXXXX, or null
+    amount_cents   int 1..10,000,000 (strict: no strings, fractions, booleans)
+    description    CleanText 0..120, optional
+    given_on       date, optional (default today); today - 366 .. today
+    due_on         date, given_on .. today + 366 (may be in the past)
+    201 {entry: entry_detail}
+    404 customer_id not the trader's; 422 VALIDATION_ERROR
+
+  GET    /entries/{id}                            120/min
+    200 {entry: entry_detail}; 404
+
+  POST   /entries/{id}/payments                   60/min, Idempotency-Key
+    amount_cents int 1..outstanding; paid_on date given_on..today (default today)
+    201 {entry}; status -> "paid" at 0
+    409 ENTRY_CLOSED (paid or cancelled); 422 more than what's left, bad date
+
+  POST   /entries/{id}/corrections                30/min
+    amount_cents paid_cents..10,000,000; due_on given_on..today+366;
+    description 0..120; reason 0..120
+    201 {entry}; status recomputed (can settle, or re-open a paid entry)
+    409 ENTRY_CLOSED (cancelled); 422 incl. "Nothing was changed."
+
+  POST   /entries/{id}/cancel                     30/min
+    reason 0..120 -> 200 {entry} status "cancelled"
+    409 ENTRY_CLOSED (already), 409 HAS_REPAYMENTS (correct instead)
+
+  GET    /customers?q=                            120/min (search as you type)
+    200 {customers: [{id, name, phone, owes_cents}]}; starts-with first,
+    then contains; % and _ are plain text; max 50
+
+  PATCH  /customers/{id}                          30/min
+    {phone: string | null} -> 200 {customer}; 404; 422
+
+  DELETE /customers/{id}                          30/min
+    anonymise: name -> "Deleted customer", phone -> null, soft-deleted;
+    entries and payments stay. 200 {}; 404 (also when already deleted).
+    (No screen yet: for the customer page.)
+
+  GET    /summary                                 120/min
+    200 {summary: {customers_owe_cents, customers_owing, due_today_count,
+    due_today_cents, overdue_count, given_this_month_cents,
+    paid_back_this_month_cents}}   (Home tab and Account tile, file 08)
+
+  Idempotency-Key (8..255 printable chars): the same key + same body
+  replays the first answer (2xx and 4xx); the same key + another body is
+  422 IDEMPOTENCY_KEY_REUSED; while the first is running, 409
+  REQUEST_IN_PROGRESS. Keys are per trader (src/shared/idempotency).
+
+  Errors: a single-field refusal from the service carries that message
+  as the top-level message ("That's more than what's left to pay."), so
+  the app can show it as is.
+
+
+2. TABLES (schema "trader", migration 0011_credit_book)
+---------------------------------------------------------------------------
+
+  credit_customers   user_id, name varchar(60), phone varchar(10)
+                     CHECK phone ~ '^0[6-8][0-9]{8}$'; soft delete = anonymise
+  credit_entries     user_id, customer_id FK (RESTRICT), amount_cents bigint
+                     CHECK 1..10,000,000, description varchar(120),
+                     given_on, due_on CHECK due_on >= given_on,
+                     status CHECK in (open, paid, cancelled).
+                     NEVER deleted. Index (user_id, status, due_on).
+  credit_payments    entry_id FK, user_id, amount_cents CHECK > 0, paid_on.
+                     NEVER updated or deleted.
+  credit_corrections entry_id FK, user_id, kind CHECK in (correction,
+                     cancellation), before/after amount, due_on,
+                     description, reason. NEVER updated or deleted.
+
+
+3. RULES
+---------------------------------------------------------------------------
+
+  - Outstanding = amount - payments. "paid" exactly when it reaches 0.
+  - A payment can't be more than what's left, before the day given, or
+    in the future. Payments, corrections and cancels lock the entry row
+    (SELECT ... FOR UPDATE): two payments at once can't overpay (tested;
+    the test fails without the lock).
+  - A correction keeps before/after; the amount can't go below what's
+    paid. It can settle an entry or re-open a paid one.
+  - Cancel only with nothing paid back.
+  - Paper book: given_on up to a year back; due_on may be in the past.
+  - WhatsApp receipts and reminders never touch the server (wa.me on the
+    trader's phone).
+
+
+4. SECURITY (file 05)
+---------------------------------------------------------------------------
+
+  IDOR:      every query filters by user_id (repository functions all take
+             it). Tested: another trader gets 404 on every route and sees
+             nothing in list, search or summary.
+  Input:     unknown=RAISE, CleanText names, strict cents, bounded dates,
+             DB CHECKs. Hostile-input tests (hidden characters, huge text,
+             wrong types, broken bodies): refused, never a 500.
+  Privacy:   a customer is a name (nickname fine) + optional cellphone for
+             the trader's own WhatsApp. Never shown to suppliers or on a
+             shared record. Delete = anonymise. "Download my data" would
+             export customers, entries, payments, corrections.
+  Secrets:   none: no links or tickets in this tool.
+  Abuse:     per-trader rate limits (tested: two traders on one IP each
+             keep their own allowance).
+  Audit:     credit.entry_added, credit.payment_recorded,
+             credit.entry_corrected, credit.entry_cancelled,
+             credit.customer_phone_changed, credit.customer_deleted:
+             ids and amounts only. Tested: no names, phones, descriptions
+             or reasons in the audit trail.
+
+
+5. THE APP
+---------------------------------------------------------------------------
+
+  api/creditBookApi.ts picks httpCreditBookApi when
+  EXPO_PUBLIC_USE_MOCK_API=false (same switch as sign-in), otherwise
+  mockCreditBookApi, which keeps the same rules and messages (on the
+  phone, sample entries, "today" = the phone's today).
+
+
+6. OPEN
+---------------------------------------------------------------------------
+
+  - The app doesn't send Idempotency-Key yet: shared/api/client.ts has no
+    way to add a header (NEEDS_api_client_headers.txt).
+  - written_off: later (decision 3.2).

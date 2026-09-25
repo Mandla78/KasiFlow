@@ -1,0 +1,29 @@
+QUESTION -- recording a sale between two phones (Bluetooth, bitchat-style)
+Risuna, Friday 25 September 2026. For the roadmap, not this weekend.
+
+THE IDEA
+  When BOTH sides have Akayza (a trader and a supplier's driver, or two
+  traders), confirm a credit sale or a repayment phone-to-phone, offline:
+  the same "confirmed by both" the credit book can't reach today, because
+  a customer confirms nothing (it's "recorded by you").
+
+WHAT I FOUND IN THE DOCS
+  - Plan 09: the cash handshake is QR FIRST, Bluetooth only as a backup,
+    and "1. Bluetooth (QR only)" is first on the cut list. Your spike
+    notes (V1_04) say react-native-ble-plx can't advertise.
+  - A "real BLE mesh" (bitchat-style relaying) is listed as later in
+    06_AKAYZA_MERGED_PLAN.
+
+WHY NOT NOW
+  - Credit customers and job clients don't have the app (that's why the
+    credit book uses WhatsApp and jobs a web link).
+  - A radio module means a new phone build.
+  - Code freeze Sunday 06:00.
+
+ASK
+  1. Pitch it as roadmap: "when both sides have Akayza, the same
+     confirmation happens phone-to-phone, offline" -- OK?
+  2. Later, should credit repayments reuse your cash handshake (QR first,
+     same SOLICIT / ACK protocol) rather than a separate design?
+
+DECISION:

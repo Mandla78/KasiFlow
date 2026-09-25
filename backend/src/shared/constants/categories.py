@@ -5,7 +5,7 @@ one, and the supplier recommendation engine matches on it.
 
 It MUST match the app's frontend/mobile/src/constants/categories.ts.
 Removing a code needs a data migration for rows that hold it (see
-migrations/versions/0011_drop_airtime_category.py).
+migrations/versions/0013_drop_airtime_category.py).
 """
 from __future__ import annotations
 

@@ -1,0 +1,29 @@
+NEEDS -- move a few credit book pieces into shared/
+Risuna, Friday 25 September 2026. For Mandla: shared/ is yours.
+
+WHAT
+  Jobs reuses these from the credit book folder today (imported by path):
+    components/AmountField.tsx   money typed in rand, big like the design
+    components/Sheet.tsx         bottom sheet for short forms
+    lib/amounts.ts               parseRand (rand -> cents), limits
+    lib/whatsapp.ts              SA cellphones, wa.me links
+  One tool importing another's folder works, but it's the wrong shape:
+  My record and the daily tally will want them too.
+
+ASK
+  May I move them (unchanged) to:
+    shared/components/AmountField.tsx, shared/components/Sheet.tsx,
+    shared/lib/money.ts (parseRand next to formatRand),
+    shared/lib/phone.ts + shared/lib/whatsapp.ts
+  and update the imports? A PR with only the move, after the jobs PR,
+  so nothing else changes at the same time.
+
+BACKEND TOO (added with the jobs backend)
+  jobs/api/routes.py imports from the credit book:
+    credit_book/api/limits.py       per_user(): the rate-limit key from the
+                                    signed-in user, not the IP
+    credit_book/api/idempotent.py   run_once(): Idempotency-Key handling
+  Both are general; they'd sit well in shared/rate_limit/ and
+  shared/idempotency/ (both yours). Same move PR.
+
+DECISION:

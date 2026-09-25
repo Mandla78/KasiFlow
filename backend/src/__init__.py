@@ -74,6 +74,8 @@ def _register_models() -> None:
     from src.domains.identity.devices import models as _devices  # noqa: F401
     # trader schema: the informal trader's own data
     from src.domains.informal_trader.business_profile import models as _business_profile  # noqa: F401
+    from src.domains.informal_trader.credit_book import models as _credit_book  # noqa: F401
+    from src.domains.informal_trader.jobs import models as _jobs  # noqa: F401
     # supplier schema: suppliers, their catalogues, their feed runs
     from src.domains.supplier.supplier_profile import models as _supplier_profile  # noqa: F401
     from src.domains.supplier.catalogue import models as _catalogue  # noqa: F401
@@ -113,6 +115,10 @@ def _register_blueprints(app: Flask) -> None:
     from src.shared.media.routes import media_webhooks_bp
 
     app.register_blueprint(media_webhooks_bp)
+    # The client's job sign-off page (outside /api/v1: it must match the link the builder sends).
+    from src.domains.informal_trader.jobs.web.sign_off_page import sign_off_page_bp
+
+    app.register_blueprint(sign_off_page_bp)
 
 
 def _register_error_handlers(app: Flask) -> None:

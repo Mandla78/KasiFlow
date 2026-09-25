@@ -1,7 +1,7 @@
 """remove the Airtime & Electricity category
 
-Revision ID: 0011_drop_airtime_category
-Revises: 0010_business_name_to_profile
+Revision ID: 0013_drop_airtime_category
+Revises: 0012_jobs
 Create Date: 2026-09-25 15:00:00
 
 Prepaid airtime and electricity are vouchers sold through a vending
@@ -12,8 +12,8 @@ code; otherwise their next save would be rejected by the stricter list.
 from alembic import op
 
 
-revision = '0011_drop_airtime_category'
-down_revision = '0010_business_name_to_profile'
+revision = '0013_drop_airtime_category'
+down_revision = '0012_jobs'
 branch_labels = None
 depends_on = None
 

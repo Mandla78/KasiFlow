@@ -4,8 +4,8 @@ Suppliers and their catalogues, filled by a supplier's own system or the
 seed files through one feed (integration/services/feed_loader.py).
 import_jobs records every feed run, row errors included.
 
-Revision ID: 0012_supplier_catalogue
-Revises: 0011_drop_airtime_category
+Revision ID: 0014_supplier_catalogue
+Revises: 0013_drop_airtime_category
 Create Date: 2026-09-25 16:46:29.456521
 
 """
@@ -14,8 +14,8 @@ import sqlalchemy as sa
 from sqlalchemy.dialects import postgresql
 
 # revision identifiers, used by Alembic.
-revision = '0012_supplier_catalogue'
-down_revision = '0011_drop_airtime_category'
+revision = '0014_supplier_catalogue'
+down_revision = '0013_drop_airtime_category'
 branch_labels = None
 depends_on = None
 

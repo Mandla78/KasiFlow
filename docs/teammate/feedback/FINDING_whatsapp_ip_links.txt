@@ -1,0 +1,44 @@
+FINDING -- WhatsApp doesn't make http://<IP>:5000/... links clickable
+Risuna, Friday 25 September 2026. Found testing job sign-off on two phones.
+
+WHAT
+  With APP_BASE_URL=http://10.181.176.8:5000 (the PC's Wi-Fi address, as
+  .env.example says), WhatsApp only highlights "10.181.176.8" in the
+  message. Tapping it opens http://10.181.176.8 -- no port, no path, no
+  ticket -- so the page never loads. The link itself is right (pasting
+  it whole into the browser works).
+
+FIX IN DEVELOPMENT (works today, nothing to install)
+  Use the same IP as a nip.io name, which resolves back to it:
+    APP_BASE_URL=http://10-181-176-8.nip.io:5000
+  WhatsApp treats it as a normal web address, port and ticket included.
+  Same Wi-Fi only, like the IP. Email reset links work the same way.
+  (Some routers block names that resolve to private addresses; then use
+  the tunnel below.)
+
+BUT PHONES THEN FORCE HTTPS (tested, 25 Sep)
+  Tapping the nip.io link, Chrome on Android (and WhatsApp's browser)
+  upgraded it to https:// -- the backend log shows TLS handshakes
+  ("\x16\x03\x01...") hitting the http server, and the page never loads.
+  So in practice a sign-off link needs https even in development.
+
+WHAT WORKS: A CLOUDFLARE QUICK TUNNEL (no account)
+    winget install --id Cloudflare.cloudflared
+    cloudflared tunnel --url http://localhost:5000
+  -> https://<random>.trycloudflare.com; put it in APP_BASE_URL and
+  restart the backend. Any network, https, clickable everywhere. The
+  address changes each time the tunnel starts; it exposes the dev
+  backend while running (everything still needs a login except the
+  one-use sign-off links), so stop it after testing.
+
+FOR THE DEMO / REAL CLIENTS
+  An https tunnel (ngrok, your static domain) in APP_BASE_URL: works
+  from any network and every app makes it clickable. Production is https
+  anyway (config.py already requires it).
+
+ASK
+  A line in .env.example (yours) next to APP_BASE_URL:
+    # For WhatsApp links, use the IP as a nip.io name:
+    # http://10-181-176-8.nip.io:5000 (bare IPs aren't clickable in WhatsApp)
+
+DECISION:

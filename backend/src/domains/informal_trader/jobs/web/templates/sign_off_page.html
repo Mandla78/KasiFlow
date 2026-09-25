@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex">
+  <title>Sign off a stage · Akayza</title>
+  <style>
+    body { margin:0; background:linear-gradient(#E3EDF5,#F7FAFC); min-height:100vh; font-family:-apple-system,'Segoe UI',Roboto,Helvetica,Arial,sans-serif; color:#0F172A; }
+    .card { max-width:440px; margin:24px auto; padding:24px; background:#fff; border:1px solid #E2E8F0; border-radius:14px; }
+    .brand { font-size:22px; font-weight:800; letter-spacing:-0.5px; }
+    .brand span { color:#2563EB; }
+    .tag { font-size:12.5px; color:#64748B; margin:2px 0 18px; }
+    h1 { font-size:21px; line-height:1.25; margin:0 0 12px; }
+    .stage { border:1px solid #E2E8F0; border-radius:12px; padding:14px; margin-bottom:18px; }
+    .stage b { font-size:16px; }
+    .muted { font-size:13.5px; color:#64748B; margin-top:3px; }
+    .photo { width:100%; border-radius:10px; margin-top:12px; display:block; background:#F1F5F9; }
+    label { display:block; font-size:13.5px; font-weight:700; margin:0 0 6px; }
+    .money { display:flex; align-items:center; border:1px solid #CBD5E1; border-radius:10px; padding:0 12px; margin-bottom:10px; }
+    .money span { font-size:24px; font-weight:800; }
+    .money input { flex:1; border:0; font-size:24px; font-weight:800; padding:12px 6px; outline:none; min-width:0; }
+    textarea { width:100%; box-sizing:border-box; border:1px solid #CBD5E1; border-radius:10px; padding:10px; font-size:15px; font-family:inherit; min-height:70px; }
+    .note { background:#F1F5F9; border-radius:10px; padding:12px; font-size:13px; line-height:1.45; color:#0F172A; margin:6px 0 18px; }
+    button { width:100%; padding:15px; border-radius:12px; font-size:15.5px; font-weight:700; cursor:pointer; margin-bottom:10px; }
+    .yes { background:#2563EB; color:#fff; border:0; }
+    .no { background:#fff; color:#0F172A; border:1px solid #E2E8F0; }
+    .error { background:#FDECEC; color:#B3261E; padding:12px 14px; border-radius:10px; font-size:13.5px; margin-bottom:14px; }
+    .ok { width:44px; height:44px; border-radius:22px; background:#D1FAE5; color:#059669; display:flex; align-items:center; justify-content:center; font-size:24px; font-weight:800; margin-bottom:14px; }
+    details summary { cursor:pointer; font-weight:700; font-size:14.5px; padding:12px 0; text-align:center; list-style:none; }
+    .foot { margin-top:22px; padding-top:14px; border-top:1px solid #EEF2F6; text-align:center; font-size:12px; color:#94A3B8; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div class="brand">akay<span>za</span></div>
+    <div class="tag">Sign-off link &middot; no app needed</div>
+
+    {% if state == "form" %}
+      <h1>{{ info.business }} asks you to sign off</h1>
+      <div class="stage">
+        <b>{{ info.stage }} stage &middot; {{ price }}</b>
+        <div class="muted">{{ info.job_title }}</div>
+        {% if info.photo_url %}
+          <img class="photo" src="{{ info.photo_url }}" alt="{{ info.stage }} photo">
+          <div class="muted">{{ info.stage }} &middot; photo taken in the app</div>
+        {% endif %}
+      </div>
+      {% if error %}<div class="error">{{ error }}</div>{% endif %}
+
+      <form method="post" action="/sign-off" autocomplete="off">
+        <input type="hidden" name="ticket" value="{{ ticket }}">
+        <input type="hidden" name="answer" value="done">
+        <label for="amount">Cash you paid for this stage (if any)</label>
+        <div class="money"><span>R</span><input id="amount" name="amount" inputmode="decimal" maxlength="12" placeholder="0" value="{{ amount }}"></div>
+        <div class="note">You type your own amount. {{ info.business }} doesn't see it until you both confirm. This link works once and expires in 7 days.</div>
+        <button class="yes" type="submit">Yes, the {{ info.stage|lower }} is done</button>
+      </form>
+
+      <details>
+        <summary>Not yet: tell {{ info.business }} why</summary>
+        <form method="post" action="/sign-off" autocomplete="off">
+          <input type="hidden" name="ticket" value="{{ ticket }}">
+          <input type="hidden" name="answer" value="not_yet">
+          <label for="note">What still needs doing? (optional)</label>
+          <textarea id="note" name="note" maxlength="200">{{ note }}</textarea>
+          <button class="no" type="submit">Send</button>
+        </form>
+      </details>
+
+    {% elif state == "thanks" %}
+      {% if info.outcome == "confirmed" %}
+        <div class="ok">&#10003;</div>
+        <h1>Thank you</h1>
+        <p>The {{ info.stage|lower }} stage is now confirmed by both of you.</p>
+      {% elif info.outcome == "amounts_dont_match" %}
+        <h1>Thank you</h1>
+        <p>Your amount and {{ info.business }}'s don't match. {{ info.business }} will contact you to sort it out.</p>
+      {% else %}
+        <h1>Thank you</h1>
+        <p>{{ info.business }} can see your note and will come back to you.</p>
+      {% endif %}
+
+    {% else %}
+      <h1>This link doesn't work any more</h1>
+      <p>This link has already been used or has expired. If you still need to sign off, ask your builder to send a new one.</p>
+    {% endif %}
+
+    <div class="foot">Akayza &middot; Keep it in the kasi.</div>
+  </div>
+</body>
+</html>
