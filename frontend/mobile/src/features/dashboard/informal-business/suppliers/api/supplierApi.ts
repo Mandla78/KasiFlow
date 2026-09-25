@@ -1,8 +1,10 @@
 /**
- * One supplier's page. Mock for now (docs/supplier/02); the HTTP version
- * calls GET /suppliers/{id} with the same shape.
+ * One supplier's page: GET /suppliers/{id} on the server, or the mock.
  */
+import { USE_MOCK_AUTH } from '@/constants/config';
+
 import type { Supplier, SupplierApi } from '../types';
+import { httpSupplierApi } from './httpSupplierApis';
 import { findMockSupplier } from './mockSupplierData';
 import { matchOne } from './mockSupplierMatchApi';
 
@@ -28,4 +30,4 @@ const mockSupplierApi: SupplierApi = {
   },
 };
 
-export const supplierApi: SupplierApi = mockSupplierApi;
+export const supplierApi: SupplierApi = USE_MOCK_AUTH ? mockSupplierApi : httpSupplierApi;

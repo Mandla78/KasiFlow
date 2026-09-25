@@ -108,7 +108,7 @@ export function newIdempotencyKey(): string {
  * Returns `data` from the envelope; throws ApiError otherwise.
  */
 export async function api<T>(
-  method: 'GET' | 'POST' | 'PATCH' | 'DELETE',
+  method: 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE',
   path: string,
   body?: unknown,
   opts: { auth?: boolean; headers?: Headers } = {},

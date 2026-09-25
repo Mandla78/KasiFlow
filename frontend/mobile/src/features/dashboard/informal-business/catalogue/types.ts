@@ -15,10 +15,14 @@ export type Product = {
   unit: string;
   /** e.g. "24 x 500 ml", "50 kg" */
   packSize: string;
+  /** Sellable items inside (24 for a case of 24): price per item for resellers. */
+  unitsPerPack?: number;
   priceCents: Cents;
   /** The usual price when the product is on sale (shown crossed out); null = not on sale. */
   compareAtPriceCents: Cents | null;
   vatIncluded: boolean;
+  /** standard (15%) or zero-rated basic food. */
+  vatRate?: 'standard' | 'zero';
   stock: StockLevel;
   minQty: number;
   maxQty: number;

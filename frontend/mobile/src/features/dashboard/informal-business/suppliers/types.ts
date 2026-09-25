@@ -26,6 +26,8 @@ export type SupplierMatch = {
   withinReach: boolean;
   verified: boolean;
   logoUrl: string | null;
+  /** From the server: already connected (mock mode keeps it in the profile). */
+  connected?: boolean;
   /** A heads-up that doesn't exclude the supplier (e.g. minimum order). */
   caution?: string;
   score: number;
