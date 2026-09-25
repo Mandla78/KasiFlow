@@ -50,3 +50,10 @@ class BusinessAuditEvent(str, enum.Enum):
     CREDIT_ENTRY_CANCELLED = "credit.entry_cancelled"
     CREDIT_CUSTOMER_PHONE_CHANGED = "credit.customer_phone_changed"
     CREDIT_CUSTOMER_DELETED = "credit.customer_deleted"
+    # Jobs (informal_trader/jobs): ids, amounts, outcomes, photo hashes; never client names or phones
+    JOB_CREATED = "job.created"
+    JOB_STAGE_PHOTO_ADDED = "job.stage_photo_added"
+    JOB_SIGN_OFF_SENT = "job.sign_off_sent"
+    JOB_SIGN_OFF_ANSWERED = "job.sign_off_answered"
+    JOB_SIGN_OFF_REFUSED = "job.sign_off_refused"
+    JOB_DONE = "job.done"
