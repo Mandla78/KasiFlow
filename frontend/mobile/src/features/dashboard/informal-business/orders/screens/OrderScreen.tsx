@@ -12,7 +12,7 @@ import { colors, fonts, radius } from '@/shared/theme/tokens';
 
 import { ordersApi } from '../api/ordersApi';
 import { StatusTimeline } from '../components/StatusTimeline';
-import { canCancel, PAYMENT_LABEL, STATUS_LABEL, when } from '../lib/status';
+import { canCancel, isStopped, PAYMENT_LABEL, STATUS_LABEL, when } from '../lib/status';
 import { Order, OrderError } from '../types';
 
 const REFRESH_MS = 10_000;
@@ -76,7 +76,7 @@ export default function OrderScreen() {
         </Text>
       </View>
       <View style={styles.tags}>
-        <Tag label={STATUS_LABEL[order.status]} tone={order.status === 'cancelled' || order.status === 'rejected' ? 'garnet' : 'info'} />
+        <Tag label={STATUS_LABEL[order.status]} tone={isStopped(order) ? 'garnet' : 'info'} />
         <Tag label={PAYMENT_LABEL[order.paymentStatus]} tone={order.paymentStatus === 'paid' || order.paymentStatus === 'confirmed_by_both' ? 'jade' : 'marigold'} />
       </View>
 

@@ -99,3 +99,13 @@ def public_product_view(p: Product) -> dict:
         "description": p.description or "",
         "images": [delivery_url(u, 800) for u in (p.image_urls or [])],
     }
+
+
+def hold_stock(product_id: uuid.UUID, qty: int) -> bool:
+    """For an order being placed. The caller commits (or rolls back)."""
+    return repo.take_stock(product_id, qty)
+
+
+def release_stock(product_id: uuid.UUID, qty: int) -> None:
+    """An order that won't be fulfilled gives its stock back. The caller commits."""
+    repo.give_back_stock(product_id, qty)

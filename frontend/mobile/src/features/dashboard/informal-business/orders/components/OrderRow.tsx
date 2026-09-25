@@ -5,12 +5,12 @@ import { Tag } from '@/shared/components/Parts';
 import { formatRand } from '@/shared/lib/money';
 import { colors, fonts } from '@/shared/theme/tokens';
 
-import { isActive, STATUS_LABEL, when } from '../lib/status';
+import { isActive, isStopped, STATUS_LABEL, when } from '../lib/status';
 import type { Order } from '../types';
 
 /** One order in "My orders": supplier, reference, when, total, status. */
 export function OrderRow({ order, onPress, last }: { order: Order; onPress: () => void; last?: boolean }) {
-  const tone = order.status === 'cancelled' || order.status === 'rejected' ? 'garnet' : isActive(order) ? 'marigold' : 'jade';
+  const tone = isStopped(order) ? 'garnet' : isActive(order) ? 'marigold' : 'jade';
   return (
     <Pressable onPress={onPress} style={[styles.row, !last && styles.rule]} accessibilityRole="button">
       <View style={styles.icon}>

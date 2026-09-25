@@ -24,7 +24,7 @@ from src.shared.email.email import get_fake_provider  # noqa: E402
 from src.shared.rate_limit.limiter import limiter  # noqa: E402
 
 TRADER_TABLES = ["trader.job_sign_offs", "trader.job_stages", "trader.jobs", "trader.credit_corrections", "trader.credit_payments", "trader.credit_entries", "trader.credit_customers", "trader.business_profile_images", "trader.business_profiles", "platform.media_uploads"]
-SUPPLIER_TABLES = ["trader.supplier_connections", "supplier.import_jobs", "supplier.products", "supplier.suppliers"]
+SUPPLIER_TABLES = ["commerce.order_events", "commerce.order_lines", "commerce.orders", "trader.supplier_connections", "supplier.import_jobs", "supplier.products", "supplier.suppliers"]
 IDENTITY_TABLES = ["google_identities", "sessions", "trusted_phones", "devices", "email_codes", "password_resets", "password_credentials", "consents", "users"]
 
 

@@ -121,7 +121,7 @@ export const mockOrdersApi: OrdersApi = {
       payment: input.payment,
       paymentStatus: input.payment === 'in_app' ? 'unpaid' : 'cash_due',
       fulfilment: input.fulfilment,
-      address: input.fulfilment === 'collect' ? supplier.address : input.deliveryAddress ?? '',
+      address: input.fulfilment === 'collect' ? supplier.address : input.deliveryAddress ?? 'Your business address',
       lines,
       subtotalCents,
       deliveryFeeCents,

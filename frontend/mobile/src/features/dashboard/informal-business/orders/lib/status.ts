@@ -11,6 +11,7 @@ export const STATUS_LABEL: Record<OrderStatus, string> = {
   collected: 'Collected',
   rejected: 'Not accepted',
   cancelled: 'Cancelled',
+  expired: 'Lapsed (not paid)',
 };
 
 /** A step on the timeline, once it has happened. */
@@ -31,10 +32,15 @@ export const PAYMENT_LABEL: Record<PaymentStatus, string> = {
 
 /** The steps this order goes through, for the timeline. */
 export function stepsFor(o: Order): OrderStatus[] {
-  if (o.status === 'cancelled' || o.status === 'rejected') return ['placed', o.status];
+  if (o.status === 'cancelled' || o.status === 'rejected' || o.status === 'expired') return ['placed', o.status];
   return o.fulfilment === 'collect'
     ? ['placed', 'accepted', 'ready_for_collection', 'collected']
     : ['placed', 'accepted', 'out_for_delivery', 'delivered'];
+}
+
+/** Ended without a sale: cancelled, not accepted, or lapsed unpaid. */
+export function isStopped(o: Order): boolean {
+  return o.status === 'cancelled' || o.status === 'rejected' || o.status === 'expired';
 }
 
 /** Only a cash order, and only until the supplier accepts it. A digital
@@ -45,7 +51,7 @@ export function canCancel(o: Order): boolean {
 }
 
 export function isActive(o: Order): boolean {
-  return !['delivered', 'collected', 'rejected', 'cancelled'].includes(o.status);
+  return !['delivered', 'collected', 'rejected', 'cancelled', 'expired'].includes(o.status);
 }
 
 export function when(iso: string): string {

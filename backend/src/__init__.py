@@ -84,6 +84,8 @@ def _register_models() -> None:
     from src.domains.supplier.catalogue import models as _catalogue  # noqa: F401
     from src.domains.supplier.integration import models as _integration  # noqa: F401
     from src.domains.supplier.connections import models as _connections  # noqa: F401
+    # commerce schema: orders between traders and suppliers
+    from src.domains.commerce.orders import models as _orders  # noqa: F401
     # platform schema: every media upload, start to finish
     from src.shared.media import models as _media  # noqa: F401
     # audit schema: the append-only audit trail
