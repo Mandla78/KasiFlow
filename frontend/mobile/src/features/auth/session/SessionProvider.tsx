@@ -15,6 +15,7 @@ import * as SecureStore from 'expo-secure-store';
 import { createContext, ReactNode, useContext, useEffect, useMemo, useState } from 'react';
 
 import { BUSINESS_TYPES, BusinessType, defaultCategories, ToolKey, TradeKey } from '@/constants/businessTypes';
+import { knownCategories } from '@/constants/categories';
 
 import { USE_MOCK_AUTH } from '@/constants/config';
 import { businessProfileApi, fromServer } from '@/features/onboarding/api/businessProfileApi';
@@ -106,7 +107,7 @@ export function SessionProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     load().then((saved) => {
-      if (saved) setState(saved);
+      if (saved) setState({ ...saved, profile: { ...saved.profile, categories: knownCategories(saved.profile.categories) } });
       setLoaded(true);
     });
   }, []);
@@ -171,6 +172,7 @@ export function SessionProvider({ children }: { children: ReactNode }) {
         setState((s) => {
           if (s.status !== 'onboarding' && s.status !== 'active') return s;
           const profile = { ...s.profile, ...server };
+          profile.categories = knownCategories(profile.categories);
           return { status: onboarded || s.status === 'active' ? 'active' : s.status, profile };
         }),
       signedIn: (profile) => {
@@ -180,6 +182,7 @@ export function SessionProvider({ children }: { children: ReactNode }) {
         Promise.all([loadLastProfile(), saved]).then(([last, server]) => {
           let merged = last && last.email === profile.email ? { ...last, ...pickServerFields(profile) } : profile;
           if (server) merged = { ...merged, ...fromServer(server) };
+          merged = { ...merged, categories: knownCategories(merged.categories) };
           setState({ status: server?.onboarded || isOnboarded(merged) ? 'active' : 'onboarding', profile: merged });
         });
       },

@@ -2,7 +2,7 @@ import { Feather } from '@expo/vector-icons';
 import { ComponentProps } from 'react';
 import { Pressable, ScrollView, StyleSheet, Text } from 'react-native';
 
-import { categoryByCode, CategoryCode } from '@/constants/categories';
+import { categoryByCode, CategoryCode, knownCategories } from '@/constants/categories';
 import { colors, fonts, radius } from '@/shared/theme/tokens';
 
 type IconName = ComponentProps<typeof Feather>['name'];
@@ -17,7 +17,7 @@ export function CategoryChips({
   value: CategoryCode | 'all';
   onChange: (c: CategoryCode | 'all') => void;
 }) {
-  const chips: (CategoryCode | 'all')[] = ['all', ...categories];
+  const chips: (CategoryCode | 'all')[] = ['all', ...knownCategories(categories)];
   return (
     <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ gap: 8 }}>
       {chips.map((c) => {

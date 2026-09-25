@@ -58,3 +58,8 @@ export const CATEGORIES: Category[] = [
 ];
 
 export const categoryByCode = (code: CategoryCode) => CATEGORIES.find((c) => c.code === code)!;
+
+/** Drops codes that are no longer categories (e.g. Airtime & Electricity,
+ *  removed 2026-09-25) from a saved profile, so old data can't crash a screen. */
+export const knownCategories = (codes: readonly string[]): CategoryCode[] =>
+  codes.filter((c): c is CategoryCode => CATEGORIES.some((k) => k.code === c));
