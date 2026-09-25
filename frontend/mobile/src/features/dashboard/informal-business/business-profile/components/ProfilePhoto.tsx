@@ -20,6 +20,7 @@ export function ProfilePhoto() {
   const { profile, updateProfile } = useSession();
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState('');
+  const [confirming, setConfirming] = useState(false);
   const url = profile.profileImageUrl;
 
   async function pick() {
@@ -45,6 +46,7 @@ export function ProfilePhoto() {
   }
 
   async function remove() {
+    setConfirming(false);
     setError('');
     if (USE_MOCK_AUTH) return updateProfile({ profileImageUrl: null });
     setBusy(true);
@@ -77,10 +79,24 @@ export function ProfilePhoto() {
           <Feather name="camera" size={12} color={colors.white} />
         </View>
       </Pressable>
-      {url && !busy ? (
-        <Pressable onPress={remove} hitSlop={8}>
+      {url && !busy && !confirming ? (
+        <Pressable onPress={() => setConfirming(true)} hitSlop={8}>
           <Text style={styles.remove}>Remove</Text>
         </Pressable>
+      ) : null}
+      {confirming ? (
+        // One stray tap must not delete the photo: ask first.
+        <View style={styles.confirm}>
+          <Text style={styles.confirmText}>Remove photo?</Text>
+          <View style={styles.confirmRow}>
+            <Pressable onPress={remove} hitSlop={6}>
+              <Text style={[styles.remove, { color: colors.garnet }]}>Yes</Text>
+            </Pressable>
+            <Pressable onPress={() => setConfirming(false)} hitSlop={6}>
+              <Text style={styles.remove}>Keep</Text>
+            </Pressable>
+          </View>
+        </View>
       ) : null}
       {error ? <Text style={styles.error}>{error}</Text> : null}
     </View>
@@ -108,4 +124,7 @@ const styles = StyleSheet.create({
   },
   remove: { fontFamily: fonts.bold, fontSize: 12, color: colors.textMuted, textDecorationLine: 'underline' },
   error: { fontFamily: fonts.medium, fontSize: 11.5, color: colors.garnet, textAlign: 'center' },
+  confirm: { alignItems: 'center', gap: 2 },
+  confirmText: { fontFamily: fonts.medium, fontSize: 11.5, color: colors.text },
+  confirmRow: { flexDirection: 'row', gap: 12 },
 });
