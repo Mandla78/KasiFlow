@@ -7,6 +7,7 @@
   "orders_email": "orders@kasi-bakers.example.com",
   "phone": null,
   "brand_color": "#8A5A1E",
+  "logo_url": null,
   "collection_address": {
     "street": "22 Mthimkhulu Street",
     "suburb": "Ivory Park",

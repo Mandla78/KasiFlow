@@ -7,6 +7,7 @@
   "orders_email": "orders@clean-and-care.example.com",
   "phone": null,
   "brand_color": "#3B6E5A",
+  "logo_url": null,
   "collection_address": {
     "street": "8 Monument Road",
     "suburb": "Kempton Park",

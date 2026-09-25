@@ -24,6 +24,22 @@ from pathlib import Path
 
 OUT = Path(__file__).resolve().parent / "suppliers"
 
+# Photo links (our Cloudinary only), one row each, pasted by hand:
+#   key                       image_url                               source   licence
+#   logo:mokgalaka-wholesale  https://res.cloudinary.com/<cloud>/...  ...      ...
+#   Super maize meal          https://res.cloudinary.com/<cloud>/...  ...      ...
+# A product-name key gives that photo to every product with that name (all
+# brands and suppliers); "logo:<slug>" is that supplier's logo. source and
+# licence say where the image came from, so we can state it if asked.
+DEMO_IMAGES = Path(__file__).resolve().parent / "demo_images.csv"
+
+
+def demo_images() -> dict[str, str]:
+    if not DEMO_IMAGES.is_file():
+        return {}
+    with DEMO_IMAGES.open(encoding="utf-8", newline="") as f:
+        return {r["key"].strip(): r["image_url"].strip() for r in csv.DictReader(f) if (r.get("image_url") or "").strip()}
+
 # Zero-rated for VAT (VAT Act Schedule 2 Part B: basic foodstuffs). Anything
 # not here is standard-rated: white bread, cake flour, sugar, flavoured drinks...
 ZERO_RATED = {
@@ -384,7 +400,7 @@ def price_cents(rands: float, factor: float) -> int:
     return max(99, cents - cents % 10 + 9)
 
 
-def supplier_json(s: dict) -> dict:
+def supplier_json(s: dict, images: dict[str, str]) -> dict:
     return {
         "external_id": s["external_id"],
         "trading_name": s["trading_name"],
@@ -394,6 +410,7 @@ def supplier_json(s: dict) -> dict:
         "orders_email": f"orders@{s['slug']}.example.com",
         "phone": None,
         "brand_color": s["color"],
+        "logo_url": images.get(f"logo:{s['slug']}"),
         "collection_address": {
             "street": s["street"], "suburb": s["suburb"], "city": s["city"], "province": s.get("province", "Gauteng"),
             "postal_code": s["postal"], "latitude": s["lat"], "longitude": s["lng"],
@@ -408,7 +425,7 @@ def supplier_json(s: dict) -> dict:
     }
 
 
-def products(s: dict, supplier_no: int) -> list[dict]:
+def products(s: dict, supplier_no: int, images: dict[str, str]) -> list[dict]:
     rnd = random.Random(s["external_id"])
     supplier_factor = 0.95 + rnd.random() * 0.10  # this supplier is a bit cheaper or dearer
     combos = []
@@ -455,6 +472,7 @@ def products(s: dict, supplier_no: int) -> list[dict]:
             "weight_kg": weight_kg(pack),
             "description": description,
             "active": "true",
+            "image_1": images.get(name, ""),
         })
     return rows
 
@@ -464,13 +482,15 @@ def main() -> None:
         "product_code", "name", "brand", "category", "unit", "pack_size", "units_per_pack",
         "price_rands", "compare_at_rands", "vat_rate", "vat_included", "stock", "min_qty", "max_qty",
         "unit_barcode", "case_barcode", "weight_kg", "description", "active",
+        "image_1",
     ]
     total = 0
+    images = demo_images()
     for number, s in enumerate(SUPPLIERS + NEAR_TEAM, start=1):
         folder = OUT / s["slug"]
         folder.mkdir(parents=True, exist_ok=True)
-        (folder / "supplier.json").write_text(json.dumps(supplier_json(s), indent=2, ensure_ascii=False) + "\n", encoding="utf-8", newline="\n")
-        rows = products(s, number)
+        (folder / "supplier.json").write_text(json.dumps(supplier_json(s, images), indent=2, ensure_ascii=False) + "\n", encoding="utf-8", newline="\n")
+        rows = products(s, number, images)
         with (folder / "products.csv").open("w", encoding="utf-8", newline="") as f:
             writer = csv.DictWriter(f, fieldnames=columns, lineterminator="\n")  # same bytes on every OS
             writer.writeheader()

@@ -115,7 +115,8 @@ def test_bad_rows_are_listed_with_their_row_number_and_good_rows_still_load(app)
 
 
 def test_a_row_with_more_cells_than_columns_is_reported(app):
-    text = to_csv([row()]).decode() + "MW-2,Rice,,food_grocery,bag,10 kg,1,169.99,,zero,true,5,1,50,,,10,x,true,EXTRA\n"
+    cells = [row(product_code="MW-2").get(c, "") for c in PRODUCT_COLUMNS] + ["EXTRA"]  # one more than the header
+    text = to_csv([row()]).decode() + ",".join(cells) + "\n"
     with app.app_context():
         r = load_files(json.dumps(profile()).encode(), text.encode(), source="seed")
         assert r.created == 1
@@ -221,3 +222,53 @@ def test_payout_ids_never_reach_the_audit_trail(app):
     dumped = json.dumps([e.metadata for e in published], default=str)
     assert "10000100" not in dumped  # payout id never logged
     assert "minimum_order_cents" in dumped  # only WHICH fields changed
+
+
+# ------------------------------------------------------------ image links
+
+OURS = "https://res.cloudinary.com/akayza-cloud/image/upload/v1/akayza-dev/demo/maize.jpg"
+
+
+@pytest.fixture
+def our_cloud(monkeypatch):
+    monkeypatch.setenv("CLOUDINARY_CLOUD_NAME", "akayza-cloud")
+
+
+def test_image_links_to_our_cloudinary_are_kept_in_order(app, our_cloud):
+    second = OURS.replace("maize", "maize-back")
+    with app.app_context():
+        r = load([row(image_1=OURS, image_2=second, image_3=OURS)], prof=profile(logo_url=OURS))
+        assert r.failed == 0
+        assert Product.query.one().image_urls == [OURS, second]  # the repeat is dropped
+        assert Supplier.query.one().logo_url == OURS
+
+
+@pytest.mark.parametrize(
+    "bad",
+    [
+        "https://example.com/maize.jpg",                                           # not our image service
+        "http://res.cloudinary.com/akayza-cloud/image/upload/v1/maize.jpg",        # not https
+        "https://res.cloudinary.com/someone-else/image/upload/v1/maize.jpg",       # another account
+        "https://res.cloudinary.com/akayza-cloud/image/upload/v1/maize.jpg?x=1",   # query string
+        "https://res.cloudinary.com/akayza-cloud/image/upload/../../evil.jpg",     # path tricks
+        "https://res.cloudinary.com/akayza-cloud/video/upload/v1/clip.mp4",        # not an image
+        "javascript:alert(1)",
+    ],
+)
+def test_only_our_image_links_are_accepted(app, our_cloud, bad):
+    with app.app_context():
+        r = load([row(), row(product_code="MW-2", image_1=bad)])
+        assert r.created == 1 and r.errors[0]["field"] == "image_1"
+        with pytest.raises(FeedRefused, match="logo_url"):
+            load([row()], prof=profile(logo_url=bad))
+
+
+def test_the_app_gets_resized_images(app, our_cloud):
+    from src.domains.supplier.catalogue.services.catalogue_service import public_product_view
+    from src.domains.supplier.supplier_profile.services.supplier_service import public_view
+
+    with app.app_context():
+        load([row(image_1=OURS)], prof=profile(logo_url=OURS))
+        [image] = public_product_view(Product.query.one())["images"]
+        assert "/image/upload/f_auto,q_auto,c_limit,w_800/v1/akayza-dev/demo/maize.jpg" in image
+        assert "/image/upload/f_auto,q_auto,c_limit,w_200/" in public_view(Supplier.query.one())["logo_url"]

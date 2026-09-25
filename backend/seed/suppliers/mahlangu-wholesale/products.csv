@@ -1,219 +1,219 @@
-product_code,name,brand,category,unit,pack_size,units_per_pack,price_rands,compare_at_rands,vat_rate,vat_included,stock,min_qty,max_qty,unit_barcode,case_barcode,weight_kg,description,active
-MAHLAN-FG-0000,Super maize meal,Kasi Gold,food_grocery,bag,10 kg,1,82.59,,zero,true,326,1,200,2010000000007,,10,Fine white maize meal for pap.,true
-MAHLAN-FG-0001,Super maize meal,Mill Street,food_grocery,bag,10 kg,1,88.79,,zero,true,80,1,200,2010000000014,,10,Fine white maize meal for pap.,true
-MAHLAN-FG-0002,Super maize meal,Harvest Tin,food_grocery,bag,10 kg,1,95.99,,zero,true,3,1,200,2010000000021,,10,Fine white maize meal for pap.,true
-MAHLAN-FG-0010,Super maize meal,Kasi Gold,food_grocery,bag,25 kg,1,193.69,,zero,true,99,1,200,2010000000038,,25,Fine white maize meal for pap.,true
-MAHLAN-FG-0011,Super maize meal,Mill Street,food_grocery,bag,25 kg,1,204.89,,zero,true,335,1,200,2010000000045,,25,Fine white maize meal for pap.,true
-MAHLAN-FG-0012,Super maize meal,Harvest Tin,food_grocery,bag,25 kg,1,221.89,263.89,zero,true,130,1,200,2010000000052,,25,Fine white maize meal for pap.,true
-MAHLAN-FG-0100,Long grain parboiled rice,Kasi Gold,food_grocery,bag,2 kg,1,36.69,,zero,true,9,1,200,2010000000069,,2,Non-sticky parboiled rice.,true
-MAHLAN-FG-0101,Long grain parboiled rice,Mill Street,food_grocery,bag,2 kg,1,38.69,,zero,true,1,1,200,2010000000076,,2,Non-sticky parboiled rice.,true
-MAHLAN-FG-0102,Long grain parboiled rice,Harvest Tin,food_grocery,bag,2 kg,1,41.99,,zero,true,327,1,200,2010000000083,,2,Non-sticky parboiled rice.,true
-MAHLAN-FG-0110,Long grain parboiled rice,Kasi Gold,food_grocery,bag,10 kg,1,151.19,,zero,true,351,1,200,2010000000090,,10,Non-sticky parboiled rice.,true
-MAHLAN-FG-0111,Long grain parboiled rice,Mill Street,food_grocery,bag,10 kg,1,167.79,,zero,true,2,1,200,2010000000106,,10,Non-sticky parboiled rice.,true
-MAHLAN-FG-0112,Long grain parboiled rice,Harvest Tin,food_grocery,bag,10 kg,1,182.09,,zero,true,66,1,200,2010000000113,,10,Non-sticky parboiled rice.,true
-MAHLAN-FG-0201,Cake flour,Mill Street,food_grocery,bag,2.5 kg,1,42.09,,standard,true,228,1,200,2010000000120,,2.5,White cake flour for baking and vetkoek.,true
-MAHLAN-FG-0202,Cake flour,Harvest Tin,food_grocery,bag,2.5 kg,1,45.69,,standard,true,212,1,200,2010000000137,,2.5,White cake flour for baking and vetkoek.,true
-MAHLAN-FG-0210,Cake flour,Kasi Gold,food_grocery,bag,10 kg,1,128.19,,standard,true,388,1,200,2010000000144,,10,White cake flour for baking and vetkoek.,true
-MAHLAN-FG-0211,Cake flour,Mill Street,food_grocery,bag,10 kg,1,135.99,162.59,standard,true,196,1,200,2010000000151,,10,White cake flour for baking and vetkoek.,true
-MAHLAN-FG-0212,Cake flour,Harvest Tin,food_grocery,bag,10 kg,1,150.79,,standard,true,297,1,200,2010000000168,,10,White cake flour for baking and vetkoek.,true
-MAHLAN-FG-0300,White sugar,Kasi Gold,food_grocery,bag,2.5 kg,1,53.99,,standard,true,5,1,200,2010000000175,,2.5,Refined white sugar.,true
-MAHLAN-FG-0301,White sugar,Mill Street,food_grocery,bag,2.5 kg,1,58.79,67.69,standard,true,41,1,200,2010000000182,,2.5,Refined white sugar.,true
-MAHLAN-FG-0302,White sugar,Harvest Tin,food_grocery,bag,2.5 kg,1,64.79,,standard,true,0,1,200,2010000000199,,2.5,Refined white sugar.,true
-MAHLAN-FG-0310,White sugar,Kasi Gold,food_grocery,bag,10 kg,1,196.89,,standard,true,13,1,200,2010000000205,,10,Refined white sugar.,true
-MAHLAN-FG-0311,White sugar,Mill Street,food_grocery,bag,10 kg,1,220.29,,standard,true,83,1,200,2010000000212,,10,Refined white sugar.,true
-MAHLAN-FG-0312,White sugar,Harvest Tin,food_grocery,bag,10 kg,1,236.69,,standard,true,317,1,200,2010000000229,,10,Refined white sugar.,true
-MAHLAN-FG-0400,Brown sugar,Kasi Gold,food_grocery,bag,2 kg,1,40.89,50.19,standard,true,2,1,200,2010000000236,,2,Soft brown sugar.,true
-MAHLAN-FG-0401,Brown sugar,Mill Street,food_grocery,bag,2 kg,1,44.09,,standard,true,133,1,200,2010000000243,,2,Soft brown sugar.,true
-MAHLAN-FG-0402,Brown sugar,Harvest Tin,food_grocery,bag,2 kg,1,47.69,,standard,true,6,1,200,2010000000250,,2,Soft brown sugar.,true
-MAHLAN-FG-0500,Sunflower cooking oil,Kasi Gold,food_grocery,bottle,2 litre,1,62.79,,zero,true,210,1,200,2010000000267,,2,Pure sunflower oil.,true
-MAHLAN-FG-0501,Sunflower cooking oil,Mill Street,food_grocery,bottle,2 litre,1,68.09,,zero,true,9,1,200,2010000000274,,2,Pure sunflower oil.,true
-MAHLAN-FG-0502,Sunflower cooking oil,Harvest Tin,food_grocery,bottle,2 litre,1,73.09,,zero,true,253,1,200,2010000000281,,2,Pure sunflower oil.,true
-MAHLAN-FG-0510,Sunflower cooking oil,Kasi Gold,food_grocery,bottle,5 litre,1,138.09,158.69,zero,true,39,1,200,2010000000298,,5,Pure sunflower oil.,true
-MAHLAN-FG-0511,Sunflower cooking oil,Mill Street,food_grocery,bottle,5 litre,1,145.19,,zero,true,131,1,200,2010000000304,,5,Pure sunflower oil.,true
-MAHLAN-FG-0512,Sunflower cooking oil,Harvest Tin,food_grocery,bottle,5 litre,1,158.19,,zero,true,151,1,200,2010000000311,,5,Pure sunflower oil.,true
-MAHLAN-FG-0600,Baked beans in tomato sauce,Kasi Gold,food_grocery,case,24 x 410 g,24,275.49,,standard,true,291,1,200,2010000000328,12010000000325,9.84,A case of 24 tins.,true
-MAHLAN-FG-0601,Baked beans in tomato sauce,Mill Street,food_grocery,case,24 x 410 g,24,299.89,,standard,true,178,1,200,2010000000335,12010000000332,9.84,A case of 24 tins.,true
-MAHLAN-FG-0602,Baked beans in tomato sauce,Harvest Tin,food_grocery,case,24 x 410 g,24,313.19,,standard,true,186,1,200,2010000000342,12010000000349,9.84,A case of 24 tins.,true
-MAHLAN-FG-0700,Pilchards in tomato sauce,Kasi Gold,food_grocery,case,24 x 400 g,24,535.39,,zero,true,274,1,200,2010000000359,12010000000356,9.6,"Canned pilchards, a case of 24.",true
-MAHLAN-FG-0701,Pilchards in tomato sauce,Mill Street,food_grocery,case,24 x 400 g,24,599.69,,zero,true,122,1,200,2010000000366,12010000000363,9.6,"Canned pilchards, a case of 24.",true
-MAHLAN-FG-0702,Pilchards in tomato sauce,Harvest Tin,food_grocery,case,24 x 400 g,24,646.69,,zero,true,1,1,200,2010000000373,12010000000370,9.6,"Canned pilchards, a case of 24.",true
-MAHLAN-FG-0800,Chicken instant noodles,Kasi Gold,food_grocery,case,40 x 73 g,40,178.69,,standard,true,209,1,200,2010000000380,12010000000387,2.92,Chicken-flavoured instant noodles.,true
-MAHLAN-FG-0802,Chicken instant noodles,Harvest Tin,food_grocery,case,40 x 73 g,40,213.29,,standard,true,131,1,200,2010000000397,12010000000394,2.92,Chicken-flavoured instant noodles.,true
-MAHLAN-FG-0901,Samp,Mill Street,food_grocery,bag,5 kg,1,74.69,,zero,true,9,1,200,2010000000403,,5,Crushed dried maize kernels.,true
-MAHLAN-FG-0902,Samp,Harvest Tin,food_grocery,bag,5 kg,1,80.69,,zero,true,0,1,200,2010000000410,,5,Crushed dried maize kernels.,true
-MAHLAN-FG-1001,Sugar beans,Mill Street,food_grocery,bag,2 kg,1,64.99,,zero,true,0,1,200,2010000000427,,2,Dried speckled sugar beans.,true
-MAHLAN-FG-1002,Sugar beans,Harvest Tin,food_grocery,bag,2 kg,1,68.39,,zero,true,343,1,200,2010000000434,,2,Dried speckled sugar beans.,true
-MAHLAN-FG-1100,Black tea bags,Kasi Gold,food_grocery,pack,100 bags,100,49.39,,standard,true,58,1,200,2010000000441,12010000000448,,Tagless black tea bags.,true
-MAHLAN-FG-1101,Black tea bags,Mill Street,food_grocery,pack,100 bags,100,55.09,,standard,true,249,1,200,2010000000458,12010000000455,,Tagless black tea bags.,true
-MAHLAN-FG-1102,Black tea bags,Harvest Tin,food_grocery,pack,100 bags,100,57.69,,standard,true,32,1,200,2010000000465,12010000000462,,Tagless black tea bags.,true
-MAHLAN-FG-1110,Black tea bags,Kasi Gold,food_grocery,pack,200 bags,200,91.69,,standard,true,88,1,200,2010000000472,12010000000479,,Tagless black tea bags.,true
-MAHLAN-FG-1111,Black tea bags,Mill Street,food_grocery,pack,200 bags,200,99.59,,standard,true,309,1,200,2010000000489,12010000000486,,Tagless black tea bags.,true
-MAHLAN-FG-1200,Instant coffee,Kasi Gold,food_grocery,tin,250 g,1,80.09,,standard,true,250,1,200,2010000000496,,,Granulated instant coffee.,true
-MAHLAN-FG-1201,Instant coffee,Mill Street,food_grocery,tin,250 g,1,89.09,,standard,true,200,1,200,2010000000502,,,Granulated instant coffee.,true
-MAHLAN-FG-1202,Instant coffee,Harvest Tin,food_grocery,tin,250 g,1,94.39,,standard,true,312,1,200,2010000000519,,,Granulated instant coffee.,true
-MAHLAN-FG-1301,Iodated table salt,Mill Street,food_grocery,case,24 x 500 g,24,118.49,,standard,true,219,1,200,2010000000526,12010000000523,12,Fine iodated salt.,true
-MAHLAN-FG-1302,Iodated table salt,Harvest Tin,food_grocery,case,24 x 500 g,24,126.09,,standard,true,266,1,200,2010000000533,12010000000530,12,Fine iodated salt.,true
-MAHLAN-FG-1400,"Peanut butter, smooth",Kasi Gold,food_grocery,case,12 x 400 g,12,376.99,,standard,true,181,1,200,2010000000540,12010000000547,4.8,Smooth peanut butter.,true
-MAHLAN-FG-1402,"Peanut butter, smooth",Harvest Tin,food_grocery,case,12 x 400 g,12,454.49,,standard,true,0,1,200,2010000000557,12010000000554,4.8,Smooth peanut butter.,true
-MAHLAN-FG-1500,Apricot jam,Kasi Gold,food_grocery,case,12 x 450 g,12,325.29,,standard,true,57,1,200,2010000000564,12010000000561,5.4,Smooth apricot jam.,true
-MAHLAN-FG-1501,Apricot jam,Mill Street,food_grocery,case,12 x 450 g,12,350.89,,standard,true,7,1,200,2010000000571,12010000000578,5.4,Smooth apricot jam.,true
-MAHLAN-FG-1502,Apricot jam,Harvest Tin,food_grocery,case,12 x 450 g,12,380.19,,standard,true,275,1,200,2010000000588,12010000000585,5.4,Smooth apricot jam.,true
-MAHLAN-BV-0000,Cola soft drink,Fizz Co,beverages,case,24 x 330 ml cans,24,171.59,,standard,true,378,1,200,2010000000595,12010000000592,7.92,"Cold drink, a full case.",true
-MAHLAN-BV-0001,Cola soft drink,Clear Spring,beverages,case,24 x 330 ml cans,24,185.49,,standard,true,334,1,200,2010000000601,12010000000608,7.92,"Cold drink, a full case.",true
-MAHLAN-BV-0002,Cola soft drink,Sunny Farm,beverages,case,24 x 330 ml cans,24,205.59,,standard,true,380,1,200,2010000000618,12010000000615,7.92,"Cold drink, a full case.",true
-MAHLAN-BV-0010,Cola soft drink,Fizz Co,beverages,case,12 x 2 litre,12,235.09,272.79,standard,true,52,1,200,2010000000625,12010000000622,24,"Cold drink, a full case.",true
-MAHLAN-BV-0011,Cola soft drink,Clear Spring,beverages,case,12 x 2 litre,12,256.09,296.49,standard,true,348,1,200,2010000000632,12010000000639,24,"Cold drink, a full case.",true
-MAHLAN-BV-0012,Cola soft drink,Sunny Farm,beverages,case,12 x 2 litre,12,274.99,,standard,true,300,1,200,2010000000649,12010000000646,24,"Cold drink, a full case.",true
-MAHLAN-BV-0100,Orange soft drink,Fizz Co,beverages,case,24 x 330 ml cans,24,160.79,,standard,true,369,1,200,2010000000656,12010000000653,7.92,Orange-flavoured cold drink.,true
-MAHLAN-BV-0101,Orange soft drink,Clear Spring,beverages,case,24 x 330 ml cans,24,174.89,,standard,true,27,1,200,2010000000663,12010000000660,7.92,Orange-flavoured cold drink.,true
-MAHLAN-BV-0102,Orange soft drink,Sunny Farm,beverages,case,24 x 330 ml cans,24,187.49,,standard,true,153,1,200,2010000000670,12010000000677,7.92,Orange-flavoured cold drink.,true
-MAHLAN-BV-0110,Orange soft drink,Fizz Co,beverages,case,12 x 2 litre,12,216.39,244.49,standard,true,3,1,200,2010000000687,12010000000684,24,Orange-flavoured cold drink.,true
-MAHLAN-BV-0111,Orange soft drink,Clear Spring,beverages,case,12 x 2 litre,12,232.79,281.19,standard,true,98,1,200,2010000000694,12010000000691,24,Orange-flavoured cold drink.,true
-MAHLAN-BV-0112,Orange soft drink,Sunny Farm,beverages,case,12 x 2 litre,12,257.59,,standard,true,331,1,200,2010000000700,12010000000707,24,Orange-flavoured cold drink.,true
-MAHLAN-BV-0200,Lemon-lime soft drink,Fizz Co,beverages,case,24 x 330 ml cans,24,165.99,,standard,true,47,1,200,2010000000717,12010000000714,7.92,Lemon-lime cold drink.,true
-MAHLAN-BV-0201,Lemon-lime soft drink,Clear Spring,beverages,case,24 x 330 ml cans,24,177.19,,standard,true,2,1,200,2010000000724,12010000000721,7.92,Lemon-lime cold drink.,true
-MAHLAN-BV-0202,Lemon-lime soft drink,Sunny Farm,beverages,case,24 x 330 ml cans,24,189.99,,standard,true,39,1,200,2010000000731,12010000000738,7.92,Lemon-lime cold drink.,true
-MAHLAN-BV-0300,Still water,Fizz Co,beverages,case,24 x 500 ml,24,90.09,,standard,true,335,1,200,2010000000748,12010000000745,12,Still spring water.,true
-MAHLAN-BV-0301,Still water,Clear Spring,beverages,case,24 x 500 ml,24,98.29,,standard,true,362,1,200,2010000000755,12010000000752,12,Still spring water.,true
-MAHLAN-BV-0302,Still water,Sunny Farm,beverages,case,24 x 500 ml,24,104.19,,standard,true,0,1,200,2010000000762,12010000000769,12,Still spring water.,true
-MAHLAN-BV-0310,Still water,Fizz Co,beverages,case,6 x 5 litre,6,109.29,,standard,true,310,1,200,2010000000779,12010000000776,30,Still spring water.,true
-MAHLAN-BV-0311,Still water,Clear Spring,beverages,case,6 x 5 litre,6,117.59,,standard,true,228,1,200,2010000000786,12010000000783,30,Still spring water.,true
-MAHLAN-BV-0312,Still water,Sunny Farm,beverages,case,6 x 5 litre,6,128.39,,standard,true,25,1,200,2010000000793,12010000000790,30,Still spring water.,true
-MAHLAN-BV-0400,Sparkling water,Fizz Co,beverages,case,24 x 500 ml,24,109.89,,standard,true,125,1,200,2010000000809,12010000000806,12,Sparkling spring water.,true
-MAHLAN-BV-0401,Sparkling water,Clear Spring,beverages,case,24 x 500 ml,24,116.39,,standard,true,2,1,200,2010000000816,12010000000813,12,Sparkling spring water.,true
-MAHLAN-BV-0402,Sparkling water,Sunny Farm,beverages,case,24 x 500 ml,24,128.39,,standard,true,233,1,200,2010000000823,12010000000820,12,Sparkling spring water.,true
-MAHLAN-BV-0500,Fruit juice blend,Fizz Co,beverages,case,6 x 1 litre,6,115.29,,standard,true,210,1,200,2010000000830,12010000000837,6,100% fruit juice blend.,true
-MAHLAN-BV-0501,Fruit juice blend,Clear Spring,beverages,case,6 x 1 litre,6,130.19,150.39,standard,true,340,1,200,2010000000847,12010000000844,6,100% fruit juice blend.,true
-MAHLAN-BV-0502,Fruit juice blend,Sunny Farm,beverages,case,6 x 1 litre,6,138.69,,standard,true,108,1,200,2010000000854,12010000000851,6,100% fruit juice blend.,true
-MAHLAN-BV-0510,Fruit juice blend,Fizz Co,beverages,case,24 x 200 ml,24,142.79,170.39,standard,true,69,1,200,2010000000861,12010000000868,4.8,100% fruit juice blend.,true
-MAHLAN-BV-0511,Fruit juice blend,Clear Spring,beverages,case,24 x 200 ml,24,156.09,,standard,true,313,1,200,2010000000878,12010000000875,4.8,100% fruit juice blend.,true
-MAHLAN-BV-0512,Fruit juice blend,Sunny Farm,beverages,case,24 x 200 ml,24,173.09,,standard,true,376,1,200,2010000000885,12010000000882,4.8,100% fruit juice blend.,true
-MAHLAN-BV-0600,Dairy fruit mix drink,Fizz Co,beverages,case,12 x 500 ml,12,155.69,,standard,true,0,1,200,2010000000892,12010000000899,6,Fruit and dairy blend.,true
-MAHLAN-BV-0601,Dairy fruit mix drink,Clear Spring,beverages,case,12 x 500 ml,12,166.29,,standard,true,302,1,200,2010000000908,12010000000905,6,Fruit and dairy blend.,true
-MAHLAN-BV-0602,Dairy fruit mix drink,Sunny Farm,beverages,case,12 x 500 ml,12,181.09,,standard,true,247,1,200,2010000000915,12010000000912,6,Fruit and dairy blend.,true
-MAHLAN-BV-0700,Energy drink,Fizz Co,beverages,case,24 x 500 ml,24,325.79,378.59,standard,true,46,1,200,2010000000922,12010000000929,12,Energy drink cans.,true
-MAHLAN-BV-0701,Energy drink,Clear Spring,beverages,case,24 x 500 ml,24,357.39,,standard,true,317,1,200,2010000000939,12010000000936,12,Energy drink cans.,true
-MAHLAN-BV-0702,Energy drink,Sunny Farm,beverages,case,24 x 500 ml,24,376.19,,standard,true,266,1,200,2010000000946,12010000000943,12,Energy drink cans.,true
-MAHLAN-BV-0800,"Cordial, orange",Fizz Co,beverages,case,6 x 1 litre,6,135.39,,standard,true,8,1,200,2010000000953,12010000000950,6,Dilute to taste.,true
-MAHLAN-BV-0801,"Cordial, orange",Clear Spring,beverages,case,6 x 1 litre,6,145.99,168.39,standard,true,7,1,200,2010000000960,12010000000967,6,Dilute to taste.,true
-MAHLAN-BV-0802,"Cordial, orange",Sunny Farm,beverages,case,6 x 1 litre,6,160.49,,standard,true,63,1,200,2010000000977,12010000000974,6,Dilute to taste.,true
-MAHLAN-BV-0900,"Mageu, original",Fizz Co,beverages,case,6 x 1 litre,6,99.79,,standard,true,222,1,200,2010000000984,12010000000981,6,Traditional fermented maize drink.,true
-MAHLAN-BV-0901,"Mageu, original",Clear Spring,beverages,case,6 x 1 litre,6,109.49,,standard,true,11,1,200,2010000000991,12010000000998,6,Traditional fermented maize drink.,true
-MAHLAN-BV-0902,"Mageu, original",Sunny Farm,beverages,case,6 x 1 litre,6,117.79,,standard,true,298,1,200,2010000001004,12010000001001,6,Traditional fermented maize drink.,true
-MAHLAN-BV-1001,"Iced tea, peach",Clear Spring,beverages,case,12 x 500 ml,12,136.29,154.39,standard,true,339,1,200,2010000001011,12010000001018,6,Peach iced tea.,true
-MAHLAN-SN-0000,"Potato chips, salt & vinegar",Crunch Kasi,snacks_confectionery,case,48 x 36 g,48,215.59,266.79,standard,true,145,1,200,2010000001028,12010000001025,1.728,Crisp potato chips.,true
-MAHLAN-SN-0001,"Potato chips, salt & vinegar",Candy Corner,snacks_confectionery,case,48 x 36 g,48,231.89,,standard,true,3,1,200,2010000001035,12010000001032,1.728,Crisp potato chips.,true
-MAHLAN-SN-0002,"Potato chips, salt & vinegar",Cocoa Joy,snacks_confectionery,case,48 x 36 g,48,255.49,,standard,true,133,1,200,2010000001042,12010000001049,1.728,Crisp potato chips.,true
-MAHLAN-SN-0010,"Potato chips, salt & vinegar",Crunch Kasi,snacks_confectionery,case,20 x 125 g,20,271.19,,standard,true,6,1,200,2010000001059,12010000001056,2.5,Crisp potato chips.,true
-MAHLAN-SN-0011,"Potato chips, salt & vinegar",Candy Corner,snacks_confectionery,case,20 x 125 g,20,298.29,,standard,true,4,1,200,2010000001066,12010000001063,2.5,Crisp potato chips.,true
-MAHLAN-SN-0012,"Potato chips, salt & vinegar",Cocoa Joy,snacks_confectionery,case,20 x 125 g,20,318.39,373.79,standard,true,276,1,200,2010000001073,12010000001070,2.5,Crisp potato chips.,true
-MAHLAN-SN-0100,"Potato chips, cheese & onion",Crunch Kasi,snacks_confectionery,case,48 x 36 g,48,215.39,,standard,true,143,1,200,2010000001080,12010000001087,1.728,Crisp potato chips.,true
-MAHLAN-SN-0101,"Potato chips, cheese & onion",Candy Corner,snacks_confectionery,case,48 x 36 g,48,234.69,,standard,true,252,1,200,2010000001097,12010000001094,1.728,Crisp potato chips.,true
-MAHLAN-SN-0200,"Maize snacks, cheese",Crunch Kasi,snacks_confectionery,case,50 x 25 g,50,116.49,,standard,true,26,1,200,2010000001103,12010000001100,1.25,Cheese-flavoured maize puffs.,true
-MAHLAN-SN-0201,"Maize snacks, cheese",Candy Corner,snacks_confectionery,case,50 x 25 g,50,125.99,,standard,true,362,1,200,2010000001110,12010000001117,1.25,Cheese-flavoured maize puffs.,true
-MAHLAN-SN-0202,"Maize snacks, cheese",Cocoa Joy,snacks_confectionery,case,50 x 25 g,50,137.59,,standard,true,76,1,200,2010000001127,12010000001124,1.25,Cheese-flavoured maize puffs.,true
-MAHLAN-SN-0300,"Maize snacks, spicy",Crunch Kasi,snacks_confectionery,case,50 x 25 g,50,119.69,,standard,true,197,1,200,2010000001134,12010000001131,1.25,Spicy maize puffs.,true
-MAHLAN-SN-0301,"Maize snacks, spicy",Candy Corner,snacks_confectionery,case,50 x 25 g,50,129.59,,standard,true,194,1,200,2010000001141,12010000001148,1.25,Spicy maize puffs.,true
-MAHLAN-SN-0302,"Maize snacks, spicy",Cocoa Joy,snacks_confectionery,case,50 x 25 g,50,136.99,,standard,true,355,1,200,2010000001158,12010000001155,1.25,Spicy maize puffs.,true
-MAHLAN-SN-0400,Fruit lollipops,Crunch Kasi,snacks_confectionery,pack,100 pieces,100,53.99,,standard,true,376,1,200,2010000001165,12010000001162,,Assorted fruit lollipops.,true
-MAHLAN-SN-0401,Fruit lollipops,Candy Corner,snacks_confectionery,pack,100 pieces,100,59.19,,standard,true,84,1,200,2010000001172,12010000001179,,Assorted fruit lollipops.,true
-MAHLAN-SN-0402,Fruit lollipops,Cocoa Joy,snacks_confectionery,pack,100 pieces,100,62.69,,standard,true,378,1,200,2010000001189,12010000001186,,Assorted fruit lollipops.,true
-MAHLAN-SN-0500,Milk chocolate bars,Crunch Kasi,snacks_confectionery,case,24 x 40 g,24,198.09,,standard,true,366,1,200,2010000001196,12010000001193,0.96,Milk chocolate bars.,true
-MAHLAN-SN-0501,Milk chocolate bars,Candy Corner,snacks_confectionery,case,24 x 40 g,24,214.49,264.69,standard,true,241,1,200,2010000001202,12010000001209,0.96,Milk chocolate bars.,true
-MAHLAN-SN-0502,Milk chocolate bars,Cocoa Joy,snacks_confectionery,case,24 x 40 g,24,236.89,,standard,true,95,1,200,2010000001219,12010000001216,0.96,Milk chocolate bars.,true
-MAHLAN-SN-0600,Mint chewing gum,Crunch Kasi,snacks_confectionery,pack,100 pieces,100,45.59,55.89,standard,true,299,1,200,2010000001226,12010000001223,,Single mint gum pieces.,true
-MAHLAN-SN-0601,Mint chewing gum,Candy Corner,snacks_confectionery,pack,100 pieces,100,48.39,,standard,true,0,1,200,2010000001233,12010000001230,,Single mint gum pieces.,true
-MAHLAN-SN-0602,Mint chewing gum,Cocoa Joy,snacks_confectionery,pack,100 pieces,100,52.79,62.99,standard,true,273,1,200,2010000001240,12010000001247,,Single mint gum pieces.,true
-MAHLAN-SN-0700,Toffees,Crunch Kasi,snacks_confectionery,pack,100 pieces,100,40.89,,standard,true,255,1,200,2010000001257,12010000001254,,Individually wrapped toffees.,true
-MAHLAN-SN-0701,Toffees,Candy Corner,snacks_confectionery,pack,100 pieces,100,44.19,54.69,standard,true,7,1,200,2010000001264,12010000001261,,Individually wrapped toffees.,true
-MAHLAN-SN-0702,Toffees,Cocoa Joy,snacks_confectionery,pack,100 pieces,100,48.29,,standard,true,247,1,200,2010000001271,12010000001278,,Individually wrapped toffees.,true
-MAHLAN-SN-0800,Marie biscuits,Crunch Kasi,snacks_confectionery,case,12 x 200 g,12,161.39,,standard,true,266,1,200,2010000001288,12010000001285,2.4,Plain tea biscuits.,true
-MAHLAN-SN-0801,Marie biscuits,Candy Corner,snacks_confectionery,case,12 x 200 g,12,179.39,223.29,standard,true,192,1,200,2010000001295,12010000001292,2.4,Plain tea biscuits.,true
-MAHLAN-SN-0802,Marie biscuits,Cocoa Joy,snacks_confectionery,case,12 x 200 g,12,193.59,,standard,true,26,1,200,2010000001301,12010000001308,2.4,Plain tea biscuits.,true
-MAHLAN-SN-0900,"Cream biscuits, vanilla",Crunch Kasi,snacks_confectionery,case,12 x 200 g,12,177.99,,standard,true,169,1,200,2010000001318,12010000001315,2.4,Vanilla cream biscuits.,true
-MAHLAN-SN-0901,"Cream biscuits, vanilla",Candy Corner,snacks_confectionery,case,12 x 200 g,12,193.99,,standard,true,267,1,200,2010000001325,12010000001322,2.4,Vanilla cream biscuits.,true
-MAHLAN-SN-0902,"Cream biscuits, vanilla",Cocoa Joy,snacks_confectionery,case,12 x 200 g,12,210.09,,standard,true,19,1,200,2010000001332,12010000001339,2.4,Vanilla cream biscuits.,true
-MAHLAN-SN-1000,Salted peanuts,Crunch Kasi,snacks_confectionery,case,24 x 50 g,24,137.89,,standard,true,380,1,200,2010000001349,12010000001346,1.2,Roasted salted peanuts.,true
-MAHLAN-SN-1001,Salted peanuts,Candy Corner,snacks_confectionery,case,24 x 50 g,24,148.39,,standard,true,361,1,200,2010000001356,12010000001353,1.2,Roasted salted peanuts.,true
-MAHLAN-SN-1002,Salted peanuts,Cocoa Joy,snacks_confectionery,case,24 x 50 g,24,157.29,,standard,true,9,1,200,2010000001363,12010000001360,1.2,Roasted salted peanuts.,true
-MAHLAN-HC-0000,Dishwashing liquid,Sparkle,household_cleaning,case,12 x 750 ml,12,216.59,,standard,true,67,1,200,2010000001370,12010000001377,9,Lemon dishwashing liquid.,true
-MAHLAN-HC-0002,Dishwashing liquid,Pure White,household_cleaning,case,12 x 750 ml,12,258.59,,standard,true,23,1,200,2010000001387,12010000001384,9,Lemon dishwashing liquid.,true
-MAHLAN-HC-0010,Dishwashing liquid,Sparkle,household_cleaning,case,4 x 5 litre,4,268.09,,standard,true,68,1,200,2010000001394,12010000001391,20,Lemon dishwashing liquid.,true
-MAHLAN-HC-0011,Dishwashing liquid,Bright Wash,household_cleaning,case,4 x 5 litre,4,300.19,,standard,true,338,1,200,2010000001400,12010000001407,20,Lemon dishwashing liquid.,true
-MAHLAN-HC-0012,Dishwashing liquid,Pure White,household_cleaning,case,4 x 5 litre,4,319.29,392.29,standard,true,351,1,200,2010000001417,12010000001414,20,Lemon dishwashing liquid.,true
-MAHLAN-HC-0100,Hand washing powder,Sparkle,household_cleaning,bag,2 kg,1,67.49,81.19,standard,true,0,1,200,2010000001424,,2,Washing powder for hand wash.,true
-MAHLAN-HC-0101,Hand washing powder,Bright Wash,household_cleaning,bag,2 kg,1,74.39,,standard,true,0,1,200,2010000001431,,2,Washing powder for hand wash.,true
-MAHLAN-HC-0102,Hand washing powder,Pure White,household_cleaning,bag,2 kg,1,78.19,,standard,true,122,1,200,2010000001448,,2,Washing powder for hand wash.,true
-MAHLAN-HC-0111,Hand washing powder,Bright Wash,household_cleaning,bag,5 kg,1,165.89,,standard,true,33,1,200,2010000001455,,5,Washing powder for hand wash.,true
-MAHLAN-HC-0112,Hand washing powder,Pure White,household_cleaning,bag,5 kg,1,178.69,,standard,true,3,1,200,2010000001462,,5,Washing powder for hand wash.,true
-MAHLAN-HC-0200,Thick bleach,Sparkle,household_cleaning,case,12 x 750 ml,12,162.09,,standard,true,319,1,200,2010000001479,12010000001476,9,Thick household bleach.,true
-MAHLAN-HC-0201,Thick bleach,Bright Wash,household_cleaning,case,12 x 750 ml,12,180.29,,standard,true,2,1,200,2010000001486,12010000001483,9,Thick household bleach.,true
-MAHLAN-HC-0202,Thick bleach,Pure White,household_cleaning,case,12 x 750 ml,12,193.99,,standard,true,353,1,200,2010000001493,12010000001490,9,Thick household bleach.,true
-MAHLAN-HC-0300,Multi-purpose cleaner,Sparkle,household_cleaning,case,12 x 750 ml,12,202.89,,standard,true,349,1,200,2010000001509,12010000001506,9,"Cleans floors, tiles and counters.",true
-MAHLAN-HC-0301,Multi-purpose cleaner,Bright Wash,household_cleaning,case,12 x 750 ml,12,214.99,,standard,true,368,1,200,2010000001516,12010000001513,9,"Cleans floors, tiles and counters.",true
-MAHLAN-HC-0302,Multi-purpose cleaner,Pure White,household_cleaning,case,12 x 750 ml,12,229.19,284.69,standard,true,3,1,200,2010000001523,12010000001520,9,"Cleans floors, tiles and counters.",true
-MAHLAN-HC-0400,"Toilet paper, 1-ply",Sparkle,household_cleaning,pack,48 rolls,48,175.19,,standard,true,192,1,200,2010000001530,12010000001537,,Single-ply toilet rolls.,true
-MAHLAN-HC-0401,"Toilet paper, 1-ply",Bright Wash,household_cleaning,pack,48 rolls,48,187.89,,standard,true,90,1,200,2010000001547,12010000001544,,Single-ply toilet rolls.,true
-MAHLAN-HC-0402,"Toilet paper, 1-ply",Pure White,household_cleaning,pack,48 rolls,48,199.29,,standard,true,334,1,200,2010000001554,12010000001551,,Single-ply toilet rolls.,true
-MAHLAN-HC-0500,"Toilet paper, 2-ply",Sparkle,household_cleaning,pack,24 rolls,24,162.39,,standard,true,0,1,200,2010000001561,12010000001568,,Two-ply toilet rolls.,true
-MAHLAN-HC-0501,"Toilet paper, 2-ply",Bright Wash,household_cleaning,pack,24 rolls,24,175.19,,standard,true,166,1,200,2010000001578,12010000001575,,Two-ply toilet rolls.,true
-MAHLAN-HC-0502,"Toilet paper, 2-ply",Pure White,household_cleaning,pack,24 rolls,24,190.99,,standard,true,78,1,200,2010000001585,12010000001582,,Two-ply toilet rolls.,true
-MAHLAN-HC-0602,Bath soap bars,Pure White,household_cleaning,case,48 x 150 g,48,345.09,,standard,true,38,1,200,2010000001592,12010000001599,7.2,Family soap bars.,true
-MAHLAN-HC-0700,Laundry bar soap,Sparkle,household_cleaning,case,24 x 500 g,24,266.69,,standard,true,31,1,200,2010000001608,12010000001605,12,Blue laundry bars.,true
-MAHLAN-HC-0701,Laundry bar soap,Bright Wash,household_cleaning,case,24 x 500 g,24,298.59,,standard,true,281,1,200,2010000001615,12010000001612,12,Blue laundry bars.,true
-MAHLAN-HC-0702,Laundry bar soap,Pure White,household_cleaning,case,24 x 500 g,24,324.49,,standard,true,375,1,200,2010000001622,12010000001629,12,Blue laundry bars.,true
-MAHLAN-HC-0800,Floor polish,Sparkle,household_cleaning,case,12 x 400 ml,12,325.09,,standard,true,389,1,200,2010000001639,12010000001636,4.8,Red floor polish.,true
-MAHLAN-HC-0801,Floor polish,Bright Wash,household_cleaning,case,12 x 400 ml,12,354.29,,standard,true,255,1,200,2010000001646,12010000001643,4.8,Red floor polish.,true
-MAHLAN-HC-0900,Scouring pads,Sparkle,household_cleaning,pack,50 pads,50,90.79,,standard,true,193,1,200,2010000001653,12010000001650,,Green scouring pads.,true
-MAHLAN-HC-0901,Scouring pads,Bright Wash,household_cleaning,pack,50 pads,50,100.19,118.09,standard,true,275,1,200,2010000001660,12010000001667,,Green scouring pads.,true
-MAHLAN-HC-0902,Scouring pads,Pure White,household_cleaning,pack,50 pads,50,105.29,121.79,standard,true,359,1,200,2010000001677,12010000001674,,Green scouring pads.,true
-MAHLAN-HC-1000,"Refuse bags, black",Sparkle,household_cleaning,bundle,200 bags,200,164.99,,standard,true,118,1,200,2010000001684,12010000001681,,Heavy-duty black bags.,true
-MAHLAN-HC-1001,"Refuse bags, black",Bright Wash,household_cleaning,bundle,200 bags,200,179.09,,standard,true,227,1,200,2010000001691,12010000001698,,Heavy-duty black bags.,true
-MAHLAN-HC-1002,"Refuse bags, black",Pure White,household_cleaning,bundle,200 bags,200,188.59,222.49,standard,true,52,1,200,2010000001707,12010000001704,,Heavy-duty black bags.,true
-MAHLAN-PC-0000,Petroleum jelly,Skin Guard,personal_care,case,12 x 250 ml,12,182.59,,standard,true,50,1,200,2010000001714,12010000001711,3,Pure petroleum jelly.,true
-MAHLAN-PC-0001,Petroleum jelly,Bright Smile,personal_care,case,12 x 250 ml,12,193.99,,standard,true,284,1,200,2010000001721,12010000001728,3,Pure petroleum jelly.,true
-MAHLAN-PC-0002,Petroleum jelly,Fresh Day,personal_care,case,12 x 250 ml,12,209.49,260.09,standard,true,164,1,200,2010000001738,12010000001735,3,Pure petroleum jelly.,true
-MAHLAN-PC-0100,Aqueous body lotion,Skin Guard,personal_care,case,6 x 400 ml,6,197.99,,standard,true,272,1,200,2010000001745,12010000001742,2.4,Aqueous body lotion.,true
-MAHLAN-PC-0101,Aqueous body lotion,Bright Smile,personal_care,case,6 x 400 ml,6,215.09,,standard,true,375,1,200,2010000001752,12010000001759,2.4,Aqueous body lotion.,true
-MAHLAN-PC-0102,Aqueous body lotion,Fresh Day,personal_care,case,6 x 400 ml,6,237.49,266.99,standard,true,1,1,200,2010000001769,12010000001766,2.4,Aqueous body lotion.,true
-MAHLAN-PC-0200,Fluoride toothpaste,Skin Guard,personal_care,case,24 x 100 ml,24,266.29,,standard,true,390,1,200,2010000001776,12010000001773,2.4,Fluoride toothpaste.,true
-MAHLAN-PC-0201,Fluoride toothpaste,Bright Smile,personal_care,case,24 x 100 ml,24,295.29,,standard,true,264,1,200,2010000001783,12010000001780,2.4,Fluoride toothpaste.,true
-MAHLAN-PC-0202,Fluoride toothpaste,Fresh Day,personal_care,case,24 x 100 ml,24,312.69,,standard,true,219,1,200,2010000001790,12010000001797,2.4,Fluoride toothpaste.,true
-MAHLAN-PC-0300,"Toothbrushes, medium",Skin Guard,personal_care,pack,24 brushes,24,106.89,,standard,true,381,1,200,2010000001806,12010000001803,,Medium toothbrushes.,true
-MAHLAN-PC-0301,"Toothbrushes, medium",Bright Smile,personal_care,pack,24 brushes,24,118.09,,standard,true,294,1,200,2010000001813,12010000001810,,Medium toothbrushes.,true
-MAHLAN-PC-0302,"Toothbrushes, medium",Fresh Day,personal_care,pack,24 brushes,24,126.19,,standard,true,214,1,200,2010000001820,12010000001827,,Medium toothbrushes.,true
-MAHLAN-PC-0400,Roll-on deodorant,Skin Guard,personal_care,case,12 x 50 ml,12,217.89,,standard,true,74,1,200,2010000001837,12010000001834,0.6,48-hour roll-on.,true
-MAHLAN-PC-0401,Roll-on deodorant,Bright Smile,personal_care,case,12 x 50 ml,12,234.49,,standard,true,92,1,200,2010000001844,12010000001841,0.6,48-hour roll-on.,true
-MAHLAN-PC-0402,Roll-on deodorant,Fresh Day,personal_care,case,12 x 50 ml,12,255.09,,standard,true,251,1,200,2010000001851,12010000001858,0.6,48-hour roll-on.,true
-MAHLAN-PC-0500,Hair food,Skin Guard,personal_care,case,12 x 125 ml,12,178.19,,standard,true,190,1,200,2010000001868,12010000001865,1.5,Moisturising hair food.,true
-MAHLAN-PC-0501,Hair food,Bright Smile,personal_care,case,12 x 125 ml,12,193.59,,standard,true,158,1,200,2010000001875,12010000001872,1.5,Moisturising hair food.,true
-MAHLAN-PC-0502,Hair food,Fresh Day,personal_care,case,12 x 125 ml,12,208.39,,standard,true,165,1,200,2010000001882,12010000001889,1.5,Moisturising hair food.,true
-MAHLAN-PC-0600,Sanitary pads,Skin Guard,personal_care,case,24 x 10 pads,1,428.39,,standard,true,0,1,200,2010000001899,,,Maxi thick pads.,true
-MAHLAN-PC-0601,Sanitary pads,Bright Smile,personal_care,case,24 x 10 pads,1,477.29,590.59,standard,true,42,1,200,2010000001905,,,Maxi thick pads.,true
-MAHLAN-PC-0602,Sanitary pads,Fresh Day,personal_care,case,24 x 10 pads,1,513.79,,standard,true,349,1,200,2010000001912,,,Maxi thick pads.,true
-MAHLAN-PC-0700,"Razors, twin blade",Skin Guard,personal_care,pack,50 razors,50,133.99,,standard,true,0,1,200,2010000001929,12010000001926,,Disposable twin-blade razors.,true
-MAHLAN-PC-0701,"Razors, twin blade",Bright Smile,personal_care,pack,50 razors,50,145.09,,standard,true,398,1,200,2010000001936,12010000001933,,Disposable twin-blade razors.,true
-MAHLAN-PC-0702,"Razors, twin blade",Fresh Day,personal_care,pack,50 razors,50,159.49,,standard,true,155,1,200,2010000001943,12010000001940,,Disposable twin-blade razors.,true
-MAHLAN-DC-0000,Long-life full cream milk,Farm Fresh,dairy_chilled,case,6 x 1 litre,6,97.69,,zero,true,5,1,200,2010000001950,12010000001957,6,UHT milk; no fridge needed until opened.,true
-MAHLAN-DC-0001,Long-life full cream milk,Dairy Best,dairy_chilled,case,6 x 1 litre,6,106.19,126.69,zero,true,10,1,200,2010000001967,12010000001964,6,UHT milk; no fridge needed until opened.,true
-MAHLAN-DC-0002,Long-life full cream milk,Golden Spread,dairy_chilled,case,6 x 1 litre,6,115.99,,zero,true,214,1,200,2010000001974,12010000001971,6,UHT milk; no fridge needed until opened.,true
-MAHLAN-DC-0010,Long-life full cream milk,Farm Fresh,dairy_chilled,case,12 x 1 litre,12,193.09,,zero,true,226,1,200,2010000001981,12010000001988,12,UHT milk; no fridge needed until opened.,true
-MAHLAN-DC-0011,Long-life full cream milk,Dairy Best,dairy_chilled,case,12 x 1 litre,12,203.69,,zero,true,87,1,200,2010000001998,12010000001995,12,UHT milk; no fridge needed until opened.,true
-MAHLAN-DC-0012,Long-life full cream milk,Golden Spread,dairy_chilled,case,12 x 1 litre,12,227.39,,zero,true,277,1,200,2010000002001,12010000002008,12,UHT milk; no fridge needed until opened.,true
-MAHLAN-DC-0100,Maas (amasi),Farm Fresh,dairy_chilled,case,6 x 2 litre,6,181.19,,zero,true,74,1,200,2010000002018,12010000002015,12,Thick fermented milk.,true
-MAHLAN-DC-0102,Maas (amasi),Golden Spread,dairy_chilled,case,6 x 2 litre,6,211.89,,zero,true,335,1,200,2010000002025,12010000002022,12,Thick fermented milk.,true
-MAHLAN-DC-0200,Fresh full cream milk,Farm Fresh,dairy_chilled,crate,6 x 2 litre,6,161.39,,zero,true,375,1,200,2010000002032,12010000002039,12,Keep chilled.,true
-MAHLAN-DC-0201,Fresh full cream milk,Dairy Best,dairy_chilled,crate,6 x 2 litre,6,174.49,204.39,zero,true,2,1,200,2010000002049,12010000002046,12,Keep chilled.,true
-MAHLAN-DC-0202,Fresh full cream milk,Golden Spread,dairy_chilled,crate,6 x 2 litre,6,193.39,,zero,true,199,1,200,2010000002056,12010000002053,12,Keep chilled.,true
-MAHLAN-DC-0300,Margarine brick,Farm Fresh,dairy_chilled,case,12 x 500 g,12,266.99,,standard,true,65,1,200,2010000002063,12010000002060,6,Margarine bricks for bread.,true
-MAHLAN-DC-0301,Margarine brick,Dairy Best,dairy_chilled,case,12 x 500 g,12,295.39,,standard,true,10,1,200,2010000002070,12010000002077,6,Margarine bricks for bread.,true
-MAHLAN-DC-0302,Margarine brick,Golden Spread,dairy_chilled,case,12 x 500 g,12,320.39,,standard,true,60,1,200,2010000002087,12010000002084,6,Margarine bricks for bread.,true
-MAHLAN-DC-0401,Cheese slices,Dairy Best,dairy_chilled,pack,10 x 200 g,10,391.59,477.29,standard,true,98,1,200,2010000002094,12010000002091,2,Processed cheese slices.,true
-MAHLAN-DC-0500,Plain yoghurt,Farm Fresh,dairy_chilled,case,6 x 1 kg,6,201.09,,standard,true,259,1,200,2010000002100,12010000002107,6,Plain drinking yoghurt.,true
-MAHLAN-DC-0501,Plain yoghurt,Dairy Best,dairy_chilled,case,6 x 1 kg,6,212.39,,standard,true,172,1,200,2010000002117,12010000002114,6,Plain drinking yoghurt.,true
-MAHLAN-DC-0502,Plain yoghurt,Golden Spread,dairy_chilled,case,6 x 1 kg,6,235.59,265.29,standard,true,339,1,200,2010000002124,12010000002121,6,Plain drinking yoghurt.,true
-MAHLAN-DC-0601,Fruit yoghurt cups,Dairy Best,dairy_chilled,case,24 x 100 g,24,188.59,,standard,true,279,1,200,2010000002131,12010000002138,2.4,Assorted fruit yoghurt.,true
-MAHLAN-DC-0602,Fruit yoghurt cups,Golden Spread,dairy_chilled,case,24 x 100 g,24,199.79,,standard,true,6,1,200,2010000002148,12010000002145,2.4,Assorted fruit yoghurt.,true
-MAHLAN-DC-0700,Polony,Farm Fresh,dairy_chilled,case,10 x 1 kg,10,422.19,,standard,true,9,1,200,2010000002155,12010000002152,10,Chilled polony rolls.,true
-MAHLAN-DC-0701,Polony,Dairy Best,dairy_chilled,case,10 x 1 kg,10,443.39,,standard,true,0,1,200,2010000002162,12010000002169,10,Chilled polony rolls.,true
-MAHLAN-DC-0702,Polony,Golden Spread,dairy_chilled,case,10 x 1 kg,10,482.59,,standard,true,176,1,200,2010000002179,12010000002176,10,Chilled polony rolls.,true
+product_code,name,brand,category,unit,pack_size,units_per_pack,price_rands,compare_at_rands,vat_rate,vat_included,stock,min_qty,max_qty,unit_barcode,case_barcode,weight_kg,description,active,image_1
+MAHLAN-FG-0000,Super maize meal,Kasi Gold,food_grocery,bag,10 kg,1,82.59,,zero,true,326,1,200,2010000000007,,10,Fine white maize meal for pap.,true,
+MAHLAN-FG-0001,Super maize meal,Mill Street,food_grocery,bag,10 kg,1,88.79,,zero,true,80,1,200,2010000000014,,10,Fine white maize meal for pap.,true,
+MAHLAN-FG-0002,Super maize meal,Harvest Tin,food_grocery,bag,10 kg,1,95.99,,zero,true,3,1,200,2010000000021,,10,Fine white maize meal for pap.,true,
+MAHLAN-FG-0010,Super maize meal,Kasi Gold,food_grocery,bag,25 kg,1,193.69,,zero,true,99,1,200,2010000000038,,25,Fine white maize meal for pap.,true,
+MAHLAN-FG-0011,Super maize meal,Mill Street,food_grocery,bag,25 kg,1,204.89,,zero,true,335,1,200,2010000000045,,25,Fine white maize meal for pap.,true,
+MAHLAN-FG-0012,Super maize meal,Harvest Tin,food_grocery,bag,25 kg,1,221.89,263.89,zero,true,130,1,200,2010000000052,,25,Fine white maize meal for pap.,true,
+MAHLAN-FG-0100,Long grain parboiled rice,Kasi Gold,food_grocery,bag,2 kg,1,36.69,,zero,true,9,1,200,2010000000069,,2,Non-sticky parboiled rice.,true,
+MAHLAN-FG-0101,Long grain parboiled rice,Mill Street,food_grocery,bag,2 kg,1,38.69,,zero,true,1,1,200,2010000000076,,2,Non-sticky parboiled rice.,true,
+MAHLAN-FG-0102,Long grain parboiled rice,Harvest Tin,food_grocery,bag,2 kg,1,41.99,,zero,true,327,1,200,2010000000083,,2,Non-sticky parboiled rice.,true,
+MAHLAN-FG-0110,Long grain parboiled rice,Kasi Gold,food_grocery,bag,10 kg,1,151.19,,zero,true,351,1,200,2010000000090,,10,Non-sticky parboiled rice.,true,
+MAHLAN-FG-0111,Long grain parboiled rice,Mill Street,food_grocery,bag,10 kg,1,167.79,,zero,true,2,1,200,2010000000106,,10,Non-sticky parboiled rice.,true,
+MAHLAN-FG-0112,Long grain parboiled rice,Harvest Tin,food_grocery,bag,10 kg,1,182.09,,zero,true,66,1,200,2010000000113,,10,Non-sticky parboiled rice.,true,
+MAHLAN-FG-0201,Cake flour,Mill Street,food_grocery,bag,2.5 kg,1,42.09,,standard,true,228,1,200,2010000000120,,2.5,White cake flour for baking and vetkoek.,true,
+MAHLAN-FG-0202,Cake flour,Harvest Tin,food_grocery,bag,2.5 kg,1,45.69,,standard,true,212,1,200,2010000000137,,2.5,White cake flour for baking and vetkoek.,true,
+MAHLAN-FG-0210,Cake flour,Kasi Gold,food_grocery,bag,10 kg,1,128.19,,standard,true,388,1,200,2010000000144,,10,White cake flour for baking and vetkoek.,true,
+MAHLAN-FG-0211,Cake flour,Mill Street,food_grocery,bag,10 kg,1,135.99,162.59,standard,true,196,1,200,2010000000151,,10,White cake flour for baking and vetkoek.,true,
+MAHLAN-FG-0212,Cake flour,Harvest Tin,food_grocery,bag,10 kg,1,150.79,,standard,true,297,1,200,2010000000168,,10,White cake flour for baking and vetkoek.,true,
+MAHLAN-FG-0300,White sugar,Kasi Gold,food_grocery,bag,2.5 kg,1,53.99,,standard,true,5,1,200,2010000000175,,2.5,Refined white sugar.,true,
+MAHLAN-FG-0301,White sugar,Mill Street,food_grocery,bag,2.5 kg,1,58.79,67.69,standard,true,41,1,200,2010000000182,,2.5,Refined white sugar.,true,
+MAHLAN-FG-0302,White sugar,Harvest Tin,food_grocery,bag,2.5 kg,1,64.79,,standard,true,0,1,200,2010000000199,,2.5,Refined white sugar.,true,
+MAHLAN-FG-0310,White sugar,Kasi Gold,food_grocery,bag,10 kg,1,196.89,,standard,true,13,1,200,2010000000205,,10,Refined white sugar.,true,
+MAHLAN-FG-0311,White sugar,Mill Street,food_grocery,bag,10 kg,1,220.29,,standard,true,83,1,200,2010000000212,,10,Refined white sugar.,true,
+MAHLAN-FG-0312,White sugar,Harvest Tin,food_grocery,bag,10 kg,1,236.69,,standard,true,317,1,200,2010000000229,,10,Refined white sugar.,true,
+MAHLAN-FG-0400,Brown sugar,Kasi Gold,food_grocery,bag,2 kg,1,40.89,50.19,standard,true,2,1,200,2010000000236,,2,Soft brown sugar.,true,
+MAHLAN-FG-0401,Brown sugar,Mill Street,food_grocery,bag,2 kg,1,44.09,,standard,true,133,1,200,2010000000243,,2,Soft brown sugar.,true,
+MAHLAN-FG-0402,Brown sugar,Harvest Tin,food_grocery,bag,2 kg,1,47.69,,standard,true,6,1,200,2010000000250,,2,Soft brown sugar.,true,
+MAHLAN-FG-0500,Sunflower cooking oil,Kasi Gold,food_grocery,bottle,2 litre,1,62.79,,zero,true,210,1,200,2010000000267,,2,Pure sunflower oil.,true,
+MAHLAN-FG-0501,Sunflower cooking oil,Mill Street,food_grocery,bottle,2 litre,1,68.09,,zero,true,9,1,200,2010000000274,,2,Pure sunflower oil.,true,
+MAHLAN-FG-0502,Sunflower cooking oil,Harvest Tin,food_grocery,bottle,2 litre,1,73.09,,zero,true,253,1,200,2010000000281,,2,Pure sunflower oil.,true,
+MAHLAN-FG-0510,Sunflower cooking oil,Kasi Gold,food_grocery,bottle,5 litre,1,138.09,158.69,zero,true,39,1,200,2010000000298,,5,Pure sunflower oil.,true,
+MAHLAN-FG-0511,Sunflower cooking oil,Mill Street,food_grocery,bottle,5 litre,1,145.19,,zero,true,131,1,200,2010000000304,,5,Pure sunflower oil.,true,
+MAHLAN-FG-0512,Sunflower cooking oil,Harvest Tin,food_grocery,bottle,5 litre,1,158.19,,zero,true,151,1,200,2010000000311,,5,Pure sunflower oil.,true,
+MAHLAN-FG-0600,Baked beans in tomato sauce,Kasi Gold,food_grocery,case,24 x 410 g,24,275.49,,standard,true,291,1,200,2010000000328,12010000000325,9.84,A case of 24 tins.,true,
+MAHLAN-FG-0601,Baked beans in tomato sauce,Mill Street,food_grocery,case,24 x 410 g,24,299.89,,standard,true,178,1,200,2010000000335,12010000000332,9.84,A case of 24 tins.,true,
+MAHLAN-FG-0602,Baked beans in tomato sauce,Harvest Tin,food_grocery,case,24 x 410 g,24,313.19,,standard,true,186,1,200,2010000000342,12010000000349,9.84,A case of 24 tins.,true,
+MAHLAN-FG-0700,Pilchards in tomato sauce,Kasi Gold,food_grocery,case,24 x 400 g,24,535.39,,zero,true,274,1,200,2010000000359,12010000000356,9.6,"Canned pilchards, a case of 24.",true,
+MAHLAN-FG-0701,Pilchards in tomato sauce,Mill Street,food_grocery,case,24 x 400 g,24,599.69,,zero,true,122,1,200,2010000000366,12010000000363,9.6,"Canned pilchards, a case of 24.",true,
+MAHLAN-FG-0702,Pilchards in tomato sauce,Harvest Tin,food_grocery,case,24 x 400 g,24,646.69,,zero,true,1,1,200,2010000000373,12010000000370,9.6,"Canned pilchards, a case of 24.",true,
+MAHLAN-FG-0800,Chicken instant noodles,Kasi Gold,food_grocery,case,40 x 73 g,40,178.69,,standard,true,209,1,200,2010000000380,12010000000387,2.92,Chicken-flavoured instant noodles.,true,
+MAHLAN-FG-0802,Chicken instant noodles,Harvest Tin,food_grocery,case,40 x 73 g,40,213.29,,standard,true,131,1,200,2010000000397,12010000000394,2.92,Chicken-flavoured instant noodles.,true,
+MAHLAN-FG-0901,Samp,Mill Street,food_grocery,bag,5 kg,1,74.69,,zero,true,9,1,200,2010000000403,,5,Crushed dried maize kernels.,true,
+MAHLAN-FG-0902,Samp,Harvest Tin,food_grocery,bag,5 kg,1,80.69,,zero,true,0,1,200,2010000000410,,5,Crushed dried maize kernels.,true,
+MAHLAN-FG-1001,Sugar beans,Mill Street,food_grocery,bag,2 kg,1,64.99,,zero,true,0,1,200,2010000000427,,2,Dried speckled sugar beans.,true,
+MAHLAN-FG-1002,Sugar beans,Harvest Tin,food_grocery,bag,2 kg,1,68.39,,zero,true,343,1,200,2010000000434,,2,Dried speckled sugar beans.,true,
+MAHLAN-FG-1100,Black tea bags,Kasi Gold,food_grocery,pack,100 bags,100,49.39,,standard,true,58,1,200,2010000000441,12010000000448,,Tagless black tea bags.,true,
+MAHLAN-FG-1101,Black tea bags,Mill Street,food_grocery,pack,100 bags,100,55.09,,standard,true,249,1,200,2010000000458,12010000000455,,Tagless black tea bags.,true,
+MAHLAN-FG-1102,Black tea bags,Harvest Tin,food_grocery,pack,100 bags,100,57.69,,standard,true,32,1,200,2010000000465,12010000000462,,Tagless black tea bags.,true,
+MAHLAN-FG-1110,Black tea bags,Kasi Gold,food_grocery,pack,200 bags,200,91.69,,standard,true,88,1,200,2010000000472,12010000000479,,Tagless black tea bags.,true,
+MAHLAN-FG-1111,Black tea bags,Mill Street,food_grocery,pack,200 bags,200,99.59,,standard,true,309,1,200,2010000000489,12010000000486,,Tagless black tea bags.,true,
+MAHLAN-FG-1200,Instant coffee,Kasi Gold,food_grocery,tin,250 g,1,80.09,,standard,true,250,1,200,2010000000496,,,Granulated instant coffee.,true,
+MAHLAN-FG-1201,Instant coffee,Mill Street,food_grocery,tin,250 g,1,89.09,,standard,true,200,1,200,2010000000502,,,Granulated instant coffee.,true,
+MAHLAN-FG-1202,Instant coffee,Harvest Tin,food_grocery,tin,250 g,1,94.39,,standard,true,312,1,200,2010000000519,,,Granulated instant coffee.,true,
+MAHLAN-FG-1301,Iodated table salt,Mill Street,food_grocery,case,24 x 500 g,24,118.49,,standard,true,219,1,200,2010000000526,12010000000523,12,Fine iodated salt.,true,
+MAHLAN-FG-1302,Iodated table salt,Harvest Tin,food_grocery,case,24 x 500 g,24,126.09,,standard,true,266,1,200,2010000000533,12010000000530,12,Fine iodated salt.,true,
+MAHLAN-FG-1400,"Peanut butter, smooth",Kasi Gold,food_grocery,case,12 x 400 g,12,376.99,,standard,true,181,1,200,2010000000540,12010000000547,4.8,Smooth peanut butter.,true,
+MAHLAN-FG-1402,"Peanut butter, smooth",Harvest Tin,food_grocery,case,12 x 400 g,12,454.49,,standard,true,0,1,200,2010000000557,12010000000554,4.8,Smooth peanut butter.,true,
+MAHLAN-FG-1500,Apricot jam,Kasi Gold,food_grocery,case,12 x 450 g,12,325.29,,standard,true,57,1,200,2010000000564,12010000000561,5.4,Smooth apricot jam.,true,
+MAHLAN-FG-1501,Apricot jam,Mill Street,food_grocery,case,12 x 450 g,12,350.89,,standard,true,7,1,200,2010000000571,12010000000578,5.4,Smooth apricot jam.,true,
+MAHLAN-FG-1502,Apricot jam,Harvest Tin,food_grocery,case,12 x 450 g,12,380.19,,standard,true,275,1,200,2010000000588,12010000000585,5.4,Smooth apricot jam.,true,
+MAHLAN-BV-0000,Cola soft drink,Fizz Co,beverages,case,24 x 330 ml cans,24,171.59,,standard,true,378,1,200,2010000000595,12010000000592,7.92,"Cold drink, a full case.",true,
+MAHLAN-BV-0001,Cola soft drink,Clear Spring,beverages,case,24 x 330 ml cans,24,185.49,,standard,true,334,1,200,2010000000601,12010000000608,7.92,"Cold drink, a full case.",true,
+MAHLAN-BV-0002,Cola soft drink,Sunny Farm,beverages,case,24 x 330 ml cans,24,205.59,,standard,true,380,1,200,2010000000618,12010000000615,7.92,"Cold drink, a full case.",true,
+MAHLAN-BV-0010,Cola soft drink,Fizz Co,beverages,case,12 x 2 litre,12,235.09,272.79,standard,true,52,1,200,2010000000625,12010000000622,24,"Cold drink, a full case.",true,
+MAHLAN-BV-0011,Cola soft drink,Clear Spring,beverages,case,12 x 2 litre,12,256.09,296.49,standard,true,348,1,200,2010000000632,12010000000639,24,"Cold drink, a full case.",true,
+MAHLAN-BV-0012,Cola soft drink,Sunny Farm,beverages,case,12 x 2 litre,12,274.99,,standard,true,300,1,200,2010000000649,12010000000646,24,"Cold drink, a full case.",true,
+MAHLAN-BV-0100,Orange soft drink,Fizz Co,beverages,case,24 x 330 ml cans,24,160.79,,standard,true,369,1,200,2010000000656,12010000000653,7.92,Orange-flavoured cold drink.,true,
+MAHLAN-BV-0101,Orange soft drink,Clear Spring,beverages,case,24 x 330 ml cans,24,174.89,,standard,true,27,1,200,2010000000663,12010000000660,7.92,Orange-flavoured cold drink.,true,
+MAHLAN-BV-0102,Orange soft drink,Sunny Farm,beverages,case,24 x 330 ml cans,24,187.49,,standard,true,153,1,200,2010000000670,12010000000677,7.92,Orange-flavoured cold drink.,true,
+MAHLAN-BV-0110,Orange soft drink,Fizz Co,beverages,case,12 x 2 litre,12,216.39,244.49,standard,true,3,1,200,2010000000687,12010000000684,24,Orange-flavoured cold drink.,true,
+MAHLAN-BV-0111,Orange soft drink,Clear Spring,beverages,case,12 x 2 litre,12,232.79,281.19,standard,true,98,1,200,2010000000694,12010000000691,24,Orange-flavoured cold drink.,true,
+MAHLAN-BV-0112,Orange soft drink,Sunny Farm,beverages,case,12 x 2 litre,12,257.59,,standard,true,331,1,200,2010000000700,12010000000707,24,Orange-flavoured cold drink.,true,
+MAHLAN-BV-0200,Lemon-lime soft drink,Fizz Co,beverages,case,24 x 330 ml cans,24,165.99,,standard,true,47,1,200,2010000000717,12010000000714,7.92,Lemon-lime cold drink.,true,
+MAHLAN-BV-0201,Lemon-lime soft drink,Clear Spring,beverages,case,24 x 330 ml cans,24,177.19,,standard,true,2,1,200,2010000000724,12010000000721,7.92,Lemon-lime cold drink.,true,
+MAHLAN-BV-0202,Lemon-lime soft drink,Sunny Farm,beverages,case,24 x 330 ml cans,24,189.99,,standard,true,39,1,200,2010000000731,12010000000738,7.92,Lemon-lime cold drink.,true,
+MAHLAN-BV-0300,Still water,Fizz Co,beverages,case,24 x 500 ml,24,90.09,,standard,true,335,1,200,2010000000748,12010000000745,12,Still spring water.,true,
+MAHLAN-BV-0301,Still water,Clear Spring,beverages,case,24 x 500 ml,24,98.29,,standard,true,362,1,200,2010000000755,12010000000752,12,Still spring water.,true,
+MAHLAN-BV-0302,Still water,Sunny Farm,beverages,case,24 x 500 ml,24,104.19,,standard,true,0,1,200,2010000000762,12010000000769,12,Still spring water.,true,
+MAHLAN-BV-0310,Still water,Fizz Co,beverages,case,6 x 5 litre,6,109.29,,standard,true,310,1,200,2010000000779,12010000000776,30,Still spring water.,true,
+MAHLAN-BV-0311,Still water,Clear Spring,beverages,case,6 x 5 litre,6,117.59,,standard,true,228,1,200,2010000000786,12010000000783,30,Still spring water.,true,
+MAHLAN-BV-0312,Still water,Sunny Farm,beverages,case,6 x 5 litre,6,128.39,,standard,true,25,1,200,2010000000793,12010000000790,30,Still spring water.,true,
+MAHLAN-BV-0400,Sparkling water,Fizz Co,beverages,case,24 x 500 ml,24,109.89,,standard,true,125,1,200,2010000000809,12010000000806,12,Sparkling spring water.,true,
+MAHLAN-BV-0401,Sparkling water,Clear Spring,beverages,case,24 x 500 ml,24,116.39,,standard,true,2,1,200,2010000000816,12010000000813,12,Sparkling spring water.,true,
+MAHLAN-BV-0402,Sparkling water,Sunny Farm,beverages,case,24 x 500 ml,24,128.39,,standard,true,233,1,200,2010000000823,12010000000820,12,Sparkling spring water.,true,
+MAHLAN-BV-0500,Fruit juice blend,Fizz Co,beverages,case,6 x 1 litre,6,115.29,,standard,true,210,1,200,2010000000830,12010000000837,6,100% fruit juice blend.,true,
+MAHLAN-BV-0501,Fruit juice blend,Clear Spring,beverages,case,6 x 1 litre,6,130.19,150.39,standard,true,340,1,200,2010000000847,12010000000844,6,100% fruit juice blend.,true,
+MAHLAN-BV-0502,Fruit juice blend,Sunny Farm,beverages,case,6 x 1 litre,6,138.69,,standard,true,108,1,200,2010000000854,12010000000851,6,100% fruit juice blend.,true,
+MAHLAN-BV-0510,Fruit juice blend,Fizz Co,beverages,case,24 x 200 ml,24,142.79,170.39,standard,true,69,1,200,2010000000861,12010000000868,4.8,100% fruit juice blend.,true,
+MAHLAN-BV-0511,Fruit juice blend,Clear Spring,beverages,case,24 x 200 ml,24,156.09,,standard,true,313,1,200,2010000000878,12010000000875,4.8,100% fruit juice blend.,true,
+MAHLAN-BV-0512,Fruit juice blend,Sunny Farm,beverages,case,24 x 200 ml,24,173.09,,standard,true,376,1,200,2010000000885,12010000000882,4.8,100% fruit juice blend.,true,
+MAHLAN-BV-0600,Dairy fruit mix drink,Fizz Co,beverages,case,12 x 500 ml,12,155.69,,standard,true,0,1,200,2010000000892,12010000000899,6,Fruit and dairy blend.,true,
+MAHLAN-BV-0601,Dairy fruit mix drink,Clear Spring,beverages,case,12 x 500 ml,12,166.29,,standard,true,302,1,200,2010000000908,12010000000905,6,Fruit and dairy blend.,true,
+MAHLAN-BV-0602,Dairy fruit mix drink,Sunny Farm,beverages,case,12 x 500 ml,12,181.09,,standard,true,247,1,200,2010000000915,12010000000912,6,Fruit and dairy blend.,true,
+MAHLAN-BV-0700,Energy drink,Fizz Co,beverages,case,24 x 500 ml,24,325.79,378.59,standard,true,46,1,200,2010000000922,12010000000929,12,Energy drink cans.,true,
+MAHLAN-BV-0701,Energy drink,Clear Spring,beverages,case,24 x 500 ml,24,357.39,,standard,true,317,1,200,2010000000939,12010000000936,12,Energy drink cans.,true,
+MAHLAN-BV-0702,Energy drink,Sunny Farm,beverages,case,24 x 500 ml,24,376.19,,standard,true,266,1,200,2010000000946,12010000000943,12,Energy drink cans.,true,
+MAHLAN-BV-0800,"Cordial, orange",Fizz Co,beverages,case,6 x 1 litre,6,135.39,,standard,true,8,1,200,2010000000953,12010000000950,6,Dilute to taste.,true,
+MAHLAN-BV-0801,"Cordial, orange",Clear Spring,beverages,case,6 x 1 litre,6,145.99,168.39,standard,true,7,1,200,2010000000960,12010000000967,6,Dilute to taste.,true,
+MAHLAN-BV-0802,"Cordial, orange",Sunny Farm,beverages,case,6 x 1 litre,6,160.49,,standard,true,63,1,200,2010000000977,12010000000974,6,Dilute to taste.,true,
+MAHLAN-BV-0900,"Mageu, original",Fizz Co,beverages,case,6 x 1 litre,6,99.79,,standard,true,222,1,200,2010000000984,12010000000981,6,Traditional fermented maize drink.,true,
+MAHLAN-BV-0901,"Mageu, original",Clear Spring,beverages,case,6 x 1 litre,6,109.49,,standard,true,11,1,200,2010000000991,12010000000998,6,Traditional fermented maize drink.,true,
+MAHLAN-BV-0902,"Mageu, original",Sunny Farm,beverages,case,6 x 1 litre,6,117.79,,standard,true,298,1,200,2010000001004,12010000001001,6,Traditional fermented maize drink.,true,
+MAHLAN-BV-1001,"Iced tea, peach",Clear Spring,beverages,case,12 x 500 ml,12,136.29,154.39,standard,true,339,1,200,2010000001011,12010000001018,6,Peach iced tea.,true,
+MAHLAN-SN-0000,"Potato chips, salt & vinegar",Crunch Kasi,snacks_confectionery,case,48 x 36 g,48,215.59,266.79,standard,true,145,1,200,2010000001028,12010000001025,1.728,Crisp potato chips.,true,
+MAHLAN-SN-0001,"Potato chips, salt & vinegar",Candy Corner,snacks_confectionery,case,48 x 36 g,48,231.89,,standard,true,3,1,200,2010000001035,12010000001032,1.728,Crisp potato chips.,true,
+MAHLAN-SN-0002,"Potato chips, salt & vinegar",Cocoa Joy,snacks_confectionery,case,48 x 36 g,48,255.49,,standard,true,133,1,200,2010000001042,12010000001049,1.728,Crisp potato chips.,true,
+MAHLAN-SN-0010,"Potato chips, salt & vinegar",Crunch Kasi,snacks_confectionery,case,20 x 125 g,20,271.19,,standard,true,6,1,200,2010000001059,12010000001056,2.5,Crisp potato chips.,true,
+MAHLAN-SN-0011,"Potato chips, salt & vinegar",Candy Corner,snacks_confectionery,case,20 x 125 g,20,298.29,,standard,true,4,1,200,2010000001066,12010000001063,2.5,Crisp potato chips.,true,
+MAHLAN-SN-0012,"Potato chips, salt & vinegar",Cocoa Joy,snacks_confectionery,case,20 x 125 g,20,318.39,373.79,standard,true,276,1,200,2010000001073,12010000001070,2.5,Crisp potato chips.,true,
+MAHLAN-SN-0100,"Potato chips, cheese & onion",Crunch Kasi,snacks_confectionery,case,48 x 36 g,48,215.39,,standard,true,143,1,200,2010000001080,12010000001087,1.728,Crisp potato chips.,true,
+MAHLAN-SN-0101,"Potato chips, cheese & onion",Candy Corner,snacks_confectionery,case,48 x 36 g,48,234.69,,standard,true,252,1,200,2010000001097,12010000001094,1.728,Crisp potato chips.,true,
+MAHLAN-SN-0200,"Maize snacks, cheese",Crunch Kasi,snacks_confectionery,case,50 x 25 g,50,116.49,,standard,true,26,1,200,2010000001103,12010000001100,1.25,Cheese-flavoured maize puffs.,true,
+MAHLAN-SN-0201,"Maize snacks, cheese",Candy Corner,snacks_confectionery,case,50 x 25 g,50,125.99,,standard,true,362,1,200,2010000001110,12010000001117,1.25,Cheese-flavoured maize puffs.,true,
+MAHLAN-SN-0202,"Maize snacks, cheese",Cocoa Joy,snacks_confectionery,case,50 x 25 g,50,137.59,,standard,true,76,1,200,2010000001127,12010000001124,1.25,Cheese-flavoured maize puffs.,true,
+MAHLAN-SN-0300,"Maize snacks, spicy",Crunch Kasi,snacks_confectionery,case,50 x 25 g,50,119.69,,standard,true,197,1,200,2010000001134,12010000001131,1.25,Spicy maize puffs.,true,
+MAHLAN-SN-0301,"Maize snacks, spicy",Candy Corner,snacks_confectionery,case,50 x 25 g,50,129.59,,standard,true,194,1,200,2010000001141,12010000001148,1.25,Spicy maize puffs.,true,
+MAHLAN-SN-0302,"Maize snacks, spicy",Cocoa Joy,snacks_confectionery,case,50 x 25 g,50,136.99,,standard,true,355,1,200,2010000001158,12010000001155,1.25,Spicy maize puffs.,true,
+MAHLAN-SN-0400,Fruit lollipops,Crunch Kasi,snacks_confectionery,pack,100 pieces,100,53.99,,standard,true,376,1,200,2010000001165,12010000001162,,Assorted fruit lollipops.,true,
+MAHLAN-SN-0401,Fruit lollipops,Candy Corner,snacks_confectionery,pack,100 pieces,100,59.19,,standard,true,84,1,200,2010000001172,12010000001179,,Assorted fruit lollipops.,true,
+MAHLAN-SN-0402,Fruit lollipops,Cocoa Joy,snacks_confectionery,pack,100 pieces,100,62.69,,standard,true,378,1,200,2010000001189,12010000001186,,Assorted fruit lollipops.,true,
+MAHLAN-SN-0500,Milk chocolate bars,Crunch Kasi,snacks_confectionery,case,24 x 40 g,24,198.09,,standard,true,366,1,200,2010000001196,12010000001193,0.96,Milk chocolate bars.,true,
+MAHLAN-SN-0501,Milk chocolate bars,Candy Corner,snacks_confectionery,case,24 x 40 g,24,214.49,264.69,standard,true,241,1,200,2010000001202,12010000001209,0.96,Milk chocolate bars.,true,
+MAHLAN-SN-0502,Milk chocolate bars,Cocoa Joy,snacks_confectionery,case,24 x 40 g,24,236.89,,standard,true,95,1,200,2010000001219,12010000001216,0.96,Milk chocolate bars.,true,
+MAHLAN-SN-0600,Mint chewing gum,Crunch Kasi,snacks_confectionery,pack,100 pieces,100,45.59,55.89,standard,true,299,1,200,2010000001226,12010000001223,,Single mint gum pieces.,true,
+MAHLAN-SN-0601,Mint chewing gum,Candy Corner,snacks_confectionery,pack,100 pieces,100,48.39,,standard,true,0,1,200,2010000001233,12010000001230,,Single mint gum pieces.,true,
+MAHLAN-SN-0602,Mint chewing gum,Cocoa Joy,snacks_confectionery,pack,100 pieces,100,52.79,62.99,standard,true,273,1,200,2010000001240,12010000001247,,Single mint gum pieces.,true,
+MAHLAN-SN-0700,Toffees,Crunch Kasi,snacks_confectionery,pack,100 pieces,100,40.89,,standard,true,255,1,200,2010000001257,12010000001254,,Individually wrapped toffees.,true,
+MAHLAN-SN-0701,Toffees,Candy Corner,snacks_confectionery,pack,100 pieces,100,44.19,54.69,standard,true,7,1,200,2010000001264,12010000001261,,Individually wrapped toffees.,true,
+MAHLAN-SN-0702,Toffees,Cocoa Joy,snacks_confectionery,pack,100 pieces,100,48.29,,standard,true,247,1,200,2010000001271,12010000001278,,Individually wrapped toffees.,true,
+MAHLAN-SN-0800,Marie biscuits,Crunch Kasi,snacks_confectionery,case,12 x 200 g,12,161.39,,standard,true,266,1,200,2010000001288,12010000001285,2.4,Plain tea biscuits.,true,
+MAHLAN-SN-0801,Marie biscuits,Candy Corner,snacks_confectionery,case,12 x 200 g,12,179.39,223.29,standard,true,192,1,200,2010000001295,12010000001292,2.4,Plain tea biscuits.,true,
+MAHLAN-SN-0802,Marie biscuits,Cocoa Joy,snacks_confectionery,case,12 x 200 g,12,193.59,,standard,true,26,1,200,2010000001301,12010000001308,2.4,Plain tea biscuits.,true,
+MAHLAN-SN-0900,"Cream biscuits, vanilla",Crunch Kasi,snacks_confectionery,case,12 x 200 g,12,177.99,,standard,true,169,1,200,2010000001318,12010000001315,2.4,Vanilla cream biscuits.,true,
+MAHLAN-SN-0901,"Cream biscuits, vanilla",Candy Corner,snacks_confectionery,case,12 x 200 g,12,193.99,,standard,true,267,1,200,2010000001325,12010000001322,2.4,Vanilla cream biscuits.,true,
+MAHLAN-SN-0902,"Cream biscuits, vanilla",Cocoa Joy,snacks_confectionery,case,12 x 200 g,12,210.09,,standard,true,19,1,200,2010000001332,12010000001339,2.4,Vanilla cream biscuits.,true,
+MAHLAN-SN-1000,Salted peanuts,Crunch Kasi,snacks_confectionery,case,24 x 50 g,24,137.89,,standard,true,380,1,200,2010000001349,12010000001346,1.2,Roasted salted peanuts.,true,
+MAHLAN-SN-1001,Salted peanuts,Candy Corner,snacks_confectionery,case,24 x 50 g,24,148.39,,standard,true,361,1,200,2010000001356,12010000001353,1.2,Roasted salted peanuts.,true,
+MAHLAN-SN-1002,Salted peanuts,Cocoa Joy,snacks_confectionery,case,24 x 50 g,24,157.29,,standard,true,9,1,200,2010000001363,12010000001360,1.2,Roasted salted peanuts.,true,
+MAHLAN-HC-0000,Dishwashing liquid,Sparkle,household_cleaning,case,12 x 750 ml,12,216.59,,standard,true,67,1,200,2010000001370,12010000001377,9,Lemon dishwashing liquid.,true,
+MAHLAN-HC-0002,Dishwashing liquid,Pure White,household_cleaning,case,12 x 750 ml,12,258.59,,standard,true,23,1,200,2010000001387,12010000001384,9,Lemon dishwashing liquid.,true,
+MAHLAN-HC-0010,Dishwashing liquid,Sparkle,household_cleaning,case,4 x 5 litre,4,268.09,,standard,true,68,1,200,2010000001394,12010000001391,20,Lemon dishwashing liquid.,true,
+MAHLAN-HC-0011,Dishwashing liquid,Bright Wash,household_cleaning,case,4 x 5 litre,4,300.19,,standard,true,338,1,200,2010000001400,12010000001407,20,Lemon dishwashing liquid.,true,
+MAHLAN-HC-0012,Dishwashing liquid,Pure White,household_cleaning,case,4 x 5 litre,4,319.29,392.29,standard,true,351,1,200,2010000001417,12010000001414,20,Lemon dishwashing liquid.,true,
+MAHLAN-HC-0100,Hand washing powder,Sparkle,household_cleaning,bag,2 kg,1,67.49,81.19,standard,true,0,1,200,2010000001424,,2,Washing powder for hand wash.,true,
+MAHLAN-HC-0101,Hand washing powder,Bright Wash,household_cleaning,bag,2 kg,1,74.39,,standard,true,0,1,200,2010000001431,,2,Washing powder for hand wash.,true,
+MAHLAN-HC-0102,Hand washing powder,Pure White,household_cleaning,bag,2 kg,1,78.19,,standard,true,122,1,200,2010000001448,,2,Washing powder for hand wash.,true,
+MAHLAN-HC-0111,Hand washing powder,Bright Wash,household_cleaning,bag,5 kg,1,165.89,,standard,true,33,1,200,2010000001455,,5,Washing powder for hand wash.,true,
+MAHLAN-HC-0112,Hand washing powder,Pure White,household_cleaning,bag,5 kg,1,178.69,,standard,true,3,1,200,2010000001462,,5,Washing powder for hand wash.,true,
+MAHLAN-HC-0200,Thick bleach,Sparkle,household_cleaning,case,12 x 750 ml,12,162.09,,standard,true,319,1,200,2010000001479,12010000001476,9,Thick household bleach.,true,
+MAHLAN-HC-0201,Thick bleach,Bright Wash,household_cleaning,case,12 x 750 ml,12,180.29,,standard,true,2,1,200,2010000001486,12010000001483,9,Thick household bleach.,true,
+MAHLAN-HC-0202,Thick bleach,Pure White,household_cleaning,case,12 x 750 ml,12,193.99,,standard,true,353,1,200,2010000001493,12010000001490,9,Thick household bleach.,true,
+MAHLAN-HC-0300,Multi-purpose cleaner,Sparkle,household_cleaning,case,12 x 750 ml,12,202.89,,standard,true,349,1,200,2010000001509,12010000001506,9,"Cleans floors, tiles and counters.",true,
+MAHLAN-HC-0301,Multi-purpose cleaner,Bright Wash,household_cleaning,case,12 x 750 ml,12,214.99,,standard,true,368,1,200,2010000001516,12010000001513,9,"Cleans floors, tiles and counters.",true,
+MAHLAN-HC-0302,Multi-purpose cleaner,Pure White,household_cleaning,case,12 x 750 ml,12,229.19,284.69,standard,true,3,1,200,2010000001523,12010000001520,9,"Cleans floors, tiles and counters.",true,
+MAHLAN-HC-0400,"Toilet paper, 1-ply",Sparkle,household_cleaning,pack,48 rolls,48,175.19,,standard,true,192,1,200,2010000001530,12010000001537,,Single-ply toilet rolls.,true,
+MAHLAN-HC-0401,"Toilet paper, 1-ply",Bright Wash,household_cleaning,pack,48 rolls,48,187.89,,standard,true,90,1,200,2010000001547,12010000001544,,Single-ply toilet rolls.,true,
+MAHLAN-HC-0402,"Toilet paper, 1-ply",Pure White,household_cleaning,pack,48 rolls,48,199.29,,standard,true,334,1,200,2010000001554,12010000001551,,Single-ply toilet rolls.,true,
+MAHLAN-HC-0500,"Toilet paper, 2-ply",Sparkle,household_cleaning,pack,24 rolls,24,162.39,,standard,true,0,1,200,2010000001561,12010000001568,,Two-ply toilet rolls.,true,
+MAHLAN-HC-0501,"Toilet paper, 2-ply",Bright Wash,household_cleaning,pack,24 rolls,24,175.19,,standard,true,166,1,200,2010000001578,12010000001575,,Two-ply toilet rolls.,true,
+MAHLAN-HC-0502,"Toilet paper, 2-ply",Pure White,household_cleaning,pack,24 rolls,24,190.99,,standard,true,78,1,200,2010000001585,12010000001582,,Two-ply toilet rolls.,true,
+MAHLAN-HC-0602,Bath soap bars,Pure White,household_cleaning,case,48 x 150 g,48,345.09,,standard,true,38,1,200,2010000001592,12010000001599,7.2,Family soap bars.,true,
+MAHLAN-HC-0700,Laundry bar soap,Sparkle,household_cleaning,case,24 x 500 g,24,266.69,,standard,true,31,1,200,2010000001608,12010000001605,12,Blue laundry bars.,true,
+MAHLAN-HC-0701,Laundry bar soap,Bright Wash,household_cleaning,case,24 x 500 g,24,298.59,,standard,true,281,1,200,2010000001615,12010000001612,12,Blue laundry bars.,true,
+MAHLAN-HC-0702,Laundry bar soap,Pure White,household_cleaning,case,24 x 500 g,24,324.49,,standard,true,375,1,200,2010000001622,12010000001629,12,Blue laundry bars.,true,
+MAHLAN-HC-0800,Floor polish,Sparkle,household_cleaning,case,12 x 400 ml,12,325.09,,standard,true,389,1,200,2010000001639,12010000001636,4.8,Red floor polish.,true,
+MAHLAN-HC-0801,Floor polish,Bright Wash,household_cleaning,case,12 x 400 ml,12,354.29,,standard,true,255,1,200,2010000001646,12010000001643,4.8,Red floor polish.,true,
+MAHLAN-HC-0900,Scouring pads,Sparkle,household_cleaning,pack,50 pads,50,90.79,,standard,true,193,1,200,2010000001653,12010000001650,,Green scouring pads.,true,
+MAHLAN-HC-0901,Scouring pads,Bright Wash,household_cleaning,pack,50 pads,50,100.19,118.09,standard,true,275,1,200,2010000001660,12010000001667,,Green scouring pads.,true,
+MAHLAN-HC-0902,Scouring pads,Pure White,household_cleaning,pack,50 pads,50,105.29,121.79,standard,true,359,1,200,2010000001677,12010000001674,,Green scouring pads.,true,
+MAHLAN-HC-1000,"Refuse bags, black",Sparkle,household_cleaning,bundle,200 bags,200,164.99,,standard,true,118,1,200,2010000001684,12010000001681,,Heavy-duty black bags.,true,
+MAHLAN-HC-1001,"Refuse bags, black",Bright Wash,household_cleaning,bundle,200 bags,200,179.09,,standard,true,227,1,200,2010000001691,12010000001698,,Heavy-duty black bags.,true,
+MAHLAN-HC-1002,"Refuse bags, black",Pure White,household_cleaning,bundle,200 bags,200,188.59,222.49,standard,true,52,1,200,2010000001707,12010000001704,,Heavy-duty black bags.,true,
+MAHLAN-PC-0000,Petroleum jelly,Skin Guard,personal_care,case,12 x 250 ml,12,182.59,,standard,true,50,1,200,2010000001714,12010000001711,3,Pure petroleum jelly.,true,
+MAHLAN-PC-0001,Petroleum jelly,Bright Smile,personal_care,case,12 x 250 ml,12,193.99,,standard,true,284,1,200,2010000001721,12010000001728,3,Pure petroleum jelly.,true,
+MAHLAN-PC-0002,Petroleum jelly,Fresh Day,personal_care,case,12 x 250 ml,12,209.49,260.09,standard,true,164,1,200,2010000001738,12010000001735,3,Pure petroleum jelly.,true,
+MAHLAN-PC-0100,Aqueous body lotion,Skin Guard,personal_care,case,6 x 400 ml,6,197.99,,standard,true,272,1,200,2010000001745,12010000001742,2.4,Aqueous body lotion.,true,
+MAHLAN-PC-0101,Aqueous body lotion,Bright Smile,personal_care,case,6 x 400 ml,6,215.09,,standard,true,375,1,200,2010000001752,12010000001759,2.4,Aqueous body lotion.,true,
+MAHLAN-PC-0102,Aqueous body lotion,Fresh Day,personal_care,case,6 x 400 ml,6,237.49,266.99,standard,true,1,1,200,2010000001769,12010000001766,2.4,Aqueous body lotion.,true,
+MAHLAN-PC-0200,Fluoride toothpaste,Skin Guard,personal_care,case,24 x 100 ml,24,266.29,,standard,true,390,1,200,2010000001776,12010000001773,2.4,Fluoride toothpaste.,true,
+MAHLAN-PC-0201,Fluoride toothpaste,Bright Smile,personal_care,case,24 x 100 ml,24,295.29,,standard,true,264,1,200,2010000001783,12010000001780,2.4,Fluoride toothpaste.,true,
+MAHLAN-PC-0202,Fluoride toothpaste,Fresh Day,personal_care,case,24 x 100 ml,24,312.69,,standard,true,219,1,200,2010000001790,12010000001797,2.4,Fluoride toothpaste.,true,
+MAHLAN-PC-0300,"Toothbrushes, medium",Skin Guard,personal_care,pack,24 brushes,24,106.89,,standard,true,381,1,200,2010000001806,12010000001803,,Medium toothbrushes.,true,
+MAHLAN-PC-0301,"Toothbrushes, medium",Bright Smile,personal_care,pack,24 brushes,24,118.09,,standard,true,294,1,200,2010000001813,12010000001810,,Medium toothbrushes.,true,
+MAHLAN-PC-0302,"Toothbrushes, medium",Fresh Day,personal_care,pack,24 brushes,24,126.19,,standard,true,214,1,200,2010000001820,12010000001827,,Medium toothbrushes.,true,
+MAHLAN-PC-0400,Roll-on deodorant,Skin Guard,personal_care,case,12 x 50 ml,12,217.89,,standard,true,74,1,200,2010000001837,12010000001834,0.6,48-hour roll-on.,true,
+MAHLAN-PC-0401,Roll-on deodorant,Bright Smile,personal_care,case,12 x 50 ml,12,234.49,,standard,true,92,1,200,2010000001844,12010000001841,0.6,48-hour roll-on.,true,
+MAHLAN-PC-0402,Roll-on deodorant,Fresh Day,personal_care,case,12 x 50 ml,12,255.09,,standard,true,251,1,200,2010000001851,12010000001858,0.6,48-hour roll-on.,true,
+MAHLAN-PC-0500,Hair food,Skin Guard,personal_care,case,12 x 125 ml,12,178.19,,standard,true,190,1,200,2010000001868,12010000001865,1.5,Moisturising hair food.,true,
+MAHLAN-PC-0501,Hair food,Bright Smile,personal_care,case,12 x 125 ml,12,193.59,,standard,true,158,1,200,2010000001875,12010000001872,1.5,Moisturising hair food.,true,
+MAHLAN-PC-0502,Hair food,Fresh Day,personal_care,case,12 x 125 ml,12,208.39,,standard,true,165,1,200,2010000001882,12010000001889,1.5,Moisturising hair food.,true,
+MAHLAN-PC-0600,Sanitary pads,Skin Guard,personal_care,case,24 x 10 pads,1,428.39,,standard,true,0,1,200,2010000001899,,,Maxi thick pads.,true,
+MAHLAN-PC-0601,Sanitary pads,Bright Smile,personal_care,case,24 x 10 pads,1,477.29,590.59,standard,true,42,1,200,2010000001905,,,Maxi thick pads.,true,
+MAHLAN-PC-0602,Sanitary pads,Fresh Day,personal_care,case,24 x 10 pads,1,513.79,,standard,true,349,1,200,2010000001912,,,Maxi thick pads.,true,
+MAHLAN-PC-0700,"Razors, twin blade",Skin Guard,personal_care,pack,50 razors,50,133.99,,standard,true,0,1,200,2010000001929,12010000001926,,Disposable twin-blade razors.,true,
+MAHLAN-PC-0701,"Razors, twin blade",Bright Smile,personal_care,pack,50 razors,50,145.09,,standard,true,398,1,200,2010000001936,12010000001933,,Disposable twin-blade razors.,true,
+MAHLAN-PC-0702,"Razors, twin blade",Fresh Day,personal_care,pack,50 razors,50,159.49,,standard,true,155,1,200,2010000001943,12010000001940,,Disposable twin-blade razors.,true,
+MAHLAN-DC-0000,Long-life full cream milk,Farm Fresh,dairy_chilled,case,6 x 1 litre,6,97.69,,zero,true,5,1,200,2010000001950,12010000001957,6,UHT milk; no fridge needed until opened.,true,
+MAHLAN-DC-0001,Long-life full cream milk,Dairy Best,dairy_chilled,case,6 x 1 litre,6,106.19,126.69,zero,true,10,1,200,2010000001967,12010000001964,6,UHT milk; no fridge needed until opened.,true,
+MAHLAN-DC-0002,Long-life full cream milk,Golden Spread,dairy_chilled,case,6 x 1 litre,6,115.99,,zero,true,214,1,200,2010000001974,12010000001971,6,UHT milk; no fridge needed until opened.,true,
+MAHLAN-DC-0010,Long-life full cream milk,Farm Fresh,dairy_chilled,case,12 x 1 litre,12,193.09,,zero,true,226,1,200,2010000001981,12010000001988,12,UHT milk; no fridge needed until opened.,true,
+MAHLAN-DC-0011,Long-life full cream milk,Dairy Best,dairy_chilled,case,12 x 1 litre,12,203.69,,zero,true,87,1,200,2010000001998,12010000001995,12,UHT milk; no fridge needed until opened.,true,
+MAHLAN-DC-0012,Long-life full cream milk,Golden Spread,dairy_chilled,case,12 x 1 litre,12,227.39,,zero,true,277,1,200,2010000002001,12010000002008,12,UHT milk; no fridge needed until opened.,true,
+MAHLAN-DC-0100,Maas (amasi),Farm Fresh,dairy_chilled,case,6 x 2 litre,6,181.19,,zero,true,74,1,200,2010000002018,12010000002015,12,Thick fermented milk.,true,
+MAHLAN-DC-0102,Maas (amasi),Golden Spread,dairy_chilled,case,6 x 2 litre,6,211.89,,zero,true,335,1,200,2010000002025,12010000002022,12,Thick fermented milk.,true,
+MAHLAN-DC-0200,Fresh full cream milk,Farm Fresh,dairy_chilled,crate,6 x 2 litre,6,161.39,,zero,true,375,1,200,2010000002032,12010000002039,12,Keep chilled.,true,
+MAHLAN-DC-0201,Fresh full cream milk,Dairy Best,dairy_chilled,crate,6 x 2 litre,6,174.49,204.39,zero,true,2,1,200,2010000002049,12010000002046,12,Keep chilled.,true,
+MAHLAN-DC-0202,Fresh full cream milk,Golden Spread,dairy_chilled,crate,6 x 2 litre,6,193.39,,zero,true,199,1,200,2010000002056,12010000002053,12,Keep chilled.,true,
+MAHLAN-DC-0300,Margarine brick,Farm Fresh,dairy_chilled,case,12 x 500 g,12,266.99,,standard,true,65,1,200,2010000002063,12010000002060,6,Margarine bricks for bread.,true,
+MAHLAN-DC-0301,Margarine brick,Dairy Best,dairy_chilled,case,12 x 500 g,12,295.39,,standard,true,10,1,200,2010000002070,12010000002077,6,Margarine bricks for bread.,true,
+MAHLAN-DC-0302,Margarine brick,Golden Spread,dairy_chilled,case,12 x 500 g,12,320.39,,standard,true,60,1,200,2010000002087,12010000002084,6,Margarine bricks for bread.,true,
+MAHLAN-DC-0401,Cheese slices,Dairy Best,dairy_chilled,pack,10 x 200 g,10,391.59,477.29,standard,true,98,1,200,2010000002094,12010000002091,2,Processed cheese slices.,true,
+MAHLAN-DC-0500,Plain yoghurt,Farm Fresh,dairy_chilled,case,6 x 1 kg,6,201.09,,standard,true,259,1,200,2010000002100,12010000002107,6,Plain drinking yoghurt.,true,
+MAHLAN-DC-0501,Plain yoghurt,Dairy Best,dairy_chilled,case,6 x 1 kg,6,212.39,,standard,true,172,1,200,2010000002117,12010000002114,6,Plain drinking yoghurt.,true,
+MAHLAN-DC-0502,Plain yoghurt,Golden Spread,dairy_chilled,case,6 x 1 kg,6,235.59,265.29,standard,true,339,1,200,2010000002124,12010000002121,6,Plain drinking yoghurt.,true,
+MAHLAN-DC-0601,Fruit yoghurt cups,Dairy Best,dairy_chilled,case,24 x 100 g,24,188.59,,standard,true,279,1,200,2010000002131,12010000002138,2.4,Assorted fruit yoghurt.,true,
+MAHLAN-DC-0602,Fruit yoghurt cups,Golden Spread,dairy_chilled,case,24 x 100 g,24,199.79,,standard,true,6,1,200,2010000002148,12010000002145,2.4,Assorted fruit yoghurt.,true,
+MAHLAN-DC-0700,Polony,Farm Fresh,dairy_chilled,case,10 x 1 kg,10,422.19,,standard,true,9,1,200,2010000002155,12010000002152,10,Chilled polony rolls.,true,
+MAHLAN-DC-0701,Polony,Dairy Best,dairy_chilled,case,10 x 1 kg,10,443.39,,standard,true,0,1,200,2010000002162,12010000002169,10,Chilled polony rolls.,true,
+MAHLAN-DC-0702,Polony,Golden Spread,dairy_chilled,case,10 x 1 kg,10,482.59,,standard,true,176,1,200,2010000002179,12010000002176,10,Chilled polony rolls.,true,

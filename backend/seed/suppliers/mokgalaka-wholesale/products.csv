@@ -1,225 +1,225 @@
-product_code,name,brand,category,unit,pack_size,units_per_pack,price_rands,compare_at_rands,vat_rate,vat_included,stock,min_qty,max_qty,unit_barcode,case_barcode,weight_kg,description,active
-MOKGAL-FG-0000,Super maize meal,Kasi Gold,food_grocery,bag,10 kg,1,83.29,,zero,true,246,1,200,2080000000000,,10,Fine white maize meal for pap.,true
-MOKGAL-FG-0001,Super maize meal,Mill Street,food_grocery,bag,10 kg,1,90.79,,zero,true,111,1,200,2080000000017,,10,Fine white maize meal for pap.,true
-MOKGAL-FG-0002,Super maize meal,Harvest Tin,food_grocery,bag,10 kg,1,98.09,,zero,true,208,1,200,2080000000024,,10,Fine white maize meal for pap.,true
-MOKGAL-FG-0010,Super maize meal,Kasi Gold,food_grocery,bag,25 kg,1,195.59,243.39,zero,true,4,1,200,2080000000031,,25,Fine white maize meal for pap.,true
-MOKGAL-FG-0011,Super maize meal,Mill Street,food_grocery,bag,25 kg,1,207.09,,zero,true,172,1,200,2080000000048,,25,Fine white maize meal for pap.,true
-MOKGAL-FG-0012,Super maize meal,Harvest Tin,food_grocery,bag,25 kg,1,231.79,,zero,true,398,1,200,2080000000055,,25,Fine white maize meal for pap.,true
-MOKGAL-FG-0100,Long grain parboiled rice,Kasi Gold,food_grocery,bag,2 kg,1,37.29,,zero,true,180,1,200,2080000000062,,2,Non-sticky parboiled rice.,true
-MOKGAL-FG-0101,Long grain parboiled rice,Mill Street,food_grocery,bag,2 kg,1,39.89,,zero,true,107,1,200,2080000000079,,2,Non-sticky parboiled rice.,true
-MOKGAL-FG-0102,Long grain parboiled rice,Harvest Tin,food_grocery,bag,2 kg,1,43.79,,zero,true,46,1,200,2080000000086,,2,Non-sticky parboiled rice.,true
-MOKGAL-FG-0110,Long grain parboiled rice,Kasi Gold,food_grocery,bag,10 kg,1,160.29,,zero,true,206,1,200,2080000000093,,10,Non-sticky parboiled rice.,true
-MOKGAL-FG-0111,Long grain parboiled rice,Mill Street,food_grocery,bag,10 kg,1,168.49,195.09,zero,true,84,1,200,2080000000109,,10,Non-sticky parboiled rice.,true
-MOKGAL-FG-0112,Long grain parboiled rice,Harvest Tin,food_grocery,bag,10 kg,1,184.29,223.89,zero,true,371,1,200,2080000000116,,10,Non-sticky parboiled rice.,true
-MOKGAL-FG-0200,Cake flour,Kasi Gold,food_grocery,bag,2.5 kg,1,39.89,,standard,true,381,1,200,2080000000123,,2.5,White cake flour for baking and vetkoek.,true
-MOKGAL-FG-0201,Cake flour,Mill Street,food_grocery,bag,2.5 kg,1,43.79,,standard,true,219,1,200,2080000000130,,2.5,White cake flour for baking and vetkoek.,true
-MOKGAL-FG-0202,Cake flour,Harvest Tin,food_grocery,bag,2.5 kg,1,46.89,,standard,true,383,1,200,2080000000147,,2.5,White cake flour for baking and vetkoek.,true
-MOKGAL-FG-0210,Cake flour,Kasi Gold,food_grocery,bag,10 kg,1,131.99,160.29,standard,true,269,1,200,2080000000154,,10,White cake flour for baking and vetkoek.,true
-MOKGAL-FG-0211,Cake flour,Mill Street,food_grocery,bag,10 kg,1,139.39,,standard,true,321,1,200,2080000000161,,10,White cake flour for baking and vetkoek.,true
-MOKGAL-FG-0212,Cake flour,Harvest Tin,food_grocery,bag,10 kg,1,151.09,,standard,true,3,1,200,2080000000178,,10,White cake flour for baking and vetkoek.,true
-MOKGAL-FG-0300,White sugar,Kasi Gold,food_grocery,bag,2.5 kg,1,54.69,,standard,true,264,1,200,2080000000185,,2.5,Refined white sugar.,true
-MOKGAL-FG-0301,White sugar,Mill Street,food_grocery,bag,2.5 kg,1,59.69,,standard,true,13,1,200,2080000000192,,2.5,Refined white sugar.,true
-MOKGAL-FG-0302,White sugar,Harvest Tin,food_grocery,bag,2.5 kg,1,64.39,,standard,true,130,1,200,2080000000208,,2.5,Refined white sugar.,true
-MOKGAL-FG-0310,White sugar,Kasi Gold,food_grocery,bag,10 kg,1,207.29,,standard,true,38,1,200,2080000000215,,10,Refined white sugar.,true
-MOKGAL-FG-0311,White sugar,Mill Street,food_grocery,bag,10 kg,1,223.39,278.09,standard,true,245,1,200,2080000000222,,10,Refined white sugar.,true
-MOKGAL-FG-0312,White sugar,Harvest Tin,food_grocery,bag,10 kg,1,240.69,,standard,true,252,1,200,2080000000239,,10,Refined white sugar.,true
-MOKGAL-FG-0400,Brown sugar,Kasi Gold,food_grocery,bag,2 kg,1,41.39,,standard,true,258,1,200,2080000000246,,2,Soft brown sugar.,true
-MOKGAL-FG-0401,Brown sugar,Mill Street,food_grocery,bag,2 kg,1,45.19,53.49,standard,true,274,1,200,2080000000253,,2,Soft brown sugar.,true
-MOKGAL-FG-0402,Brown sugar,Harvest Tin,food_grocery,bag,2 kg,1,48.29,,standard,true,338,1,200,2080000000260,,2,Soft brown sugar.,true
-MOKGAL-FG-0500,Sunflower cooking oil,Kasi Gold,food_grocery,bottle,2 litre,1,65.89,,zero,true,61,1,200,2080000000277,,2,Pure sunflower oil.,true
-MOKGAL-FG-0501,Sunflower cooking oil,Mill Street,food_grocery,bottle,2 litre,1,69.29,,zero,true,55,1,200,2080000000284,,2,Pure sunflower oil.,true
-MOKGAL-FG-0502,Sunflower cooking oil,Harvest Tin,food_grocery,bottle,2 litre,1,75.59,90.19,zero,true,363,1,200,2080000000291,,2,Pure sunflower oil.,true
-MOKGAL-FG-0510,Sunflower cooking oil,Kasi Gold,food_grocery,bottle,5 litre,1,139.69,,zero,true,316,1,200,2080000000307,,5,Pure sunflower oil.,true
-MOKGAL-FG-0511,Sunflower cooking oil,Mill Street,food_grocery,bottle,5 litre,1,148.39,,zero,true,282,1,200,2080000000314,,5,Pure sunflower oil.,true
-MOKGAL-FG-0512,Sunflower cooking oil,Harvest Tin,food_grocery,bottle,5 litre,1,161.69,,zero,true,280,1,200,2080000000321,,5,Pure sunflower oil.,true
-MOKGAL-FG-0600,Baked beans in tomato sauce,Kasi Gold,food_grocery,case,24 x 410 g,24,275.49,,standard,true,98,1,200,2080000000338,12080000000335,9.84,A case of 24 tins.,true
-MOKGAL-FG-0601,Baked beans in tomato sauce,Mill Street,food_grocery,case,24 x 410 g,24,302.09,,standard,true,399,1,200,2080000000345,12080000000342,9.84,A case of 24 tins.,true
-MOKGAL-FG-0602,Baked beans in tomato sauce,Harvest Tin,food_grocery,case,24 x 410 g,24,320.19,,standard,true,3,1,200,2080000000352,12080000000359,9.84,A case of 24 tins.,true
-MOKGAL-FG-0700,Pilchards in tomato sauce,Kasi Gold,food_grocery,case,24 x 400 g,24,545.99,,zero,true,25,1,200,2080000000369,12080000000366,9.6,"Canned pilchards, a case of 24.",true
-MOKGAL-FG-0701,Pilchards in tomato sauce,Mill Street,food_grocery,case,24 x 400 g,24,594.39,741.49,zero,true,82,1,200,2080000000376,12080000000373,9.6,"Canned pilchards, a case of 24.",true
-MOKGAL-FG-0702,Pilchards in tomato sauce,Harvest Tin,food_grocery,case,24 x 400 g,24,640.09,,zero,true,0,1,200,2080000000383,12080000000380,9.6,"Canned pilchards, a case of 24.",true
-MOKGAL-FG-0800,Chicken instant noodles,Kasi Gold,food_grocery,case,40 x 73 g,40,182.19,216.49,standard,true,249,1,200,2080000000390,12080000000397,2.92,Chicken-flavoured instant noodles.,true
-MOKGAL-FG-0801,Chicken instant noodles,Mill Street,food_grocery,case,40 x 73 g,40,204.39,,standard,true,262,1,200,2080000000406,12080000000403,2.92,Chicken-flavoured instant noodles.,true
-MOKGAL-FG-0802,Chicken instant noodles,Harvest Tin,food_grocery,case,40 x 73 g,40,220.49,,standard,true,375,1,200,2080000000413,12080000000410,2.92,Chicken-flavoured instant noodles.,true
-MOKGAL-FG-0900,Samp,Kasi Gold,food_grocery,bag,5 kg,1,68.39,,zero,true,107,1,200,2080000000420,,5,Crushed dried maize kernels.,true
-MOKGAL-FG-0901,Samp,Mill Street,food_grocery,bag,5 kg,1,74.19,,zero,true,10,1,200,2080000000437,,5,Crushed dried maize kernels.,true
-MOKGAL-FG-0902,Samp,Harvest Tin,food_grocery,bag,5 kg,1,82.59,,zero,true,7,1,200,2080000000444,,5,Crushed dried maize kernels.,true
-MOKGAL-FG-1000,Sugar beans,Kasi Gold,food_grocery,bag,2 kg,1,61.09,,zero,true,0,1,200,2080000000451,,2,Dried speckled sugar beans.,true
-MOKGAL-FG-1001,Sugar beans,Mill Street,food_grocery,bag,2 kg,1,65.39,,zero,true,391,1,200,2080000000468,,2,Dried speckled sugar beans.,true
-MOKGAL-FG-1002,Sugar beans,Harvest Tin,food_grocery,bag,2 kg,1,71.89,,zero,true,195,1,200,2080000000475,,2,Dried speckled sugar beans.,true
-MOKGAL-FG-1100,Black tea bags,Kasi Gold,food_grocery,pack,100 bags,100,50.79,,standard,true,54,1,200,2080000000482,12080000000489,,Tagless black tea bags.,true
-MOKGAL-FG-1101,Black tea bags,Mill Street,food_grocery,pack,100 bags,100,54.39,,standard,true,16,1,200,2080000000499,12080000000496,,Tagless black tea bags.,true
-MOKGAL-FG-1102,Black tea bags,Harvest Tin,food_grocery,pack,100 bags,100,60.89,,standard,true,162,1,200,2080000000505,12080000000502,,Tagless black tea bags.,true
-MOKGAL-FG-1110,Black tea bags,Kasi Gold,food_grocery,pack,200 bags,200,92.79,,standard,true,67,1,200,2080000000512,12080000000519,,Tagless black tea bags.,true
-MOKGAL-FG-1111,Black tea bags,Mill Street,food_grocery,pack,200 bags,200,102.09,,standard,true,270,1,200,2080000000529,12080000000526,,Tagless black tea bags.,true
-MOKGAL-FG-1112,Black tea bags,Harvest Tin,food_grocery,pack,200 bags,200,107.89,,standard,true,315,1,200,2080000000536,12080000000533,,Tagless black tea bags.,true
-MOKGAL-FG-1200,Instant coffee,Kasi Gold,food_grocery,tin,250 g,1,84.09,,standard,true,159,1,200,2080000000543,,,Granulated instant coffee.,true
-MOKGAL-FG-1201,Instant coffee,Mill Street,food_grocery,tin,250 g,1,90.09,,standard,true,58,1,200,2080000000550,,,Granulated instant coffee.,true
-MOKGAL-FG-1202,Instant coffee,Harvest Tin,food_grocery,tin,250 g,1,97.49,,standard,true,213,1,200,2080000000567,,,Granulated instant coffee.,true
-MOKGAL-FG-1300,Iodated table salt,Kasi Gold,food_grocery,case,24 x 500 g,24,110.39,,standard,true,68,1,200,2080000000574,12080000000571,12,Fine iodated salt.,true
-MOKGAL-FG-1301,Iodated table salt,Mill Street,food_grocery,case,24 x 500 g,24,120.49,137.59,standard,true,323,1,200,2080000000581,12080000000588,12,Fine iodated salt.,true
-MOKGAL-FG-1302,Iodated table salt,Harvest Tin,food_grocery,case,24 x 500 g,24,128.19,,standard,true,384,1,200,2080000000598,12080000000595,12,Fine iodated salt.,true
-MOKGAL-FG-1400,"Peanut butter, smooth",Kasi Gold,food_grocery,case,12 x 400 g,12,384.99,,standard,true,161,1,200,2080000000604,12080000000601,4.8,Smooth peanut butter.,true
-MOKGAL-FG-1401,"Peanut butter, smooth",Mill Street,food_grocery,case,12 x 400 g,12,426.09,,standard,true,1,1,200,2080000000611,12080000000618,4.8,Smooth peanut butter.,true
-MOKGAL-FG-1402,"Peanut butter, smooth",Harvest Tin,food_grocery,case,12 x 400 g,12,454.49,,standard,true,183,1,200,2080000000628,12080000000625,4.8,Smooth peanut butter.,true
-MOKGAL-FG-1500,Apricot jam,Kasi Gold,food_grocery,case,12 x 450 g,12,331.69,,standard,true,149,1,200,2080000000635,12080000000632,5.4,Smooth apricot jam.,true
-MOKGAL-FG-1501,Apricot jam,Mill Street,food_grocery,case,12 x 450 g,12,362.89,,standard,true,5,1,200,2080000000642,12080000000649,5.4,Smooth apricot jam.,true
-MOKGAL-FG-1502,Apricot jam,Harvest Tin,food_grocery,case,12 x 450 g,12,391.49,,standard,true,218,1,200,2080000000659,12080000000656,5.4,Smooth apricot jam.,true
-MOKGAL-BV-0000,Cola soft drink,Fizz Co,beverages,case,24 x 330 ml cans,24,174.19,206.39,standard,true,222,1,200,2080000000666,12080000000663,7.92,"Cold drink, a full case.",true
-MOKGAL-BV-0001,Cola soft drink,Clear Spring,beverages,case,24 x 330 ml cans,24,192.59,,standard,true,141,1,200,2080000000673,12080000000670,7.92,"Cold drink, a full case.",true
-MOKGAL-BV-0002,Cola soft drink,Sunny Farm,beverages,case,24 x 330 ml cans,24,208.59,257.39,standard,true,201,1,200,2080000000680,12080000000687,7.92,"Cold drink, a full case.",true
-MOKGAL-BV-0011,Cola soft drink,Clear Spring,beverages,case,12 x 2 litre,12,262.29,,standard,true,300,1,200,2080000000697,12080000000694,24,"Cold drink, a full case.",true
-MOKGAL-BV-0012,Cola soft drink,Sunny Farm,beverages,case,12 x 2 litre,12,287.39,,standard,true,303,1,200,2080000000703,12080000000700,24,"Cold drink, a full case.",true
-MOKGAL-BV-0100,Orange soft drink,Fizz Co,beverages,case,24 x 330 ml cans,24,164.79,,standard,true,4,1,200,2080000000710,12080000000717,7.92,Orange-flavoured cold drink.,true
-MOKGAL-BV-0101,Orange soft drink,Clear Spring,beverages,case,24 x 330 ml cans,24,182.09,224.39,standard,true,1,1,200,2080000000727,12080000000724,7.92,Orange-flavoured cold drink.,true
-MOKGAL-BV-0102,Orange soft drink,Sunny Farm,beverages,case,24 x 330 ml cans,24,193.89,,standard,true,251,1,200,2080000000734,12080000000731,7.92,Orange-flavoured cold drink.,true
-MOKGAL-BV-0110,Orange soft drink,Fizz Co,beverages,case,12 x 2 litre,12,223.39,,standard,true,287,1,200,2080000000741,12080000000748,24,Orange-flavoured cold drink.,true
-MOKGAL-BV-0111,Orange soft drink,Clear Spring,beverages,case,12 x 2 litre,12,243.29,,standard,true,344,1,200,2080000000758,12080000000755,24,Orange-flavoured cold drink.,true
-MOKGAL-BV-0200,Lemon-lime soft drink,Fizz Co,beverages,case,24 x 330 ml cans,24,169.29,202.09,standard,true,157,1,200,2080000000765,12080000000762,7.92,Lemon-lime cold drink.,true
-MOKGAL-BV-0201,Lemon-lime soft drink,Clear Spring,beverages,case,24 x 330 ml cans,24,178.19,,standard,true,227,1,200,2080000000772,12080000000779,7.92,Lemon-lime cold drink.,true
-MOKGAL-BV-0202,Lemon-lime soft drink,Sunny Farm,beverages,case,24 x 330 ml cans,24,196.49,,standard,true,65,1,200,2080000000789,12080000000786,7.92,Lemon-lime cold drink.,true
-MOKGAL-BV-0300,Still water,Fizz Co,beverages,case,24 x 500 ml,24,91.59,,standard,true,3,1,200,2080000000796,12080000000793,12,Still spring water.,true
-MOKGAL-BV-0301,Still water,Clear Spring,beverages,case,24 x 500 ml,24,99.39,122.69,standard,true,226,1,200,2080000000802,12080000000809,12,Still spring water.,true
-MOKGAL-BV-0302,Still water,Sunny Farm,beverages,case,24 x 500 ml,24,110.69,126.19,standard,true,116,1,200,2080000000819,12080000000816,12,Still spring water.,true
-MOKGAL-BV-0310,Still water,Fizz Co,beverages,case,6 x 5 litre,6,111.09,,standard,true,31,1,200,2080000000826,12080000000823,30,Still spring water.,true
-MOKGAL-BV-0311,Still water,Clear Spring,beverages,case,6 x 5 litre,6,120.69,,standard,true,8,1,200,2080000000833,12080000000830,30,Still spring water.,true
-MOKGAL-BV-0312,Still water,Sunny Farm,beverages,case,6 x 5 litre,6,132.69,,standard,true,52,1,200,2080000000840,12080000000847,30,Still spring water.,true
-MOKGAL-BV-0400,Sparkling water,Fizz Co,beverages,case,24 x 500 ml,24,109.39,,standard,true,256,1,200,2080000000857,12080000000854,12,Sparkling spring water.,true
-MOKGAL-BV-0401,Sparkling water,Clear Spring,beverages,case,24 x 500 ml,24,119.99,,standard,true,41,1,200,2080000000864,12080000000861,12,Sparkling spring water.,true
-MOKGAL-BV-0402,Sparkling water,Sunny Farm,beverages,case,24 x 500 ml,24,130.69,,standard,true,29,1,200,2080000000871,12080000000878,12,Sparkling spring water.,true
-MOKGAL-BV-0500,Fruit juice blend,Fizz Co,beverages,case,6 x 1 litre,6,119.19,,standard,true,298,1,200,2080000000888,12080000000885,6,100% fruit juice blend.,true
-MOKGAL-BV-0501,Fruit juice blend,Clear Spring,beverages,case,6 x 1 litre,6,128.79,,standard,true,171,1,200,2080000000895,12080000000892,6,100% fruit juice blend.,true
-MOKGAL-BV-0502,Fruit juice blend,Sunny Farm,beverages,case,6 x 1 litre,6,142.69,171.69,standard,true,0,1,200,2080000000901,12080000000908,6,100% fruit juice blend.,true
-MOKGAL-BV-0510,Fruit juice blend,Fizz Co,beverages,case,24 x 200 ml,24,150.19,,standard,true,329,1,200,2080000000918,12080000000915,4.8,100% fruit juice blend.,true
-MOKGAL-BV-0511,Fruit juice blend,Clear Spring,beverages,case,24 x 200 ml,24,163.99,,standard,true,197,1,200,2080000000925,12080000000922,4.8,100% fruit juice blend.,true
-MOKGAL-BV-0512,Fruit juice blend,Sunny Farm,beverages,case,24 x 200 ml,24,171.99,,standard,true,391,1,200,2080000000932,12080000000939,4.8,100% fruit juice blend.,true
-MOKGAL-BV-0600,Dairy fruit mix drink,Fizz Co,beverages,case,12 x 500 ml,12,155.19,,standard,true,0,1,200,2080000000949,12080000000946,6,Fruit and dairy blend.,true
-MOKGAL-BV-0601,Dairy fruit mix drink,Clear Spring,beverages,case,12 x 500 ml,12,170.09,,standard,true,394,1,200,2080000000956,12080000000953,6,Fruit and dairy blend.,true
-MOKGAL-BV-0602,Dairy fruit mix drink,Sunny Farm,beverages,case,12 x 500 ml,12,188.29,,standard,true,10,1,200,2080000000963,12080000000960,6,Fruit and dairy blend.,true
-MOKGAL-BV-0700,Energy drink,Fizz Co,beverages,case,24 x 500 ml,24,338.69,,standard,true,270,1,200,2080000000970,12080000000977,12,Energy drink cans.,true
-MOKGAL-BV-0701,Energy drink,Clear Spring,beverages,case,24 x 500 ml,24,356.09,,standard,true,5,1,200,2080000000987,12080000000984,12,Energy drink cans.,true
-MOKGAL-BV-0702,Energy drink,Sunny Farm,beverages,case,24 x 500 ml,24,390.99,462.49,standard,true,25,1,200,2080000000994,12080000000991,12,Energy drink cans.,true
-MOKGAL-BV-0800,"Cordial, orange",Fizz Co,beverages,case,6 x 1 litre,6,137.99,161.99,standard,true,68,1,200,2080000001007,12080000001004,6,Dilute to taste.,true
-MOKGAL-BV-0801,"Cordial, orange",Clear Spring,beverages,case,6 x 1 litre,6,148.89,,standard,true,147,1,200,2080000001014,12080000001011,6,Dilute to taste.,true
-MOKGAL-BV-0802,"Cordial, orange",Sunny Farm,beverages,case,6 x 1 litre,6,159.89,,standard,true,167,1,200,2080000001021,12080000001028,6,Dilute to taste.,true
-MOKGAL-BV-0900,"Mageu, original",Fizz Co,beverages,case,6 x 1 litre,6,100.49,,standard,true,45,1,200,2080000001038,12080000001035,6,Traditional fermented maize drink.,true
-MOKGAL-BV-0901,"Mageu, original",Clear Spring,beverages,case,6 x 1 litre,6,109.79,,standard,true,0,1,200,2080000001045,12080000001042,6,Traditional fermented maize drink.,true
-MOKGAL-BV-0902,"Mageu, original",Sunny Farm,beverages,case,6 x 1 litre,6,121.59,,standard,true,1,1,200,2080000001052,12080000001059,6,Traditional fermented maize drink.,true
-MOKGAL-BV-1000,"Iced tea, peach",Fizz Co,beverages,case,12 x 500 ml,12,127.29,143.79,standard,true,117,1,200,2080000001069,12080000001066,6,Peach iced tea.,true
-MOKGAL-BV-1002,"Iced tea, peach",Sunny Farm,beverages,case,12 x 500 ml,12,150.29,,standard,true,264,1,200,2080000001076,12080000001073,6,Peach iced tea.,true
-MOKGAL-SN-0000,"Potato chips, salt & vinegar",Crunch Kasi,snacks_confectionery,case,48 x 36 g,48,220.59,,standard,true,36,1,200,2080000001083,12080000001080,1.728,Crisp potato chips.,true
-MOKGAL-SN-0001,"Potato chips, salt & vinegar",Candy Corner,snacks_confectionery,case,48 x 36 g,48,240.99,,standard,true,223,1,200,2080000001090,12080000001097,1.728,Crisp potato chips.,true
-MOKGAL-SN-0002,"Potato chips, salt & vinegar",Cocoa Joy,snacks_confectionery,case,48 x 36 g,48,257.89,,standard,true,304,1,200,2080000001106,12080000001103,1.728,Crisp potato chips.,true
-MOKGAL-SN-0010,"Potato chips, salt & vinegar",Crunch Kasi,snacks_confectionery,case,20 x 125 g,20,275.19,,standard,true,291,1,200,2080000001113,12080000001110,2.5,Crisp potato chips.,true
-MOKGAL-SN-0011,"Potato chips, salt & vinegar",Candy Corner,snacks_confectionery,case,20 x 125 g,20,296.79,,standard,true,282,1,200,2080000001120,12080000001127,2.5,Crisp potato chips.,true
-MOKGAL-SN-0012,"Potato chips, salt & vinegar",Cocoa Joy,snacks_confectionery,case,20 x 125 g,20,323.69,,standard,true,1,1,200,2080000001137,12080000001134,2.5,Crisp potato chips.,true
-MOKGAL-SN-0100,"Potato chips, cheese & onion",Crunch Kasi,snacks_confectionery,case,48 x 36 g,48,219.79,,standard,true,185,1,200,2080000001144,12080000001141,1.728,Crisp potato chips.,true
-MOKGAL-SN-0101,"Potato chips, cheese & onion",Candy Corner,snacks_confectionery,case,48 x 36 g,48,241.29,,standard,true,346,1,200,2080000001151,12080000001158,1.728,Crisp potato chips.,true
-MOKGAL-SN-0102,"Potato chips, cheese & onion",Cocoa Joy,snacks_confectionery,case,48 x 36 g,48,261.69,,standard,true,1,1,200,2080000001168,12080000001165,1.728,Crisp potato chips.,true
-MOKGAL-SN-0200,"Maize snacks, cheese",Crunch Kasi,snacks_confectionery,case,50 x 25 g,50,121.49,,standard,true,108,1,200,2080000001175,12080000001172,1.25,Cheese-flavoured maize puffs.,true
-MOKGAL-SN-0201,"Maize snacks, cheese",Candy Corner,snacks_confectionery,case,50 x 25 g,50,132.89,,standard,true,338,1,200,2080000001182,12080000001189,1.25,Cheese-flavoured maize puffs.,true
-MOKGAL-SN-0202,"Maize snacks, cheese",Cocoa Joy,snacks_confectionery,case,50 x 25 g,50,142.19,,standard,true,129,1,200,2080000001199,12080000001196,1.25,Cheese-flavoured maize puffs.,true
-MOKGAL-SN-0300,"Maize snacks, spicy",Crunch Kasi,snacks_confectionery,case,50 x 25 g,50,119.89,,standard,true,0,1,200,2080000001205,12080000001202,1.25,Spicy maize puffs.,true
-MOKGAL-SN-0301,"Maize snacks, spicy",Candy Corner,snacks_confectionery,case,50 x 25 g,50,130.69,,standard,true,327,1,200,2080000001212,12080000001219,1.25,Spicy maize puffs.,true
-MOKGAL-SN-0302,"Maize snacks, spicy",Cocoa Joy,snacks_confectionery,case,50 x 25 g,50,140.39,,standard,true,60,1,200,2080000001229,12080000001226,1.25,Spicy maize puffs.,true
-MOKGAL-SN-0400,Fruit lollipops,Crunch Kasi,snacks_confectionery,pack,100 pieces,100,55.79,,standard,true,99,1,200,2080000001236,12080000001233,,Assorted fruit lollipops.,true
-MOKGAL-SN-0401,Fruit lollipops,Candy Corner,snacks_confectionery,pack,100 pieces,100,59.19,,standard,true,31,1,200,2080000001243,12080000001240,,Assorted fruit lollipops.,true
-MOKGAL-SN-0402,Fruit lollipops,Cocoa Joy,snacks_confectionery,pack,100 pieces,100,65.89,,standard,true,233,1,200,2080000001250,12080000001257,,Assorted fruit lollipops.,true
-MOKGAL-SN-0500,Milk chocolate bars,Crunch Kasi,snacks_confectionery,case,24 x 40 g,24,205.89,232.39,standard,true,374,1,200,2080000001267,12080000001264,0.96,Milk chocolate bars.,true
-MOKGAL-SN-0501,Milk chocolate bars,Candy Corner,snacks_confectionery,case,24 x 40 g,24,221.09,,standard,true,231,1,200,2080000001274,12080000001271,0.96,Milk chocolate bars.,true
-MOKGAL-SN-0502,Milk chocolate bars,Cocoa Joy,snacks_confectionery,case,24 x 40 g,24,240.09,,standard,true,3,1,200,2080000001281,12080000001288,0.96,Milk chocolate bars.,true
-MOKGAL-SN-0600,Mint chewing gum,Crunch Kasi,snacks_confectionery,pack,100 pieces,100,45.79,,standard,true,191,1,200,2080000001298,12080000001295,,Single mint gum pieces.,true
-MOKGAL-SN-0601,Mint chewing gum,Candy Corner,snacks_confectionery,pack,100 pieces,100,49.69,58.89,standard,true,128,1,200,2080000001304,12080000001301,,Single mint gum pieces.,true
-MOKGAL-SN-0602,Mint chewing gum,Cocoa Joy,snacks_confectionery,pack,100 pieces,100,54.69,,standard,true,0,1,200,2080000001311,12080000001318,,Single mint gum pieces.,true
-MOKGAL-SN-0700,Toffees,Crunch Kasi,snacks_confectionery,pack,100 pieces,100,42.09,,standard,true,380,1,200,2080000001328,12080000001325,,Individually wrapped toffees.,true
-MOKGAL-SN-0701,Toffees,Candy Corner,snacks_confectionery,pack,100 pieces,100,45.49,,standard,true,398,1,200,2080000001335,12080000001332,,Individually wrapped toffees.,true
-MOKGAL-SN-0702,Toffees,Cocoa Joy,snacks_confectionery,pack,100 pieces,100,48.79,,standard,true,10,1,200,2080000001342,12080000001349,,Individually wrapped toffees.,true
-MOKGAL-SN-0800,Marie biscuits,Crunch Kasi,snacks_confectionery,case,12 x 200 g,12,169.29,,standard,true,342,1,200,2080000001359,12080000001356,2.4,Plain tea biscuits.,true
-MOKGAL-SN-0801,Marie biscuits,Candy Corner,snacks_confectionery,case,12 x 200 g,12,184.39,,standard,true,120,1,200,2080000001366,12080000001363,2.4,Plain tea biscuits.,true
-MOKGAL-SN-0802,Marie biscuits,Cocoa Joy,snacks_confectionery,case,12 x 200 g,12,193.09,,standard,true,74,1,200,2080000001373,12080000001370,2.4,Plain tea biscuits.,true
-MOKGAL-SN-0900,"Cream biscuits, vanilla",Crunch Kasi,snacks_confectionery,case,12 x 200 g,12,184.89,,standard,true,327,1,200,2080000001380,12080000001387,2.4,Vanilla cream biscuits.,true
-MOKGAL-SN-1000,Salted peanuts,Crunch Kasi,snacks_confectionery,case,24 x 50 g,24,140.59,,standard,true,388,1,200,2080000001397,12080000001394,1.2,Roasted salted peanuts.,true
-MOKGAL-SN-1001,Salted peanuts,Candy Corner,snacks_confectionery,case,24 x 50 g,24,153.49,,standard,true,1,1,200,2080000001403,12080000001400,1.2,Roasted salted peanuts.,true
-MOKGAL-SN-1002,Salted peanuts,Cocoa Joy,snacks_confectionery,case,24 x 50 g,24,164.59,,standard,true,7,1,200,2080000001410,12080000001417,1.2,Roasted salted peanuts.,true
-MOKGAL-HC-0000,Dishwashing liquid,Sparkle,household_cleaning,case,12 x 750 ml,12,220.19,,standard,true,111,1,200,2080000001427,12080000001424,9,Lemon dishwashing liquid.,true
-MOKGAL-HC-0001,Dishwashing liquid,Bright Wash,household_cleaning,case,12 x 750 ml,12,239.29,,standard,true,169,1,200,2080000001434,12080000001431,9,Lemon dishwashing liquid.,true
-MOKGAL-HC-0002,Dishwashing liquid,Pure White,household_cleaning,case,12 x 750 ml,12,262.89,,standard,true,236,1,200,2080000001441,12080000001448,9,Lemon dishwashing liquid.,true
-MOKGAL-HC-0010,Dishwashing liquid,Sparkle,household_cleaning,case,4 x 5 litre,4,280.79,340.39,standard,true,6,1,200,2080000001458,12080000001455,20,Lemon dishwashing liquid.,true
-MOKGAL-HC-0011,Dishwashing liquid,Bright Wash,household_cleaning,case,4 x 5 litre,4,295.99,,standard,true,4,1,200,2080000001465,12080000001462,20,Lemon dishwashing liquid.,true
-MOKGAL-HC-0012,Dishwashing liquid,Pure White,household_cleaning,case,4 x 5 litre,4,330.19,,standard,true,207,1,200,2080000001472,12080000001479,20,Lemon dishwashing liquid.,true
-MOKGAL-HC-0100,Hand washing powder,Sparkle,household_cleaning,bag,2 kg,1,70.39,,standard,true,82,1,200,2080000001489,,2,Washing powder for hand wash.,true
-MOKGAL-HC-0101,Hand washing powder,Bright Wash,household_cleaning,bag,2 kg,1,76.49,,standard,true,192,1,200,2080000001496,,2,Washing powder for hand wash.,true
-MOKGAL-HC-0102,Hand washing powder,Pure White,household_cleaning,bag,2 kg,1,81.49,100.59,standard,true,243,1,200,2080000001502,,2,Washing powder for hand wash.,true
-MOKGAL-HC-0110,Hand washing powder,Sparkle,household_cleaning,bag,5 kg,1,154.39,,standard,true,352,1,200,2080000001519,,5,Washing powder for hand wash.,true
-MOKGAL-HC-0111,Hand washing powder,Bright Wash,household_cleaning,bag,5 kg,1,173.79,,standard,true,72,1,200,2080000001526,,5,Washing powder for hand wash.,true
-MOKGAL-HC-0112,Hand washing powder,Pure White,household_cleaning,bag,5 kg,1,187.59,,standard,true,393,1,200,2080000001533,,5,Washing powder for hand wash.,true
-MOKGAL-HC-0200,Thick bleach,Sparkle,household_cleaning,case,12 x 750 ml,12,166.49,,standard,true,0,1,200,2080000001540,12080000001547,9,Thick household bleach.,true
-MOKGAL-HC-0201,Thick bleach,Bright Wash,household_cleaning,case,12 x 750 ml,12,181.49,212.49,standard,true,158,1,200,2080000001557,12080000001554,9,Thick household bleach.,true
-MOKGAL-HC-0300,Multi-purpose cleaner,Sparkle,household_cleaning,case,12 x 750 ml,12,204.99,,standard,true,118,1,200,2080000001564,12080000001561,9,"Cleans floors, tiles and counters.",true
-MOKGAL-HC-0301,Multi-purpose cleaner,Bright Wash,household_cleaning,case,12 x 750 ml,12,221.89,,standard,true,295,1,200,2080000001571,12080000001578,9,"Cleans floors, tiles and counters.",true
-MOKGAL-HC-0302,Multi-purpose cleaner,Pure White,household_cleaning,case,12 x 750 ml,12,240.09,,standard,true,315,1,200,2080000001588,12080000001585,9,"Cleans floors, tiles and counters.",true
-MOKGAL-HC-0400,"Toilet paper, 1-ply",Sparkle,household_cleaning,pack,48 rolls,48,178.39,,standard,true,6,1,200,2080000001595,12080000001592,,Single-ply toilet rolls.,true
-MOKGAL-HC-0401,"Toilet paper, 1-ply",Bright Wash,household_cleaning,pack,48 rolls,48,189.29,,standard,true,43,1,200,2080000001601,12080000001608,,Single-ply toilet rolls.,true
-MOKGAL-HC-0402,"Toilet paper, 1-ply",Pure White,household_cleaning,pack,48 rolls,48,204.19,,standard,true,9,1,200,2080000001618,12080000001615,,Single-ply toilet rolls.,true
-MOKGAL-HC-0500,"Toilet paper, 2-ply",Sparkle,household_cleaning,pack,24 rolls,24,163.79,201.89,standard,true,239,1,200,2080000001625,12080000001622,,Two-ply toilet rolls.,true
-MOKGAL-HC-0501,"Toilet paper, 2-ply",Bright Wash,household_cleaning,pack,24 rolls,24,182.79,,standard,true,87,1,200,2080000001632,12080000001639,,Two-ply toilet rolls.,true
-MOKGAL-HC-0502,"Toilet paper, 2-ply",Pure White,household_cleaning,pack,24 rolls,24,198.09,,standard,true,172,1,200,2080000001649,12080000001646,,Two-ply toilet rolls.,true
-MOKGAL-HC-0600,Bath soap bars,Sparkle,household_cleaning,case,48 x 150 g,48,308.09,,standard,true,119,1,200,2080000001656,12080000001653,7.2,Family soap bars.,true
-MOKGAL-HC-0601,Bath soap bars,Bright Wash,household_cleaning,case,48 x 150 g,48,326.39,,standard,true,126,1,200,2080000001663,12080000001660,7.2,Family soap bars.,true
-MOKGAL-HC-0700,Laundry bar soap,Sparkle,household_cleaning,case,24 x 500 g,24,273.99,,standard,true,154,1,200,2080000001670,12080000001677,12,Blue laundry bars.,true
-MOKGAL-HC-0702,Laundry bar soap,Pure White,household_cleaning,case,24 x 500 g,24,325.39,,standard,true,29,1,200,2080000001687,12080000001684,12,Blue laundry bars.,true
-MOKGAL-HC-0800,Floor polish,Sparkle,household_cleaning,case,12 x 400 ml,12,337.59,,standard,true,342,1,200,2080000001694,12080000001691,4.8,Red floor polish.,true
-MOKGAL-HC-0802,Floor polish,Pure White,household_cleaning,case,12 x 400 ml,12,398.39,490.79,standard,true,150,1,200,2080000001700,12080000001707,4.8,Red floor polish.,true
-MOKGAL-HC-0900,Scouring pads,Sparkle,household_cleaning,pack,50 pads,50,93.89,114.49,standard,true,162,1,200,2080000001717,12080000001714,,Green scouring pads.,true
-MOKGAL-HC-0901,Scouring pads,Bright Wash,household_cleaning,pack,50 pads,50,102.19,,standard,true,365,1,200,2080000001724,12080000001721,,Green scouring pads.,true
-MOKGAL-HC-1000,"Refuse bags, black",Sparkle,household_cleaning,bundle,200 bags,200,169.39,,standard,true,291,1,200,2080000001731,12080000001738,,Heavy-duty black bags.,true
-MOKGAL-HC-1001,"Refuse bags, black",Bright Wash,household_cleaning,bundle,200 bags,200,177.69,,standard,true,10,1,200,2080000001748,12080000001745,,Heavy-duty black bags.,true
-MOKGAL-HC-1002,"Refuse bags, black",Pure White,household_cleaning,bundle,200 bags,200,198.69,,standard,true,11,1,200,2080000001755,12080000001752,,Heavy-duty black bags.,true
-MOKGAL-PC-0000,Petroleum jelly,Skin Guard,personal_care,case,12 x 250 ml,12,187.99,,standard,true,54,1,200,2080000001762,12080000001769,3,Pure petroleum jelly.,true
-MOKGAL-PC-0001,Petroleum jelly,Bright Smile,personal_care,case,12 x 250 ml,12,201.69,,standard,true,327,1,200,2080000001779,12080000001776,3,Pure petroleum jelly.,true
-MOKGAL-PC-0002,Petroleum jelly,Fresh Day,personal_care,case,12 x 250 ml,12,217.79,257.29,standard,true,136,1,200,2080000001786,12080000001783,3,Pure petroleum jelly.,true
-MOKGAL-PC-0100,Aqueous body lotion,Skin Guard,personal_care,case,6 x 400 ml,6,200.49,,standard,true,59,1,200,2080000001793,12080000001790,2.4,Aqueous body lotion.,true
-MOKGAL-PC-0101,Aqueous body lotion,Bright Smile,personal_care,case,6 x 400 ml,6,223.19,,standard,true,373,1,200,2080000001809,12080000001806,2.4,Aqueous body lotion.,true
-MOKGAL-PC-0102,Aqueous body lotion,Fresh Day,personal_care,case,6 x 400 ml,6,239.89,,standard,true,388,1,200,2080000001816,12080000001813,2.4,Aqueous body lotion.,true
-MOKGAL-PC-0200,Fluoride toothpaste,Skin Guard,personal_care,case,24 x 100 ml,24,278.69,,standard,true,0,1,200,2080000001823,12080000001820,2.4,Fluoride toothpaste.,true
-MOKGAL-PC-0201,Fluoride toothpaste,Bright Smile,personal_care,case,24 x 100 ml,24,295.79,339.99,standard,true,8,1,200,2080000001830,12080000001837,2.4,Fluoride toothpaste.,true
-MOKGAL-PC-0202,Fluoride toothpaste,Fresh Day,personal_care,case,24 x 100 ml,24,323.69,,standard,true,305,1,200,2080000001847,12080000001844,2.4,Fluoride toothpaste.,true
-MOKGAL-PC-0300,"Toothbrushes, medium",Skin Guard,personal_care,pack,24 brushes,24,110.19,132.99,standard,true,399,1,200,2080000001854,12080000001851,,Medium toothbrushes.,true
-MOKGAL-PC-0301,"Toothbrushes, medium",Bright Smile,personal_care,pack,24 brushes,24,120.49,145.09,standard,true,386,1,200,2080000001861,12080000001868,,Medium toothbrushes.,true
-MOKGAL-PC-0302,"Toothbrushes, medium",Fresh Day,personal_care,pack,24 brushes,24,131.59,,standard,true,86,1,200,2080000001878,12080000001875,,Medium toothbrushes.,true
-MOKGAL-PC-0400,Roll-on deodorant,Skin Guard,personal_care,case,12 x 50 ml,12,225.89,,standard,true,321,1,200,2080000001885,12080000001882,0.6,48-hour roll-on.,true
-MOKGAL-PC-0401,Roll-on deodorant,Bright Smile,personal_care,case,12 x 50 ml,12,237.39,288.79,standard,true,386,1,200,2080000001892,12080000001899,0.6,48-hour roll-on.,true
-MOKGAL-PC-0402,Roll-on deodorant,Fresh Day,personal_care,case,12 x 50 ml,12,265.79,,standard,true,162,1,200,2080000001908,12080000001905,0.6,48-hour roll-on.,true
-MOKGAL-PC-0500,Hair food,Skin Guard,personal_care,case,12 x 125 ml,12,184.89,,standard,true,2,1,200,2080000001915,12080000001912,1.5,Moisturising hair food.,true
-MOKGAL-PC-0501,Hair food,Bright Smile,personal_care,case,12 x 125 ml,12,199.69,,standard,true,279,1,200,2080000001922,12080000001929,1.5,Moisturising hair food.,true
-MOKGAL-PC-0502,Hair food,Fresh Day,personal_care,case,12 x 125 ml,12,215.19,,standard,true,196,1,200,2080000001939,12080000001936,1.5,Moisturising hair food.,true
-MOKGAL-PC-0600,Sanitary pads,Skin Guard,personal_care,case,24 x 10 pads,1,445.79,,standard,true,264,1,200,2080000001946,,,Maxi thick pads.,true
-MOKGAL-PC-0601,Sanitary pads,Bright Smile,personal_care,case,24 x 10 pads,1,483.09,,standard,true,312,1,200,2080000001953,,,Maxi thick pads.,true
-MOKGAL-PC-0602,Sanitary pads,Fresh Day,personal_care,case,24 x 10 pads,1,529.59,,standard,true,80,1,200,2080000001960,,,Maxi thick pads.,true
-MOKGAL-PC-0700,"Razors, twin blade",Skin Guard,personal_care,pack,50 razors,50,141.09,,standard,true,51,1,200,2080000001977,12080000001974,,Disposable twin-blade razors.,true
-MOKGAL-PC-0701,"Razors, twin blade",Bright Smile,personal_care,pack,50 razors,50,153.49,,standard,true,131,1,200,2080000001984,12080000001981,,Disposable twin-blade razors.,true
-MOKGAL-PC-0702,"Razors, twin blade",Fresh Day,personal_care,pack,50 razors,50,162.19,,standard,true,86,1,200,2080000001991,12080000001998,,Disposable twin-blade razors.,true
-MOKGAL-DC-0000,Long-life full cream milk,Farm Fresh,dairy_chilled,case,6 x 1 litre,6,100.29,,zero,true,304,1,200,2080000002004,12080000002001,6,UHT milk; no fridge needed until opened.,true
-MOKGAL-DC-0001,Long-life full cream milk,Dairy Best,dairy_chilled,case,6 x 1 litre,6,108.59,122.99,zero,true,153,1,200,2080000002011,12080000002018,6,UHT milk; no fridge needed until opened.,true
-MOKGAL-DC-0010,Long-life full cream milk,Farm Fresh,dairy_chilled,case,12 x 1 litre,12,195.39,220.79,zero,true,368,1,200,2080000002028,12080000002025,12,UHT milk; no fridge needed until opened.,true
-MOKGAL-DC-0011,Long-life full cream milk,Dairy Best,dairy_chilled,case,12 x 1 litre,12,209.19,,zero,true,275,1,200,2080000002035,12080000002032,12,UHT milk; no fridge needed until opened.,true
-MOKGAL-DC-0012,Long-life full cream milk,Golden Spread,dairy_chilled,case,12 x 1 litre,12,227.49,,zero,true,241,1,200,2080000002042,12080000002049,12,UHT milk; no fridge needed until opened.,true
-MOKGAL-DC-0100,Maas (amasi),Farm Fresh,dairy_chilled,case,6 x 2 litre,6,187.79,,zero,true,221,1,200,2080000002059,12080000002056,12,Thick fermented milk.,true
-MOKGAL-DC-0101,Maas (amasi),Dairy Best,dairy_chilled,case,6 x 2 litre,6,197.39,,zero,true,235,1,200,2080000002066,12080000002063,12,Thick fermented milk.,true
-MOKGAL-DC-0102,Maas (amasi),Golden Spread,dairy_chilled,case,6 x 2 litre,6,218.09,,zero,true,373,1,200,2080000002073,12080000002070,12,Thick fermented milk.,true
-MOKGAL-DC-0200,Fresh full cream milk,Farm Fresh,dairy_chilled,crate,6 x 2 litre,6,169.39,,zero,true,145,1,200,2080000002080,12080000002087,12,Keep chilled.,true
-MOKGAL-DC-0201,Fresh full cream milk,Dairy Best,dairy_chilled,crate,6 x 2 litre,6,181.79,223.19,zero,true,337,1,200,2080000002097,12080000002094,12,Keep chilled.,true
-MOKGAL-DC-0202,Fresh full cream milk,Golden Spread,dairy_chilled,crate,6 x 2 litre,6,194.89,234.09,zero,true,136,1,200,2080000002103,12080000002100,12,Keep chilled.,true
-MOKGAL-DC-0300,Margarine brick,Farm Fresh,dairy_chilled,case,12 x 500 g,12,274.99,,standard,true,320,1,200,2080000002110,12080000002117,6,Margarine bricks for bread.,true
-MOKGAL-DC-0302,Margarine brick,Golden Spread,dairy_chilled,case,12 x 500 g,12,319.79,386.89,standard,true,375,1,200,2080000002127,12080000002124,6,Margarine bricks for bread.,true
-MOKGAL-DC-0401,Cheese slices,Dairy Best,dairy_chilled,pack,10 x 200 g,10,405.59,460.19,standard,true,7,1,200,2080000002134,12080000002131,2,Processed cheese slices.,true
-MOKGAL-DC-0402,Cheese slices,Golden Spread,dairy_chilled,pack,10 x 200 g,10,435.79,,standard,true,278,1,200,2080000002141,12080000002148,2,Processed cheese slices.,true
-MOKGAL-DC-0500,Plain yoghurt,Farm Fresh,dairy_chilled,case,6 x 1 kg,6,206.09,244.89,standard,true,13,1,200,2080000002158,12080000002155,6,Plain drinking yoghurt.,true
-MOKGAL-DC-0501,Plain yoghurt,Dairy Best,dairy_chilled,case,6 x 1 kg,6,224.19,,standard,true,186,1,200,2080000002165,12080000002162,6,Plain drinking yoghurt.,true
-MOKGAL-DC-0502,Plain yoghurt,Golden Spread,dairy_chilled,case,6 x 1 kg,6,242.89,,standard,true,0,1,200,2080000002172,12080000002179,6,Plain drinking yoghurt.,true
-MOKGAL-DC-0600,Fruit yoghurt cups,Farm Fresh,dairy_chilled,case,24 x 100 g,24,174.79,,standard,true,273,1,200,2080000002189,12080000002186,2.4,Assorted fruit yoghurt.,true
-MOKGAL-DC-0601,Fruit yoghurt cups,Dairy Best,dairy_chilled,case,24 x 100 g,24,192.79,,standard,true,50,1,200,2080000002196,12080000002193,2.4,Assorted fruit yoghurt.,true
-MOKGAL-DC-0602,Fruit yoghurt cups,Golden Spread,dairy_chilled,case,24 x 100 g,24,208.79,,standard,true,8,1,200,2080000002202,12080000002209,2.4,Assorted fruit yoghurt.,true
-MOKGAL-DC-0700,Polony,Farm Fresh,dairy_chilled,case,10 x 1 kg,10,419.79,,standard,true,340,1,200,2080000002219,12080000002216,10,Chilled polony rolls.,true
-MOKGAL-DC-0701,Polony,Dairy Best,dairy_chilled,case,10 x 1 kg,10,459.59,,standard,true,99,1,200,2080000002226,12080000002223,10,Chilled polony rolls.,true
-MOKGAL-DC-0702,Polony,Golden Spread,dairy_chilled,case,10 x 1 kg,10,499.29,,standard,true,302,1,200,2080000002233,12080000002230,10,Chilled polony rolls.,true
+product_code,name,brand,category,unit,pack_size,units_per_pack,price_rands,compare_at_rands,vat_rate,vat_included,stock,min_qty,max_qty,unit_barcode,case_barcode,weight_kg,description,active,image_1
+MOKGAL-FG-0000,Super maize meal,Kasi Gold,food_grocery,bag,10 kg,1,83.29,,zero,true,246,1,200,2080000000000,,10,Fine white maize meal for pap.,true,
+MOKGAL-FG-0001,Super maize meal,Mill Street,food_grocery,bag,10 kg,1,90.79,,zero,true,111,1,200,2080000000017,,10,Fine white maize meal for pap.,true,
+MOKGAL-FG-0002,Super maize meal,Harvest Tin,food_grocery,bag,10 kg,1,98.09,,zero,true,208,1,200,2080000000024,,10,Fine white maize meal for pap.,true,
+MOKGAL-FG-0010,Super maize meal,Kasi Gold,food_grocery,bag,25 kg,1,195.59,243.39,zero,true,4,1,200,2080000000031,,25,Fine white maize meal for pap.,true,
+MOKGAL-FG-0011,Super maize meal,Mill Street,food_grocery,bag,25 kg,1,207.09,,zero,true,172,1,200,2080000000048,,25,Fine white maize meal for pap.,true,
+MOKGAL-FG-0012,Super maize meal,Harvest Tin,food_grocery,bag,25 kg,1,231.79,,zero,true,398,1,200,2080000000055,,25,Fine white maize meal for pap.,true,
+MOKGAL-FG-0100,Long grain parboiled rice,Kasi Gold,food_grocery,bag,2 kg,1,37.29,,zero,true,180,1,200,2080000000062,,2,Non-sticky parboiled rice.,true,
+MOKGAL-FG-0101,Long grain parboiled rice,Mill Street,food_grocery,bag,2 kg,1,39.89,,zero,true,107,1,200,2080000000079,,2,Non-sticky parboiled rice.,true,
+MOKGAL-FG-0102,Long grain parboiled rice,Harvest Tin,food_grocery,bag,2 kg,1,43.79,,zero,true,46,1,200,2080000000086,,2,Non-sticky parboiled rice.,true,
+MOKGAL-FG-0110,Long grain parboiled rice,Kasi Gold,food_grocery,bag,10 kg,1,160.29,,zero,true,206,1,200,2080000000093,,10,Non-sticky parboiled rice.,true,
+MOKGAL-FG-0111,Long grain parboiled rice,Mill Street,food_grocery,bag,10 kg,1,168.49,195.09,zero,true,84,1,200,2080000000109,,10,Non-sticky parboiled rice.,true,
+MOKGAL-FG-0112,Long grain parboiled rice,Harvest Tin,food_grocery,bag,10 kg,1,184.29,223.89,zero,true,371,1,200,2080000000116,,10,Non-sticky parboiled rice.,true,
+MOKGAL-FG-0200,Cake flour,Kasi Gold,food_grocery,bag,2.5 kg,1,39.89,,standard,true,381,1,200,2080000000123,,2.5,White cake flour for baking and vetkoek.,true,
+MOKGAL-FG-0201,Cake flour,Mill Street,food_grocery,bag,2.5 kg,1,43.79,,standard,true,219,1,200,2080000000130,,2.5,White cake flour for baking and vetkoek.,true,
+MOKGAL-FG-0202,Cake flour,Harvest Tin,food_grocery,bag,2.5 kg,1,46.89,,standard,true,383,1,200,2080000000147,,2.5,White cake flour for baking and vetkoek.,true,
+MOKGAL-FG-0210,Cake flour,Kasi Gold,food_grocery,bag,10 kg,1,131.99,160.29,standard,true,269,1,200,2080000000154,,10,White cake flour for baking and vetkoek.,true,
+MOKGAL-FG-0211,Cake flour,Mill Street,food_grocery,bag,10 kg,1,139.39,,standard,true,321,1,200,2080000000161,,10,White cake flour for baking and vetkoek.,true,
+MOKGAL-FG-0212,Cake flour,Harvest Tin,food_grocery,bag,10 kg,1,151.09,,standard,true,3,1,200,2080000000178,,10,White cake flour for baking and vetkoek.,true,
+MOKGAL-FG-0300,White sugar,Kasi Gold,food_grocery,bag,2.5 kg,1,54.69,,standard,true,264,1,200,2080000000185,,2.5,Refined white sugar.,true,
+MOKGAL-FG-0301,White sugar,Mill Street,food_grocery,bag,2.5 kg,1,59.69,,standard,true,13,1,200,2080000000192,,2.5,Refined white sugar.,true,
+MOKGAL-FG-0302,White sugar,Harvest Tin,food_grocery,bag,2.5 kg,1,64.39,,standard,true,130,1,200,2080000000208,,2.5,Refined white sugar.,true,
+MOKGAL-FG-0310,White sugar,Kasi Gold,food_grocery,bag,10 kg,1,207.29,,standard,true,38,1,200,2080000000215,,10,Refined white sugar.,true,
+MOKGAL-FG-0311,White sugar,Mill Street,food_grocery,bag,10 kg,1,223.39,278.09,standard,true,245,1,200,2080000000222,,10,Refined white sugar.,true,
+MOKGAL-FG-0312,White sugar,Harvest Tin,food_grocery,bag,10 kg,1,240.69,,standard,true,252,1,200,2080000000239,,10,Refined white sugar.,true,
+MOKGAL-FG-0400,Brown sugar,Kasi Gold,food_grocery,bag,2 kg,1,41.39,,standard,true,258,1,200,2080000000246,,2,Soft brown sugar.,true,
+MOKGAL-FG-0401,Brown sugar,Mill Street,food_grocery,bag,2 kg,1,45.19,53.49,standard,true,274,1,200,2080000000253,,2,Soft brown sugar.,true,
+MOKGAL-FG-0402,Brown sugar,Harvest Tin,food_grocery,bag,2 kg,1,48.29,,standard,true,338,1,200,2080000000260,,2,Soft brown sugar.,true,
+MOKGAL-FG-0500,Sunflower cooking oil,Kasi Gold,food_grocery,bottle,2 litre,1,65.89,,zero,true,61,1,200,2080000000277,,2,Pure sunflower oil.,true,
+MOKGAL-FG-0501,Sunflower cooking oil,Mill Street,food_grocery,bottle,2 litre,1,69.29,,zero,true,55,1,200,2080000000284,,2,Pure sunflower oil.,true,
+MOKGAL-FG-0502,Sunflower cooking oil,Harvest Tin,food_grocery,bottle,2 litre,1,75.59,90.19,zero,true,363,1,200,2080000000291,,2,Pure sunflower oil.,true,
+MOKGAL-FG-0510,Sunflower cooking oil,Kasi Gold,food_grocery,bottle,5 litre,1,139.69,,zero,true,316,1,200,2080000000307,,5,Pure sunflower oil.,true,
+MOKGAL-FG-0511,Sunflower cooking oil,Mill Street,food_grocery,bottle,5 litre,1,148.39,,zero,true,282,1,200,2080000000314,,5,Pure sunflower oil.,true,
+MOKGAL-FG-0512,Sunflower cooking oil,Harvest Tin,food_grocery,bottle,5 litre,1,161.69,,zero,true,280,1,200,2080000000321,,5,Pure sunflower oil.,true,
+MOKGAL-FG-0600,Baked beans in tomato sauce,Kasi Gold,food_grocery,case,24 x 410 g,24,275.49,,standard,true,98,1,200,2080000000338,12080000000335,9.84,A case of 24 tins.,true,
+MOKGAL-FG-0601,Baked beans in tomato sauce,Mill Street,food_grocery,case,24 x 410 g,24,302.09,,standard,true,399,1,200,2080000000345,12080000000342,9.84,A case of 24 tins.,true,
+MOKGAL-FG-0602,Baked beans in tomato sauce,Harvest Tin,food_grocery,case,24 x 410 g,24,320.19,,standard,true,3,1,200,2080000000352,12080000000359,9.84,A case of 24 tins.,true,
+MOKGAL-FG-0700,Pilchards in tomato sauce,Kasi Gold,food_grocery,case,24 x 400 g,24,545.99,,zero,true,25,1,200,2080000000369,12080000000366,9.6,"Canned pilchards, a case of 24.",true,
+MOKGAL-FG-0701,Pilchards in tomato sauce,Mill Street,food_grocery,case,24 x 400 g,24,594.39,741.49,zero,true,82,1,200,2080000000376,12080000000373,9.6,"Canned pilchards, a case of 24.",true,
+MOKGAL-FG-0702,Pilchards in tomato sauce,Harvest Tin,food_grocery,case,24 x 400 g,24,640.09,,zero,true,0,1,200,2080000000383,12080000000380,9.6,"Canned pilchards, a case of 24.",true,
+MOKGAL-FG-0800,Chicken instant noodles,Kasi Gold,food_grocery,case,40 x 73 g,40,182.19,216.49,standard,true,249,1,200,2080000000390,12080000000397,2.92,Chicken-flavoured instant noodles.,true,
+MOKGAL-FG-0801,Chicken instant noodles,Mill Street,food_grocery,case,40 x 73 g,40,204.39,,standard,true,262,1,200,2080000000406,12080000000403,2.92,Chicken-flavoured instant noodles.,true,
+MOKGAL-FG-0802,Chicken instant noodles,Harvest Tin,food_grocery,case,40 x 73 g,40,220.49,,standard,true,375,1,200,2080000000413,12080000000410,2.92,Chicken-flavoured instant noodles.,true,
+MOKGAL-FG-0900,Samp,Kasi Gold,food_grocery,bag,5 kg,1,68.39,,zero,true,107,1,200,2080000000420,,5,Crushed dried maize kernels.,true,
+MOKGAL-FG-0901,Samp,Mill Street,food_grocery,bag,5 kg,1,74.19,,zero,true,10,1,200,2080000000437,,5,Crushed dried maize kernels.,true,
+MOKGAL-FG-0902,Samp,Harvest Tin,food_grocery,bag,5 kg,1,82.59,,zero,true,7,1,200,2080000000444,,5,Crushed dried maize kernels.,true,
+MOKGAL-FG-1000,Sugar beans,Kasi Gold,food_grocery,bag,2 kg,1,61.09,,zero,true,0,1,200,2080000000451,,2,Dried speckled sugar beans.,true,
+MOKGAL-FG-1001,Sugar beans,Mill Street,food_grocery,bag,2 kg,1,65.39,,zero,true,391,1,200,2080000000468,,2,Dried speckled sugar beans.,true,
+MOKGAL-FG-1002,Sugar beans,Harvest Tin,food_grocery,bag,2 kg,1,71.89,,zero,true,195,1,200,2080000000475,,2,Dried speckled sugar beans.,true,
+MOKGAL-FG-1100,Black tea bags,Kasi Gold,food_grocery,pack,100 bags,100,50.79,,standard,true,54,1,200,2080000000482,12080000000489,,Tagless black tea bags.,true,
+MOKGAL-FG-1101,Black tea bags,Mill Street,food_grocery,pack,100 bags,100,54.39,,standard,true,16,1,200,2080000000499,12080000000496,,Tagless black tea bags.,true,
+MOKGAL-FG-1102,Black tea bags,Harvest Tin,food_grocery,pack,100 bags,100,60.89,,standard,true,162,1,200,2080000000505,12080000000502,,Tagless black tea bags.,true,
+MOKGAL-FG-1110,Black tea bags,Kasi Gold,food_grocery,pack,200 bags,200,92.79,,standard,true,67,1,200,2080000000512,12080000000519,,Tagless black tea bags.,true,
+MOKGAL-FG-1111,Black tea bags,Mill Street,food_grocery,pack,200 bags,200,102.09,,standard,true,270,1,200,2080000000529,12080000000526,,Tagless black tea bags.,true,
+MOKGAL-FG-1112,Black tea bags,Harvest Tin,food_grocery,pack,200 bags,200,107.89,,standard,true,315,1,200,2080000000536,12080000000533,,Tagless black tea bags.,true,
+MOKGAL-FG-1200,Instant coffee,Kasi Gold,food_grocery,tin,250 g,1,84.09,,standard,true,159,1,200,2080000000543,,,Granulated instant coffee.,true,
+MOKGAL-FG-1201,Instant coffee,Mill Street,food_grocery,tin,250 g,1,90.09,,standard,true,58,1,200,2080000000550,,,Granulated instant coffee.,true,
+MOKGAL-FG-1202,Instant coffee,Harvest Tin,food_grocery,tin,250 g,1,97.49,,standard,true,213,1,200,2080000000567,,,Granulated instant coffee.,true,
+MOKGAL-FG-1300,Iodated table salt,Kasi Gold,food_grocery,case,24 x 500 g,24,110.39,,standard,true,68,1,200,2080000000574,12080000000571,12,Fine iodated salt.,true,
+MOKGAL-FG-1301,Iodated table salt,Mill Street,food_grocery,case,24 x 500 g,24,120.49,137.59,standard,true,323,1,200,2080000000581,12080000000588,12,Fine iodated salt.,true,
+MOKGAL-FG-1302,Iodated table salt,Harvest Tin,food_grocery,case,24 x 500 g,24,128.19,,standard,true,384,1,200,2080000000598,12080000000595,12,Fine iodated salt.,true,
+MOKGAL-FG-1400,"Peanut butter, smooth",Kasi Gold,food_grocery,case,12 x 400 g,12,384.99,,standard,true,161,1,200,2080000000604,12080000000601,4.8,Smooth peanut butter.,true,
+MOKGAL-FG-1401,"Peanut butter, smooth",Mill Street,food_grocery,case,12 x 400 g,12,426.09,,standard,true,1,1,200,2080000000611,12080000000618,4.8,Smooth peanut butter.,true,
+MOKGAL-FG-1402,"Peanut butter, smooth",Harvest Tin,food_grocery,case,12 x 400 g,12,454.49,,standard,true,183,1,200,2080000000628,12080000000625,4.8,Smooth peanut butter.,true,
+MOKGAL-FG-1500,Apricot jam,Kasi Gold,food_grocery,case,12 x 450 g,12,331.69,,standard,true,149,1,200,2080000000635,12080000000632,5.4,Smooth apricot jam.,true,
+MOKGAL-FG-1501,Apricot jam,Mill Street,food_grocery,case,12 x 450 g,12,362.89,,standard,true,5,1,200,2080000000642,12080000000649,5.4,Smooth apricot jam.,true,
+MOKGAL-FG-1502,Apricot jam,Harvest Tin,food_grocery,case,12 x 450 g,12,391.49,,standard,true,218,1,200,2080000000659,12080000000656,5.4,Smooth apricot jam.,true,
+MOKGAL-BV-0000,Cola soft drink,Fizz Co,beverages,case,24 x 330 ml cans,24,174.19,206.39,standard,true,222,1,200,2080000000666,12080000000663,7.92,"Cold drink, a full case.",true,
+MOKGAL-BV-0001,Cola soft drink,Clear Spring,beverages,case,24 x 330 ml cans,24,192.59,,standard,true,141,1,200,2080000000673,12080000000670,7.92,"Cold drink, a full case.",true,
+MOKGAL-BV-0002,Cola soft drink,Sunny Farm,beverages,case,24 x 330 ml cans,24,208.59,257.39,standard,true,201,1,200,2080000000680,12080000000687,7.92,"Cold drink, a full case.",true,
+MOKGAL-BV-0011,Cola soft drink,Clear Spring,beverages,case,12 x 2 litre,12,262.29,,standard,true,300,1,200,2080000000697,12080000000694,24,"Cold drink, a full case.",true,
+MOKGAL-BV-0012,Cola soft drink,Sunny Farm,beverages,case,12 x 2 litre,12,287.39,,standard,true,303,1,200,2080000000703,12080000000700,24,"Cold drink, a full case.",true,
+MOKGAL-BV-0100,Orange soft drink,Fizz Co,beverages,case,24 x 330 ml cans,24,164.79,,standard,true,4,1,200,2080000000710,12080000000717,7.92,Orange-flavoured cold drink.,true,
+MOKGAL-BV-0101,Orange soft drink,Clear Spring,beverages,case,24 x 330 ml cans,24,182.09,224.39,standard,true,1,1,200,2080000000727,12080000000724,7.92,Orange-flavoured cold drink.,true,
+MOKGAL-BV-0102,Orange soft drink,Sunny Farm,beverages,case,24 x 330 ml cans,24,193.89,,standard,true,251,1,200,2080000000734,12080000000731,7.92,Orange-flavoured cold drink.,true,
+MOKGAL-BV-0110,Orange soft drink,Fizz Co,beverages,case,12 x 2 litre,12,223.39,,standard,true,287,1,200,2080000000741,12080000000748,24,Orange-flavoured cold drink.,true,
+MOKGAL-BV-0111,Orange soft drink,Clear Spring,beverages,case,12 x 2 litre,12,243.29,,standard,true,344,1,200,2080000000758,12080000000755,24,Orange-flavoured cold drink.,true,
+MOKGAL-BV-0200,Lemon-lime soft drink,Fizz Co,beverages,case,24 x 330 ml cans,24,169.29,202.09,standard,true,157,1,200,2080000000765,12080000000762,7.92,Lemon-lime cold drink.,true,
+MOKGAL-BV-0201,Lemon-lime soft drink,Clear Spring,beverages,case,24 x 330 ml cans,24,178.19,,standard,true,227,1,200,2080000000772,12080000000779,7.92,Lemon-lime cold drink.,true,
+MOKGAL-BV-0202,Lemon-lime soft drink,Sunny Farm,beverages,case,24 x 330 ml cans,24,196.49,,standard,true,65,1,200,2080000000789,12080000000786,7.92,Lemon-lime cold drink.,true,
+MOKGAL-BV-0300,Still water,Fizz Co,beverages,case,24 x 500 ml,24,91.59,,standard,true,3,1,200,2080000000796,12080000000793,12,Still spring water.,true,
+MOKGAL-BV-0301,Still water,Clear Spring,beverages,case,24 x 500 ml,24,99.39,122.69,standard,true,226,1,200,2080000000802,12080000000809,12,Still spring water.,true,
+MOKGAL-BV-0302,Still water,Sunny Farm,beverages,case,24 x 500 ml,24,110.69,126.19,standard,true,116,1,200,2080000000819,12080000000816,12,Still spring water.,true,
+MOKGAL-BV-0310,Still water,Fizz Co,beverages,case,6 x 5 litre,6,111.09,,standard,true,31,1,200,2080000000826,12080000000823,30,Still spring water.,true,
+MOKGAL-BV-0311,Still water,Clear Spring,beverages,case,6 x 5 litre,6,120.69,,standard,true,8,1,200,2080000000833,12080000000830,30,Still spring water.,true,
+MOKGAL-BV-0312,Still water,Sunny Farm,beverages,case,6 x 5 litre,6,132.69,,standard,true,52,1,200,2080000000840,12080000000847,30,Still spring water.,true,
+MOKGAL-BV-0400,Sparkling water,Fizz Co,beverages,case,24 x 500 ml,24,109.39,,standard,true,256,1,200,2080000000857,12080000000854,12,Sparkling spring water.,true,
+MOKGAL-BV-0401,Sparkling water,Clear Spring,beverages,case,24 x 500 ml,24,119.99,,standard,true,41,1,200,2080000000864,12080000000861,12,Sparkling spring water.,true,
+MOKGAL-BV-0402,Sparkling water,Sunny Farm,beverages,case,24 x 500 ml,24,130.69,,standard,true,29,1,200,2080000000871,12080000000878,12,Sparkling spring water.,true,
+MOKGAL-BV-0500,Fruit juice blend,Fizz Co,beverages,case,6 x 1 litre,6,119.19,,standard,true,298,1,200,2080000000888,12080000000885,6,100% fruit juice blend.,true,
+MOKGAL-BV-0501,Fruit juice blend,Clear Spring,beverages,case,6 x 1 litre,6,128.79,,standard,true,171,1,200,2080000000895,12080000000892,6,100% fruit juice blend.,true,
+MOKGAL-BV-0502,Fruit juice blend,Sunny Farm,beverages,case,6 x 1 litre,6,142.69,171.69,standard,true,0,1,200,2080000000901,12080000000908,6,100% fruit juice blend.,true,
+MOKGAL-BV-0510,Fruit juice blend,Fizz Co,beverages,case,24 x 200 ml,24,150.19,,standard,true,329,1,200,2080000000918,12080000000915,4.8,100% fruit juice blend.,true,
+MOKGAL-BV-0511,Fruit juice blend,Clear Spring,beverages,case,24 x 200 ml,24,163.99,,standard,true,197,1,200,2080000000925,12080000000922,4.8,100% fruit juice blend.,true,
+MOKGAL-BV-0512,Fruit juice blend,Sunny Farm,beverages,case,24 x 200 ml,24,171.99,,standard,true,391,1,200,2080000000932,12080000000939,4.8,100% fruit juice blend.,true,
+MOKGAL-BV-0600,Dairy fruit mix drink,Fizz Co,beverages,case,12 x 500 ml,12,155.19,,standard,true,0,1,200,2080000000949,12080000000946,6,Fruit and dairy blend.,true,
+MOKGAL-BV-0601,Dairy fruit mix drink,Clear Spring,beverages,case,12 x 500 ml,12,170.09,,standard,true,394,1,200,2080000000956,12080000000953,6,Fruit and dairy blend.,true,
+MOKGAL-BV-0602,Dairy fruit mix drink,Sunny Farm,beverages,case,12 x 500 ml,12,188.29,,standard,true,10,1,200,2080000000963,12080000000960,6,Fruit and dairy blend.,true,
+MOKGAL-BV-0700,Energy drink,Fizz Co,beverages,case,24 x 500 ml,24,338.69,,standard,true,270,1,200,2080000000970,12080000000977,12,Energy drink cans.,true,
+MOKGAL-BV-0701,Energy drink,Clear Spring,beverages,case,24 x 500 ml,24,356.09,,standard,true,5,1,200,2080000000987,12080000000984,12,Energy drink cans.,true,
+MOKGAL-BV-0702,Energy drink,Sunny Farm,beverages,case,24 x 500 ml,24,390.99,462.49,standard,true,25,1,200,2080000000994,12080000000991,12,Energy drink cans.,true,
+MOKGAL-BV-0800,"Cordial, orange",Fizz Co,beverages,case,6 x 1 litre,6,137.99,161.99,standard,true,68,1,200,2080000001007,12080000001004,6,Dilute to taste.,true,
+MOKGAL-BV-0801,"Cordial, orange",Clear Spring,beverages,case,6 x 1 litre,6,148.89,,standard,true,147,1,200,2080000001014,12080000001011,6,Dilute to taste.,true,
+MOKGAL-BV-0802,"Cordial, orange",Sunny Farm,beverages,case,6 x 1 litre,6,159.89,,standard,true,167,1,200,2080000001021,12080000001028,6,Dilute to taste.,true,
+MOKGAL-BV-0900,"Mageu, original",Fizz Co,beverages,case,6 x 1 litre,6,100.49,,standard,true,45,1,200,2080000001038,12080000001035,6,Traditional fermented maize drink.,true,
+MOKGAL-BV-0901,"Mageu, original",Clear Spring,beverages,case,6 x 1 litre,6,109.79,,standard,true,0,1,200,2080000001045,12080000001042,6,Traditional fermented maize drink.,true,
+MOKGAL-BV-0902,"Mageu, original",Sunny Farm,beverages,case,6 x 1 litre,6,121.59,,standard,true,1,1,200,2080000001052,12080000001059,6,Traditional fermented maize drink.,true,
+MOKGAL-BV-1000,"Iced tea, peach",Fizz Co,beverages,case,12 x 500 ml,12,127.29,143.79,standard,true,117,1,200,2080000001069,12080000001066,6,Peach iced tea.,true,
+MOKGAL-BV-1002,"Iced tea, peach",Sunny Farm,beverages,case,12 x 500 ml,12,150.29,,standard,true,264,1,200,2080000001076,12080000001073,6,Peach iced tea.,true,
+MOKGAL-SN-0000,"Potato chips, salt & vinegar",Crunch Kasi,snacks_confectionery,case,48 x 36 g,48,220.59,,standard,true,36,1,200,2080000001083,12080000001080,1.728,Crisp potato chips.,true,
+MOKGAL-SN-0001,"Potato chips, salt & vinegar",Candy Corner,snacks_confectionery,case,48 x 36 g,48,240.99,,standard,true,223,1,200,2080000001090,12080000001097,1.728,Crisp potato chips.,true,
+MOKGAL-SN-0002,"Potato chips, salt & vinegar",Cocoa Joy,snacks_confectionery,case,48 x 36 g,48,257.89,,standard,true,304,1,200,2080000001106,12080000001103,1.728,Crisp potato chips.,true,
+MOKGAL-SN-0010,"Potato chips, salt & vinegar",Crunch Kasi,snacks_confectionery,case,20 x 125 g,20,275.19,,standard,true,291,1,200,2080000001113,12080000001110,2.5,Crisp potato chips.,true,
+MOKGAL-SN-0011,"Potato chips, salt & vinegar",Candy Corner,snacks_confectionery,case,20 x 125 g,20,296.79,,standard,true,282,1,200,2080000001120,12080000001127,2.5,Crisp potato chips.,true,
+MOKGAL-SN-0012,"Potato chips, salt & vinegar",Cocoa Joy,snacks_confectionery,case,20 x 125 g,20,323.69,,standard,true,1,1,200,2080000001137,12080000001134,2.5,Crisp potato chips.,true,
+MOKGAL-SN-0100,"Potato chips, cheese & onion",Crunch Kasi,snacks_confectionery,case,48 x 36 g,48,219.79,,standard,true,185,1,200,2080000001144,12080000001141,1.728,Crisp potato chips.,true,
+MOKGAL-SN-0101,"Potato chips, cheese & onion",Candy Corner,snacks_confectionery,case,48 x 36 g,48,241.29,,standard,true,346,1,200,2080000001151,12080000001158,1.728,Crisp potato chips.,true,
+MOKGAL-SN-0102,"Potato chips, cheese & onion",Cocoa Joy,snacks_confectionery,case,48 x 36 g,48,261.69,,standard,true,1,1,200,2080000001168,12080000001165,1.728,Crisp potato chips.,true,
+MOKGAL-SN-0200,"Maize snacks, cheese",Crunch Kasi,snacks_confectionery,case,50 x 25 g,50,121.49,,standard,true,108,1,200,2080000001175,12080000001172,1.25,Cheese-flavoured maize puffs.,true,
+MOKGAL-SN-0201,"Maize snacks, cheese",Candy Corner,snacks_confectionery,case,50 x 25 g,50,132.89,,standard,true,338,1,200,2080000001182,12080000001189,1.25,Cheese-flavoured maize puffs.,true,
+MOKGAL-SN-0202,"Maize snacks, cheese",Cocoa Joy,snacks_confectionery,case,50 x 25 g,50,142.19,,standard,true,129,1,200,2080000001199,12080000001196,1.25,Cheese-flavoured maize puffs.,true,
+MOKGAL-SN-0300,"Maize snacks, spicy",Crunch Kasi,snacks_confectionery,case,50 x 25 g,50,119.89,,standard,true,0,1,200,2080000001205,12080000001202,1.25,Spicy maize puffs.,true,
+MOKGAL-SN-0301,"Maize snacks, spicy",Candy Corner,snacks_confectionery,case,50 x 25 g,50,130.69,,standard,true,327,1,200,2080000001212,12080000001219,1.25,Spicy maize puffs.,true,
+MOKGAL-SN-0302,"Maize snacks, spicy",Cocoa Joy,snacks_confectionery,case,50 x 25 g,50,140.39,,standard,true,60,1,200,2080000001229,12080000001226,1.25,Spicy maize puffs.,true,
+MOKGAL-SN-0400,Fruit lollipops,Crunch Kasi,snacks_confectionery,pack,100 pieces,100,55.79,,standard,true,99,1,200,2080000001236,12080000001233,,Assorted fruit lollipops.,true,
+MOKGAL-SN-0401,Fruit lollipops,Candy Corner,snacks_confectionery,pack,100 pieces,100,59.19,,standard,true,31,1,200,2080000001243,12080000001240,,Assorted fruit lollipops.,true,
+MOKGAL-SN-0402,Fruit lollipops,Cocoa Joy,snacks_confectionery,pack,100 pieces,100,65.89,,standard,true,233,1,200,2080000001250,12080000001257,,Assorted fruit lollipops.,true,
+MOKGAL-SN-0500,Milk chocolate bars,Crunch Kasi,snacks_confectionery,case,24 x 40 g,24,205.89,232.39,standard,true,374,1,200,2080000001267,12080000001264,0.96,Milk chocolate bars.,true,
+MOKGAL-SN-0501,Milk chocolate bars,Candy Corner,snacks_confectionery,case,24 x 40 g,24,221.09,,standard,true,231,1,200,2080000001274,12080000001271,0.96,Milk chocolate bars.,true,
+MOKGAL-SN-0502,Milk chocolate bars,Cocoa Joy,snacks_confectionery,case,24 x 40 g,24,240.09,,standard,true,3,1,200,2080000001281,12080000001288,0.96,Milk chocolate bars.,true,
+MOKGAL-SN-0600,Mint chewing gum,Crunch Kasi,snacks_confectionery,pack,100 pieces,100,45.79,,standard,true,191,1,200,2080000001298,12080000001295,,Single mint gum pieces.,true,
+MOKGAL-SN-0601,Mint chewing gum,Candy Corner,snacks_confectionery,pack,100 pieces,100,49.69,58.89,standard,true,128,1,200,2080000001304,12080000001301,,Single mint gum pieces.,true,
+MOKGAL-SN-0602,Mint chewing gum,Cocoa Joy,snacks_confectionery,pack,100 pieces,100,54.69,,standard,true,0,1,200,2080000001311,12080000001318,,Single mint gum pieces.,true,
+MOKGAL-SN-0700,Toffees,Crunch Kasi,snacks_confectionery,pack,100 pieces,100,42.09,,standard,true,380,1,200,2080000001328,12080000001325,,Individually wrapped toffees.,true,
+MOKGAL-SN-0701,Toffees,Candy Corner,snacks_confectionery,pack,100 pieces,100,45.49,,standard,true,398,1,200,2080000001335,12080000001332,,Individually wrapped toffees.,true,
+MOKGAL-SN-0702,Toffees,Cocoa Joy,snacks_confectionery,pack,100 pieces,100,48.79,,standard,true,10,1,200,2080000001342,12080000001349,,Individually wrapped toffees.,true,
+MOKGAL-SN-0800,Marie biscuits,Crunch Kasi,snacks_confectionery,case,12 x 200 g,12,169.29,,standard,true,342,1,200,2080000001359,12080000001356,2.4,Plain tea biscuits.,true,
+MOKGAL-SN-0801,Marie biscuits,Candy Corner,snacks_confectionery,case,12 x 200 g,12,184.39,,standard,true,120,1,200,2080000001366,12080000001363,2.4,Plain tea biscuits.,true,
+MOKGAL-SN-0802,Marie biscuits,Cocoa Joy,snacks_confectionery,case,12 x 200 g,12,193.09,,standard,true,74,1,200,2080000001373,12080000001370,2.4,Plain tea biscuits.,true,
+MOKGAL-SN-0900,"Cream biscuits, vanilla",Crunch Kasi,snacks_confectionery,case,12 x 200 g,12,184.89,,standard,true,327,1,200,2080000001380,12080000001387,2.4,Vanilla cream biscuits.,true,
+MOKGAL-SN-1000,Salted peanuts,Crunch Kasi,snacks_confectionery,case,24 x 50 g,24,140.59,,standard,true,388,1,200,2080000001397,12080000001394,1.2,Roasted salted peanuts.,true,
+MOKGAL-SN-1001,Salted peanuts,Candy Corner,snacks_confectionery,case,24 x 50 g,24,153.49,,standard,true,1,1,200,2080000001403,12080000001400,1.2,Roasted salted peanuts.,true,
+MOKGAL-SN-1002,Salted peanuts,Cocoa Joy,snacks_confectionery,case,24 x 50 g,24,164.59,,standard,true,7,1,200,2080000001410,12080000001417,1.2,Roasted salted peanuts.,true,
+MOKGAL-HC-0000,Dishwashing liquid,Sparkle,household_cleaning,case,12 x 750 ml,12,220.19,,standard,true,111,1,200,2080000001427,12080000001424,9,Lemon dishwashing liquid.,true,
+MOKGAL-HC-0001,Dishwashing liquid,Bright Wash,household_cleaning,case,12 x 750 ml,12,239.29,,standard,true,169,1,200,2080000001434,12080000001431,9,Lemon dishwashing liquid.,true,
+MOKGAL-HC-0002,Dishwashing liquid,Pure White,household_cleaning,case,12 x 750 ml,12,262.89,,standard,true,236,1,200,2080000001441,12080000001448,9,Lemon dishwashing liquid.,true,
+MOKGAL-HC-0010,Dishwashing liquid,Sparkle,household_cleaning,case,4 x 5 litre,4,280.79,340.39,standard,true,6,1,200,2080000001458,12080000001455,20,Lemon dishwashing liquid.,true,
+MOKGAL-HC-0011,Dishwashing liquid,Bright Wash,household_cleaning,case,4 x 5 litre,4,295.99,,standard,true,4,1,200,2080000001465,12080000001462,20,Lemon dishwashing liquid.,true,
+MOKGAL-HC-0012,Dishwashing liquid,Pure White,household_cleaning,case,4 x 5 litre,4,330.19,,standard,true,207,1,200,2080000001472,12080000001479,20,Lemon dishwashing liquid.,true,
+MOKGAL-HC-0100,Hand washing powder,Sparkle,household_cleaning,bag,2 kg,1,70.39,,standard,true,82,1,200,2080000001489,,2,Washing powder for hand wash.,true,
+MOKGAL-HC-0101,Hand washing powder,Bright Wash,household_cleaning,bag,2 kg,1,76.49,,standard,true,192,1,200,2080000001496,,2,Washing powder for hand wash.,true,
+MOKGAL-HC-0102,Hand washing powder,Pure White,household_cleaning,bag,2 kg,1,81.49,100.59,standard,true,243,1,200,2080000001502,,2,Washing powder for hand wash.,true,
+MOKGAL-HC-0110,Hand washing powder,Sparkle,household_cleaning,bag,5 kg,1,154.39,,standard,true,352,1,200,2080000001519,,5,Washing powder for hand wash.,true,
+MOKGAL-HC-0111,Hand washing powder,Bright Wash,household_cleaning,bag,5 kg,1,173.79,,standard,true,72,1,200,2080000001526,,5,Washing powder for hand wash.,true,
+MOKGAL-HC-0112,Hand washing powder,Pure White,household_cleaning,bag,5 kg,1,187.59,,standard,true,393,1,200,2080000001533,,5,Washing powder for hand wash.,true,
+MOKGAL-HC-0200,Thick bleach,Sparkle,household_cleaning,case,12 x 750 ml,12,166.49,,standard,true,0,1,200,2080000001540,12080000001547,9,Thick household bleach.,true,
+MOKGAL-HC-0201,Thick bleach,Bright Wash,household_cleaning,case,12 x 750 ml,12,181.49,212.49,standard,true,158,1,200,2080000001557,12080000001554,9,Thick household bleach.,true,
+MOKGAL-HC-0300,Multi-purpose cleaner,Sparkle,household_cleaning,case,12 x 750 ml,12,204.99,,standard,true,118,1,200,2080000001564,12080000001561,9,"Cleans floors, tiles and counters.",true,
+MOKGAL-HC-0301,Multi-purpose cleaner,Bright Wash,household_cleaning,case,12 x 750 ml,12,221.89,,standard,true,295,1,200,2080000001571,12080000001578,9,"Cleans floors, tiles and counters.",true,
+MOKGAL-HC-0302,Multi-purpose cleaner,Pure White,household_cleaning,case,12 x 750 ml,12,240.09,,standard,true,315,1,200,2080000001588,12080000001585,9,"Cleans floors, tiles and counters.",true,
+MOKGAL-HC-0400,"Toilet paper, 1-ply",Sparkle,household_cleaning,pack,48 rolls,48,178.39,,standard,true,6,1,200,2080000001595,12080000001592,,Single-ply toilet rolls.,true,
+MOKGAL-HC-0401,"Toilet paper, 1-ply",Bright Wash,household_cleaning,pack,48 rolls,48,189.29,,standard,true,43,1,200,2080000001601,12080000001608,,Single-ply toilet rolls.,true,
+MOKGAL-HC-0402,"Toilet paper, 1-ply",Pure White,household_cleaning,pack,48 rolls,48,204.19,,standard,true,9,1,200,2080000001618,12080000001615,,Single-ply toilet rolls.,true,
+MOKGAL-HC-0500,"Toilet paper, 2-ply",Sparkle,household_cleaning,pack,24 rolls,24,163.79,201.89,standard,true,239,1,200,2080000001625,12080000001622,,Two-ply toilet rolls.,true,
+MOKGAL-HC-0501,"Toilet paper, 2-ply",Bright Wash,household_cleaning,pack,24 rolls,24,182.79,,standard,true,87,1,200,2080000001632,12080000001639,,Two-ply toilet rolls.,true,
+MOKGAL-HC-0502,"Toilet paper, 2-ply",Pure White,household_cleaning,pack,24 rolls,24,198.09,,standard,true,172,1,200,2080000001649,12080000001646,,Two-ply toilet rolls.,true,
+MOKGAL-HC-0600,Bath soap bars,Sparkle,household_cleaning,case,48 x 150 g,48,308.09,,standard,true,119,1,200,2080000001656,12080000001653,7.2,Family soap bars.,true,
+MOKGAL-HC-0601,Bath soap bars,Bright Wash,household_cleaning,case,48 x 150 g,48,326.39,,standard,true,126,1,200,2080000001663,12080000001660,7.2,Family soap bars.,true,
+MOKGAL-HC-0700,Laundry bar soap,Sparkle,household_cleaning,case,24 x 500 g,24,273.99,,standard,true,154,1,200,2080000001670,12080000001677,12,Blue laundry bars.,true,
+MOKGAL-HC-0702,Laundry bar soap,Pure White,household_cleaning,case,24 x 500 g,24,325.39,,standard,true,29,1,200,2080000001687,12080000001684,12,Blue laundry bars.,true,
+MOKGAL-HC-0800,Floor polish,Sparkle,household_cleaning,case,12 x 400 ml,12,337.59,,standard,true,342,1,200,2080000001694,12080000001691,4.8,Red floor polish.,true,
+MOKGAL-HC-0802,Floor polish,Pure White,household_cleaning,case,12 x 400 ml,12,398.39,490.79,standard,true,150,1,200,2080000001700,12080000001707,4.8,Red floor polish.,true,
+MOKGAL-HC-0900,Scouring pads,Sparkle,household_cleaning,pack,50 pads,50,93.89,114.49,standard,true,162,1,200,2080000001717,12080000001714,,Green scouring pads.,true,
+MOKGAL-HC-0901,Scouring pads,Bright Wash,household_cleaning,pack,50 pads,50,102.19,,standard,true,365,1,200,2080000001724,12080000001721,,Green scouring pads.,true,
+MOKGAL-HC-1000,"Refuse bags, black",Sparkle,household_cleaning,bundle,200 bags,200,169.39,,standard,true,291,1,200,2080000001731,12080000001738,,Heavy-duty black bags.,true,
+MOKGAL-HC-1001,"Refuse bags, black",Bright Wash,household_cleaning,bundle,200 bags,200,177.69,,standard,true,10,1,200,2080000001748,12080000001745,,Heavy-duty black bags.,true,
+MOKGAL-HC-1002,"Refuse bags, black",Pure White,household_cleaning,bundle,200 bags,200,198.69,,standard,true,11,1,200,2080000001755,12080000001752,,Heavy-duty black bags.,true,
+MOKGAL-PC-0000,Petroleum jelly,Skin Guard,personal_care,case,12 x 250 ml,12,187.99,,standard,true,54,1,200,2080000001762,12080000001769,3,Pure petroleum jelly.,true,
+MOKGAL-PC-0001,Petroleum jelly,Bright Smile,personal_care,case,12 x 250 ml,12,201.69,,standard,true,327,1,200,2080000001779,12080000001776,3,Pure petroleum jelly.,true,
+MOKGAL-PC-0002,Petroleum jelly,Fresh Day,personal_care,case,12 x 250 ml,12,217.79,257.29,standard,true,136,1,200,2080000001786,12080000001783,3,Pure petroleum jelly.,true,
+MOKGAL-PC-0100,Aqueous body lotion,Skin Guard,personal_care,case,6 x 400 ml,6,200.49,,standard,true,59,1,200,2080000001793,12080000001790,2.4,Aqueous body lotion.,true,
+MOKGAL-PC-0101,Aqueous body lotion,Bright Smile,personal_care,case,6 x 400 ml,6,223.19,,standard,true,373,1,200,2080000001809,12080000001806,2.4,Aqueous body lotion.,true,
+MOKGAL-PC-0102,Aqueous body lotion,Fresh Day,personal_care,case,6 x 400 ml,6,239.89,,standard,true,388,1,200,2080000001816,12080000001813,2.4,Aqueous body lotion.,true,
+MOKGAL-PC-0200,Fluoride toothpaste,Skin Guard,personal_care,case,24 x 100 ml,24,278.69,,standard,true,0,1,200,2080000001823,12080000001820,2.4,Fluoride toothpaste.,true,
+MOKGAL-PC-0201,Fluoride toothpaste,Bright Smile,personal_care,case,24 x 100 ml,24,295.79,339.99,standard,true,8,1,200,2080000001830,12080000001837,2.4,Fluoride toothpaste.,true,
+MOKGAL-PC-0202,Fluoride toothpaste,Fresh Day,personal_care,case,24 x 100 ml,24,323.69,,standard,true,305,1,200,2080000001847,12080000001844,2.4,Fluoride toothpaste.,true,
+MOKGAL-PC-0300,"Toothbrushes, medium",Skin Guard,personal_care,pack,24 brushes,24,110.19,132.99,standard,true,399,1,200,2080000001854,12080000001851,,Medium toothbrushes.,true,
+MOKGAL-PC-0301,"Toothbrushes, medium",Bright Smile,personal_care,pack,24 brushes,24,120.49,145.09,standard,true,386,1,200,2080000001861,12080000001868,,Medium toothbrushes.,true,
+MOKGAL-PC-0302,"Toothbrushes, medium",Fresh Day,personal_care,pack,24 brushes,24,131.59,,standard,true,86,1,200,2080000001878,12080000001875,,Medium toothbrushes.,true,
+MOKGAL-PC-0400,Roll-on deodorant,Skin Guard,personal_care,case,12 x 50 ml,12,225.89,,standard,true,321,1,200,2080000001885,12080000001882,0.6,48-hour roll-on.,true,
+MOKGAL-PC-0401,Roll-on deodorant,Bright Smile,personal_care,case,12 x 50 ml,12,237.39,288.79,standard,true,386,1,200,2080000001892,12080000001899,0.6,48-hour roll-on.,true,
+MOKGAL-PC-0402,Roll-on deodorant,Fresh Day,personal_care,case,12 x 50 ml,12,265.79,,standard,true,162,1,200,2080000001908,12080000001905,0.6,48-hour roll-on.,true,
+MOKGAL-PC-0500,Hair food,Skin Guard,personal_care,case,12 x 125 ml,12,184.89,,standard,true,2,1,200,2080000001915,12080000001912,1.5,Moisturising hair food.,true,
+MOKGAL-PC-0501,Hair food,Bright Smile,personal_care,case,12 x 125 ml,12,199.69,,standard,true,279,1,200,2080000001922,12080000001929,1.5,Moisturising hair food.,true,
+MOKGAL-PC-0502,Hair food,Fresh Day,personal_care,case,12 x 125 ml,12,215.19,,standard,true,196,1,200,2080000001939,12080000001936,1.5,Moisturising hair food.,true,
+MOKGAL-PC-0600,Sanitary pads,Skin Guard,personal_care,case,24 x 10 pads,1,445.79,,standard,true,264,1,200,2080000001946,,,Maxi thick pads.,true,
+MOKGAL-PC-0601,Sanitary pads,Bright Smile,personal_care,case,24 x 10 pads,1,483.09,,standard,true,312,1,200,2080000001953,,,Maxi thick pads.,true,
+MOKGAL-PC-0602,Sanitary pads,Fresh Day,personal_care,case,24 x 10 pads,1,529.59,,standard,true,80,1,200,2080000001960,,,Maxi thick pads.,true,
+MOKGAL-PC-0700,"Razors, twin blade",Skin Guard,personal_care,pack,50 razors,50,141.09,,standard,true,51,1,200,2080000001977,12080000001974,,Disposable twin-blade razors.,true,
+MOKGAL-PC-0701,"Razors, twin blade",Bright Smile,personal_care,pack,50 razors,50,153.49,,standard,true,131,1,200,2080000001984,12080000001981,,Disposable twin-blade razors.,true,
+MOKGAL-PC-0702,"Razors, twin blade",Fresh Day,personal_care,pack,50 razors,50,162.19,,standard,true,86,1,200,2080000001991,12080000001998,,Disposable twin-blade razors.,true,
+MOKGAL-DC-0000,Long-life full cream milk,Farm Fresh,dairy_chilled,case,6 x 1 litre,6,100.29,,zero,true,304,1,200,2080000002004,12080000002001,6,UHT milk; no fridge needed until opened.,true,
+MOKGAL-DC-0001,Long-life full cream milk,Dairy Best,dairy_chilled,case,6 x 1 litre,6,108.59,122.99,zero,true,153,1,200,2080000002011,12080000002018,6,UHT milk; no fridge needed until opened.,true,
+MOKGAL-DC-0010,Long-life full cream milk,Farm Fresh,dairy_chilled,case,12 x 1 litre,12,195.39,220.79,zero,true,368,1,200,2080000002028,12080000002025,12,UHT milk; no fridge needed until opened.,true,
+MOKGAL-DC-0011,Long-life full cream milk,Dairy Best,dairy_chilled,case,12 x 1 litre,12,209.19,,zero,true,275,1,200,2080000002035,12080000002032,12,UHT milk; no fridge needed until opened.,true,
+MOKGAL-DC-0012,Long-life full cream milk,Golden Spread,dairy_chilled,case,12 x 1 litre,12,227.49,,zero,true,241,1,200,2080000002042,12080000002049,12,UHT milk; no fridge needed until opened.,true,
+MOKGAL-DC-0100,Maas (amasi),Farm Fresh,dairy_chilled,case,6 x 2 litre,6,187.79,,zero,true,221,1,200,2080000002059,12080000002056,12,Thick fermented milk.,true,
+MOKGAL-DC-0101,Maas (amasi),Dairy Best,dairy_chilled,case,6 x 2 litre,6,197.39,,zero,true,235,1,200,2080000002066,12080000002063,12,Thick fermented milk.,true,
+MOKGAL-DC-0102,Maas (amasi),Golden Spread,dairy_chilled,case,6 x 2 litre,6,218.09,,zero,true,373,1,200,2080000002073,12080000002070,12,Thick fermented milk.,true,
+MOKGAL-DC-0200,Fresh full cream milk,Farm Fresh,dairy_chilled,crate,6 x 2 litre,6,169.39,,zero,true,145,1,200,2080000002080,12080000002087,12,Keep chilled.,true,
+MOKGAL-DC-0201,Fresh full cream milk,Dairy Best,dairy_chilled,crate,6 x 2 litre,6,181.79,223.19,zero,true,337,1,200,2080000002097,12080000002094,12,Keep chilled.,true,
+MOKGAL-DC-0202,Fresh full cream milk,Golden Spread,dairy_chilled,crate,6 x 2 litre,6,194.89,234.09,zero,true,136,1,200,2080000002103,12080000002100,12,Keep chilled.,true,
+MOKGAL-DC-0300,Margarine brick,Farm Fresh,dairy_chilled,case,12 x 500 g,12,274.99,,standard,true,320,1,200,2080000002110,12080000002117,6,Margarine bricks for bread.,true,
+MOKGAL-DC-0302,Margarine brick,Golden Spread,dairy_chilled,case,12 x 500 g,12,319.79,386.89,standard,true,375,1,200,2080000002127,12080000002124,6,Margarine bricks for bread.,true,
+MOKGAL-DC-0401,Cheese slices,Dairy Best,dairy_chilled,pack,10 x 200 g,10,405.59,460.19,standard,true,7,1,200,2080000002134,12080000002131,2,Processed cheese slices.,true,
+MOKGAL-DC-0402,Cheese slices,Golden Spread,dairy_chilled,pack,10 x 200 g,10,435.79,,standard,true,278,1,200,2080000002141,12080000002148,2,Processed cheese slices.,true,
+MOKGAL-DC-0500,Plain yoghurt,Farm Fresh,dairy_chilled,case,6 x 1 kg,6,206.09,244.89,standard,true,13,1,200,2080000002158,12080000002155,6,Plain drinking yoghurt.,true,
+MOKGAL-DC-0501,Plain yoghurt,Dairy Best,dairy_chilled,case,6 x 1 kg,6,224.19,,standard,true,186,1,200,2080000002165,12080000002162,6,Plain drinking yoghurt.,true,
+MOKGAL-DC-0502,Plain yoghurt,Golden Spread,dairy_chilled,case,6 x 1 kg,6,242.89,,standard,true,0,1,200,2080000002172,12080000002179,6,Plain drinking yoghurt.,true,
+MOKGAL-DC-0600,Fruit yoghurt cups,Farm Fresh,dairy_chilled,case,24 x 100 g,24,174.79,,standard,true,273,1,200,2080000002189,12080000002186,2.4,Assorted fruit yoghurt.,true,
+MOKGAL-DC-0601,Fruit yoghurt cups,Dairy Best,dairy_chilled,case,24 x 100 g,24,192.79,,standard,true,50,1,200,2080000002196,12080000002193,2.4,Assorted fruit yoghurt.,true,
+MOKGAL-DC-0602,Fruit yoghurt cups,Golden Spread,dairy_chilled,case,24 x 100 g,24,208.79,,standard,true,8,1,200,2080000002202,12080000002209,2.4,Assorted fruit yoghurt.,true,
+MOKGAL-DC-0700,Polony,Farm Fresh,dairy_chilled,case,10 x 1 kg,10,419.79,,standard,true,340,1,200,2080000002219,12080000002216,10,Chilled polony rolls.,true,
+MOKGAL-DC-0701,Polony,Dairy Best,dairy_chilled,case,10 x 1 kg,10,459.59,,standard,true,99,1,200,2080000002226,12080000002223,10,Chilled polony rolls.,true,
+MOKGAL-DC-0702,Polony,Golden Spread,dairy_chilled,case,10 x 1 kg,10,499.29,,standard,true,302,1,200,2080000002233,12080000002230,10,Chilled polony rolls.,true,

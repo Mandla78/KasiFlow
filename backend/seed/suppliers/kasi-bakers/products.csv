@@ -1,28 +1,28 @@
-product_code,name,brand,category,unit,pack_size,units_per_pack,price_rands,compare_at_rands,vat_rate,vat_included,stock,min_qty,max_qty,unit_barcode,case_barcode,weight_kg,description,active
-KASIBA-BK-0000,"White bread, sliced",Kasi Bakers,bakery,crate,10 x 700 g,10,145.09,,standard,true,0,1,200,2030000000005,12030000000002,7,"Baked fresh daily, sliced.",true
-KASIBA-BK-0001,"White bread, sliced",Morning Loaf,bakery,crate,10 x 700 g,10,157.79,,standard,true,7,1,200,2030000000012,12030000000019,7,"Baked fresh daily, sliced.",true
-KASIBA-BK-0002,"White bread, sliced",Oven Gold,bakery,crate,10 x 700 g,10,170.99,,standard,true,163,1,200,2030000000029,12030000000026,7,"Baked fresh daily, sliced.",true
-KASIBA-BK-0100,"Brown bread, sliced",Kasi Bakers,bakery,crate,10 x 700 g,10,134.39,,zero,true,6,1,200,2030000000036,12030000000033,7,"Baked fresh daily, sliced.",true
-KASIBA-BK-0101,"Brown bread, sliced",Morning Loaf,bakery,crate,10 x 700 g,10,145.99,,zero,true,319,1,200,2030000000043,12030000000040,7,"Baked fresh daily, sliced.",true
-KASIBA-BK-0102,"Brown bread, sliced",Oven Gold,bakery,crate,10 x 700 g,10,155.49,,zero,true,0,1,200,2030000000050,12030000000057,7,"Baked fresh daily, sliced.",true
-KASIBA-BK-0200,Whole-wheat bread,Kasi Bakers,bakery,crate,10 x 700 g,10,153.89,188.49,zero,true,6,1,200,2030000000067,12030000000064,7,Baked fresh daily.,true
-KASIBA-BK-0201,Whole-wheat bread,Morning Loaf,bakery,crate,10 x 700 g,10,165.39,206.09,zero,true,3,1,200,2030000000074,12030000000071,7,Baked fresh daily.,true
-KASIBA-BK-0202,Whole-wheat bread,Oven Gold,bakery,crate,10 x 700 g,10,176.89,201.89,zero,true,119,1,200,2030000000081,12030000000088,7,Baked fresh daily.,true
-KASIBA-BK-0300,Hot dog rolls,Kasi Bakers,bakery,pack,6 x 6 rolls,1,82.69,,standard,true,280,1,200,2030000000098,,,Soft rolls.,true
-KASIBA-BK-0301,Hot dog rolls,Morning Loaf,bakery,pack,6 x 6 rolls,1,88.09,,standard,true,240,1,200,2030000000104,,,Soft rolls.,true
-KASIBA-BK-0302,Hot dog rolls,Oven Gold,bakery,pack,6 x 6 rolls,1,96.09,,standard,true,111,1,200,2030000000111,,,Soft rolls.,true
-KASIBA-BK-0400,Burger buns,Kasi Bakers,bakery,pack,6 x 6 buns,1,85.39,,standard,true,338,1,200,2030000000128,,,Soft sesame buns.,true
-KASIBA-BK-0401,Burger buns,Morning Loaf,bakery,pack,6 x 6 buns,1,93.09,,standard,true,365,1,200,2030000000135,,,Soft sesame buns.,true
-KASIBA-BK-0402,Burger buns,Oven Gold,bakery,pack,6 x 6 buns,1,98.99,,standard,true,398,1,200,2030000000142,,,Soft sesame buns.,true
-KASIBA-BK-0500,Vetkoek,Kasi Bakers,bakery,tray,24 pieces,24,63.69,,standard,true,384,1,200,2030000000159,12030000000156,,Made fresh every morning.,true
-KASIBA-BK-0501,Vetkoek,Morning Loaf,bakery,tray,24 pieces,24,71.19,,standard,true,4,1,200,2030000000166,12030000000163,,Made fresh every morning.,true
-KASIBA-BK-0502,Vetkoek,Oven Gold,bakery,tray,24 pieces,24,75.89,,standard,true,213,1,200,2030000000173,12030000000170,,Made fresh every morning.,true
-KASIBA-BK-0600,Scones,Kasi Bakers,bakery,tray,24 pieces,24,85.89,103.99,standard,true,332,1,200,2030000000180,12030000000187,,Plain scones.,true
-KASIBA-BK-0601,Scones,Morning Loaf,bakery,tray,24 pieces,24,92.89,110.49,standard,true,391,1,200,2030000000197,12030000000194,,Plain scones.,true
-KASIBA-BK-0602,Scones,Oven Gold,bakery,tray,24 pieces,24,100.79,,standard,true,9,1,200,2030000000203,12030000000200,,Plain scones.,true
-KASIBA-BK-0700,"Muffins, assorted",Kasi Bakers,bakery,tray,12 pieces,12,74.29,,standard,true,98,1,200,2030000000210,12030000000217,,Chocolate and bran muffins.,true
-KASIBA-BK-0701,"Muffins, assorted",Morning Loaf,bakery,tray,12 pieces,12,83.89,94.79,standard,true,277,1,200,2030000000227,12030000000224,,Chocolate and bran muffins.,true
-KASIBA-BK-0702,"Muffins, assorted",Oven Gold,bakery,tray,12 pieces,12,88.99,,standard,true,0,1,200,2030000000234,12030000000231,,Chocolate and bran muffins.,true
-KASIBA-BK-0800,"Rusks, buttermilk",Kasi Bakers,bakery,case,6 x 500 g,6,219.19,,standard,true,356,1,200,2030000000241,12030000000248,3,Buttermilk rusks.,true
-KASIBA-BK-0801,"Rusks, buttermilk",Morning Loaf,bakery,case,6 x 500 g,6,232.59,278.19,standard,true,47,1,200,2030000000258,12030000000255,3,Buttermilk rusks.,true
-KASIBA-BK-0802,"Rusks, buttermilk",Oven Gold,bakery,case,6 x 500 g,6,252.09,,standard,true,343,1,200,2030000000265,12030000000262,3,Buttermilk rusks.,true
+product_code,name,brand,category,unit,pack_size,units_per_pack,price_rands,compare_at_rands,vat_rate,vat_included,stock,min_qty,max_qty,unit_barcode,case_barcode,weight_kg,description,active,image_1
+KASIBA-BK-0000,"White bread, sliced",Kasi Bakers,bakery,crate,10 x 700 g,10,145.09,,standard,true,0,1,200,2030000000005,12030000000002,7,"Baked fresh daily, sliced.",true,
+KASIBA-BK-0001,"White bread, sliced",Morning Loaf,bakery,crate,10 x 700 g,10,157.79,,standard,true,7,1,200,2030000000012,12030000000019,7,"Baked fresh daily, sliced.",true,
+KASIBA-BK-0002,"White bread, sliced",Oven Gold,bakery,crate,10 x 700 g,10,170.99,,standard,true,163,1,200,2030000000029,12030000000026,7,"Baked fresh daily, sliced.",true,
+KASIBA-BK-0100,"Brown bread, sliced",Kasi Bakers,bakery,crate,10 x 700 g,10,134.39,,zero,true,6,1,200,2030000000036,12030000000033,7,"Baked fresh daily, sliced.",true,
+KASIBA-BK-0101,"Brown bread, sliced",Morning Loaf,bakery,crate,10 x 700 g,10,145.99,,zero,true,319,1,200,2030000000043,12030000000040,7,"Baked fresh daily, sliced.",true,
+KASIBA-BK-0102,"Brown bread, sliced",Oven Gold,bakery,crate,10 x 700 g,10,155.49,,zero,true,0,1,200,2030000000050,12030000000057,7,"Baked fresh daily, sliced.",true,
+KASIBA-BK-0200,Whole-wheat bread,Kasi Bakers,bakery,crate,10 x 700 g,10,153.89,188.49,zero,true,6,1,200,2030000000067,12030000000064,7,Baked fresh daily.,true,
+KASIBA-BK-0201,Whole-wheat bread,Morning Loaf,bakery,crate,10 x 700 g,10,165.39,206.09,zero,true,3,1,200,2030000000074,12030000000071,7,Baked fresh daily.,true,
+KASIBA-BK-0202,Whole-wheat bread,Oven Gold,bakery,crate,10 x 700 g,10,176.89,201.89,zero,true,119,1,200,2030000000081,12030000000088,7,Baked fresh daily.,true,
+KASIBA-BK-0300,Hot dog rolls,Kasi Bakers,bakery,pack,6 x 6 rolls,1,82.69,,standard,true,280,1,200,2030000000098,,,Soft rolls.,true,
+KASIBA-BK-0301,Hot dog rolls,Morning Loaf,bakery,pack,6 x 6 rolls,1,88.09,,standard,true,240,1,200,2030000000104,,,Soft rolls.,true,
+KASIBA-BK-0302,Hot dog rolls,Oven Gold,bakery,pack,6 x 6 rolls,1,96.09,,standard,true,111,1,200,2030000000111,,,Soft rolls.,true,
+KASIBA-BK-0400,Burger buns,Kasi Bakers,bakery,pack,6 x 6 buns,1,85.39,,standard,true,338,1,200,2030000000128,,,Soft sesame buns.,true,
+KASIBA-BK-0401,Burger buns,Morning Loaf,bakery,pack,6 x 6 buns,1,93.09,,standard,true,365,1,200,2030000000135,,,Soft sesame buns.,true,
+KASIBA-BK-0402,Burger buns,Oven Gold,bakery,pack,6 x 6 buns,1,98.99,,standard,true,398,1,200,2030000000142,,,Soft sesame buns.,true,
+KASIBA-BK-0500,Vetkoek,Kasi Bakers,bakery,tray,24 pieces,24,63.69,,standard,true,384,1,200,2030000000159,12030000000156,,Made fresh every morning.,true,
+KASIBA-BK-0501,Vetkoek,Morning Loaf,bakery,tray,24 pieces,24,71.19,,standard,true,4,1,200,2030000000166,12030000000163,,Made fresh every morning.,true,
+KASIBA-BK-0502,Vetkoek,Oven Gold,bakery,tray,24 pieces,24,75.89,,standard,true,213,1,200,2030000000173,12030000000170,,Made fresh every morning.,true,
+KASIBA-BK-0600,Scones,Kasi Bakers,bakery,tray,24 pieces,24,85.89,103.99,standard,true,332,1,200,2030000000180,12030000000187,,Plain scones.,true,
+KASIBA-BK-0601,Scones,Morning Loaf,bakery,tray,24 pieces,24,92.89,110.49,standard,true,391,1,200,2030000000197,12030000000194,,Plain scones.,true,
+KASIBA-BK-0602,Scones,Oven Gold,bakery,tray,24 pieces,24,100.79,,standard,true,9,1,200,2030000000203,12030000000200,,Plain scones.,true,
+KASIBA-BK-0700,"Muffins, assorted",Kasi Bakers,bakery,tray,12 pieces,12,74.29,,standard,true,98,1,200,2030000000210,12030000000217,,Chocolate and bran muffins.,true,
+KASIBA-BK-0701,"Muffins, assorted",Morning Loaf,bakery,tray,12 pieces,12,83.89,94.79,standard,true,277,1,200,2030000000227,12030000000224,,Chocolate and bran muffins.,true,
+KASIBA-BK-0702,"Muffins, assorted",Oven Gold,bakery,tray,12 pieces,12,88.99,,standard,true,0,1,200,2030000000234,12030000000231,,Chocolate and bran muffins.,true,
+KASIBA-BK-0800,"Rusks, buttermilk",Kasi Bakers,bakery,case,6 x 500 g,6,219.19,,standard,true,356,1,200,2030000000241,12030000000248,3,Buttermilk rusks.,true,
+KASIBA-BK-0801,"Rusks, buttermilk",Morning Loaf,bakery,case,6 x 500 g,6,232.59,278.19,standard,true,47,1,200,2030000000258,12030000000255,3,Buttermilk rusks.,true,
+KASIBA-BK-0802,"Rusks, buttermilk",Oven Gold,bakery,case,6 x 500 g,6,252.09,,standard,true,343,1,200,2030000000265,12030000000262,3,Buttermilk rusks.,true,

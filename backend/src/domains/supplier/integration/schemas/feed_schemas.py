@@ -21,6 +21,7 @@ from typing import Any, Optional
 from marshmallow import RAISE, Schema, ValidationError, fields, validate, validates_schema
 
 from src.shared.constants.categories import CATEGORIES
+from src.shared.media.public_urls import is_our_image_url
 from src.shared.validation.identifiers import normalize_email, normalize_phone
 from src.shared.validation.text import BusinessName, CleanText, clean_text
 from src.shared.validation.validators import is_plausible_email
@@ -89,6 +90,7 @@ class SupplierFeedSchema(_Strict):
     orders_email = fields.String(required=True, validate=validate.Length(max=254))
     phone = fields.String(load_default=None, allow_none=True)
     brand_color = fields.String(load_default="#1F2A44", validate=validate.Regexp(r"^#[0-9A-Fa-f]{6}$"))
+    logo_url = fields.String(load_default=None, allow_none=True)
     collection_address = fields.Nested(AddressSchema, required=True)
     hours = fields.List(fields.Nested(HoursSchema), required=True, validate=validate.Length(min=1, max=7))
     delivery = fields.Nested(DeliverySchema, required=True)
@@ -106,6 +108,8 @@ class SupplierFeedSchema(_Strict):
         email = normalize_email(data.get("orders_email", ""))
         if not is_plausible_email(email):
             errors["orders_email"] = ["Enter a valid email address."]
+        if data.get("logo_url") and not is_our_image_url(data["logo_url"]):
+            errors["logo_url"] = ["Use an image link on our image service (res.cloudinary.com)."]
         if data.get("phone") and not normalize_phone(data["phone"]):
             errors["phone"] = ["Enter a valid South African phone number."]
         cats = data.get("categories") or []
@@ -137,6 +141,7 @@ def load_supplier_feed(raw: Any) -> dict:
         "orders_email": normalize_email(d["orders_email"]),
         "phone": normalize_phone(d["phone"]) if d["phone"] else None,
         "brand_color": d["brand_color"].upper(),
+        "logo_url": d["logo_url"] or None,
         "street": a["street"],
         "suburb": a["suburb"],
         "city": a["city"],
@@ -168,6 +173,7 @@ PRODUCT_COLUMNS = (
     "product_code", "name", "brand", "category", "unit", "pack_size", "units_per_pack",
     "price_rands", "compare_at_rands", "vat_rate", "vat_included", "stock", "min_qty", "max_qty",
     "unit_barcode", "case_barcode", "weight_kg", "description", "active",
+    "image_1", "image_2", "image_3", "image_4", "image_5", "image_6", "image_7",
 )
 REQUIRED_COLUMNS = ("product_code", "name", "category", "unit", "pack_size", "price_rands", "vat_rate", "stock")
 
@@ -256,6 +262,19 @@ def _barcode(row: dict, field: str, lengths: tuple[int, ...], what: str) -> Opti
     return raw
 
 
+def _images(row: dict) -> list[str]:
+    urls: list[str] = []
+    for n in range(1, 8):
+        raw = (row.get(f"image_{n}") or "").strip()
+        if not raw:
+            continue
+        if not is_our_image_url(raw):
+            raise RowError(f"image_{n}", "Use an image link on our image service (res.cloudinary.com).")
+        if raw not in urls:
+            urls.append(raw)
+    return urls
+
+
 def parse_product_row(row: dict, supplier_categories: list[str]) -> dict:
     """One CSV row -> the Product model's columns, or RowError(field, reason)."""
     code = (row.get("product_code") or "").strip()
@@ -298,6 +317,7 @@ def parse_product_row(row: dict, supplier_categories: list[str]) -> dict:
         "units_per_pack": _int(row, "units_per_pack", 1, 1, 10_000),
         "weight_kg": Decimal(weight_raw) if weight_raw else None,
         "description": _text(row, "description", required=False, max_len=1000),
+        "image_urls": _images(row),
         "price_cents": price,
         "compare_at_price_cents": compare_at,
         "vat_rate": vat_rate,

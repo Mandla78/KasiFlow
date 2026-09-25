@@ -15,6 +15,8 @@ import uuid
 from dataclasses import dataclass
 from typing import Optional
 
+from src.shared.media.public_urls import delivery_url
+
 from ..constants import LOW_STOCK_AT
 from ..models import Product
 from ..repositories import product_repository as repo
@@ -95,5 +97,5 @@ def public_product_view(p: Product) -> dict:
         "min_qty": p.min_qty,
         "max_qty": p.max_qty,
         "description": p.description or "",
-        "images": [],  # 1-7 photos come with the images step
+        "images": [delivery_url(u, 800) for u in (p.image_urls or [])],
     }
