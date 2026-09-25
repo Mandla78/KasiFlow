@@ -38,7 +38,6 @@ export function RepaymentSheet({ entry, today, onClose, onSaved }: Props) {
   const error = amountError(amount, left, `Only ${formatRand(left)} is left to pay`);
   const cents = parseRand(amount);
   const yesterday = addDays(today, -1);
-  const supplier = entry.kind === 'supplier_debt';
 
   async function save() {
     setTouched(true);
@@ -55,12 +54,12 @@ export function RepaymentSheet({ entry, today, onClose, onSaved }: Props) {
   }
 
   return (
-    <Sheet visible onClose={onClose} title={supplier ? 'Record a payment' : 'Record repayment'}>
+    <Sheet visible onClose={onClose} title="Record repayment">
       <Text style={styles.remaining}>
-        {formatRand(left)} still {supplier ? 'to pay' : 'owed'}
+        {formatRand(left)} still owed
       </Text>
       <AmountField
-        label={supplier ? 'How much did you pay?' : 'How much did they pay back?'}
+        label="How much did they pay back?"
         value={amount}
         onChangeText={setAmount}
         error={touched ? error : ''}

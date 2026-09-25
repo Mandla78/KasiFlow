@@ -3,18 +3,15 @@ import { Pressable, StyleSheet, Text, View } from 'react-native';
 
 import { colors, fonts, radius } from '@/shared/theme/tokens';
 
-import { addDays, monthEnd, nextFriday, shortDate } from '../lib/dueDates';
+import { addDays, MAX_DAYS_AHEAD, monthEnd, nextFriday, shortDate } from '../lib/dueDates';
 import { CalendarSheet } from './CalendarSheet';
-
-/** A year ahead is the furthest a pay-back date can go (the server says the same). */
-export const MAX_DUE_DAYS = 366;
 
 type Props = {
   label?: string;
   value: string | null;
   onChange: (iso: string) => void;
   today: string;
-  /** Earliest allowed day; today for a new entry, the day it was given for a correction. */
+  /** Earliest allowed day: the day the credit was given (which may be in the past). */
   min?: string;
   error?: string;
 };
@@ -49,7 +46,7 @@ export function DuePicker({ label = 'Pays back on', value, onChange, today, min 
           title={label}
           value={value}
           min={min}
-          max={addDays(today, MAX_DUE_DAYS)}
+          max={addDays(today, MAX_DAYS_AHEAD)}
           today={today}
           onPick={onChange}
         />

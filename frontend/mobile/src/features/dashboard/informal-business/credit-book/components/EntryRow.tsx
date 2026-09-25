@@ -1,4 +1,3 @@
-import { Feather } from '@expo/vector-icons';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 
 import { Tag } from '@/shared/components/Parts';
@@ -8,18 +7,11 @@ import { colors, fonts } from '@/shared/theme/tokens';
 import { dueLabel } from '../lib/dueDates';
 import { CreditEntry } from '../types';
 
-export function entryName(e: CreditEntry): string {
-  return e.customer?.name ?? e.supplierName ?? 'Someone';
-}
-
 /** One line of the book: who, what they took, what's left, and when it's due. */
 export function EntryRow({ entry, today, onPress, last }: { entry: CreditEntry; today: string; onPress: () => void; last?: boolean }) {
-  const name = entryName(entry);
+  const name = entry.customer.name;
   const paid = entry.status === 'paid';
   const due = dueLabel(entry.dueOn, today);
-  const supplier = entry.kind === 'supplier_debt';
-  const source = supplier ? (entry.source === 'order' ? 'From an order' : 'Added by you') : '';
-  const sub = [source, entry.description].filter(Boolean).join(' · ');
 
   return (
     <Pressable
@@ -28,15 +20,15 @@ export function EntryRow({ entry, today, onPress, last }: { entry: CreditEntry; 
       onPress={onPress}
       style={({ pressed }) => [styles.row, !last && styles.rule, pressed && { opacity: 0.7 }]}>
       <View style={[styles.avatar, paid && { opacity: 0.6 }]}>
-        {supplier ? <Feather name="truck" size={17} color={colors.ink} /> : <Text style={styles.initial}>{name.trim()[0]?.toUpperCase() ?? '?'}</Text>}
+        <Text style={styles.initial}>{name.trim()[0]?.toUpperCase() ?? '?'}</Text>
       </View>
       <View style={{ flex: 1, gap: 2 }}>
         <Text style={[styles.name, paid && styles.faded]} numberOfLines={1}>
           {name}
         </Text>
-        {sub ? (
+        {entry.description ? (
           <Text style={styles.sub} numberOfLines={1}>
-            {sub}
+            {entry.description}
           </Text>
         ) : null}
       </View>

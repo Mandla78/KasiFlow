@@ -5,6 +5,10 @@
  * which isn't complete on every Android phone.
  */
 
+/** A pay-back date up to a year ahead; paper-book credit up to a year back (the server says the same). */
+export const MAX_DAYS_AHEAD = 366;
+export const MAX_DAYS_BACK = 366;
+
 const DAYS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 const FRIDAY = 5;

@@ -1,6 +1,6 @@
 import { router } from 'expo-router';
 import { useState } from 'react';
-import { StyleSheet, Text } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 
 import { useSession } from '@/features/auth/session/SessionProvider';
 import { ApiError } from '@/shared/api/client';
@@ -15,9 +15,10 @@ import { colors, fonts } from '@/shared/theme/tokens';
 import { creditBookApi } from '../api/creditBookApi';
 import { AmountField } from '../components/AmountField';
 import { CustomerField } from '../components/CustomerField';
-import { DuePicker } from '../components/DuePicker';
+import { CalendarSheet } from '../components/CalendarSheet';
+import { Chip, DuePicker } from '../components/DuePicker';
 import { amountError, DESCRIPTION_MAX, NAME_MAX, parseRand } from '../lib/amounts';
-import { nextFriday, todayIso } from '../lib/dueDates';
+import { addDays, MAX_DAYS_BACK, nextFriday, shortDate, todayIso } from '../lib/dueDates';
 import { normalisePhone, openWhatsApp, receiptText } from '../lib/whatsapp';
 import { Customer } from '../types';
 
@@ -25,6 +26,9 @@ import { Customer } from '../types';
  * New credit sale (PDF p3): who, how much, what, and when they pay back.
  * If the customer has a cellphone, the trader can send a WhatsApp receipt
  * from their own phone straight after saving.
+ *
+ * Copying the paper book: "Given on: Earlier" back-dates it (up to a year),
+ * and the pay-back date may then already be past, so it shows as late.
  */
 export default function NewCreditSaleScreen() {
   const { profile } = useSession();
@@ -34,6 +38,8 @@ export default function NewCreditSaleScreen() {
   const [phone, setPhone] = useState('');
   const [amount, setAmount] = useState('');
   const [description, setDescription] = useState('');
+  const [givenOn, setGivenOn] = useState(today);
+  const [calendar, setCalendar] = useState(false);
   const [dueOn, setDueOn] = useState<string | null>(nextFriday(today));
   const [receipt, setReceipt] = useState(true);
   const [touched, setTouched] = useState(false);
@@ -52,6 +58,13 @@ export default function NewCreditSaleScreen() {
   const whatsappTo = picked ? picked.phone : typedPhone;
   const firstName = name.trim().split(/\s+/)[0] || 'them';
 
+  function giveOn(day: string) {
+    setGivenOn(day);
+    if (dueOn && dueOn < day) setDueOn(null);
+    // A receipt is for credit given now, not for copying an old book.
+    setReceipt(day === today);
+  }
+
   function type(next: string) {
     setName(next);
     if (picked && next !== picked.name) setPicked(null);
@@ -68,6 +81,7 @@ export default function NewCreditSaleScreen() {
         customer: picked ? { id: picked.id } : { name: name.trim(), phone: typedPhone },
         amountCents: cents,
         description: description.trim(),
+        givenOn,
         dueOn,
       });
       if (receipt && whatsappTo) await openWhatsApp(whatsappTo, receiptText(entry, profile.businessName, today));
@@ -122,7 +136,26 @@ export default function NewCreditSaleScreen() {
         maxLength={DESCRIPTION_MAX}
         error={e('description')}
       />
-      <DuePicker value={dueOn} onChange={setDueOn} today={today} error={e('dueOn')} />
+      <View style={{ gap: 8 }}>
+        <Text style={styles.label}>Given on</Text>
+        <View style={styles.chips}>
+          <Chip label="Today" on={givenOn === today} onPress={() => giveOn(today)} />
+          <Chip label={givenOn === today ? 'Earlier' : shortDate(givenOn, today)} on={givenOn !== today} onPress={() => setCalendar(true)} />
+        </View>
+        {givenOn !== today ? <Text style={styles.hint}>From your paper book? The pay-back date can be in the past too.</Text> : null}
+      </View>
+      <DuePicker value={dueOn} onChange={setDueOn} today={today} min={givenOn} error={e('dueOn')} />
+      {calendar ? (
+        <CalendarSheet
+          onClose={() => setCalendar(false)}
+          title="Given on"
+          value={givenOn}
+          min={addDays(today, -MAX_DAYS_BACK)}
+          max={today}
+          today={today}
+          onPick={giveOn}
+        />
+      ) : null}
 
       {whatsappTo ? (
         <Card>
@@ -139,5 +172,8 @@ export default function NewCreditSaleScreen() {
 
 const styles = StyleSheet.create({
   check: { fontFamily: fonts.medium, fontSize: 14.5, lineHeight: 22, color: colors.text },
+  label: { fontFamily: fonts.semibold, fontSize: 13.5, color: colors.text },
+  chips: { flexDirection: 'row', flexWrap: 'wrap', gap: 8 },
+  hint: { fontFamily: fonts.body, fontSize: 12.5, color: colors.textMuted },
   failure: { fontFamily: fonts.medium, fontSize: 13, color: colors.garnet, textAlign: 'center' },
 });

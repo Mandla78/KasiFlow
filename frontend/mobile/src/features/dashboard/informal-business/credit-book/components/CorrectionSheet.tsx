@@ -73,7 +73,7 @@ export function CorrectionSheet({ entry, today, onClose, onSaved }: Props) {
       <Text style={styles.intro}>The old values stay in the history, so the book always adds up.</Text>
       <AmountField label="Amount" value={amount} onChangeText={setAmount} error={e('amount')} />
       <TextField
-        label={entry.kind === 'supplier_debt' ? 'What was it for?' : 'What did they take?'}
+        label="What did they take?"
         optional
         value={description}
         onChangeText={setDescription}

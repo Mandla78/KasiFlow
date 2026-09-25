@@ -7,7 +7,6 @@ import { Cents, formatRand } from '@/shared/lib/money';
 /** R100,000: far above any spaza tab, low enough to catch a slipped finger. */
 export const MAX_AMOUNT_CENTS: Cents = 10_000_000;
 export const NAME_MAX = 60;
-export const SUPPLIER_NAME_MAX = 80;
 export const DESCRIPTION_MAX = 120;
 export const REASON_MAX = 120;
 
