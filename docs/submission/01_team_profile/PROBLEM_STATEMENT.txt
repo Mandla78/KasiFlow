@@ -7,17 +7,17 @@ private until the pitch). This is the PROBLEM only. Every number has a
 source (bottom); check the [MANDLA] / [RISUNA] lines before pasting.
 
 Scope: the whole informal trade. Spaza shops first (the biggest part),
-informal builders second, then other hustles (street vendors, resellers,
-food sellers), and the suppliers and clients on the other side of them.
+informal builders second, then other informal traders, and the suppliers
+and clients on the other side of them.
 
 
 ---------------------------------------------------------------------------
-PASTE-READY (about 200 words)
+PASTE-READY (about 195 words)
 ---------------------------------------------------------------------------
 
-South Africa's informal traders -- spaza shops, informal builders,
-street vendors and resellers -- run their business on phone calls,
-WhatsApp messages, cash and a notebook. A spaza owner restocks from a
+South Africa's informal traders -- spaza shops, builders and other
+informal businesses -- run their business on phone calls, WhatsApp
+messages, cash and a notebook. A spaza owner restocks from a
 wholesaler and pays a driver in cash; a builder buys materials and gets
 paid by a client in stages; none of it leaves a record that both sides
 accept. So suppliers can't reconcile cash, builders and clients argue
@@ -46,7 +46,7 @@ THE FIVE PARTS (what the organisers asked for)
      businesses; Stats SA);
    - informal builders and trades (plumbers, electricians, painters):
      construction is one of the informal industries that is growing;
-   - other hustles: street vendors, resellers, food sellers.
+   - other informal traders.
    And the people on the other side of every deal: the wholesalers and
    hardware suppliers they buy from, and the clients who pay builders.
 
