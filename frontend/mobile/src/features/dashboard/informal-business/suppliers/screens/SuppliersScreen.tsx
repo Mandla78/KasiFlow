@@ -107,9 +107,7 @@ export default function SuppliersScreen() {
 
       {matches && shown.length === 0 ? (
         <Text style={styles.empty}>
-          {matches.length === 0
-            ? "No supplier we work with reaches you or sells your categories yet. We'll let you know when one does."
-            : 'No suppliers match. Try another word or category.'}
+          {matches.length === 0 ? 'No suppliers to show right now. New suppliers are joining; check again soon.' : 'No suppliers match. Try another word or category.'}
         </Text>
       ) : null}
     </Screen>

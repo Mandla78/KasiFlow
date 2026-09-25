@@ -1,14 +1,11 @@
 /**
- * MOCK supplier engine -- the same rules the backend will run, so the
- * Suppliers tab behaves the same after wiring.
+ * MOCK supplier recommendation engine -- the same idea the backend will run.
+ * It RANKS, it never hides: every supplier shows, best fit first, each with
+ * plain reasons (including honest ones like "outside their delivery area").
  *
- *   1. Must sell at least one category the trader buys.
- *   2. Must reach the trader: delivers within its radius, or (if the trader
- *      collects) is within 15 km.
- *   3. If the trader has said how they pay, the supplier must accept it.
- *   Score = category fit (50) + closeness (30) + payment fit (10) +
- *   minimum-order fit (10). A minimum order above the trader's usual spend
- *   is a caution, not an exclusion. Unknown payment or spend: no filter.
+ *   Score = what you buy (40) + reach (35: delivers to you > you can collect
+ *   > far) + closeness (10) + how you pay (10) + minimum order fits (5).
+ *   A minimum order above the trader's usual spend is a caution.
  */
 import { categoryByCode } from '@/constants/categories';
 import type { Buying } from '@/features/auth/types';
@@ -48,19 +45,31 @@ export const mockSupplierMatchApi: SupplierMatchApi = {
     const matches: SupplierMatch[] = [];
     for (const s of SUPPLIERS) {
       const shared = s.categories.filter((c) => categories.includes(c));
-      if (shared.length === 0) continue;
-
       const km = distanceKm(place.latitude, place.longitude, s.latitude, s.longitude);
       const delivers = !wantsCollect && km <= s.deliveryRadiusKm;
       const collectable = canCollect && km <= COLLECT_RADIUS_KM;
-      if (!delivers && !collectable) continue;
-
       const payOk = buying.payment === 'payfast' ? s.payfast : buying.payment === 'cash' ? s.cash : true;
-      if (!payOk) continue;
-
-      const reach = delivers ? s.deliveryRadiusKm : COLLECT_RADIUS_KM;
       const minOk = spendMax === null || s.minOrderCents <= spendMax;
-      const score = (shared.length / Math.max(categories.length, 1)) * 50 + (1 - km / reach) * 30 + 10 + (minOk ? 10 : 0);
+
+      const fit = shared.length / Math.max(categories.length, 1);
+      const reachScore = delivers ? 35 : collectable ? 25 : 0;
+      const closeness = Math.max(0, 1 - km / 100) * 10;
+      const score = fit * 40 + reachScore + closeness + (payOk ? 10 : 0) + (minOk ? 5 : 0);
+
+      const where = delivers
+        ? `${km.toFixed(1)} km away · delivers to you`
+        : collectable
+          ? `${km.toFixed(1)} km away · you can collect`
+          : `${km.toFixed(0)} km away · outside their delivery area`;
+      const what = shared.length
+        ? `Sells ${shared.length} of your ${categories.length} categories: ${shared
+            .slice(0, 3)
+            .map((c) => categoryByCode(c).label)
+            .join(', ')}${shared.length > 3 ? '…' : ''}`
+        : `Sells ${s.categories
+            .slice(0, 3)
+            .map((c) => categoryByCode(c).label)
+            .join(', ')}`;
 
       matches.push({
         id: s.id,
@@ -74,14 +83,7 @@ export const mockSupplierMatchApi: SupplierMatchApi = {
         cash: s.cash,
         delivers,
         minOrderCents: s.minOrderCents,
-        reasons: [
-          `${km.toFixed(1)} km away · ${delivers ? 'delivers to you' : 'you can collect'}`,
-          `Sells ${shared.length} of your ${categories.length} categories: ${shared
-            .slice(0, 3)
-            .map((c) => categoryByCode(c).label)
-            .join(', ')}${shared.length > 3 ? '…' : ''}`,
-          [s.payfast && 'Accepts payment in the app', s.cash && 'cash on delivery'].filter(Boolean).join(' · '),
-        ],
+        reasons: [where, what, [s.payfast && 'Accepts payment in the app', s.cash && 'cash on delivery'].filter(Boolean).join(' · ')],
         caution: minOk ? undefined : `Minimum order ${formatRand(s.minOrderCents)}, more than your usual spend`,
         score,
       });

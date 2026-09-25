@@ -3,8 +3,6 @@ import { router } from 'expo-router';
 import { useEffect, useState } from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 
-import { Button } from '@/shared/components/Button';
-import { Card, ListRow } from '@/shared/components/Parts';
 import { Screen } from '@/shared/components/Screen';
 import { Title } from '@/shared/components/Text';
 import { formatRand } from '@/shared/lib/money';
@@ -14,7 +12,7 @@ import { supplierApi } from '../../suppliers/api/supplierApi';
 import type { Supplier } from '../../suppliers/types';
 import { estimatedTotal, itemCount, useCart, useCartSupplierIds } from '../lib/cartStore';
 
-/** Your carts: one per supplier (one order = one supplier). */
+/** Your carts: stock added but not ordered yet, one cart per supplier (one order = one supplier). */
 export default function CartsScreen() {
   const ids = useCartSupplierIds();
 
@@ -24,8 +22,7 @@ export default function CartsScreen() {
       {ids.length === 0 ? (
         <View style={{ gap: 12, alignItems: 'center', paddingVertical: 30 }}>
           <Feather name="shopping-cart" size={28} color={colors.textMuted} />
-          <Text style={styles.muted}>Nothing in your carts yet. Open a supplier and add stock.</Text>
-          <Button title="Find suppliers" variant="secondary" onPress={() => router.back()} />
+          <Text style={styles.muted}>Nothing waiting to be ordered. Stock you add at a supplier shows here until you place the order.</Text>
         </View>
       ) : (
         <View style={{ gap: 10 }}>
@@ -35,9 +32,6 @@ export default function CartsScreen() {
           ))}
         </View>
       )}
-      <Card style={{ paddingVertical: 4 }}>
-        <ListRow icon="file-text" title="My orders" subtitle="Orders you've placed" onPress={() => router.push('/informal-business/orders')} last />
-      </Card>
     </Screen>
   );
 }
@@ -67,7 +61,7 @@ function SupplierCartRow({ supplierId }: { supplierId: string }) {
 }
 
 const styles = StyleSheet.create({
-  muted: { fontFamily: fonts.body, fontSize: 13, lineHeight: 18, color: colors.textMuted, textAlign: 'left' },
+  muted: { fontFamily: fonts.body, fontSize: 13, lineHeight: 18, color: colors.textMuted, textAlign: 'center' },
   row: { flexDirection: 'row', alignItems: 'center', gap: 12, backgroundColor: colors.white, borderRadius: radius.md, borderWidth: 1, borderColor: colors.line, padding: 14 },
   logo: { width: 44, height: 44, borderRadius: radius.sm, alignItems: 'center', justifyContent: 'center' },
   logoText: { fontFamily: fonts.display, fontSize: 16, color: colors.white },
