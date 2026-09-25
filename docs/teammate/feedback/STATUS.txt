@@ -11,12 +11,15 @@ DONE
     stages that add up, job detail (stages as steps), stage photo (camera
     only, launchCameraAsync), send sign-off on WhatsApp, a practice
     client page (Test), "amounts don't match" kept, house records.
+  - Jobs backend (approved verbally, 25 Sep), risuna/jobs-api (PR 4):
+    migration 0012_jobs, stage photos kept with the server's time and a
+    server-side SHA-256, one-use sign-off links (HMAC-stored), the
+    client's /sign-off page, the app on the real API.
 
 IN PROGRESS
-  - CONTRACT_jobs.txt: proposed, waiting for Mandla
+  -
 
 BLOCKED (and on what)
-  - Jobs backend + the public sign-off page: on CONTRACT_jobs.txt
   - The app sending Idempotency-Key: a header option in api()
     (NEEDS_api_client_headers.txt)
 
@@ -30,4 +33,3 @@ NEXT
   - Home / Account live lines from creditBookApi.summary() and
     jobsApi.summary() (file 08)
   - My record screen (mock) + share
-  - Jobs backend after the contract is approved

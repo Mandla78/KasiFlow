@@ -5,7 +5,8 @@ CONTRACT -- JOBS (builders and trades)
 TOOL:            Jobs, stage photos, client sign-off, house records
                  (docs/teammate/07_JOBS_PLAN.txt, PDF p11-p15)
 AUTHOR / DATE:   Risuna, Friday 25 September 2026
-STATUS:          proposed
+STATUS:          approved by Mandla (verbal, 25 Sep 2026, via Risuna) and built on
+                 risuna/jobs-api, with the answers in section 6
 
   The app's mock keeps these rules today:
   frontend/mobile/src/features/dashboard/informal-business/jobs/
@@ -139,16 +140,26 @@ STATUS:          proposed
   backend), importing old WhatsApp photos, editing/cancelling a job.
 
 
-6. OPEN QUESTIONS FOR MANDLA
+6. ANSWERS USED (Mandla: correct anything here and I'll follow)
 ---------------------------------------------------------------------------
 
-  1. Migration number for jobs (0012?).
-  2. The sign-off page: under /sign-off on the API host (like the reset
-     page), right?
-  3. Hash the photo on the server after Cloudinary (FINDING_stage_photos)
-     instead of on the phone (expo-crypto would need a new build)?
-  4. Camera permission text in app.json (NEEDS_camera_permission_text).
-  5. Shared components (NEEDS_shared_components): OK to move them?
-  6. Editing/cancelling a job and "house records import" after the demo?
+  1. Migration 0012_jobs.
+  2. The client's page is /sign-off?ticket=... on the API host
+     ({APP_BASE_URL}), built like the reset-password page. In development
+     APP_BASE_URL is the PC's Wi-Fi address, so a second phone on the same
+     Wi-Fi opens it.
+  3. The photo is hashed on the server: the stored file is read once from
+     Cloudinary after uploads.finish(); if it can't be read, nothing is
+     kept (503 PHOTO_CHECK_FAILED) and the builder tries again.
+  4. The camera text in app.json is yours (NEEDS_camera_permission_text).
+  5. Moving shared pieces is its own PR later (NEEDS_shared_components):
+     jobs reuses the credit book's rate-limit key and idempotency wrapper
+     for now.
+  6. Editing/cancelling a job and importing old photos: later.
+
+  Built as above, with GET /me/jobs/summary and the sign-off route named
+  POST /me/jobs/{id}/stages/{sid}/sign-off. A new link revokes the stage's
+  older ones. Stage photos are not malware-scanned yet (scanning is off
+  by default; the profile photo's scan flow can be added when it's on).
 
 DECISION:

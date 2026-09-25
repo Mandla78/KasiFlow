@@ -18,4 +18,12 @@ ASK
   and update the imports? A PR with only the move, after the jobs PR,
   so nothing else changes at the same time.
 
+BACKEND TOO (added with the jobs backend)
+  jobs/api/routes.py imports from the credit book:
+    credit_book/api/limits.py       per_user(): the rate-limit key from the
+                                    signed-in user, not the IP
+    credit_book/api/idempotent.py   run_once(): Idempotency-Key handling
+  Both are general; they'd sit well in shared/rate_limit/ and
+  shared/idempotency/ (both yours). Same move PR.
+
 DECISION:
