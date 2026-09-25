@@ -1,6 +1,6 @@
 """
 Where every uploaded file lives on Cloudinary. ONE place every feature's
-upload path calls into. (Adapted from TruConnect; see REUSE.md.)
+upload path calls into.
 
 ORGANISED BY WHO OWNS THE FILE, then what it is, so one trader's or one
 supplier's whole folder can be browsed (or removed) in one place:

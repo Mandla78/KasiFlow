@@ -23,7 +23,7 @@ from src.shared.cache import cache as cache_module  # noqa: E402
 from src.shared.email.email import get_fake_provider  # noqa: E402
 from src.shared.rate_limit.limiter import limiter  # noqa: E402
 
-TRADER_TABLES = ["trader.business_profile_images", "trader.business_profiles", "platform.media_upload_intents", "platform.media_upload_records"]
+TRADER_TABLES = ["trader.business_profile_images", "trader.business_profiles", "platform.media_uploads"]
 IDENTITY_TABLES = ["google_identities", "sessions", "trusted_phones", "devices", "email_codes", "password_resets", "password_credentials", "consents", "users"]
 
 
@@ -48,9 +48,9 @@ def clean(app):
     cache_module.cache.clear()
     # Limits off by default; tests/domains/identity/test_rate_limits.py turns them on.
     limiter.enabled = False
-    from src.shared.media.providers.composition import reset_media_provider
+    from src.shared.media.provider import reset_provider
 
-    reset_media_provider()  # a fresh fake Cloudinary per test
+    reset_provider()  # a fresh fake Cloudinary per test
     yield
     with app.app_context():
         db.session.remove()

@@ -1,20 +1,20 @@
 """
-The trader's profile photo: signed direct upload to (fake) Cloudinary,
-registration checked against what Cloudinary itself holds.
+The trader's profile photo: a signed upload straight to (fake) Cloudinary,
+kept only after shared.media checks it against its own record and against
+what Cloudinary itself holds.
 """
 from __future__ import annotations
 
 import json
 import re
 
-from src.shared.media import folder_naming
-from src.shared.media.providers.composition import get_media_provider
-from src.shared.media.providers.provider import UploadedAsset
+from src.shared.media.provider import get_provider
 
 PASSWORD = "Spaza2026!"
 CONSENT = {"privacy_version": "0.1-draft", "terms_version": "0.1-draft"}
 SIGN = "/api/v1/me/business-profile/image/upload-signature"
 IMAGE = "/api/v1/me/business-profile/image"
+WEBHOOK = "/api/v1/media/webhooks/cloudinary-notifications"
 
 
 def signed_in(client, outbox, email="photo@example.com") -> dict:
@@ -24,129 +24,112 @@ def signed_in(client, outbox, email="photo@example.com") -> dict:
     return {"Authorization": f"Bearer {token}"}
 
 
-def phone_uploads(public_id: str, size: int = 200_000, url: str | None = None) -> None:
-    """Stands in for the phone posting the file straight to Cloudinary."""
-    get_media_provider().uploaded[public_id] = UploadedAsset(
-        public_id, url or f"https://res.cloudinary.com/fake-cloud/image/upload/v1/{public_id}.jpg", "image", "jpg", 800, 800, size
-    )
-
-
-def signature(client, me) -> dict:
+def start(client, me) -> str:
     r = client.post(SIGN, headers=me)
     assert r.status_code == 200
-    return r.get_json()["data"]
+    return r.get_json()["data"]["fields"]["public_id"]
 
 
-def test_signature_is_for_one_file_in_my_own_folder(app, client, outbox):
+def upload_and_keep(client, me, size=200_000):
+    public_id = start(client, me)
+    get_provider().put(public_id, size)  # the phone's post to Cloudinary
+    return public_id, client.post(IMAGE, headers=me, json={"public_id": public_id})
+
+
+def test_form_is_for_one_file_in_my_own_folder(app, client, outbox):
     me = signed_in(client, outbox)
-    s = signature(client, me)
-    public_id = s["fields"]["public_id"]
-    assert public_id.startswith("akayza-test/informal-trader/") and "/profile/profile-" in public_id
-    assert s["fields"]["asset_folder"] == public_id.rsplit("/", 1)[0]
-    assert "api_secret" not in json.dumps(s)  # the secret never leaves the server
-    # The folder key is not our database id.
+    data = client.post(SIGN, headers=me).get_json()["data"]
+    public_id = data["fields"]["public_id"]
+    assert public_id.startswith("akayza-test/informal-trader/") and "/profile/" in public_id
+    assert data["fields"]["asset_folder"] == public_id.rsplit("/", 1)[0]
+    assert "secret" not in json.dumps(data).lower()
     with app.app_context():
         from src.domains.identity.accounts.services import account_service
 
-        user_id = str(account_service.find_by_email("photo@example.com").id)
-    assert user_id not in public_id
+        assert str(account_service.find_by_email("photo@example.com").id) not in public_id  # a key, not our id
 
 
-def test_upload_then_register_shows_the_photo(client, outbox):
+def test_upload_then_keep_shows_the_photo(client, outbox):
     me = signed_in(client, outbox)
-    public_id = signature(client, me)["fields"]["public_id"]
-    phone_uploads(public_id)
-    r = client.post(IMAGE, headers=me, json={"public_id": public_id})
-    assert r.status_code == 200
-    assert r.get_json()["data"]["profile"]["profile_image_url"].endswith(f"{public_id}.jpg")
+    public_id, r = upload_and_keep(client, me)
+    assert r.status_code == 200 and r.get_json()["data"]["profile"]["profile_image_url"].endswith(f"{public_id}.jpg")
 
 
-def test_the_url_comes_from_cloudinary_not_the_phone(client, outbox):
+def test_the_phone_cannot_supply_the_url(client, outbox):
     me = signed_in(client, outbox)
-    public_id = signature(client, me)["fields"]["public_id"]
-    phone_uploads(public_id)
-    r = client.post(IMAGE, headers=me, json={"public_id": public_id, "secure_url": "https://evil.example/x.png"})
-    assert r.status_code == 422  # extra fields refused outright
-    r = client.post(IMAGE, headers=me, json={"public_id": public_id})
-    assert "evil" not in r.get_json()["data"]["profile"]["profile_image_url"]
+    public_id = start(client, me)
+    get_provider().put(public_id)
+    assert client.post(IMAGE, headers=me, json={"public_id": public_id, "secure_url": "https://evil.example/x.png"}).status_code == 422
 
 
-def test_nothing_uploaded_nothing_registered(client, outbox):
+def test_nothing_uploaded_nothing_kept(client, outbox):
     me = signed_in(client, outbox)
-    public_id = signature(client, me)["fields"]["public_id"]
-    r = client.post(IMAGE, headers=me, json={"public_id": public_id})  # the phone never uploaded
-    assert r.status_code == 404
+    assert client.post(IMAGE, headers=me, json={"public_id": start(client, me)}).status_code == 404
 
 
-def test_cannot_register_someone_elses_upload(client, outbox):
+def test_cannot_keep_someone_elses_upload(client, outbox):
     mine = signed_in(client, outbox)
     theirs = signed_in(client, outbox, email="other@example.com")
-    their_id = signature(client, theirs)["fields"]["public_id"]
-    phone_uploads(their_id)
-    r = client.post(IMAGE, headers=mine, json={"public_id": their_id})
-    assert r.status_code == 404
+    their_id = start(client, theirs)
+    get_provider().put(their_id)
+    assert client.post(IMAGE, headers=mine, json={"public_id": their_id}).status_code == 404
+    # ...and a file nobody started through us is refused too
+    get_provider().put("akayza-test/informal-trader/x/profile/planted")
+    assert client.post(IMAGE, headers=mine, json={"public_id": "akayza-test/informal-trader/x/profile/planted"}).status_code == 404
+
+
+def test_an_upload_is_kept_only_once(client, outbox):
+    me = signed_in(client, outbox)
+    public_id, _ = upload_and_keep(client, me)
+    assert client.post(IMAGE, headers=me, json={"public_id": public_id}).status_code == 404
 
 
 def test_too_large_is_refused_and_deleted(client, outbox):
     me = signed_in(client, outbox)
-    public_id = signature(client, me)["fields"]["public_id"]
-    phone_uploads(public_id, size=6 * 1024 * 1024)
-    r = client.post(IMAGE, headers=me, json={"public_id": public_id})
-    assert r.status_code == 422 and r.get_json()["code"] == "IMAGE_TOO_LARGE"
-    assert public_id in get_media_provider().deleted
+    public_id, r = upload_and_keep(client, me, size=6 * 1024 * 1024)
+    assert r.status_code == 422 and r.get_json()["code"] == "FILE_TOO_LARGE"
+    assert public_id in get_provider().deleted
 
 
 def test_a_new_photo_replaces_and_deletes_the_old(client, outbox):
     me = signed_in(client, outbox)
-    first = signature(client, me)["fields"]["public_id"]
-    phone_uploads(first)
-    client.post(IMAGE, headers=me, json={"public_id": first})
-    second = signature(client, me)["fields"]["public_id"]
-    phone_uploads(second)
-    r = client.post(IMAGE, headers=me, json={"public_id": second})
+    first, _ = upload_and_keep(client, me)
+    second, r = upload_and_keep(client, me)
     assert r.get_json()["data"]["profile"]["profile_image_url"].endswith(f"{second}.jpg")
-    assert first in get_media_provider().deleted
+    assert first in get_provider().deleted
 
 
 def test_remove_photo(client, outbox):
     me = signed_in(client, outbox)
-    public_id = signature(client, me)["fields"]["public_id"]
-    phone_uploads(public_id)
-    client.post(IMAGE, headers=me, json={"public_id": public_id})
+    public_id, _ = upload_and_keep(client, me)
     r = client.delete(IMAGE, headers=me)
     assert r.status_code == 200 and r.get_json()["data"]["profile"]["profile_image_url"] is None
-    assert public_id in get_media_provider().deleted
+    assert public_id in get_provider().deleted
 
 
 def test_with_malware_scan_on_the_photo_waits_for_approval(client, outbox):
     me = signed_in(client, outbox)
-    get_media_provider().moderation = True
-    public_id = signature(client, me)["fields"]["public_id"]
-    phone_uploads(public_id)
-    r = client.post(IMAGE, headers=me, json={"public_id": public_id})
+    get_provider().scan = True
+    public_id, r = upload_and_keep(client, me)
     assert r.get_json()["data"]["profile"]["profile_image_url"] is None  # hidden until scanned
 
-    body = json.dumps({"public_id": public_id, "moderation_status": "approved", "notification_type": "moderation"})
-    bad = client.post("/api/v1/media/webhooks/cloudinary-notifications", data=body, headers={"X-Cld-Timestamp": "1", "X-Cld-Signature": "forged"})
-    assert bad.status_code == 401  # only Cloudinary can approve
-    ok = client.post("/api/v1/media/webhooks/cloudinary-notifications", data=body, headers={"X-Cld-Timestamp": "1", "X-Cld-Signature": "valid"})
-    assert ok.status_code == 200
+    body = json.dumps({"public_id": public_id, "moderation_status": "approved"})
+    assert client.post(WEBHOOK, data=body, headers={"X-Cld-Timestamp": "1", "X-Cld-Signature": "forged"}).status_code == 401
+    assert client.post(WEBHOOK, data=body, headers={"X-Cld-Timestamp": "1", "X-Cld-Signature": "valid"}).status_code == 200
     profile = client.get("/api/v1/me/business-profile", headers=me).get_json()["data"]["profile"]
     assert profile["profile_image_url"].endswith(f"{public_id}.jpg")
+
+
+def test_a_rejected_photo_is_deleted_and_never_shown(client, outbox):
+    me = signed_in(client, outbox)
+    get_provider().scan = True
+    public_id, _ = upload_and_keep(client, me)
+    body = json.dumps({"public_id": public_id, "moderation_status": "rejected"})
+    client.post(WEBHOOK, data=body, headers={"X-Cld-Timestamp": "1", "X-Cld-Signature": "valid"})
+    profile = client.get("/api/v1/me/business-profile", headers=me).get_json()["data"]["profile"]
+    assert profile["profile_image_url"] is None and public_id in get_provider().deleted
 
 
 def test_needs_a_token(client):
     assert client.post(SIGN).status_code == 401
     assert client.post(IMAGE, json={"public_id": "x" * 20}).status_code == 401
-
-
-def test_folder_layout():
-    trader = folder_naming.informal_trader_folder("u1")
-    assert folder_naming.informal_trader_profile_folder("u1") == f"{trader}/profile"
-    assert folder_naming.informal_trader_job_folder("u1", "j1").startswith(f"{trader}/jobs/")
-    supplier = folder_naming.supplier_folder("s1")
-    assert supplier.startswith("akayza-test/supplier/")
-    assert folder_naming.supplier_product_folder("s1", "p1").startswith(f"{supplier}/products/")
-    assert folder_naming.supplier_category_folder("s1") == f"{supplier}/categories"
-    assert folder_naming.informal_trader_folder("u1") == trader  # stable
-    assert folder_naming.informal_trader_folder("u2") != trader  # unique

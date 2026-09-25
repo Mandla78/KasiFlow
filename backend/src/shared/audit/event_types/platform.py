@@ -12,6 +12,6 @@ import enum
 class PlatformAuditEvent(str, enum.Enum):
     SCHEDULED_JOB_COMPLETED = "platform.scheduled_job_completed"
     SCHEDULED_JOB_FAILED = "platform.scheduled_job_failed"
-    # Media (shared/media): an issued upload signature never registered
-    # (app closed mid-upload); its Cloudinary asset was deleted.
-    MEDIA_ORPHAN_ASSET_CLEANED = "platform.media_orphan_asset_cleaned"
+    # Media (shared/media/sweep.py): uploads started but never finished
+    # (app closed mid-upload); their files were deleted.
+    MEDIA_ABANDONED_UPLOADS_DELETED = "platform.media_abandoned_uploads_deleted"

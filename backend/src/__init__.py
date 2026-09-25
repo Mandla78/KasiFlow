@@ -73,9 +73,8 @@ def _register_models() -> None:
     from src.domains.identity.devices import models as _devices  # noqa: F401
     # trader schema: the informal trader's own data
     from src.domains.informal_trader.business_profile import models as _business_profile  # noqa: F401
-    # platform schema: media upload intents + the cross-feature upload ledger
-    from src.shared.media.intents import models as _media_intents  # noqa: F401
-    from src.shared.media.ledger import models as _media_ledger  # noqa: F401
+    # platform schema: every media upload, start to finish
+    from src.shared.media import models as _media  # noqa: F401
     # audit schema: the append-only audit trail
     from src.domains.security.audit import models as _audit  # noqa: F401
 
@@ -91,11 +90,10 @@ def _register_listeners(app: Flask) -> None:
 
     # Cloudinary scan verdicts, routed to the feature that owns the folder.
     from src.domains.informal_trader.business_profile.services import profile_image_service
-    from src.shared.media import folder_naming
-    from src.shared.media.webhooks.webhook_service import clear_scan_result_handlers, register_scan_result_handler
+    from src.shared.media import folders, notifications
 
-    clear_scan_result_handlers()  # create_app can run more than once (tests)
-    register_scan_result_handler(folder_naming.is_informal_trader_profile_asset, profile_image_service.apply_scan_result)
+    notifications.clear_handlers()  # create_app can run more than once (tests)
+    notifications.on_verdict(folders.is_informal_trader_profile_asset, profile_image_service.apply_verdict)
 
 
 def _register_blueprints(app: Flask) -> None:
@@ -107,7 +105,7 @@ def _register_blueprints(app: Flask) -> None:
 
     app.register_blueprint(reset_page_bp)
     # Cloudinary calls this one itself (HMAC-signed), not a signed-in user.
-    from src.shared.media.api.webhook_routes import media_webhooks_bp
+    from src.shared.media.routes import media_webhooks_bp
 
     app.register_blueprint(media_webhooks_bp)
 

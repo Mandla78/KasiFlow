@@ -27,7 +27,7 @@ from src.shared.idempotency.schedulers.idempotency_scheduler import (
 from src.domains.identity.auth.schedulers.identity_scheduler import (
     JOB_SPECS as IDENTITY_JOB_SPECS,
 )
-from src.shared.media.schedulers.media_scheduler import (
+from src.shared.media.scheduler import (
     JOB_SPECS as MEDIA_JOB_SPECS,
 )
 from src.master_scheduler import runner

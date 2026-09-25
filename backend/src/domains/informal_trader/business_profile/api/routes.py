@@ -51,29 +51,9 @@ UPLOAD_LIMIT = "20 per hour"
 @limiter.limit(UPLOAD_LIMIT)
 @auth_required(dashboard="informal_business")
 def profile_image_upload_signature():
-    s = profile_image_service.request_upload_signature(current_user())
-    return success_response(
-        {
-            "upload_url": s.upload_url,
-            # Exactly these fields go in the multipart form, with the file as "file".
-            "fields": {
-                k: v
-                for k, v in {
-                    "api_key": s.api_key,
-                    "timestamp": str(s.timestamp),
-                    "signature": s.signature,
-                    "public_id": s.public_id,
-                    "allowed_formats": s.allowed_formats,
-                    "transformation": s.transformation,
-                    "asset_folder": s.asset_folder,
-                    "notification_url": s.notification_url,
-                    "moderation": s.moderation,
-                }.items()
-                if v
-            },
-            "max_bytes": profile_image_service.MAX_UPLOAD_BYTES,
-        }
-    )
+    form = profile_image_service.upload_form(current_user())
+    # The phone posts the file to upload_url with exactly these fields (+ "file").
+    return success_response({"upload_url": form.url, "fields": form.fields, "max_bytes": profile_image_service.MAX_BYTES})
 
 
 @api_bp.post("/me/business-profile/image")
@@ -84,7 +64,7 @@ def register_profile_image():
     public_id = body.get("public_id")
     if not isinstance(public_id, str) or not 10 <= len(public_id) <= 500 or set(body) - {"public_id"}:
         raise ValidationError("Please check the highlighted fields.", errors=[{"public_id": ["Required."]}])
-    profile = profile_image_service.register(current_user(), public_id)
+    profile = profile_image_service.keep(current_user(), public_id)
     return success_response({"profile": service.public_view(profile)}, message="Photo saved.")
 
 

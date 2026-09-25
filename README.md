@@ -117,24 +117,23 @@ def list_customers():
 
 ### Building a feature? How to use media (photos)
 
-Images live on **Cloudinary**; the phone uploads **straight to Cloudinary** with a one-upload signature from our server, so Flask never carries image bytes. Everything is in `backend/src/shared/media/` (adapted from TruConnect, see `REUSE.md`). The profile photo is the worked example: `domains/informal_trader/business_profile/services/profile_image_service.py`.
+Images live on **Cloudinary**; the phone uploads **straight to Cloudinary** with a one-upload form our server signs, so Flask never carries image bytes. Everything is in `backend/src/shared/media/` (read its `__init__.py` first). The profile photo is the worked example: `domains/informal_trader/business_profile/services/profile_image_service.py`.
 
-Folders (`shared/media/folder_naming.py`), by owner first. `{key}` is an HMAC of the id, never our database id:
+Folders (`shared/media/folders.py`), by owner first. `{key}` is an HMAC of the id, never our database id:
 
 ```
 akayza/informal-trader/{key}/profile/          profile photo            (built)
-akayza/informal-trader/{key}/jobs/{job-key}/   job photos (builders)    -> folder_naming.informal_trader_job_folder(user_id, job_id)
-akayza/supplier/{key}/profile/                 supplier photo           -> supplier_profile_folder(supplier_id)
-akayza/supplier/{key}/products/{product-key}/  product images           -> supplier_product_folder(supplier_id, product_id)
-akayza/supplier/{key}/categories/              category images          -> supplier_category_folder(supplier_id)
+akayza/informal-trader/{key}/jobs/{job-key}/   job photos (builders)    -> folders.informal_trader_job_folder(user_id, job_id)
+akayza/supplier/{key}/profile/                 supplier photo           -> folders.supplier_profile_folder(supplier_id)
+akayza/supplier/{key}/products/{product-key}/  product images           -> folders.supplier_product_folder(supplier_id, product_id)
+akayza/supplier/{key}/categories/              category images          -> folders.supplier_category_folder(supplier_id)
 ```
 
-The flow, three calls (copy the profile photo's):
-1. `POST .../upload-signature` → `create_intent(...)` + `get_media_provider().generate_signed_upload(public_id, max_px, folder)`.
-2. The phone posts the file to Cloudinary with exactly those fields.
-3. `POST ...` with `{public_id}` → check the prefix is the user's own folder, then **`get_media_provider().fetch_asset(public_id)`** for the real URL and size (never trust what the phone reports), `check_quota_before_upload`, save your row (`MediaAssetMixin`), `record_upload`, `mark_registered`.
+Two calls, in two routes (copy the profile photo's):
+1. `form = uploads.start(user.id, "job_photo", folders.informal_trader_job_folder(user.id, job.id), max_px)` → return `form.url` and `form.fields`; the phone posts the file there.
+2. `stored = uploads.finish(user.id, "job_photo", public_id, max_bytes)` → it checks that this user started this upload, asks Cloudinary for the **real** URL and size, and applies the size and daily limits. Save your own row (mix in `MediaFileColumns`) and commit.
 
-Abandoned uploads are deleted by the orphan sweep (every 30 min). **Check the real setup any time:** `python scripts/verify_media.py` (from `backend/`, venv on; for the webhook step, run the backend and `ngrok http 5000 --url=<CLOUDINARY_WEBHOOK_BASE_URL>` first). Tests use `MEDIA_PROVIDER=fake` automatically (`tests/conftest.py`).
+Remove a file with `uploads.delete_file(public_id)`. Uploads never finished are deleted by the sweep (every 30 min, in the master scheduler). Tests use the fake provider automatically (`tests/conftest.py`). **Check the real setup any time:** `python scripts/verify_media.py` (from `backend/`, venv on; for the webhook step, run the backend and `ngrok http 5000 --url=<CLOUDINARY_WEBHOOK_BASE_URL>` first).
 
 ## 3. Mobile
 
