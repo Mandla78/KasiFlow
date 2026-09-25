@@ -5,6 +5,7 @@
  * where it is saved and read back. The server owns the CIPC result: the
  * app only ever sends the registration NUMBER.
  */
+import { File } from 'expo-file-system';
 import { Platform } from 'react-native';
 
 import { api, ApiError } from '@/shared/api/client';
@@ -123,7 +124,9 @@ export const businessProfileApi = {
     if (Platform.OS === 'web') {
       form.append('file', await (await fetch(uri)).blob(), 'photo.jpg');
     } else {
-      form.append('file', { uri, name: 'photo.jpg', type: 'image/jpeg' } as unknown as Blob);
+      // Expo's fetch needs a real file object (the old React Native
+      // { uri, name, type } trick fails with "Unsupported FormDataPart").
+      form.append('file', new File(uri));
     }
     let res: Response;
     try {
