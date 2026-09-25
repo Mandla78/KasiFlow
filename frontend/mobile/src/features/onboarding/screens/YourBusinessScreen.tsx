@@ -1,6 +1,8 @@
 import { router } from 'expo-router';
 import { useState } from 'react';
 
+import { businessNameProblem, personNameProblem } from '@/shared/lib/validation';
+
 import { BUSINESS_TYPE_ORDER, BUSINESS_TYPES, BusinessType, TradeKey, TRADES } from '@/constants/businessTypes';
 import type { YearsTrading } from '@/features/auth/types';
 import { useSession } from '@/features/auth/session/SessionProvider';
@@ -22,9 +24,10 @@ const YEARS_OPTIONS: { value: YearsTrading; label: string }[] = [
   { value: '3_plus', label: 'More than 3 years' },
 ];
 
-/** Step 1: what the business is and who runs it. */
+/** Step 1: the business's name, what it is, and who runs it. */
 export default function YourBusinessScreen({ editing = false }: { editing?: boolean }) {
   const { profile, updateProfile, setBusinessType, setTrade } = useSession();
+  const [businessName, setBusinessName] = useState(profile.businessName);
   const [ownerName, setOwnerName] = useState(profile.ownerName);
   const [years, setYears] = useState<YearsTrading | null>(profile.yearsTrading);
   const [cellphone, setCellphone] = useState(profile.cellphone);
@@ -33,9 +36,10 @@ export default function YourBusinessScreen({ editing = false }: { editing?: bool
   const isBuilder = profile.businessType === 'builder';
   const digits = cellphone.replace(/\D/g, '');
   const errors = {
+    business: !businessName.trim() ? 'Give your business a name' : businessNameProblem(businessName),
     type: !profile.businessType ? 'Choose the type that fits best' : '',
     trade: isBuilder && !profile.trade ? 'Choose the work you do' : '',
-    name: ownerName.trim().length < 2 ? 'Tell us your name' : '',
+    name: !ownerName.trim() ? 'Tell us your name' : personNameProblem(ownerName),
     years: !years ? 'Choose one' : '',
     cellphone: cellphone && !(digits.length === 10 && digits.startsWith('0')) ? 'A 10-digit number, like 082 123 4567' : '',
   };
@@ -44,7 +48,7 @@ export default function YourBusinessScreen({ editing = false }: { editing?: bool
   function next() {
     setTouched(true);
     if (Object.values(errors).some(Boolean)) return;
-    updateProfile({ ownerName: ownerName.trim(), yearsTrading: years, cellphone: cellphone.trim() });
+    updateProfile({ businessName: businessName.trim(), ownerName: ownerName.trim(), yearsTrading: years, cellphone: cellphone.trim() });
     if (editing) return router.back();
     router.push('/registration');
   }
@@ -54,12 +58,21 @@ export default function YourBusinessScreen({ editing = false }: { editing?: bool
       step="yourBusiness"
       title="Your business"
       why={[
+        'Your business name is what suppliers see on your orders (letters only, as on your signboard).',
         'Your business type sets up your tools and decides which suppliers we show you first. Builders see hardware suppliers; spaza shops see wholesalers.',
         'How long you have been trading is shown to suppliers as a simple badge. It helps them trust a new customer.',
         'Your cellphone is optional and only used for delivery calls and WhatsApp receipts, never to sign in or for marketing. We never ask for your ID number.',
       ]}
       onPrimary={next}
       editing={editing}>
+      <TextField
+        label="Business name"
+        placeholder="e.g. Nomsa's Spaza"
+        value={businessName}
+        onChangeText={setBusinessName}
+        autoCapitalize="words"
+        error={e('business')}
+      />
       <SelectField<BusinessType>
         label="What type of business do you run?"
         options={TYPE_OPTIONS}

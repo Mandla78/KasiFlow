@@ -51,7 +51,6 @@ class ConsentSchema(_Strict):
 
 
 class RegisterSchema(_Strict):
-    business_name = fields.String(required=True, validate=validate.Length(min=2, max=80))
     email = _email
     password = _password
     consent = fields.Nested(ConsentSchema, required=True)
@@ -90,7 +89,6 @@ class ChallengeSchema(_Strict):
 
 class GoogleSignInSchema(_Strict):
     id_token = fields.String(required=True, validate=validate.Length(min=20, max=4096))
-    business_name = fields.String(load_default=None, validate=validate.Length(min=2, max=80))
     consent = fields.Nested(ConsentSchema, load_default=None)
     device = fields.Nested(DeviceSchema, load_default=None)
 

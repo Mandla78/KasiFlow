@@ -48,7 +48,7 @@ def _phone(data: dict):
 def register():
     data = load(RegisterSchema(), request.get_json(silent=True))
     auth_service.register(
-        data["business_name"], data["email"], data["password"], data["consent"]["privacy_version"], data["consent"]["terms_version"]
+        data["email"], data["password"], data["consent"]["privacy_version"], data["consent"]["terms_version"]
     )
     return success_response({}, message=CHECK_EMAIL, status_code=202)
 
@@ -180,7 +180,7 @@ def google_sign_in():
     data = load(GoogleSignInSchema(), request.get_json(silent=True))
     consent = data.get("consent") or {}
     result = auth_service.google_sign_in(
-        data["id_token"], data.get("business_name"), consent.get("privacy_version"), consent.get("terms_version"), _device(data)
+        data["id_token"], consent.get("privacy_version"), consent.get("terms_version"), _device(data)
     )
     return success_response(result, message="Signed in with Google.")
 

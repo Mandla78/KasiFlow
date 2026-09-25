@@ -12,7 +12,7 @@ PASSWORD = "Spaza2026!"
 CONSENT = {"privacy_version": "0.1-draft", "terms_version": "0.1-draft"}
 URL = "/api/v1/me/business-profile"
 
-BUSINESS = {"business_type": "spaza", "trade": None, "owner_name": "Nomsa Dlamini", "years_trading": "3_plus", "cellphone": "082 123 4567"}
+BUSINESS = {"business_name": "Nomsa's Spaza", "business_type": "spaza", "trade": None, "owner_name": "Nomsa Dlamini", "years_trading": "3_plus", "cellphone": "082 123 4567"}
 LOCATION = {
     "building": "", "street": "Andrew Mapheto Drive", "suburb": "Tembisa", "city": "Ekurhuleni",
     "province": "Gauteng", "postal_code": "1632", "latitude": -25.9964, "longitude": 28.2268,
@@ -28,7 +28,7 @@ EVERYTHING = {
 
 
 def signed_in(client, outbox, email="nomsa@example.com") -> dict:
-    client.post("/api/v1/auth/register", json={"business_name": "Nomsa's Spaza", "email": email, "password": PASSWORD, "consent": CONSENT})
+    client.post("/api/v1/auth/register", json={"email": email, "password": PASSWORD, "consent": CONSENT})
     code = re.search(r">(\d{6})<", outbox[-1]["html_body"]).group(1)
     token = client.post("/api/v1/auth/verify-email", json={"email": email, "code": code}).get_json()["data"]["access_token"]
     return {"Authorization": f"Bearer {token}"}

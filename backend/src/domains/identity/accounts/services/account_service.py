@@ -32,22 +32,20 @@ def find_by_email(email: str) -> Optional[User]:
     return user_repository.get_by_email(normalized(email))
 
 
-def create_unverified(email: str, business_name: str, method: SignUpMethod = SignUpMethod.EMAIL) -> User:
+def create_unverified(email: str, method: SignUpMethod = SignUpMethod.EMAIL) -> User:
     return user_repository.add(
         User(
             email=normalized(email),
-            business_name=business_name.strip(),
             status=AccountStatus.UNVERIFIED.value,
             signed_up_with=method.value,
         )
     )
 
 
-def restart_unverified(user: User, business_name: str) -> User:
+def restart_unverified(user: User) -> User:
     """Someone signs up again with an email that was never verified. The
-    earlier attempt proved nothing about who owns the address, so its
-    details are replaced rather than kept."""
-    user.business_name = business_name.strip()
+    earlier attempt proved nothing about who owns the address, so it
+    starts over (the caller replaces the password)."""
     return user
 
 
@@ -92,7 +90,6 @@ def public_view(user: User) -> dict:
     return {
         "id": str(user.id),
         "email": user.email,
-        "business_name": user.business_name,
         "status": user.status,
         "dashboard": user.dashboard,
         "signed_up_with": user.signed_up_with,
@@ -128,12 +125,11 @@ def delete_unverified(user: User) -> None:
     db.session.delete(user)
 
 
-def create_verified(email: str, business_name: str, method: SignUpMethod) -> User:
+def create_verified(email: str, method: SignUpMethod) -> User:
     """A new account whose email is already proven (e.g. by Google)."""
     user = user_repository.add(
         User(
             email=normalized(email),
-            business_name=business_name.strip(),
             status=AccountStatus.UNVERIFIED.value,
             signed_up_with=method.value,
         )
@@ -142,9 +138,8 @@ def create_verified(email: str, business_name: str, method: SignUpMethod) -> Use
     return user
 
 
-def claim_unverified_with(user: User, business_name: str, method: SignUpMethod) -> None:
+def claim_unverified_with(user: User, method: SignUpMethod) -> None:
     """The real owner of the email (proven by Google) takes over a sign-up
     that was never verified. Whoever started it proved nothing."""
-    user.business_name = business_name.strip()
     user.signed_up_with = method.value
     mark_verified(user)

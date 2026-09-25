@@ -42,6 +42,8 @@ class BusinessProfile(BaseModel):
     user_id = db.Column(UUID(as_uuid=True), db.ForeignKey("identity.users.id", ondelete="CASCADE"), nullable=False, unique=True)
 
     # Your business
+    #: The trading name (letters only; see shared/validation/text.py).
+    business_name = db.Column(db.String(80), nullable=True)
     business_type = db.Column(db.String(20), nullable=True)
     trade = db.Column(db.String(30), nullable=True)
     owner_name = db.Column(db.String(80), nullable=True)

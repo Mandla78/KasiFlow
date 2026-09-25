@@ -17,7 +17,6 @@ import { AuthApi, AuthError, Profile } from '../types';
 type ServerUser = {
   id: string;
   email: string;
-  business_name: string;
   status: string;
   signed_up_with: 'email' | 'google';
 };
@@ -43,7 +42,6 @@ async function keep(result: SignedIn): Promise<Profile> {
   return {
     ...emptyProfile,
     email: result.user.email,
-    businessName: result.user.business_name,
     signedUpWith: result.user.signed_up_with,
     // Consent was recorded on the server at sign-up.
     consent: consentNow(),
@@ -54,7 +52,6 @@ export const httpAuthApi: AuthApi = {
   createAccount: (input) =>
     call(async () => {
       await api('POST', '/auth/register', {
-        business_name: input.businessName,
         email: input.email,
         password: input.password,
         consent: { privacy_version: PRIVACY_POLICY.version, terms_version: TERMS_OF_USE.version },

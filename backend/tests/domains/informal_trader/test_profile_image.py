@@ -18,7 +18,7 @@ WEBHOOK = "/api/v1/media/webhooks/cloudinary-notifications"
 
 
 def signed_in(client, outbox, email="photo@example.com") -> dict:
-    client.post("/api/v1/auth/register", json={"business_name": "Photo Spaza", "email": email, "password": PASSWORD, "consent": CONSENT})
+    client.post("/api/v1/auth/register", json={"email": email, "password": PASSWORD, "consent": CONSENT})
     code = re.search(r">(\d{6})<", outbox[-1]["html_body"]).group(1)
     token = client.post("/api/v1/auth/verify-email", json={"email": email, "code": code}).get_json()["data"]["access_token"]
     return {"Authorization": f"Bearer {token}"}

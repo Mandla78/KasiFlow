@@ -1,9 +1,12 @@
 /**
  * Address search and lookup. The real implementation calls OUR backend,
  * which calls Mapbox with the secret token: the app never holds it.
- * Mock until the backend geocoding endpoints exist.
+ * EXPO_PUBLIC_USE_MOCK_API=true -> the offline mock (a few known places).
  */
 import type { AddressSuggestion, GeocodedAddress, LatLng } from '../types';
+import { USE_MOCK_AUTH } from '@/constants/config';
+
+import { httpGeocodingApi } from './httpGeocodingApi';
 import { mockGeocodingApi } from './mockGeocodingApi';
 
 export interface GeocodingApi {
@@ -15,4 +18,4 @@ export interface GeocodingApi {
   reverse(latitude: number, longitude: number): Promise<GeocodedAddress>;
 }
 
-export const geocodingApi: GeocodingApi = mockGeocodingApi;
+export const geocodingApi: GeocodingApi = USE_MOCK_AUTH ? mockGeocodingApi : httpGeocodingApi;

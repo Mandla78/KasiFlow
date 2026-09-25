@@ -81,6 +81,10 @@ export function AddressPickerField({ label, value, onChange, mapTitle, confirmLa
           setSearching(false);
           openMap(c);
         }}
+        onPinInstead={() => {
+          setSearching(false);
+          openMap(value ? { latitude: value.latitude, longitude: value.longitude } : null);
+        }}
       />
       <MapPickerModal
         visible={mapOpen}

@@ -8,7 +8,7 @@ import { getPendingSignIn, setPendingSignIn } from '@/features/auth/session/pend
 import { useSession } from '@/features/auth/session/SessionProvider';
 import { Button } from '@/shared/components/Button';
 import { CODE_LENGTH, CodeInput, CodeInputHandle } from '@/shared/components/CodeInput';
-import { IconTile, InfoNote } from '@/shared/components/Parts';
+import { IconTile } from '@/shared/components/Parts';
 import { Screen } from '@/shared/components/Screen';
 import { Body, Title } from '@/shared/components/Text';
 import { colors, fonts } from '@/shared/theme/tokens';
@@ -101,7 +101,6 @@ export default function SignInCodeScreen() {
         )}
       </View>
       <Text style={styles.small}>Can&apos;t see it? Check Spam or Promotions.</Text>
-      <InfoNote icon="smartphone">After this, this phone signs in with just your password.</InfoNote>
     </Screen>
   );
 }

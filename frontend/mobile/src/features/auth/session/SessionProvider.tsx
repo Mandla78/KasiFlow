@@ -16,6 +16,8 @@ import { createContext, ReactNode, useContext, useEffect, useMemo, useState } fr
 
 import { BUSINESS_TYPES, BusinessType, defaultCategories, ToolKey, TradeKey } from '@/constants/businessTypes';
 
+import { USE_MOCK_AUTH } from '@/constants/config';
+import { businessProfileApi, fromServer } from '@/features/onboarding/api/businessProfileApi';
 import { setSessionEndedHandler } from '@/shared/api/client';
 
 import { authApi } from '../api/authApi';
@@ -61,7 +63,7 @@ function isOnboarded(p: Profile): boolean {
 
 type SessionContextValue = SessionState & {
   loaded: boolean;
-  startEmailSignUp: (businessName: string, email: string) => void;
+  startEmailSignUp: (email: string) => void;
   emailVerified: () => void;
   startGoogleSignUp: (email: string, ownerName: string, consented: boolean) => void;
   acceptConsent: () => void;
@@ -129,8 +131,7 @@ export function SessionProvider({ children }: { children: ReactNode }) {
       ...state,
       loaded,
       // Consent was ticked on the create-account screen, so stamp it here.
-      startEmailSignUp: (businessName, email) =>
-        setState({ status: 'unverified', profile: { ...emptyProfile, businessName, email, consent: consentNow() } }),
+      startEmailSignUp: (email) => setState({ status: 'unverified', profile: { ...emptyProfile, email, consent: consentNow() } }),
       emailVerified: () => patch({}, 'onboarding'),
       startGoogleSignUp: (email, ownerName, consented) =>
         setState({
@@ -173,10 +174,13 @@ export function SessionProvider({ children }: { children: ReactNode }) {
           return { status: onboarded || s.status === 'active' ? 'active' : s.status, profile };
         }),
       signedIn: (profile) => {
-        // Same account on this phone before? Restore its onboarding answers.
-        loadLastProfile().then((last) => {
-          const merged = last && last.email === profile.email ? { ...last, ...pickServerFields(profile) } : profile;
-          setState({ status: isOnboarded(merged) ? 'active' : 'onboarding', profile: merged });
+        // The answers saved on the server win (another phone, a reinstall,
+        // steps left half-done); this phone's last answers fill any gaps.
+        const saved = USE_MOCK_AUTH ? Promise.resolve(null) : businessProfileApi.get().catch(() => null);
+        Promise.all([loadLastProfile(), saved]).then(([last, server]) => {
+          let merged = last && last.email === profile.email ? { ...last, ...pickServerFields(profile) } : profile;
+          if (server) merged = { ...merged, ...fromServer(server) };
+          setState({ status: server?.onboarded || isOnboarded(merged) ? 'active' : 'onboarding', profile: merged });
         });
       },
       signOut: () => {
@@ -191,7 +195,7 @@ export function SessionProvider({ children }: { children: ReactNode }) {
 
 /** What the server is the source of truth for. */
 function pickServerFields(p: Profile): Partial<Profile> {
-  return { email: p.email, businessName: p.businessName, signedUpWith: p.signedUpWith, consent: p.consent };
+  return { email: p.email, signedUpWith: p.signedUpWith, consent: p.consent };
 }
 
 export function useSession() {

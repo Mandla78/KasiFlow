@@ -27,7 +27,7 @@ from . import cipc_verifier, profile_audit
 #: look-up, and the register shouldn't be probed through us.
 CIPC_CHECKS_PER_DAY = 5
 
-_BUSINESS = ("business_type", "trade", "owner_name", "years_trading", "cellphone")
+_BUSINESS = ("business_name", "business_type", "trade", "owner_name", "years_trading", "cellphone")
 _LOCATION = ("building", "street", "suburb", "city", "province", "postal_code", "latitude", "longitude")
 _BUYING = ("categories", "restock", "spend", "payment", "fulfilment")
 
@@ -102,10 +102,11 @@ def _clear_cipc(profile: BusinessProfile) -> None:
 
 
 def is_complete(p: BusinessProfile) -> bool:
-    """Everything onboarding requires: type (and trade for builders), name,
+    """Everything onboarding requires: business name, type (and trade for builders), owner name,
     years, a pin, at least one category, and how stock arrives."""
     return bool(
-        p.business_type
+        p.business_name
+        and p.business_type
         and (p.business_type != "builder" or p.trade)
         and p.owner_name
         and p.years_trading

@@ -3,7 +3,7 @@ import { useRef, useState } from 'react';
 import { Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
 
 import { Button } from '@/shared/components/Button';
-import { GoogleButton, InfoNote, OrDivider } from '@/shared/components/Parts';
+import { GoogleButton, OrDivider } from '@/shared/components/Parts';
 import { Screen } from '@/shared/components/Screen';
 import { Body, Title } from '@/shared/components/Text';
 import { TextField } from '@/shared/components/TextField';
@@ -42,7 +42,7 @@ export default function SignIn() {
     } catch (e) {
       if (e instanceof AuthError && e.code === 'EMAIL_NOT_VERIFIED') {
         // Right password, email never confirmed: the server just sent a new code.
-        startEmailSignUp('', email.trim().toLowerCase());
+        startEmailSignUp(email.trim().toLowerCase());
         router.push('/verify-email');
         return;
       }
@@ -96,9 +96,6 @@ export default function SignIn() {
       <Pressable onPress={() => router.push({ pathname: '/forgot-password', params: { email } })}>
         <Text style={styles.link}>Forgot password?</Text>
       </Pressable>
-      <InfoNote icon="shield">
-        On a new phone we&apos;ll also email you a code, so your password alone can&apos;t open your business.
-      </InfoNote>
     </Screen>
   );
 }

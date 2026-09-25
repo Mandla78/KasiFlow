@@ -10,6 +10,7 @@ from __future__ import annotations
 from marshmallow import RAISE, Schema, ValidationError as MarshmallowError, fields, pre_load, validate, validates_schema
 
 from src.core.exceptions import ValidationError
+from src.shared.validation.text import BusinessName, CleanText, PersonName
 
 from ..constants import (
     BUSINESS_TYPES,
@@ -30,7 +31,7 @@ def _choice(values, required=False):
 
 
 def _text(max_len, required=False):
-    return fields.String(required=required, load_default="", validate=validate.Length(max=max_len))
+    return CleanText(required=required, load_default="", max_len=max_len)
 
 
 class _Strict(Schema):
@@ -39,9 +40,10 @@ class _Strict(Schema):
 
 
 class BusinessSection(_Strict):
+    business_name = BusinessName(load_default=None, allow_none=True)
     business_type = _choice(BUSINESS_TYPES)
     trade = _choice(TRADES)
-    owner_name = fields.String(load_default=None, allow_none=True, validate=validate.Length(min=2, max=80))
+    owner_name = PersonName(load_default=None, allow_none=True)
     years_trading = _choice(YEARS_TRADING)
     #: South African cellphone, 10 digits starting with 0. Optional.
     cellphone = fields.String(load_default=None, allow_none=True, validate=validate.Regexp(r"^0\d{9}$", error="A 10-digit number, like 0821234567."))

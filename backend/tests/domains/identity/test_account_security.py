@@ -13,7 +13,7 @@ def bearer(t):
 
 
 def signed_up(client, outbox) -> dict:
-    client.post("/api/v1/auth/register", json={"business_name": "Sec Spaza", "email": EMAIL, "password": PASSWORD, "consent": CONSENT})
+    client.post("/api/v1/auth/register", json={"email": EMAIL, "password": PASSWORD, "consent": CONSENT})
     code = re.search(r">(\d{6})<", outbox[-1]["html_body"]).group(1)
     return client.post("/api/v1/auth/verify-email", json={"email": EMAIL, "code": code}).get_json()["data"]
 

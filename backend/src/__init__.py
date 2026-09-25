@@ -22,6 +22,7 @@ def create_app(env_name: str | None = None) -> Flask:
     _register_blueprints(app)
     _register_listeners(app)
     _register_error_handlers(app)
+    _register_input_guard(app)
     _register_security_headers(app)
     _register_cli(app)
 
@@ -140,6 +141,33 @@ def _register_error_handlers(app: Flask) -> None:
     def handle_internal_error(error):
         app.logger.exception("Unhandled server error: %s", error)
         return error_response(message="Internal server error", status_code=500, code="INTERNAL_ERROR")
+
+
+def _register_input_guard(app: Flask) -> None:
+    """Refuse any request carrying the NUL character anywhere (JSON, form,
+    query). PostgreSQL can't store it and no human types it; it only
+    arrives in attacks and broken clients. Fields also clean their own text
+    (shared/validation/text.py); this is the net under them."""
+    from flask import request
+
+    from src.core.responses import error_response
+
+    def _has_nul(value) -> bool:
+        if isinstance(value, str):
+            return "\x00" in value
+        if isinstance(value, dict):
+            return any(_has_nul(k) or _has_nul(v) for k, v in value.items())
+        if isinstance(value, list):
+            return any(_has_nul(v) for v in value)
+        return False
+
+    @app.before_request
+    def _refuse_nul():
+        found = any(_has_nul(v) for v in request.args.values()) or any(_has_nul(v) for v in request.form.values())
+        if not found and request.is_json:
+            found = _has_nul(request.get_json(silent=True))
+        if found:
+            return error_response(message="The request contains characters we don't accept.", status_code=400, code="INVALID_CHARACTERS")
 
 
 def _register_security_headers(app: Flask) -> None:

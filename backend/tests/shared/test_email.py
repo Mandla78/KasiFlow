@@ -51,7 +51,7 @@ def test_codes_never_reach_the_logs(client, outbox, caplog):
     caplog.set_level(logging.DEBUG)
     client.post(
         "/api/v1/auth/register",
-        json={"business_name": "Log Spaza", "email": "logs@example.com", "password": "Spaza2026!",
+        json={"email": "logs@example.com", "password": "Spaza2026!",
               "consent": {"privacy_version": "0.1-draft", "terms_version": "0.1-draft"}},
     )
     code = re.search(r">(\d{6})<", outbox[-1]["html_body"]).group(1)

@@ -34,7 +34,7 @@ def events_for(app, email: str, since: datetime) -> list[AuditEventRecord]:
 
 
 def sign_up(client, outbox, email) -> dict:
-    client.post("/api/v1/auth/register", json={"business_name": "Audit Spaza", "email": email, "password": PASSWORD, "consent": CONSENT})
+    client.post("/api/v1/auth/register", json={"email": email, "password": PASSWORD, "consent": CONSENT})
     code = re.search(r">(\d{6})<", outbox[-1]["html_body"]).group(1)
     return client.post("/api/v1/auth/verify-email", json={"email": email, "code": code}).get_json()["data"]
 
@@ -71,7 +71,7 @@ def test_attempt_to_reuse_an_email_is_stored_but_not_revealed(app, client, outbo
     since = datetime.now(timezone.utc)
     email = fresh_email()
     sign_up(client, outbox, email)
-    r = client.post("/api/v1/auth/register", json={"business_name": "Someone Else", "email": email, "password": PASSWORD, "consent": CONSENT})
+    r = client.post("/api/v1/auth/register", json={"email": email, "password": PASSWORD, "consent": CONSENT})
     assert r.status_code == 202  # the caller learns nothing
     failed = [e for e in events_for(app, email, since) if e.event_name == "auth.register_failed"]
     assert failed and failed[0].failure_reason == "email_already_registered"

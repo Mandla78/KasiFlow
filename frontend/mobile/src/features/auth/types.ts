@@ -92,7 +92,7 @@ export type SignInResult = { kind: 'signed_in'; profile: Profile } | { kind: 'co
 
 /** Everything the auth screens ask of the server. Mock today, HTTP later. */
 export interface AuthApi {
-  createAccount(input: { businessName: string; email: string; password: string; consent: Consent }): Promise<void>;
+  createAccount(input: { email: string; password: string; consent: Consent }): Promise<void>;
   verifyEmail(email: string, code: string): Promise<void>;
   resendCode(email: string): Promise<void>;
   /** 'new' starts onboarding; 'link' means a password account already uses the email. */
