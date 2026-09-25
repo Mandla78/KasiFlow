@@ -1,6 +1,6 @@
 import { router } from 'expo-router';
 import { Feather } from '@expo/vector-icons';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { ActivityIndicator, StyleSheet, Text, TextInput, View } from 'react-native';
 
 import { CategoryCode } from '@/constants/categories';
@@ -48,9 +48,15 @@ export default function SuppliersScreen() {
     };
   }, [place, profile.categories, profile.buying]);
 
-  // The server knows the connections (in mock mode the profile does).
+  // The server knows the connections (in mock mode the profile does). Sync
+  // ONCE per list the server sends -- never again when the phone's own list
+  // changes, or a stale list would undo a Connect tapped since (that bug
+  // made Connect look like it did nothing).
+  const syncedFor = useRef<SupplierMatch[] | null>(null);
   useEffect(() => {
-    if (matches?.some((m) => m.connected !== undefined)) syncFromServer(matches.filter((m) => m.connected).map((m) => m.id));
+    if (!matches || syncedFor.current === matches) return;
+    syncedFor.current = matches;
+    if (matches.some((m) => m.connected !== undefined)) syncFromServer(matches.filter((m) => m.connected).map((m) => m.id));
   }, [matches, syncFromServer]);
 
   const q = query.trim().toLowerCase();
