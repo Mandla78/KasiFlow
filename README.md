@@ -88,6 +88,8 @@ Commit the migration file with the model change, so everyone else gets it with `
 | `GET /me` | the signed-in account |
 | `GET /me/export` | everything identity holds about you (POPIA) |
 | `POST /me/close-account` | password required; ends all sessions and phone keys |
+| `GET /me/business-profile` | the trader's sign-up answers (`null` before the first save) |
+| `PATCH /me/business-profile` | save sections: `business`, `registration` (CIPC **number** only; the server runs the check and sets the status), `location`, `buying`, `tools` |
 
 **Two-factor sign-in:** the password plus either a trusted phone or a code sent to the email. A phone becomes trusted by entering an emailed code (sign-up counts); it stays trusted for 90 days of not being used, until the owner signs out other phones, or until the account is closed. Only the HMAC of the trusted-phone token is stored.
 

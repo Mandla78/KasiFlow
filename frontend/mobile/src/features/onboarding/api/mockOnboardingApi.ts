@@ -31,7 +31,7 @@ function sameName(director: string, person: string): boolean {
 }
 
 export const mockOnboardingApi: OnboardingApi = {
-  async verifyCipc(number, ownerName) {
+  async verifyCipc(number, profile) {
     await wait(2500); // a background check, not instant
     const checkedAt = new Date().toISOString();
     if (number === '2018/999999/07') return { status: 'unavailable', checkedAt };
@@ -39,7 +39,7 @@ export const mockOnboardingApi: OnboardingApi = {
     if (!company) return { status: 'not_found', checkedAt };
     const base = { registeredName: company.name, entityType: company.type, checkedAt };
     if (company.status !== 'In Business') return { status: 'deregistered', ...base };
-    const owns = company.directors.some((d) => sameName(d, ownerName));
+    const owns = company.directors.some((d) => sameName(d, profile.ownerName));
     return { status: owns ? 'verified' : 'owner_unconfirmed', ...base };
   },
 };

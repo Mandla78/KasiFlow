@@ -12,6 +12,7 @@ import { StatusBar } from 'expo-status-bar';
 import { useEffect } from 'react';
 
 import { SessionProvider, useSession } from '@/features/auth/session/SessionProvider';
+import { useBusinessProfileSync } from '@/features/onboarding/sync/useBusinessProfileSync';
 import { colors } from '@/shared/theme/tokens';
 
 export { ErrorBoundary } from 'expo-router';
@@ -33,6 +34,7 @@ export default function RootLayout() {
  */
 function RootNavigator() {
   const { status, loaded } = useSession();
+  useBusinessProfileSync();
   const [fontsLoaded, fontError] = useFonts({
     PlusJakartaSans_400Regular,
     PlusJakartaSans_500Medium,

@@ -1,4 +1,4 @@
-import type { CipcStatus } from '@/features/auth/types';
+import type { CipcStatus, Profile } from '@/features/auth/types';
 
 export type CipcResult = { status: Exclude<CipcStatus, 'pending'>; registeredName?: string; entityType?: string; checkedAt: string };
 
@@ -9,5 +9,5 @@ export interface OnboardingApi {
    * the company is active, and matches the user's name against its
    * directors.
    */
-  verifyCipc(number: string, ownerName: string): Promise<CipcResult>;
+  verifyCipc(number: string, profile: Profile): Promise<CipcResult>;
 }

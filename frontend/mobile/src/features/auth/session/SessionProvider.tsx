@@ -33,7 +33,8 @@ const STORAGE_KEY = 'akayza.session.v4';
 const initialState: SessionState = { status: 'signedOut', profile: emptyProfile };
 
 // The last profile on this phone, so signing back in restores onboarding
-// answers (they live on the phone until the business-profile API exists).
+// answers straight away (the server copy is read right after; see
+// features/onboarding/sync/useBusinessProfileSync.ts).
 const LAST_PROFILE_KEY = 'akayza.lastProfile.v1';
 
 async function loadLastProfile(): Promise<Profile | null> {
@@ -71,6 +72,8 @@ type SessionContextValue = SessionState & {
   /** The backend's CIPC answer arrived (ignored if the number changed meanwhile). */
   setCipcResult: (number: string, result: { status: CipcStatus; registeredName?: string; checkedAt: string }) => void;
   finishOnboarding: () => void;
+  /** The server's saved business profile (another phone, or after a reinstall). */
+  applyServerProfile: (patch: Partial<Profile>, onboarded: boolean) => void;
   signedIn: (profile: Profile) => void;
   signOut: () => void;
 };
@@ -163,6 +166,12 @@ export function SessionProvider({ children }: { children: ReactNode }) {
           return { ...s, profile: { ...s.profile, registration: { ...s.profile.registration, cipc: { number, ...result } } } };
         }),
       finishOnboarding: () => patch({}, 'active'),
+      applyServerProfile: (server, onboarded) =>
+        setState((s) => {
+          if (s.status !== 'onboarding' && s.status !== 'active') return s;
+          const profile = { ...s.profile, ...server };
+          return { status: onboarded || s.status === 'active' ? 'active' : s.status, profile };
+        }),
       signedIn: (profile) => {
         // Same account on this phone before? Restore its onboarding answers.
         loadLastProfile().then((last) => {

@@ -111,6 +111,11 @@ class BaseConfig:
     # issued to one of these. Empty = Google sign-in switched off.
     GOOGLE_CLIENT_IDS = [c.strip() for c in os.environ.get("GOOGLE_CLIENT_IDS", "").split(",") if c.strip()]
 
+    # CIPC company check (business profile). "sandbox" = a small fake
+    # register for development and tests; "none" = no provider connected,
+    # so every check answers "unavailable" (never a fake "verified").
+    CIPC_PROVIDER = os.environ.get("CIPC_PROVIDER", "sandbox")
+
     # Mapbox token for address search and reverse geocoding. Server-side
     # only: the app has its own public token for drawing the map.
     MAPBOX_TOKEN = os.environ.get("MAPBOX_TOKEN", "")
@@ -146,6 +151,8 @@ class TestingConfig(BaseConfig):
 
 
 class ProductionConfig(BaseConfig):
+    # No real CIPC provider is contracted yet: never the sandbox in production.
+    CIPC_PROVIDER = os.environ.get("CIPC_PROVIDER", "none").replace("sandbox", "none")
     DEBUG = False
     SQLALCHEMY_DATABASE_URI = _database_uri()
 

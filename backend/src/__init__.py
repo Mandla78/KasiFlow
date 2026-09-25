@@ -71,6 +71,8 @@ def _register_models() -> None:
     from src.domains.identity.accounts import models as _accounts  # noqa: F401
     from src.domains.identity.auth import models as _auth  # noqa: F401
     from src.domains.identity.devices import models as _devices  # noqa: F401
+    # trader schema: the informal trader's own data
+    from src.domains.informal_trader.business_profile import models as _business_profile  # noqa: F401
     # audit schema: the append-only audit trail
     from src.domains.security.audit import models as _audit  # noqa: F401
 

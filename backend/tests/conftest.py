@@ -19,6 +19,7 @@ from src.shared.cache import cache as cache_module  # noqa: E402
 from src.shared.email.email import get_fake_provider  # noqa: E402
 from src.shared.rate_limit.limiter import limiter  # noqa: E402
 
+TRADER_TABLES = ["trader.business_profiles"]
 IDENTITY_TABLES = ["google_identities", "sessions", "trusted_phones", "devices", "email_codes", "password_resets", "password_credentials", "consents", "users"]
 
 
@@ -35,7 +36,7 @@ def app():
 @pytest.fixture(autouse=True)
 def clean(app):
     with app.app_context():
-        db.session.execute(text("TRUNCATE " + ", ".join(f"identity.{t}" for t in IDENTITY_TABLES) + " CASCADE"))
+        db.session.execute(text("TRUNCATE " + ", ".join([f"identity.{t}" for t in IDENTITY_TABLES] + TRADER_TABLES) + " CASCADE"))
         db.session.commit()
     get_fake_provider().clear()
     # Per-address email limits live in memory for the whole run; each test

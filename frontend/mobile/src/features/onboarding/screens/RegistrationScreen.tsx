@@ -62,7 +62,7 @@ export default function RegistrationScreen({ editing = false }: { editing?: bool
     if (wantsCheck && !unchanged) {
       // Stands in for the backend job that checks CIPC after this step is saved.
       onboardingApi
-        .verifyCipc(cipcNumber, profile.ownerName)
+        .verifyCipc(cipcNumber, profile)
         .then((r) => setCipcResult(cipcNumber, r))
         .catch(() => setCipcResult(cipcNumber, { status: 'unavailable', checkedAt: new Date().toISOString() }));
     }

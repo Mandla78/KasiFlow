@@ -36,3 +36,7 @@ class BusinessAuditEvent(str, enum.Enum):
     CHECKOUT_RATE_LIMITED = "business.checkout_rate_limited"
     ORDER_ACCESS_DENIED = "business.order_access_denied"
     ORDER_CANCELLED = "business.order_cancelled"
+    # Business profile (informal_trader/business_profile)
+    BUSINESS_PROFILE_SAVED = "business.profile_saved"
+    CIPC_CHECKED = "business.cipc_checked"
+    CIPC_CHECK_LIMITED = "business.cipc_check_limited"
