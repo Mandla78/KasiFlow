@@ -9,12 +9,8 @@ BUSINESS_TYPES = ("builder", "spaza", "other")
 TRADES = ("general_builder", "plumber", "electrician", "carpenter", "painter_tiler", "other_trade")
 YEARS_TRADING = ("under_1", "1_3", "3_plus")
 
-CATEGORIES = (
-    "food_grocery", "beverages", "snacks_confectionery", "bakery", "dairy_chilled", "fresh_produce",
-    "meat_frozen", "household_cleaning", "personal_care", "baby_family", "packaging_disposable",
-    "stationery_school", "clothing_apparel", "fragrances_beauty", "phone_accessories",
-    "building_materials", "plumbing", "electrical", "tools_hardware", "paint_finishes", "other",
-)
+#: One list for the whole backend (the supplier side sells from the same codes).
+from src.shared.constants.categories import CATEGORIES  # noqa: E402,F401
 
 RESTOCK = ("daily", "weekly", "fortnightly", "monthly")
 SPEND = ("under_1k", "1k_5k", "5k_20k", "over_20k")

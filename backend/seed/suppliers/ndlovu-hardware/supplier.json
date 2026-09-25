@@ -1,0 +1,54 @@
+{
+  "external_id": "NDLOVU-001",
+  "trading_name": "Ndlovu Hardware",
+  "legal_name": "Ndlovu Hardware (Pty) Ltd",
+  "about": "Building materials, plumbing, electrical and tools for builders and trades.",
+  "vat_number": null,
+  "orders_email": "orders@ndlovu-hardware.example.com",
+  "phone": null,
+  "brand_color": "#5E5648",
+  "collection_address": {
+    "street": "51 Olifantsfontein Road",
+    "suburb": "Tembisa",
+    "city": "Ekurhuleni",
+    "province": "Gauteng",
+    "postal_code": "1632",
+    "latitude": -26.01,
+    "longitude": 28.24
+  },
+  "hours": [
+    {
+      "days": "mon-fri",
+      "open": "07:00",
+      "close": "17:00"
+    },
+    {
+      "days": "sat",
+      "open": "08:00",
+      "close": "13:00"
+    }
+  ],
+  "delivery": {
+    "offers": true,
+    "radius_km": 25,
+    "fee_cents": 25000,
+    "free_over_cents": 500000
+  },
+  "collect": true,
+  "payments": {
+    "in_app": true,
+    "cash": true,
+    "cash_limit_cents": 1000000
+  },
+  "minimum_order_cents": 100000,
+  "categories": [
+    "building_materials",
+    "tools_hardware",
+    "paint_finishes",
+    "plumbing",
+    "electrical"
+  ],
+  "payout": {
+    "merchant_id": null
+  }
+}

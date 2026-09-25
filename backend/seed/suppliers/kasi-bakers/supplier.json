@@ -1,0 +1,45 @@
+{
+  "external_id": "KASIBAKERS-001",
+  "trading_name": "Kasi Bakers",
+  "legal_name": "Kasi Bakers (Pty) Ltd",
+  "about": "Fresh bread every morning, baked in Ivory Park.",
+  "vat_number": null,
+  "orders_email": "orders@kasi-bakers.example.com",
+  "phone": null,
+  "brand_color": "#8A5A1E",
+  "collection_address": {
+    "street": "22 Mthimkhulu Street",
+    "suburb": "Ivory Park",
+    "city": "Midrand",
+    "province": "Gauteng",
+    "postal_code": "1693",
+    "latitude": -25.994,
+    "longitude": 28.183
+  },
+  "hours": [
+    {
+      "days": "mon-sat",
+      "open": "05:00",
+      "close": "14:00"
+    }
+  ],
+  "delivery": {
+    "offers": true,
+    "radius_km": 8,
+    "fee_cents": 1500,
+    "free_over_cents": 50000
+  },
+  "collect": true,
+  "payments": {
+    "in_app": true,
+    "cash": true,
+    "cash_limit_cents": 200000
+  },
+  "minimum_order_cents": 20000,
+  "categories": [
+    "bakery"
+  ],
+  "payout": {
+    "merchant_id": null
+  }
+}

@@ -1,0 +1,82 @@
+product_code,name,brand,category,unit,pack_size,units_per_pack,price_rands,compare_at_rands,vat_rate,vat_included,stock,min_qty,max_qty,unit_barcode,case_barcode,weight_kg,description,active
+DLAMIN-BV-0000,Cola soft drink,Fizz Co,beverages,case,24 x 330 ml cans,24,179.09,,standard,true,378,1,200,2020000000006,12020000000003,7.92,"Cold drink, a full case.",true
+DLAMIN-BV-0001,Cola soft drink,Clear Spring,beverages,case,24 x 330 ml cans,24,195.49,,standard,true,293,1,200,2020000000013,12020000000010,7.92,"Cold drink, a full case.",true
+DLAMIN-BV-0002,Cola soft drink,Sunny Farm,beverages,case,24 x 330 ml cans,24,207.99,,standard,true,350,1,200,2020000000020,12020000000027,7.92,"Cold drink, a full case.",true
+DLAMIN-BV-0010,Cola soft drink,Fizz Co,beverages,case,12 x 2 litre,12,242.89,,standard,true,127,1,200,2020000000037,12020000000034,24,"Cold drink, a full case.",true
+DLAMIN-BV-0011,Cola soft drink,Clear Spring,beverages,case,12 x 2 litre,12,265.89,,standard,true,317,1,200,2020000000044,12020000000041,24,"Cold drink, a full case.",true
+DLAMIN-BV-0012,Cola soft drink,Sunny Farm,beverages,case,12 x 2 litre,12,286.29,,standard,true,361,1,200,2020000000051,12020000000058,24,"Cold drink, a full case.",true
+DLAMIN-BV-0100,Orange soft drink,Fizz Co,beverages,case,24 x 330 ml cans,24,168.79,190.39,standard,true,84,1,200,2020000000068,12020000000065,7.92,Orange-flavoured cold drink.,true
+DLAMIN-BV-0101,Orange soft drink,Clear Spring,beverages,case,24 x 330 ml cans,24,182.09,,standard,true,5,1,200,2020000000075,12020000000072,7.92,Orange-flavoured cold drink.,true
+DLAMIN-BV-0102,Orange soft drink,Sunny Farm,beverages,case,24 x 330 ml cans,24,197.79,,standard,true,0,1,200,2020000000082,12020000000089,7.92,Orange-flavoured cold drink.,true
+DLAMIN-BV-0110,Orange soft drink,Fizz Co,beverages,case,12 x 2 litre,12,226.29,,standard,true,144,1,200,2020000000099,12020000000096,24,Orange-flavoured cold drink.,true
+DLAMIN-BV-0111,Orange soft drink,Clear Spring,beverages,case,12 x 2 litre,12,242.49,,standard,true,199,1,200,2020000000105,12020000000102,24,Orange-flavoured cold drink.,true
+DLAMIN-BV-0112,Orange soft drink,Sunny Farm,beverages,case,12 x 2 litre,12,264.29,,standard,true,312,1,200,2020000000112,12020000000119,24,Orange-flavoured cold drink.,true
+DLAMIN-BV-0200,Lemon-lime soft drink,Fizz Co,beverages,case,24 x 330 ml cans,24,172.49,,standard,true,6,1,200,2020000000129,12020000000126,7.92,Lemon-lime cold drink.,true
+DLAMIN-BV-0201,Lemon-lime soft drink,Clear Spring,beverages,case,24 x 330 ml cans,24,183.39,,standard,true,331,1,200,2020000000136,12020000000133,7.92,Lemon-lime cold drink.,true
+DLAMIN-BV-0202,Lemon-lime soft drink,Sunny Farm,beverages,case,24 x 330 ml cans,24,198.19,,standard,true,114,1,200,2020000000143,12020000000140,7.92,Lemon-lime cold drink.,true
+DLAMIN-BV-0300,Still water,Fizz Co,beverages,case,24 x 500 ml,24,95.89,,standard,true,193,1,200,2020000000150,12020000000157,12,Still spring water.,true
+DLAMIN-BV-0301,Still water,Clear Spring,beverages,case,24 x 500 ml,24,100.59,,standard,true,354,1,200,2020000000167,12020000000164,12,Still spring water.,true
+DLAMIN-BV-0302,Still water,Sunny Farm,beverages,case,24 x 500 ml,24,112.19,139.09,standard,true,206,1,200,2020000000174,12020000000171,12,Still spring water.,true
+DLAMIN-BV-0310,Still water,Fizz Co,beverages,case,6 x 5 litre,6,113.19,140.29,standard,true,264,1,200,2020000000181,12020000000188,30,Still spring water.,true
+DLAMIN-BV-0311,Still water,Clear Spring,beverages,case,6 x 5 litre,6,122.59,,standard,true,206,1,200,2020000000198,12020000000195,30,Still spring water.,true
+DLAMIN-BV-0312,Still water,Sunny Farm,beverages,case,6 x 5 litre,6,135.49,,standard,true,286,1,200,2020000000204,12020000000201,30,Still spring water.,true
+DLAMIN-BV-0400,Sparkling water,Fizz Co,beverages,case,24 x 500 ml,24,111.99,,standard,true,68,1,200,2020000000211,12020000000218,12,Sparkling spring water.,true
+DLAMIN-BV-0401,Sparkling water,Clear Spring,beverages,case,24 x 500 ml,24,125.39,,standard,true,306,1,200,2020000000228,12020000000225,12,Sparkling spring water.,true
+DLAMIN-BV-0402,Sparkling water,Sunny Farm,beverages,case,24 x 500 ml,24,131.79,,standard,true,140,1,200,2020000000235,12020000000232,12,Sparkling spring water.,true
+DLAMIN-BV-0500,Fruit juice blend,Fizz Co,beverages,case,6 x 1 litre,6,121.19,,standard,true,289,1,200,2020000000242,12020000000249,6,100% fruit juice blend.,true
+DLAMIN-BV-0501,Fruit juice blend,Clear Spring,beverages,case,6 x 1 litre,6,133.39,,standard,true,14,1,200,2020000000259,12020000000256,6,100% fruit juice blend.,true
+DLAMIN-BV-0502,Fruit juice blend,Sunny Farm,beverages,case,6 x 1 litre,6,142.29,,standard,true,157,1,200,2020000000266,12020000000263,6,100% fruit juice blend.,true
+DLAMIN-BV-0510,Fruit juice blend,Fizz Co,beverages,case,24 x 200 ml,24,149.59,,standard,true,288,1,200,2020000000273,12020000000270,4.8,100% fruit juice blend.,true
+DLAMIN-BV-0511,Fruit juice blend,Clear Spring,beverages,case,24 x 200 ml,24,162.09,,standard,true,251,1,200,2020000000280,12020000000287,4.8,100% fruit juice blend.,true
+DLAMIN-BV-0512,Fruit juice blend,Sunny Farm,beverages,case,24 x 200 ml,24,178.99,,standard,true,101,1,200,2020000000297,12020000000294,4.8,100% fruit juice blend.,true
+DLAMIN-BV-0600,Dairy fruit mix drink,Fizz Co,beverages,case,12 x 500 ml,12,161.29,,standard,true,178,1,200,2020000000303,12020000000300,6,Fruit and dairy blend.,true
+DLAMIN-BV-0601,Dairy fruit mix drink,Clear Spring,beverages,case,12 x 500 ml,12,171.39,,standard,true,0,1,200,2020000000310,12020000000317,6,Fruit and dairy blend.,true
+DLAMIN-BV-0602,Dairy fruit mix drink,Sunny Farm,beverages,case,12 x 500 ml,12,191.89,231.99,standard,true,0,1,200,2020000000327,12020000000324,6,Fruit and dairy blend.,true
+DLAMIN-BV-0700,Energy drink,Fizz Co,beverages,case,24 x 500 ml,24,336.29,,standard,true,323,1,200,2020000000334,12020000000331,12,Energy drink cans.,true
+DLAMIN-BV-0701,Energy drink,Clear Spring,beverages,case,24 x 500 ml,24,368.19,,standard,true,43,1,200,2020000000341,12020000000348,12,Energy drink cans.,true
+DLAMIN-BV-0702,Energy drink,Sunny Farm,beverages,case,24 x 500 ml,24,406.19,,standard,true,209,1,200,2020000000358,12020000000355,12,Energy drink cans.,true
+DLAMIN-BV-0800,"Cordial, orange",Fizz Co,beverages,case,6 x 1 litre,6,143.99,,standard,true,160,1,200,2020000000365,12020000000362,6,Dilute to taste.,true
+DLAMIN-BV-0801,"Cordial, orange",Clear Spring,beverages,case,6 x 1 litre,6,154.09,,standard,true,396,1,200,2020000000372,12020000000379,6,Dilute to taste.,true
+DLAMIN-BV-0802,"Cordial, orange",Sunny Farm,beverages,case,6 x 1 litre,6,165.49,,standard,true,40,1,200,2020000000389,12020000000386,6,Dilute to taste.,true
+DLAMIN-BV-0900,"Mageu, original",Fizz Co,beverages,case,6 x 1 litre,6,102.89,,standard,true,287,1,200,2020000000396,12020000000393,6,Traditional fermented maize drink.,true
+DLAMIN-BV-0901,"Mageu, original",Clear Spring,beverages,case,6 x 1 litre,6,113.39,,standard,true,382,1,200,2020000000402,12020000000409,6,Traditional fermented maize drink.,true
+DLAMIN-BV-0902,"Mageu, original",Sunny Farm,beverages,case,6 x 1 litre,6,123.99,,standard,true,77,1,200,2020000000419,12020000000416,6,Traditional fermented maize drink.,true
+DLAMIN-BV-1000,"Iced tea, peach",Fizz Co,beverages,case,12 x 500 ml,12,133.29,,standard,true,1,1,200,2020000000426,12020000000423,6,Peach iced tea.,true
+DLAMIN-BV-1001,"Iced tea, peach",Clear Spring,beverages,case,12 x 500 ml,12,144.69,,standard,true,154,1,200,2020000000433,12020000000430,6,Peach iced tea.,true
+DLAMIN-BV-1002,"Iced tea, peach",Sunny Farm,beverages,case,12 x 500 ml,12,154.39,,standard,true,200,1,200,2020000000440,12020000000447,6,Peach iced tea.,true
+DLAMIN-SN-0000,"Potato chips, salt & vinegar",Crunch Kasi,snacks_confectionery,case,48 x 36 g,48,226.89,,standard,true,202,1,200,2020000000457,12020000000454,1.728,Crisp potato chips.,true
+DLAMIN-SN-0001,"Potato chips, salt & vinegar",Candy Corner,snacks_confectionery,case,48 x 36 g,48,242.89,,standard,true,227,1,200,2020000000464,12020000000461,1.728,Crisp potato chips.,true
+DLAMIN-SN-0002,"Potato chips, salt & vinegar",Cocoa Joy,snacks_confectionery,case,48 x 36 g,48,263.69,,standard,true,395,1,200,2020000000471,12020000000478,1.728,Crisp potato chips.,true
+DLAMIN-SN-0010,"Potato chips, salt & vinegar",Crunch Kasi,snacks_confectionery,case,20 x 125 g,20,282.79,,standard,true,4,1,200,2020000000488,12020000000485,2.5,Crisp potato chips.,true
+DLAMIN-SN-0011,"Potato chips, salt & vinegar",Candy Corner,snacks_confectionery,case,20 x 125 g,20,303.09,,standard,true,372,1,200,2020000000495,12020000000492,2.5,Crisp potato chips.,true
+DLAMIN-SN-0012,"Potato chips, salt & vinegar",Cocoa Joy,snacks_confectionery,case,20 x 125 g,20,336.09,,standard,true,320,1,200,2020000000501,12020000000508,2.5,Crisp potato chips.,true
+DLAMIN-SN-0100,"Potato chips, cheese & onion",Crunch Kasi,snacks_confectionery,case,48 x 36 g,48,223.49,,standard,true,2,1,200,2020000000518,12020000000515,1.728,Crisp potato chips.,true
+DLAMIN-SN-0101,"Potato chips, cheese & onion",Candy Corner,snacks_confectionery,case,48 x 36 g,48,246.29,,standard,true,0,1,200,2020000000525,12020000000522,1.728,Crisp potato chips.,true
+DLAMIN-SN-0102,"Potato chips, cheese & onion",Cocoa Joy,snacks_confectionery,case,48 x 36 g,48,268.09,,standard,true,158,1,200,2020000000532,12020000000539,1.728,Crisp potato chips.,true
+DLAMIN-SN-0200,"Maize snacks, cheese",Crunch Kasi,snacks_confectionery,case,50 x 25 g,50,124.49,147.49,standard,true,33,1,200,2020000000549,12020000000546,1.25,Cheese-flavoured maize puffs.,true
+DLAMIN-SN-0201,"Maize snacks, cheese",Candy Corner,snacks_confectionery,case,50 x 25 g,50,130.89,,standard,true,136,1,200,2020000000556,12020000000553,1.25,Cheese-flavoured maize puffs.,true
+DLAMIN-SN-0202,"Maize snacks, cheese",Cocoa Joy,snacks_confectionery,case,50 x 25 g,50,146.69,170.59,standard,true,38,1,200,2020000000563,12020000000560,1.25,Cheese-flavoured maize puffs.,true
+DLAMIN-SN-0300,"Maize snacks, spicy",Crunch Kasi,snacks_confectionery,case,50 x 25 g,50,121.99,,standard,true,150,1,200,2020000000570,12020000000577,1.25,Spicy maize puffs.,true
+DLAMIN-SN-0301,"Maize snacks, spicy",Candy Corner,snacks_confectionery,case,50 x 25 g,50,131.69,,standard,true,253,1,200,2020000000587,12020000000584,1.25,Spicy maize puffs.,true
+DLAMIN-SN-0302,"Maize snacks, spicy",Cocoa Joy,snacks_confectionery,case,50 x 25 g,50,141.59,,standard,true,215,1,200,2020000000594,12020000000591,1.25,Spicy maize puffs.,true
+DLAMIN-SN-0400,Fruit lollipops,Crunch Kasi,snacks_confectionery,pack,100 pieces,100,55.59,67.09,standard,true,10,1,200,2020000000600,12020000000607,,Assorted fruit lollipops.,true
+DLAMIN-SN-0401,Fruit lollipops,Candy Corner,snacks_confectionery,pack,100 pieces,100,60.49,,standard,true,191,1,200,2020000000617,12020000000614,,Assorted fruit lollipops.,true
+DLAMIN-SN-0402,Fruit lollipops,Cocoa Joy,snacks_confectionery,pack,100 pieces,100,67.69,,standard,true,244,1,200,2020000000624,12020000000621,,Assorted fruit lollipops.,true
+DLAMIN-SN-0500,Milk chocolate bars,Crunch Kasi,snacks_confectionery,case,24 x 40 g,24,209.09,,standard,true,18,1,200,2020000000631,12020000000638,0.96,Milk chocolate bars.,true
+DLAMIN-SN-0501,Milk chocolate bars,Candy Corner,snacks_confectionery,case,24 x 40 g,24,224.69,,standard,true,319,1,200,2020000000648,12020000000645,0.96,Milk chocolate bars.,true
+DLAMIN-SN-0502,Milk chocolate bars,Cocoa Joy,snacks_confectionery,case,24 x 40 g,24,240.29,,standard,true,272,1,200,2020000000655,12020000000652,0.96,Milk chocolate bars.,true
+DLAMIN-SN-0600,Mint chewing gum,Crunch Kasi,snacks_confectionery,pack,100 pieces,100,47.39,,standard,true,187,1,200,2020000000662,12020000000669,,Single mint gum pieces.,true
+DLAMIN-SN-0601,Mint chewing gum,Candy Corner,snacks_confectionery,pack,100 pieces,100,50.39,56.89,standard,true,6,1,200,2020000000679,12020000000676,,Single mint gum pieces.,true
+DLAMIN-SN-0602,Mint chewing gum,Cocoa Joy,snacks_confectionery,pack,100 pieces,100,54.69,,standard,true,8,1,200,2020000000686,12020000000683,,Single mint gum pieces.,true
+DLAMIN-SN-0700,Toffees,Crunch Kasi,snacks_confectionery,pack,100 pieces,100,42.79,,standard,true,240,1,200,2020000000693,12020000000690,,Individually wrapped toffees.,true
+DLAMIN-SN-0701,Toffees,Candy Corner,snacks_confectionery,pack,100 pieces,100,45.89,,standard,true,337,1,200,2020000000709,12020000000706,,Individually wrapped toffees.,true
+DLAMIN-SN-0702,Toffees,Cocoa Joy,snacks_confectionery,pack,100 pieces,100,50.09,57.49,standard,true,230,1,200,2020000000716,12020000000713,,Individually wrapped toffees.,true
+DLAMIN-SN-0800,Marie biscuits,Crunch Kasi,snacks_confectionery,case,12 x 200 g,12,169.09,,standard,true,180,1,200,2020000000723,12020000000720,2.4,Plain tea biscuits.,true
+DLAMIN-SN-0801,Marie biscuits,Candy Corner,snacks_confectionery,case,12 x 200 g,12,183.99,206.99,standard,true,145,1,200,2020000000730,12020000000737,2.4,Plain tea biscuits.,true
+DLAMIN-SN-0802,Marie biscuits,Cocoa Joy,snacks_confectionery,case,12 x 200 g,12,202.49,232.99,standard,true,155,1,200,2020000000747,12020000000744,2.4,Plain tea biscuits.,true
+DLAMIN-SN-0900,"Cream biscuits, vanilla",Crunch Kasi,snacks_confectionery,case,12 x 200 g,12,192.19,238.29,standard,true,224,1,200,2020000000754,12020000000751,2.4,Vanilla cream biscuits.,true
+DLAMIN-SN-0901,"Cream biscuits, vanilla",Candy Corner,snacks_confectionery,case,12 x 200 g,12,201.39,,standard,true,381,1,200,2020000000761,12020000000768,2.4,Vanilla cream biscuits.,true
+DLAMIN-SN-0902,"Cream biscuits, vanilla",Cocoa Joy,snacks_confectionery,case,12 x 200 g,12,222.59,264.89,standard,true,234,1,200,2020000000778,12020000000775,2.4,Vanilla cream biscuits.,true
+DLAMIN-SN-1000,Salted peanuts,Crunch Kasi,snacks_confectionery,case,24 x 50 g,24,138.79,,standard,true,309,1,200,2020000000785,12020000000782,1.2,Roasted salted peanuts.,true
+DLAMIN-SN-1001,Salted peanuts,Candy Corner,snacks_confectionery,case,24 x 50 g,24,155.79,,standard,true,102,1,200,2020000000792,12020000000799,1.2,Roasted salted peanuts.,true
+DLAMIN-SN-1002,Salted peanuts,Cocoa Joy,snacks_confectionery,case,24 x 50 g,24,163.49,,standard,true,362,1,200,2020000000808,12020000000805,1.2,Roasted salted peanuts.,true

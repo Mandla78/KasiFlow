@@ -1,0 +1,47 @@
+{
+  "external_id": "MIDRANDBP-001",
+  "trading_name": "Midrand Build & Plumb",
+  "legal_name": "Midrand Build & Plumb (Pty) Ltd",
+  "about": "Plumbing and electrical supplies for contractors.",
+  "vat_number": null,
+  "orders_email": "orders@midrand-build-and-plumb.example.com",
+  "phone": null,
+  "brand_color": "#6B3A2E",
+  "collection_address": {
+    "street": "120 New Road",
+    "suburb": "Halfway House",
+    "city": "Midrand",
+    "province": "Gauteng",
+    "postal_code": "1685",
+    "latitude": -25.99,
+    "longitude": 28.13
+  },
+  "hours": [
+    {
+      "days": "mon-fri",
+      "open": "07:00",
+      "close": "17:00"
+    }
+  ],
+  "delivery": {
+    "offers": true,
+    "radius_km": 30,
+    "fee_cents": 35000,
+    "free_over_cents": 800000
+  },
+  "collect": true,
+  "payments": {
+    "in_app": true,
+    "cash": false,
+    "cash_limit_cents": null
+  },
+  "minimum_order_cents": 200000,
+  "categories": [
+    "plumbing",
+    "electrical",
+    "building_materials"
+  ],
+  "payout": {
+    "merchant_id": null
+  }
+}

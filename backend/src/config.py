@@ -131,6 +131,7 @@ class BaseConfig:
 
 
 class DevelopmentConfig(BaseConfig):
+    ENV_NAME = "development"
     DEBUG = True
     # The Expo web preview runs in a browser at another origin. Phones don't
     # need CORS; production allows no browser origins at all.
@@ -139,6 +140,7 @@ class DevelopmentConfig(BaseConfig):
 
 
 class TestingConfig(BaseConfig):
+    ENV_NAME = "testing"
     TESTING = True
     SECRET_KEY = os.environ.get("SECRET_KEY", "test-secret-key")
     JWT_SECRET_KEY = os.environ.get("JWT_SECRET_KEY", "test-jwt-secret-key-long-enough-32b")
@@ -153,6 +155,7 @@ class TestingConfig(BaseConfig):
 
 
 class ProductionConfig(BaseConfig):
+    ENV_NAME = "production"
     # No real CIPC provider is contracted yet: never the sandbox in production.
     CIPC_PROVIDER = os.environ.get("CIPC_PROVIDER", "none").replace("sandbox", "none")
     DEBUG = False

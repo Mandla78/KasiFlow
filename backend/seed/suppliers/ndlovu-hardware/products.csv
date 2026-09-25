@@ -1,0 +1,175 @@
+product_code,name,brand,category,unit,pack_size,units_per_pack,price_rands,compare_at_rands,vat_rate,vat_included,stock,min_qty,max_qty,unit_barcode,case_barcode,weight_kg,description,active
+NDLOVU-BM-0000,"Cement, 42.5N",Rock Build,building_materials,bag,50 kg,1,105.99,,standard,true,0,1,200,2050000000003,,50,General-purpose cement.,true
+NDLOVU-BM-0001,"Cement, 42.5N",Clay Works,building_materials,bag,50 kg,1,113.29,,standard,true,275,1,200,2050000000010,,50,General-purpose cement.,true
+NDLOVU-BM-0002,"Cement, 42.5N",Steel Line,building_materials,bag,50 kg,1,124.99,,standard,true,155,1,200,2050000000027,,50,General-purpose cement.,true
+NDLOVU-BM-0100,"Cement, 32.5R",Rock Build,building_materials,bag,50 kg,1,94.29,,standard,true,250,1,200,2050000000034,,50,Plaster and brickwork cement.,true
+NDLOVU-BM-0101,"Cement, 32.5R",Clay Works,building_materials,bag,50 kg,1,103.09,,standard,true,11,1,200,2050000000041,,50,Plaster and brickwork cement.,true
+NDLOVU-BM-0102,"Cement, 32.5R",Steel Line,building_materials,bag,50 kg,1,110.79,,standard,true,87,1,200,2050000000058,,50,Plaster and brickwork cement.,true
+NDLOVU-BM-0200,Building sand,Rock Build,building_materials,cube,1 m³,1,623.69,,standard,true,244,1,20,2050000000065,,,Delivered by truck.,true
+NDLOVU-BM-0201,Building sand,Clay Works,building_materials,cube,1 m³,1,659.89,764.79,standard,true,301,1,20,2050000000072,,,Delivered by truck.,true
+NDLOVU-BM-0202,Building sand,Steel Line,building_materials,cube,1 m³,1,733.59,897.09,standard,true,309,1,20,2050000000089,,,Delivered by truck.,true
+NDLOVU-BM-0300,Plaster sand,Rock Build,building_materials,cube,1 m³,1,668.19,,standard,true,291,1,20,2050000000096,,,Fine plaster sand.,true
+NDLOVU-BM-0301,Plaster sand,Clay Works,building_materials,cube,1 m³,1,708.19,,standard,true,9,1,20,2050000000102,,,Fine plaster sand.,true
+NDLOVU-BM-0302,Plaster sand,Steel Line,building_materials,cube,1 m³,1,787.19,,standard,true,367,1,20,2050000000119,,,Fine plaster sand.,true
+NDLOVU-BM-0400,"Concrete stone, 19 mm",Rock Build,building_materials,cube,1 m³,1,722.79,,standard,true,52,1,20,2050000000126,,,Concrete stone.,true
+NDLOVU-BM-0401,"Concrete stone, 19 mm",Clay Works,building_materials,cube,1 m³,1,784.59,,standard,true,298,1,20,2050000000133,,,Concrete stone.,true
+NDLOVU-BM-0402,"Concrete stone, 19 mm",Steel Line,building_materials,cube,1 m³,1,844.59,,standard,true,3,1,20,2050000000140,,,Concrete stone.,true
+NDLOVU-BM-0500,Maxi stock bricks,Rock Build,building_materials,pallet,500 bricks,1,1610.29,1890.99,standard,true,81,1,20,2050000000157,,,"Stock bricks, a pallet.",true
+NDLOVU-BM-0501,Maxi stock bricks,Clay Works,building_materials,pallet,500 bricks,1,1732.99,,standard,true,322,1,20,2050000000164,,,"Stock bricks, a pallet.",true
+NDLOVU-BM-0502,Maxi stock bricks,Steel Line,building_materials,pallet,500 bricks,1,1896.79,,standard,true,5,1,20,2050000000171,,,"Stock bricks, a pallet.",true
+NDLOVU-BM-0600,Cement blocks,Rock Build,building_materials,pallet,100 blocks,1,1255.99,1483.09,standard,true,185,1,20,2050000000188,,,Hollow cement blocks.,true
+NDLOVU-BM-0601,Cement blocks,Clay Works,building_materials,pallet,100 blocks,1,1331.39,,standard,true,43,1,20,2050000000195,,,Hollow cement blocks.,true
+NDLOVU-BM-0602,Cement blocks,Steel Line,building_materials,pallet,100 blocks,1,1463.19,,standard,true,39,1,20,2050000000201,,,Hollow cement blocks.,true
+NDLOVU-BM-0700,"IBR roof sheet, 0.47 mm",Rock Build,building_materials,sheet,3.6 m,1,272.39,,standard,true,326,1,200,2050000000218,,,Galvanised IBR sheet.,true
+NDLOVU-BM-0701,"IBR roof sheet, 0.47 mm",Clay Works,building_materials,sheet,3.6 m,1,300.59,,standard,true,183,1,200,2050000000225,,,Galvanised IBR sheet.,true
+NDLOVU-BM-0702,"IBR roof sheet, 0.47 mm",Steel Line,building_materials,sheet,3.6 m,1,321.19,,standard,true,58,1,200,2050000000232,,,Galvanised IBR sheet.,true
+NDLOVU-BM-0710,"IBR roof sheet, 0.47 mm",Rock Build,building_materials,sheet,6 m,1,445.99,,standard,true,214,1,200,2050000000249,,,Galvanised IBR sheet.,true
+NDLOVU-BM-0711,"IBR roof sheet, 0.47 mm",Clay Works,building_materials,sheet,6 m,1,481.29,,standard,true,246,1,200,2050000000256,,,Galvanised IBR sheet.,true
+NDLOVU-BM-0712,"IBR roof sheet, 0.47 mm",Steel Line,building_materials,sheet,6 m,1,515.29,,standard,true,374,1,200,2050000000263,,,Galvanised IBR sheet.,true
+NDLOVU-BM-0800,Corrugated roof sheet,Rock Build,building_materials,sheet,3 m,1,212.49,,standard,true,46,1,200,2050000000270,,,Galvanised corrugated sheet.,true
+NDLOVU-BM-0801,Corrugated roof sheet,Clay Works,building_materials,sheet,3 m,1,229.39,,standard,true,135,1,200,2050000000287,,,Galvanised corrugated sheet.,true
+NDLOVU-BM-0802,Corrugated roof sheet,Steel Line,building_materials,sheet,3 m,1,243.39,,standard,true,143,1,200,2050000000294,,,Galvanised corrugated sheet.,true
+NDLOVU-BM-0900,Brickforce,Rock Build,building_materials,roll,20 m,1,37.89,,standard,true,50,1,200,2050000000300,,,"Brickforce wire, 150 mm.",true
+NDLOVU-BM-0901,Brickforce,Clay Works,building_materials,roll,20 m,1,41.39,,standard,true,163,1,200,2050000000317,,,"Brickforce wire, 150 mm.",true
+NDLOVU-BM-0902,Brickforce,Steel Line,building_materials,roll,20 m,1,43.89,,standard,true,210,1,200,2050000000324,,,"Brickforce wire, 150 mm.",true
+NDLOVU-BM-1000,Damp-proof course,Rock Build,building_materials,roll,30 m,1,94.19,,standard,true,238,1,200,2050000000331,,,375 mm DPC.,true
+NDLOVU-BM-1001,Damp-proof course,Clay Works,building_materials,roll,30 m,1,102.89,,standard,true,90,1,200,2050000000348,,,375 mm DPC.,true
+NDLOVU-BM-1002,Damp-proof course,Steel Line,building_materials,roll,30 m,1,110.09,,standard,true,71,1,200,2050000000355,,,375 mm DPC.,true
+NDLOVU-BM-1100,"Timber, 38 x 114 mm",Rock Build,building_materials,length,3.6 m,1,150.29,,standard,true,313,1,200,2050000000362,,,Treated SA pine.,true
+NDLOVU-BM-1101,"Timber, 38 x 114 mm",Clay Works,building_materials,length,3.6 m,1,166.59,,standard,true,8,1,200,2050000000379,,,Treated SA pine.,true
+NDLOVU-BM-1102,"Timber, 38 x 114 mm",Steel Line,building_materials,length,3.6 m,1,179.39,,standard,true,370,1,200,2050000000386,,,Treated SA pine.,true
+NDLOVU-BM-1110,"Timber, 38 x 114 mm",Rock Build,building_materials,length,6.6 m,1,278.19,312.79,standard,true,197,1,200,2050000000393,,,Treated SA pine.,true
+NDLOVU-BM-1111,"Timber, 38 x 114 mm",Clay Works,building_materials,length,6.6 m,1,296.69,,standard,true,28,1,200,2050000000409,,,Treated SA pine.,true
+NDLOVU-BM-1112,"Timber, 38 x 114 mm",Steel Line,building_materials,length,6.6 m,1,326.69,,standard,true,350,1,200,2050000000416,,,Treated SA pine.,true
+NDLOVU-TH-0000,Builder's wheelbarrow,Site Pro,tools_hardware,each,65 litre,1,863.19,,standard,true,23,1,20,2050000000423,,65,Heavy-duty wheelbarrow.,true
+NDLOVU-TH-0001,Builder's wheelbarrow,Fixit,tools_hardware,each,65 litre,1,911.39,,standard,true,94,1,20,2050000000430,,65,Heavy-duty wheelbarrow.,true
+NDLOVU-TH-0002,Builder's wheelbarrow,Iron Hand,tools_hardware,each,65 litre,1,985.79,,standard,true,345,1,20,2050000000447,,65,Heavy-duty wheelbarrow.,true
+NDLOVU-TH-0010,Builder's wheelbarrow,Site Pro,tools_hardware,each,85 litre,1,1050.59,,standard,true,70,1,20,2050000000454,,85,Heavy-duty wheelbarrow.,true
+NDLOVU-TH-0011,Builder's wheelbarrow,Fixit,tools_hardware,each,85 litre,1,1142.19,,standard,true,239,1,20,2050000000461,,85,Heavy-duty wheelbarrow.,true
+NDLOVU-TH-0012,Builder's wheelbarrow,Iron Hand,tools_hardware,each,85 litre,1,1211.49,,standard,true,0,1,20,2050000000478,,85,Heavy-duty wheelbarrow.,true
+NDLOVU-TH-0100,Round-mouth spade,Site Pro,tools_hardware,each,Standard,1,171.69,,standard,true,224,1,200,2050000000485,,,"Steel spade, wooden handle.",true
+NDLOVU-TH-0101,Round-mouth spade,Fixit,tools_hardware,each,Standard,1,183.19,210.39,standard,true,173,1,200,2050000000492,,,"Steel spade, wooden handle.",true
+NDLOVU-TH-0102,Round-mouth spade,Iron Hand,tools_hardware,each,Standard,1,197.49,226.59,standard,true,0,1,200,2050000000508,,,"Steel spade, wooden handle.",true
+NDLOVU-TH-0200,Claw hammer,Site Pro,tools_hardware,each,500 g,1,139.99,,standard,true,114,1,200,2050000000515,,,Fibreglass handle.,true
+NDLOVU-TH-0201,Claw hammer,Fixit,tools_hardware,each,500 g,1,152.99,,standard,true,124,1,200,2050000000522,,,Fibreglass handle.,true
+NDLOVU-TH-0202,Claw hammer,Iron Hand,tools_hardware,each,500 g,1,165.69,,standard,true,333,1,200,2050000000539,,,Fibreglass handle.,true
+NDLOVU-TH-0300,Brick trowel,Site Pro,tools_hardware,each,280 mm,1,115.89,136.49,standard,true,0,1,200,2050000000546,,,Forged steel trowel.,true
+NDLOVU-TH-0301,Brick trowel,Fixit,tools_hardware,each,280 mm,1,124.69,,standard,true,307,1,200,2050000000553,,,Forged steel trowel.,true
+NDLOVU-TH-0302,Brick trowel,Iron Hand,tools_hardware,each,280 mm,1,134.19,,standard,true,334,1,200,2050000000560,,,Forged steel trowel.,true
+NDLOVU-TH-0400,Spirit level,Site Pro,tools_hardware,each,600 mm,1,176.99,,standard,true,2,1,200,2050000000577,,,Aluminium spirit level.,true
+NDLOVU-TH-0401,Spirit level,Fixit,tools_hardware,each,600 mm,1,193.19,,standard,true,258,1,200,2050000000584,,,Aluminium spirit level.,true
+NDLOVU-TH-0402,Spirit level,Iron Hand,tools_hardware,each,600 mm,1,213.39,,standard,true,208,1,200,2050000000591,,,Aluminium spirit level.,true
+NDLOVU-TH-0410,Spirit level,Site Pro,tools_hardware,each,1200 mm,1,287.89,344.09,standard,true,121,1,200,2050000000607,,,Aluminium spirit level.,true
+NDLOVU-TH-0411,Spirit level,Fixit,tools_hardware,each,1200 mm,1,307.09,345.59,standard,true,208,1,200,2050000000614,,,Aluminium spirit level.,true
+NDLOVU-TH-0412,Spirit level,Iron Hand,tools_hardware,each,1200 mm,1,335.69,,standard,true,294,1,200,2050000000621,,,Aluminium spirit level.,true
+NDLOVU-TH-0500,"Wire nails, 75 mm",Site Pro,tools_hardware,box,5 kg,1,216.99,,standard,true,168,1,200,2050000000638,,5,Round wire nails.,true
+NDLOVU-TH-0501,"Wire nails, 75 mm",Fixit,tools_hardware,box,5 kg,1,241.09,,standard,true,60,1,200,2050000000645,,5,Round wire nails.,true
+NDLOVU-TH-0502,"Wire nails, 75 mm",Iron Hand,tools_hardware,box,5 kg,1,260.29,313.59,standard,true,31,1,200,2050000000652,,5,Round wire nails.,true
+NDLOVU-TH-0600,Roofing screws,Site Pro,tools_hardware,box,100 screws,1,143.49,,standard,true,153,1,200,2050000000669,,,Self-drilling roofing screws.,true
+NDLOVU-TH-0601,Roofing screws,Fixit,tools_hardware,box,100 screws,1,151.69,,standard,true,367,1,200,2050000000676,,,Self-drilling roofing screws.,true
+NDLOVU-TH-0602,Roofing screws,Iron Hand,tools_hardware,box,100 screws,1,164.39,,standard,true,274,1,200,2050000000683,,,Self-drilling roofing screws.,true
+NDLOVU-TH-0700,Tape measure,Site Pro,tools_hardware,each,8 m,1,93.49,,standard,true,216,1,200,2050000000690,,,Metric tape measure.,true
+NDLOVU-TH-0701,Tape measure,Fixit,tools_hardware,each,8 m,1,101.49,,standard,true,189,1,200,2050000000706,,,Metric tape measure.,true
+NDLOVU-TH-0702,Tape measure,Iron Hand,tools_hardware,each,8 m,1,109.79,128.39,standard,true,399,1,200,2050000000713,,,Metric tape measure.,true
+NDLOVU-TH-0800,Angle grinder,Site Pro,tools_hardware,each,115 mm,1,671.99,,standard,true,361,1,20,2050000000720,,,750 W angle grinder.,true
+NDLOVU-TH-0801,Angle grinder,Fixit,tools_hardware,each,115 mm,1,720.09,,standard,true,281,1,20,2050000000737,,,750 W angle grinder.,true
+NDLOVU-TH-0802,Angle grinder,Iron Hand,tools_hardware,each,115 mm,1,768.39,,standard,true,54,1,20,2050000000744,,,750 W angle grinder.,true
+NDLOVU-TH-0900,Cutting discs,Site Pro,tools_hardware,pack,10 x 115 mm,1,114.09,,standard,true,121,1,200,2050000000751,,,Steel cutting discs.,true
+NDLOVU-TH-0901,Cutting discs,Fixit,tools_hardware,pack,10 x 115 mm,1,122.59,,standard,true,2,1,200,2050000000768,,,Steel cutting discs.,true
+NDLOVU-TH-0902,Cutting discs,Iron Hand,tools_hardware,pack,10 x 115 mm,1,134.09,,standard,true,395,1,200,2050000000775,,,Steel cutting discs.,true
+NDLOVU-TH-1000,Safety boots,Site Pro,tools_hardware,each,Size 8,1,476.89,576.69,standard,true,53,1,200,2050000000782,,,Steel-toe safety boots.,true
+NDLOVU-TH-1001,Safety boots,Fixit,tools_hardware,each,Size 8,1,525.49,,standard,true,347,1,200,2050000000799,,,Steel-toe safety boots.,true
+NDLOVU-TH-1002,Safety boots,Iron Hand,tools_hardware,each,Size 8,1,556.19,,standard,true,258,1,200,2050000000805,,,Steel-toe safety boots.,true
+NDLOVU-PF-0000,"PVA paint, white",Colour Kasi,paint_finishes,tin,5 litre,1,240.29,,standard,true,252,1,200,2050000000812,,5,Interior/exterior PVA.,true
+NDLOVU-PF-0001,"PVA paint, white",Coat Pro,paint_finishes,tin,5 litre,1,256.09,310.29,standard,true,288,1,200,2050000000829,,5,Interior/exterior PVA.,true
+NDLOVU-PF-0002,"PVA paint, white",Bright Wall,paint_finishes,tin,5 litre,1,280.49,,standard,true,219,1,200,2050000000836,,5,Interior/exterior PVA.,true
+NDLOVU-PF-0010,"PVA paint, white",Colour Kasi,paint_finishes,tin,20 litre,1,842.99,1032.89,standard,true,131,1,200,2050000000843,,20,Interior/exterior PVA.,true
+NDLOVU-PF-0011,"PVA paint, white",Coat Pro,paint_finishes,tin,20 litre,1,918.29,,standard,true,0,1,200,2050000000850,,20,Interior/exterior PVA.,true
+NDLOVU-PF-0012,"PVA paint, white",Bright Wall,paint_finishes,tin,20 litre,1,1014.99,,standard,true,20,1,200,2050000000867,,20,Interior/exterior PVA.,true
+NDLOVU-PF-0100,"Roof paint, red oxide",Colour Kasi,paint_finishes,tin,20 litre,1,1226.29,,standard,true,301,1,200,2050000000874,,20,Roof and wall paint.,true
+NDLOVU-PF-0101,"Roof paint, red oxide",Coat Pro,paint_finishes,tin,20 litre,1,1343.79,1575.69,standard,true,173,1,200,2050000000881,,20,Roof and wall paint.,true
+NDLOVU-PF-0102,"Roof paint, red oxide",Bright Wall,paint_finishes,tin,20 litre,1,1446.39,1658.49,standard,true,118,1,200,2050000000898,,20,Roof and wall paint.,true
+NDLOVU-PF-0200,"Enamel paint, gloss white",Colour Kasi,paint_finishes,tin,5 litre,1,429.29,,standard,true,3,1,200,2050000000904,,5,For doors and trims.,true
+NDLOVU-PF-0201,"Enamel paint, gloss white",Coat Pro,paint_finishes,tin,5 litre,1,468.59,,standard,true,214,1,200,2050000000911,,5,For doors and trims.,true
+NDLOVU-PF-0202,"Enamel paint, gloss white",Bright Wall,paint_finishes,tin,5 litre,1,497.69,,standard,true,3,1,200,2050000000928,,5,For doors and trims.,true
+NDLOVU-PF-0300,Paint roller set,Colour Kasi,paint_finishes,each,225 mm,1,111.89,,standard,true,362,1,200,2050000000935,,,"Roller, tray and extension.",true
+NDLOVU-PF-0301,Paint roller set,Coat Pro,paint_finishes,each,225 mm,1,125.29,,standard,true,7,1,200,2050000000942,,,"Roller, tray and extension.",true
+NDLOVU-PF-0302,Paint roller set,Bright Wall,paint_finishes,each,225 mm,1,131.89,,standard,true,107,1,200,2050000000959,,,"Roller, tray and extension.",true
+NDLOVU-PF-0400,Paint brush set,Colour Kasi,paint_finishes,pack,5 brushes,5,94.79,,standard,true,4,1,200,2050000000966,12050000000963,,25 to 100 mm brushes.,true
+NDLOVU-PF-0401,Paint brush set,Coat Pro,paint_finishes,pack,5 brushes,5,105.09,,standard,true,385,1,200,2050000000973,12050000000970,,25 to 100 mm brushes.,true
+NDLOVU-PF-0402,Paint brush set,Bright Wall,paint_finishes,pack,5 brushes,5,109.39,125.99,standard,true,114,1,200,2050000000980,12050000000987,,25 to 100 mm brushes.,true
+NDLOVU-PF-0500,Tile adhesive,Colour Kasi,paint_finishes,bag,20 kg,1,150.19,,standard,true,304,1,200,2050000000997,,20,Floor and wall tile adhesive.,true
+NDLOVU-PF-0501,Tile adhesive,Coat Pro,paint_finishes,bag,20 kg,1,166.59,,standard,true,10,1,200,2050000001000,,20,Floor and wall tile adhesive.,true
+NDLOVU-PF-0502,Tile adhesive,Bright Wall,paint_finishes,bag,20 kg,1,179.09,201.69,standard,true,55,1,200,2050000001017,,20,Floor and wall tile adhesive.,true
+NDLOVU-PF-0600,"Tile grout, white",Colour Kasi,paint_finishes,bag,5 kg,1,86.69,,standard,true,223,1,200,2050000001024,,5,Fine grout.,true
+NDLOVU-PF-0601,"Tile grout, white",Coat Pro,paint_finishes,bag,5 kg,1,94.69,,standard,true,252,1,200,2050000001031,,5,Fine grout.,true
+NDLOVU-PF-0602,"Tile grout, white",Bright Wall,paint_finishes,bag,5 kg,1,99.99,,standard,true,386,1,200,2050000001048,,5,Fine grout.,true
+NDLOVU-PF-0700,Crack filler,Colour Kasi,paint_finishes,bag,2 kg,1,62.79,,standard,true,145,1,200,2050000001055,,2,Interior crack filler.,true
+NDLOVU-PF-0701,Crack filler,Coat Pro,paint_finishes,bag,2 kg,1,66.19,,standard,true,4,1,200,2050000001062,,2,Interior crack filler.,true
+NDLOVU-PF-0702,Crack filler,Bright Wall,paint_finishes,bag,2 kg,1,71.19,,standard,true,2,1,200,2050000001079,,2,Interior crack filler.,true
+NDLOVU-PL-0000,"PVC sewer pipe, 110 mm",Flow Line,plumbing,length,6 m,1,329.99,,standard,true,300,1,200,2050000001086,,,Class 34 sewer pipe.,true
+NDLOVU-PL-0001,"PVC sewer pipe, 110 mm",Hot Flow,plumbing,length,6 m,1,358.19,,standard,true,334,1,200,2050000001093,,,Class 34 sewer pipe.,true
+NDLOVU-PL-0002,"PVC sewer pipe, 110 mm",Pipe Pro,plumbing,length,6 m,1,396.49,,standard,true,248,1,200,2050000001109,,,Class 34 sewer pipe.,true
+NDLOVU-PL-0100,"PVC pipe, 50 mm",Flow Line,plumbing,length,6 m,1,154.09,,standard,true,288,1,200,2050000001116,,,Waste pipe.,true
+NDLOVU-PL-0101,"PVC pipe, 50 mm",Hot Flow,plumbing,length,6 m,1,166.99,,standard,true,389,1,200,2050000001123,,,Waste pipe.,true
+NDLOVU-PL-0102,"PVC pipe, 50 mm",Pipe Pro,plumbing,length,6 m,1,175.09,,standard,true,90,1,200,2050000001130,,,Waste pipe.,true
+NDLOVU-PL-0200,"Copper pipe, 15 mm",Flow Line,plumbing,length,5.5 m,1,280.49,,standard,true,261,1,200,2050000001147,,,Class 1 copper pipe.,true
+NDLOVU-PL-0201,"Copper pipe, 15 mm",Hot Flow,plumbing,length,5.5 m,1,308.99,,standard,true,99,1,200,2050000001154,,,Class 1 copper pipe.,true
+NDLOVU-PL-0202,"Copper pipe, 15 mm",Pipe Pro,plumbing,length,5.5 m,1,328.59,,standard,true,140,1,200,2050000001161,,,Class 1 copper pipe.,true
+NDLOVU-PL-0300,"HDPE pipe, 20 mm",Flow Line,plumbing,roll,50 m,1,473.79,,standard,true,213,1,200,2050000001178,,,Water supply pipe.,true
+NDLOVU-PL-0301,"HDPE pipe, 20 mm",Hot Flow,plumbing,roll,50 m,1,508.49,,standard,true,42,1,200,2050000001185,,,Water supply pipe.,true
+NDLOVU-PL-0302,"HDPE pipe, 20 mm",Pipe Pro,plumbing,roll,50 m,1,554.09,,standard,true,127,1,200,2050000001192,,,Water supply pipe.,true
+NDLOVU-PL-0400,Close-coupled toilet suite,Flow Line,plumbing,each,White,1,1351.39,,standard,true,396,1,20,2050000001208,,,"Pan, cistern and seat.",true
+NDLOVU-PL-0401,Close-coupled toilet suite,Hot Flow,plumbing,each,White,1,1471.09,,standard,true,167,1,20,2050000001215,,,"Pan, cistern and seat.",true
+NDLOVU-PL-0402,Close-coupled toilet suite,Pipe Pro,plumbing,each,White,1,1569.99,,standard,true,370,1,20,2050000001222,,,"Pan, cistern and seat.",true
+NDLOVU-PL-0500,Electric geyser,Flow Line,plumbing,each,150 litre,1,5191.99,,standard,true,228,1,20,2050000001239,,150,SABS-approved geyser.,true
+NDLOVU-PL-0501,Electric geyser,Hot Flow,plumbing,each,150 litre,1,5700.79,,standard,true,0,1,20,2050000001246,,150,SABS-approved geyser.,true
+NDLOVU-PL-0502,Electric geyser,Pipe Pro,plumbing,each,150 litre,1,6048.39,,standard,true,194,1,20,2050000001253,,150,SABS-approved geyser.,true
+NDLOVU-PL-0510,Electric geyser,Flow Line,plumbing,each,100 litre,1,4224.49,,standard,true,70,1,20,2050000001260,,100,SABS-approved geyser.,true
+NDLOVU-PL-0511,Electric geyser,Hot Flow,plumbing,each,100 litre,1,4453.89,,standard,true,147,1,20,2050000001277,,100,SABS-approved geyser.,true
+NDLOVU-PL-0512,Electric geyser,Pipe Pro,plumbing,each,100 litre,1,4904.09,,standard,true,46,1,20,2050000001284,,100,SABS-approved geyser.,true
+NDLOVU-PL-0600,"Pillar tap, chrome",Flow Line,plumbing,each,15 mm,1,180.89,,standard,true,151,1,200,2050000001291,,,Chrome pillar tap.,true
+NDLOVU-PL-0601,"Pillar tap, chrome",Hot Flow,plumbing,each,15 mm,1,198.09,,standard,true,364,1,200,2050000001307,,,Chrome pillar tap.,true
+NDLOVU-PL-0602,"Pillar tap, chrome",Pipe Pro,plumbing,each,15 mm,1,211.49,,standard,true,7,1,200,2050000001314,,,Chrome pillar tap.,true
+NDLOVU-PL-0700,Kitchen sink mixer,Flow Line,plumbing,each,Standard,1,658.49,,standard,true,128,1,20,2050000001321,,,Single-lever mixer.,true
+NDLOVU-PL-0701,Kitchen sink mixer,Hot Flow,plumbing,each,Standard,1,711.19,,standard,true,112,1,20,2050000001338,,,Single-lever mixer.,true
+NDLOVU-PL-0702,Kitchen sink mixer,Pipe Pro,plumbing,each,Standard,1,780.39,,standard,true,86,1,20,2050000001345,,,Single-lever mixer.,true
+NDLOVU-PL-0800,Stopcock,Flow Line,plumbing,each,15 mm,1,121.99,,standard,true,355,1,200,2050000001352,,,Brass stopcock.,true
+NDLOVU-PL-0801,Stopcock,Hot Flow,plumbing,each,15 mm,1,135.49,,standard,true,144,1,200,2050000001369,,,Brass stopcock.,true
+NDLOVU-PL-0802,Stopcock,Pipe Pro,plumbing,each,15 mm,1,142.79,,standard,true,366,1,200,2050000001376,,,Brass stopcock.,true
+NDLOVU-PL-0900,Thread tape,Flow Line,plumbing,pack,10 rolls,10,47.59,,standard,true,281,1,200,2050000001383,12050000001380,,PTFE thread tape.,true
+NDLOVU-PL-0901,Thread tape,Hot Flow,plumbing,pack,10 rolls,10,51.29,,standard,true,223,1,200,2050000001390,12050000001397,,PTFE thread tape.,true
+NDLOVU-PL-0902,Thread tape,Pipe Pro,plumbing,pack,10 rolls,10,54.89,,standard,true,343,1,200,2050000001406,12050000001403,,PTFE thread tape.,true
+NDLOVU-EL-0000,"Surfix cable, 2.5 mm",Wire Co,electrical,roll,100 m,1,1412.09,,standard,true,81,1,200,2050000001413,,,Twin and earth cable.,true
+NDLOVU-EL-0001,"Surfix cable, 2.5 mm",Bright Home,electrical,roll,100 m,1,1527.89,1724.09,standard,true,83,1,200,2050000001420,,,Twin and earth cable.,true
+NDLOVU-EL-0002,"Surfix cable, 2.5 mm",Volt Safe,electrical,roll,100 m,1,1692.99,2087.99,standard,true,204,1,200,2050000001437,,,Twin and earth cable.,true
+NDLOVU-EL-0100,"Surfix cable, 1.5 mm",Wire Co,electrical,roll,100 m,1,946.99,,standard,true,265,1,200,2050000001444,,,Twin and earth cable.,true
+NDLOVU-EL-0101,"Surfix cable, 1.5 mm",Bright Home,electrical,roll,100 m,1,1042.79,,standard,true,350,1,200,2050000001451,,,Twin and earth cable.,true
+NDLOVU-EL-0102,"Surfix cable, 1.5 mm",Volt Safe,electrical,roll,100 m,1,1095.49,1349.29,standard,true,4,1,200,2050000001468,,,Twin and earth cable.,true
+NDLOVU-EL-0200,"LED bulb, 9 W",Wire Co,electrical,pack,10 bulbs,10,167.99,,standard,true,386,1,200,2050000001475,12050000001472,,"Cool white, B22.",true
+NDLOVU-EL-0201,"LED bulb, 9 W",Bright Home,electrical,pack,10 bulbs,10,184.99,,standard,true,254,1,200,2050000001482,12050000001489,,"Cool white, B22.",true
+NDLOVU-EL-0202,"LED bulb, 9 W",Volt Safe,electrical,pack,10 bulbs,10,202.59,,standard,true,245,1,200,2050000001499,12050000001496,,"Cool white, B22.",true
+NDLOVU-EL-0300,Double switched socket,Wire Co,electrical,each,100 x 100 mm,1,66.39,,standard,true,94,1,200,2050000001505,,,Double switched socket.,true
+NDLOVU-EL-0301,Double switched socket,Bright Home,electrical,each,100 x 100 mm,1,73.29,,standard,true,210,1,200,2050000001512,,,Double switched socket.,true
+NDLOVU-EL-0302,Double switched socket,Volt Safe,electrical,each,100 x 100 mm,1,79.49,,standard,true,366,1,200,2050000001529,,,Double switched socket.,true
+NDLOVU-EL-0400,"Light switch, 1-lever",Wire Co,electrical,each,100 x 50 mm,1,32.79,,standard,true,22,1,200,2050000001536,,,One-lever switch.,true
+NDLOVU-EL-0401,"Light switch, 1-lever",Bright Home,electrical,each,100 x 50 mm,1,36.09,,standard,true,187,1,200,2050000001543,,,One-lever switch.,true
+NDLOVU-EL-0402,"Light switch, 1-lever",Volt Safe,electrical,each,100 x 50 mm,1,39.09,,standard,true,395,1,200,2050000001550,,,One-lever switch.,true
+NDLOVU-EL-0500,Distribution board,Wire Co,electrical,each,8-way,1,578.99,,standard,true,355,1,20,2050000001567,,,Surface-mount DB.,true
+NDLOVU-EL-0501,Distribution board,Bright Home,electrical,each,8-way,1,622.39,,standard,true,67,1,20,2050000001574,,,Surface-mount DB.,true
+NDLOVU-EL-0502,Distribution board,Volt Safe,electrical,each,8-way,1,655.39,,standard,true,35,1,20,2050000001581,,,Surface-mount DB.,true
+NDLOVU-EL-0510,Distribution board,Wire Co,electrical,each,12-way,1,764.49,,standard,true,218,1,20,2050000001598,,,Surface-mount DB.,true
+NDLOVU-EL-0511,Distribution board,Bright Home,electrical,each,12-way,1,820.09,,standard,true,333,1,20,2050000001604,,,Surface-mount DB.,true
+NDLOVU-EL-0512,Distribution board,Volt Safe,electrical,each,12-way,1,879.19,,standard,true,39,1,20,2050000001611,,,Surface-mount DB.,true
+NDLOVU-EL-0600,Circuit breaker,Wire Co,electrical,each,20 A,1,86.09,,standard,true,314,1,200,2050000001628,,,Single-pole breaker.,true
+NDLOVU-EL-0601,Circuit breaker,Bright Home,electrical,each,20 A,1,91.69,,standard,true,315,1,200,2050000001635,,,Single-pole breaker.,true
+NDLOVU-EL-0602,Circuit breaker,Volt Safe,electrical,each,20 A,1,101.99,,standard,true,246,1,200,2050000001642,,,Single-pole breaker.,true
+NDLOVU-EL-0700,Earth leakage unit,Wire Co,electrical,each,63 A,1,432.19,529.59,standard,true,374,1,200,2050000001659,,,30 mA earth leakage.,true
+NDLOVU-EL-0701,Earth leakage unit,Bright Home,electrical,each,63 A,1,455.69,532.09,standard,true,315,1,200,2050000001666,,,30 mA earth leakage.,true
+NDLOVU-EL-0702,Earth leakage unit,Volt Safe,electrical,each,63 A,1,509.09,570.49,standard,true,281,1,200,2050000001673,,,30 mA earth leakage.,true
+NDLOVU-EL-0800,"PVC conduit, 20 mm",Wire Co,electrical,length,4 m,1,23.99,,standard,true,0,1,200,2050000001680,,,Conduit pipe.,true
+NDLOVU-EL-0801,"PVC conduit, 20 mm",Bright Home,electrical,length,4 m,1,26.19,,standard,true,3,1,200,2050000001697,,,Conduit pipe.,true
+NDLOVU-EL-0802,"PVC conduit, 20 mm",Volt Safe,electrical,length,4 m,1,27.99,,standard,true,114,1,200,2050000001703,,,Conduit pipe.,true
+NDLOVU-EL-0900,Insulation tape,Wire Co,electrical,pack,10 rolls,10,56.89,,standard,true,238,1,200,2050000001710,12050000001717,,Black insulation tape.,true
+NDLOVU-EL-0901,Insulation tape,Bright Home,electrical,pack,10 rolls,10,63.09,,standard,true,75,1,200,2050000001727,12050000001724,,Black insulation tape.,true
+NDLOVU-EL-0902,Insulation tape,Volt Safe,electrical,pack,10 rolls,10,65.69,,standard,true,225,1,200,2050000001734,12050000001731,,Black insulation tape.,true

@@ -1,0 +1,46 @@
+{
+  "external_id": "DLAMINI-001",
+  "trading_name": "Dlamini Drinks",
+  "legal_name": "Dlamini Drinks (Pty) Ltd",
+  "about": "Cold drinks, juices and snacks by the case.",
+  "vat_number": null,
+  "orders_email": "orders@dlamini-drinks.example.com",
+  "phone": null,
+  "brand_color": "#2F5D8A",
+  "collection_address": {
+    "street": "3 Isimuku Street",
+    "suburb": "Tembisa",
+    "city": "Ekurhuleni",
+    "province": "Gauteng",
+    "postal_code": "1632",
+    "latitude": -25.985,
+    "longitude": 28.21
+  },
+  "hours": [
+    {
+      "days": "mon-fri",
+      "open": "07:00",
+      "close": "17:00"
+    }
+  ],
+  "delivery": {
+    "offers": true,
+    "radius_km": 12,
+    "fee_cents": 2500,
+    "free_over_cents": 100000
+  },
+  "collect": true,
+  "payments": {
+    "in_app": true,
+    "cash": false,
+    "cash_limit_cents": null
+  },
+  "minimum_order_cents": 30000,
+  "categories": [
+    "beverages",
+    "snacks_confectionery"
+  ],
+  "payout": {
+    "merchant_id": null
+  }
+}

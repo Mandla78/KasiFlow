@@ -74,6 +74,10 @@ def _register_models() -> None:
     from src.domains.identity.devices import models as _devices  # noqa: F401
     # trader schema: the informal trader's own data
     from src.domains.informal_trader.business_profile import models as _business_profile  # noqa: F401
+    # supplier schema: suppliers, their catalogues, their feed runs
+    from src.domains.supplier.supplier_profile import models as _supplier_profile  # noqa: F401
+    from src.domains.supplier.catalogue import models as _catalogue  # noqa: F401
+    from src.domains.supplier.integration import models as _integration  # noqa: F401
     # platform schema: every media upload, start to finish
     from src.shared.media import models as _media  # noqa: F401
     # audit schema: the append-only audit trail

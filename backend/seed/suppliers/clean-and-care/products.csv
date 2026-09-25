@@ -1,0 +1,94 @@
+product_code,name,brand,category,unit,pack_size,units_per_pack,price_rands,compare_at_rands,vat_rate,vat_included,stock,min_qty,max_qty,unit_barcode,case_barcode,weight_kg,description,active
+CLEANC-HC-0000,Dishwashing liquid,Sparkle,household_cleaning,case,12 x 750 ml,12,219.69,,standard,true,39,1,200,2040000000004,12040000000001,9,Lemon dishwashing liquid.,true
+CLEANC-HC-0001,Dishwashing liquid,Bright Wash,household_cleaning,case,12 x 750 ml,12,237.39,,standard,true,209,1,200,2040000000011,12040000000018,9,Lemon dishwashing liquid.,true
+CLEANC-HC-0002,Dishwashing liquid,Pure White,household_cleaning,case,12 x 750 ml,12,258.79,,standard,true,124,1,200,2040000000028,12040000000025,9,Lemon dishwashing liquid.,true
+CLEANC-HC-0010,Dishwashing liquid,Sparkle,household_cleaning,case,4 x 5 litre,4,277.89,,standard,true,361,1,200,2040000000035,12040000000032,20,Lemon dishwashing liquid.,true
+CLEANC-HC-0011,Dishwashing liquid,Bright Wash,household_cleaning,case,4 x 5 litre,4,294.69,,standard,true,29,1,200,2040000000042,12040000000049,20,Lemon dishwashing liquid.,true
+CLEANC-HC-0012,Dishwashing liquid,Pure White,household_cleaning,case,4 x 5 litre,4,325.39,,standard,true,395,1,200,2040000000059,12040000000056,20,Lemon dishwashing liquid.,true
+CLEANC-HC-0100,Hand washing powder,Sparkle,household_cleaning,bag,2 kg,1,67.99,,standard,true,389,1,200,2040000000066,,2,Washing powder for hand wash.,true
+CLEANC-HC-0101,Hand washing powder,Bright Wash,household_cleaning,bag,2 kg,1,75.29,87.09,standard,true,13,1,200,2040000000073,,2,Washing powder for hand wash.,true
+CLEANC-HC-0102,Hand washing powder,Pure White,household_cleaning,bag,2 kg,1,80.29,,standard,true,55,1,200,2040000000080,,2,Washing powder for hand wash.,true
+CLEANC-HC-0110,Hand washing powder,Sparkle,household_cleaning,bag,5 kg,1,154.39,,standard,true,5,1,200,2040000000097,,5,Washing powder for hand wash.,true
+CLEANC-HC-0111,Hand washing powder,Bright Wash,household_cleaning,bag,5 kg,1,171.09,,standard,true,6,1,200,2040000000103,,5,Washing powder for hand wash.,true
+CLEANC-HC-0112,Hand washing powder,Pure White,household_cleaning,bag,5 kg,1,181.79,,standard,true,304,1,200,2040000000110,,5,Washing powder for hand wash.,true
+CLEANC-HC-0200,Thick bleach,Sparkle,household_cleaning,case,12 x 750 ml,12,164.29,,standard,true,206,1,200,2040000000127,12040000000124,9,Thick household bleach.,true
+CLEANC-HC-0201,Thick bleach,Bright Wash,household_cleaning,case,12 x 750 ml,12,178.29,,standard,true,321,1,200,2040000000134,12040000000131,9,Thick household bleach.,true
+CLEANC-HC-0202,Thick bleach,Pure White,household_cleaning,case,12 x 750 ml,12,192.29,,standard,true,177,1,200,2040000000141,12040000000148,9,Thick household bleach.,true
+CLEANC-HC-0300,Multi-purpose cleaner,Sparkle,household_cleaning,case,12 x 750 ml,12,204.99,,standard,true,43,1,200,2040000000158,12040000000155,9,"Cleans floors, tiles and counters.",true
+CLEANC-HC-0301,Multi-purpose cleaner,Bright Wash,household_cleaning,case,12 x 750 ml,12,224.39,,standard,true,386,1,200,2040000000165,12040000000162,9,"Cleans floors, tiles and counters.",true
+CLEANC-HC-0302,Multi-purpose cleaner,Pure White,household_cleaning,case,12 x 750 ml,12,236.09,,standard,true,111,1,200,2040000000172,12040000000179,9,"Cleans floors, tiles and counters.",true
+CLEANC-HC-0400,"Toilet paper, 1-ply",Sparkle,household_cleaning,pack,48 rolls,48,173.59,,standard,true,260,1,200,2040000000189,12040000000186,,Single-ply toilet rolls.,true
+CLEANC-HC-0401,"Toilet paper, 1-ply",Bright Wash,household_cleaning,pack,48 rolls,48,193.79,,standard,true,324,1,200,2040000000196,12040000000193,,Single-ply toilet rolls.,true
+CLEANC-HC-0402,"Toilet paper, 1-ply",Pure White,household_cleaning,pack,48 rolls,48,204.49,,standard,true,0,1,200,2040000000202,12040000000209,,Single-ply toilet rolls.,true
+CLEANC-HC-0500,"Toilet paper, 2-ply",Sparkle,household_cleaning,pack,24 rolls,24,168.69,,standard,true,224,1,200,2040000000219,12040000000216,,Two-ply toilet rolls.,true
+CLEANC-HC-0501,"Toilet paper, 2-ply",Bright Wash,household_cleaning,pack,24 rolls,24,182.09,,standard,true,181,1,200,2040000000226,12040000000223,,Two-ply toilet rolls.,true
+CLEANC-HC-0502,"Toilet paper, 2-ply",Pure White,household_cleaning,pack,24 rolls,24,191.99,,standard,true,202,1,200,2040000000233,12040000000230,,Two-ply toilet rolls.,true
+CLEANC-HC-0600,Bath soap bars,Sparkle,household_cleaning,case,48 x 150 g,48,305.09,,standard,true,85,1,200,2040000000240,12040000000247,7.2,Family soap bars.,true
+CLEANC-HC-0601,Bath soap bars,Bright Wash,household_cleaning,case,48 x 150 g,48,335.89,,standard,true,83,1,200,2040000000257,12040000000254,7.2,Family soap bars.,true
+CLEANC-HC-0602,Bath soap bars,Pure White,household_cleaning,case,48 x 150 g,48,349.89,404.99,standard,true,111,1,200,2040000000264,12040000000261,7.2,Family soap bars.,true
+CLEANC-HC-0700,Laundry bar soap,Sparkle,household_cleaning,case,24 x 500 g,24,278.09,314.49,standard,true,246,1,200,2040000000271,12040000000278,12,Blue laundry bars.,true
+CLEANC-HC-0701,Laundry bar soap,Bright Wash,household_cleaning,case,24 x 500 g,24,300.89,,standard,true,1,1,200,2040000000288,12040000000285,12,Blue laundry bars.,true
+CLEANC-HC-0702,Laundry bar soap,Pure White,household_cleaning,case,24 x 500 g,24,324.49,,standard,true,94,1,200,2040000000295,12040000000292,12,Blue laundry bars.,true
+CLEANC-HC-0800,Floor polish,Sparkle,household_cleaning,case,12 x 400 ml,12,325.69,,standard,true,146,1,200,2040000000301,12040000000308,4.8,Red floor polish.,true
+CLEANC-HC-0801,Floor polish,Bright Wash,household_cleaning,case,12 x 400 ml,12,356.69,,standard,true,366,1,200,2040000000318,12040000000315,4.8,Red floor polish.,true
+CLEANC-HC-0802,Floor polish,Pure White,household_cleaning,case,12 x 400 ml,12,382.39,,standard,true,166,1,200,2040000000325,12040000000322,4.8,Red floor polish.,true
+CLEANC-HC-0900,Scouring pads,Sparkle,household_cleaning,pack,50 pads,50,90.59,,standard,true,284,1,200,2040000000332,12040000000339,,Green scouring pads.,true
+CLEANC-HC-0901,Scouring pads,Bright Wash,household_cleaning,pack,50 pads,50,100.29,124.09,standard,true,233,1,200,2040000000349,12040000000346,,Green scouring pads.,true
+CLEANC-HC-0902,Scouring pads,Pure White,household_cleaning,pack,50 pads,50,108.19,,standard,true,282,1,200,2040000000356,12040000000353,,Green scouring pads.,true
+CLEANC-HC-1000,"Refuse bags, black",Sparkle,household_cleaning,bundle,200 bags,200,166.29,,standard,true,152,1,200,2040000000363,12040000000360,,Heavy-duty black bags.,true
+CLEANC-HC-1001,"Refuse bags, black",Bright Wash,household_cleaning,bundle,200 bags,200,181.59,,standard,true,4,1,200,2040000000370,12040000000377,,Heavy-duty black bags.,true
+CLEANC-HC-1002,"Refuse bags, black",Pure White,household_cleaning,bundle,200 bags,200,196.29,,standard,true,31,1,200,2040000000387,12040000000384,,Heavy-duty black bags.,true
+CLEANC-PC-0000,Petroleum jelly,Skin Guard,personal_care,case,12 x 250 ml,12,186.29,,standard,true,354,1,200,2040000000394,12040000000391,3,Pure petroleum jelly.,true
+CLEANC-PC-0001,Petroleum jelly,Bright Smile,personal_care,case,12 x 250 ml,12,203.09,,standard,true,64,1,200,2040000000400,12040000000407,3,Pure petroleum jelly.,true
+CLEANC-PC-0002,Petroleum jelly,Fresh Day,personal_care,case,12 x 250 ml,12,217.39,,standard,true,55,1,200,2040000000417,12040000000414,3,Pure petroleum jelly.,true
+CLEANC-PC-0100,Aqueous body lotion,Skin Guard,personal_care,case,6 x 400 ml,6,201.29,,standard,true,174,1,200,2040000000424,12040000000421,2.4,Aqueous body lotion.,true
+CLEANC-PC-0101,Aqueous body lotion,Bright Smile,personal_care,case,6 x 400 ml,6,217.99,,standard,true,380,1,200,2040000000431,12040000000438,2.4,Aqueous body lotion.,true
+CLEANC-PC-0102,Aqueous body lotion,Fresh Day,personal_care,case,6 x 400 ml,6,241.49,,standard,true,47,1,200,2040000000448,12040000000445,2.4,Aqueous body lotion.,true
+CLEANC-PC-0200,Fluoride toothpaste,Skin Guard,personal_care,case,24 x 100 ml,24,271.29,,standard,true,107,1,200,2040000000455,12040000000452,2.4,Fluoride toothpaste.,true
+CLEANC-PC-0201,Fluoride toothpaste,Bright Smile,personal_care,case,24 x 100 ml,24,299.99,,standard,true,1,1,200,2040000000462,12040000000469,2.4,Fluoride toothpaste.,true
+CLEANC-PC-0202,Fluoride toothpaste,Fresh Day,personal_care,case,24 x 100 ml,24,318.39,,standard,true,379,1,200,2040000000479,12040000000476,2.4,Fluoride toothpaste.,true
+CLEANC-PC-0300,"Toothbrushes, medium",Skin Guard,personal_care,pack,24 brushes,24,108.49,121.59,standard,true,132,1,200,2040000000486,12040000000483,,Medium toothbrushes.,true
+CLEANC-PC-0301,"Toothbrushes, medium",Bright Smile,personal_care,pack,24 brushes,24,121.09,,standard,true,35,1,200,2040000000493,12040000000490,,Medium toothbrushes.,true
+CLEANC-PC-0302,"Toothbrushes, medium",Fresh Day,personal_care,pack,24 brushes,24,130.69,,standard,true,328,1,200,2040000000509,12040000000506,,Medium toothbrushes.,true
+CLEANC-PC-0400,Roll-on deodorant,Skin Guard,personal_care,case,12 x 50 ml,12,222.99,,standard,true,346,1,200,2040000000516,12040000000513,0.6,48-hour roll-on.,true
+CLEANC-PC-0401,Roll-on deodorant,Bright Smile,personal_care,case,12 x 50 ml,12,236.39,267.39,standard,true,143,1,200,2040000000523,12040000000520,0.6,48-hour roll-on.,true
+CLEANC-PC-0402,Roll-on deodorant,Fresh Day,personal_care,case,12 x 50 ml,12,258.39,301.19,standard,true,245,1,200,2040000000530,12040000000537,0.6,48-hour roll-on.,true
+CLEANC-PC-0500,Hair food,Skin Guard,personal_care,case,12 x 125 ml,12,184.29,219.39,standard,true,17,1,200,2040000000547,12040000000544,1.5,Moisturising hair food.,true
+CLEANC-PC-0501,Hair food,Bright Smile,personal_care,case,12 x 125 ml,12,202.29,,standard,true,399,1,200,2040000000554,12040000000551,1.5,Moisturising hair food.,true
+CLEANC-PC-0502,Hair food,Fresh Day,personal_care,case,12 x 125 ml,12,217.69,,standard,true,398,1,200,2040000000561,12040000000568,1.5,Moisturising hair food.,true
+CLEANC-PC-0600,Sanitary pads,Skin Guard,personal_care,case,24 x 10 pads,1,445.69,,standard,true,57,1,200,2040000000578,,,Maxi thick pads.,true
+CLEANC-PC-0601,Sanitary pads,Bright Smile,personal_care,case,24 x 10 pads,1,476.69,,standard,true,6,1,200,2040000000585,,,Maxi thick pads.,true
+CLEANC-PC-0602,Sanitary pads,Fresh Day,personal_care,case,24 x 10 pads,1,526.99,,standard,true,201,1,200,2040000000592,,,Maxi thick pads.,true
+CLEANC-PC-0700,"Razors, twin blade",Skin Guard,personal_care,pack,50 razors,50,139.89,,standard,true,269,1,200,2040000000608,12040000000605,,Disposable twin-blade razors.,true
+CLEANC-PC-0701,"Razors, twin blade",Bright Smile,personal_care,pack,50 razors,50,148.49,,standard,true,27,1,200,2040000000615,12040000000612,,Disposable twin-blade razors.,true
+CLEANC-PC-0702,"Razors, twin blade",Fresh Day,personal_care,pack,50 razors,50,163.09,192.79,standard,true,55,1,200,2040000000622,12040000000629,,Disposable twin-blade razors.,true
+CLEANC-BF-0000,"Disposable nappies, size 3",Little Steps,baby_family,pack,4 x 44,1,543.69,,standard,true,180,1,200,2040000000639,,,Size 3 nappies.,true
+CLEANC-BF-0001,"Disposable nappies, size 3",Soft Cloud,baby_family,pack,4 x 44,1,609.99,694.99,standard,true,338,1,200,2040000000646,,,Size 3 nappies.,true
+CLEANC-BF-0002,"Disposable nappies, size 3",Tiny Care,baby_family,pack,4 x 44,1,637.59,,standard,true,342,1,200,2040000000653,,,Size 3 nappies.,true
+CLEANC-BF-0100,"Disposable nappies, size 4",Little Steps,baby_family,pack,4 x 40,1,575.99,,standard,true,220,1,200,2040000000660,,,Size 4 nappies.,true
+CLEANC-BF-0101,"Disposable nappies, size 4",Soft Cloud,baby_family,pack,4 x 40,1,626.49,,standard,true,35,1,200,2040000000677,,,Size 4 nappies.,true
+CLEANC-BF-0102,"Disposable nappies, size 4",Tiny Care,baby_family,pack,4 x 40,1,660.59,,standard,true,0,1,200,2040000000684,,,Size 4 nappies.,true
+CLEANC-BF-0200,Baby wipes,Little Steps,baby_family,case,12 x 80,1,274.89,320.89,standard,true,205,1,200,2040000000691,,,Alcohol-free wipes.,true
+CLEANC-BF-0201,Baby wipes,Soft Cloud,baby_family,case,12 x 80,1,300.89,,standard,true,156,1,200,2040000000707,,,Alcohol-free wipes.,true
+CLEANC-BF-0202,Baby wipes,Tiny Care,baby_family,case,12 x 80,1,329.89,,standard,true,221,1,200,2040000000714,,,Alcohol-free wipes.,true
+CLEANC-BF-0300,Baby aqueous cream,Little Steps,baby_family,case,12 x 500 ml,12,325.49,,standard,true,273,1,200,2040000000721,12040000000728,6,Gentle aqueous cream.,true
+CLEANC-BF-0301,Baby aqueous cream,Soft Cloud,baby_family,case,12 x 500 ml,12,356.59,,standard,true,18,1,200,2040000000738,12040000000735,6,Gentle aqueous cream.,true
+CLEANC-BF-0302,Baby aqueous cream,Tiny Care,baby_family,case,12 x 500 ml,12,391.59,,standard,true,0,1,200,2040000000745,12040000000742,6,Gentle aqueous cream.,true
+CLEANC-BF-0400,Baby cereal,Little Steps,baby_family,case,12 x 500 g,12,451.29,,standard,true,275,1,200,2040000000752,12040000000759,6,Fortified infant cereal.,true
+CLEANC-BF-0401,Baby cereal,Soft Cloud,baby_family,case,12 x 500 g,12,499.09,606.19,standard,true,356,1,200,2040000000769,12040000000766,6,Fortified infant cereal.,true
+CLEANC-BF-0402,Baby cereal,Tiny Care,baby_family,case,12 x 500 g,12,543.19,,standard,true,276,1,200,2040000000776,12040000000773,6,Fortified infant cereal.,true
+CLEANC-PD-0000,"Plastic carry bags, size 24",Pack It,packaging_disposable,bundle,1000 bags,1000,175.89,,standard,true,4,1,200,2040000000783,12040000000780,,Size 24 carry bags.,true
+CLEANC-PD-0001,"Plastic carry bags, size 24",Wrap Right,packaging_disposable,bundle,1000 bags,1000,191.79,,standard,true,6,1,200,2040000000790,12040000000797,,Size 24 carry bags.,true
+CLEANC-PD-0002,"Plastic carry bags, size 24",Carry All,packaging_disposable,bundle,1000 bags,1000,202.99,,standard,true,195,1,200,2040000000806,12040000000803,,Size 24 carry bags.,true
+CLEANC-PD-0100,Bread bags,Pack It,packaging_disposable,bundle,1000 bags,1000,92.89,,standard,true,51,1,200,2040000000813,12040000000810,,Clear bread bags.,true
+CLEANC-PD-0101,Bread bags,Wrap Right,packaging_disposable,bundle,1000 bags,1000,101.09,,standard,true,99,1,200,2040000000820,12040000000827,,Clear bread bags.,true
+CLEANC-PD-0102,Bread bags,Carry All,packaging_disposable,bundle,1000 bags,1000,106.79,,standard,true,293,1,200,2040000000837,12040000000834,,Clear bread bags.,true
+CLEANC-PD-0200,Takeaway containers,Pack It,packaging_disposable,case,500 containers,500,362.29,,standard,true,117,1,200,2040000000844,12040000000841,,Hinged foam containers.,true
+CLEANC-PD-0201,Takeaway containers,Wrap Right,packaging_disposable,case,500 containers,500,402.99,,standard,true,0,1,200,2040000000851,12040000000858,,Hinged foam containers.,true
+CLEANC-PD-0202,Takeaway containers,Carry All,packaging_disposable,case,500 containers,500,440.49,,standard,true,340,1,200,2040000000868,12040000000865,,Hinged foam containers.,true
+CLEANC-PD-0300,Paper serviettes,Pack It,packaging_disposable,case,20 x 100,1,199.49,,standard,true,0,1,200,2040000000875,,,White 2-ply serviettes.,true
+CLEANC-PD-0301,Paper serviettes,Wrap Right,packaging_disposable,case,20 x 100,1,216.79,,standard,true,319,1,200,2040000000882,,,White 2-ply serviettes.,true
+CLEANC-PD-0302,Paper serviettes,Carry All,packaging_disposable,case,20 x 100,1,233.99,,standard,true,339,1,200,2040000000899,,,White 2-ply serviettes.,true
+CLEANC-PD-0400,Polystyrene cups,Pack It,packaging_disposable,case,1000 cups,1000,262.49,,standard,true,0,1,200,2040000000905,12040000000902,,250 ml cups.,true
+CLEANC-PD-0401,Polystyrene cups,Wrap Right,packaging_disposable,case,1000 cups,1000,287.59,,standard,true,380,1,200,2040000000912,12040000000919,,250 ml cups.,true
+CLEANC-PD-0402,Polystyrene cups,Carry All,packaging_disposable,case,1000 cups,1000,317.79,388.59,standard,true,42,1,200,2040000000929,12040000000926,,250 ml cups.,true

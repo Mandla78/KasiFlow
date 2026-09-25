@@ -1,2 +1,2 @@
-"""models -- the catalogue tables (SQLAlchemy). Add the import to _register_models in src/__init__.py and write a migration.
-"""
+"""models -- the catalogue tables (SQLAlchemy). Registered in _register_models in src/__init__.py."""
+from .product import Product  # noqa: E402,F401

@@ -57,18 +57,50 @@ supplier.json
     "payout": {"payfast_merchant_id": "<sandbox id>"}
   }
 
-products.csv  (one row per product; UTF-8; header row)
+products.csv  (one row per product; UTF-8; header row)   [BUILT 2026-09-25]
 
-  sku, name, brand, category, unit, pack_size, price_rands, vat_included,
-  stock, min_qty, max_qty, barcode, description, active, image_1..image_7
+  Checked against how SA suppliers' systems describe stock (Sage Pastel
+  "Item Code", GS1 barcodes on units and cases, SARS zero-rated foods):
 
-  - category: one of our 22 codes; unit: each | pack | case | bag | kg |
-    litre | metre | roll ...; price_rands like 189.99 (converted to cents,
-    rounding refused if more than 2 decimals)
-  - barcode: 13-digit EAN with a valid check digit, from a fictional
-    prefix
-  - image_n: a file name in images/ or an https URL; 1-7 per product
-  - bad rows are REPORTED (row number + reason), never silently dropped
+  product_code *   the supplier's item/stock code; unique per supplier.
+                   Never shown to traders.
+  name *, brand    clean text (no hidden characters, no = + - @ at the
+                   start: spreadsheet-formula injection)
+  category *       one of our 21 codes AND one of the supplier's own
+  unit *           each | pack | case | bag | box | bottle | tin | tray |
+                   crate | bundle | roll | sheet | length | cube | pallet |
+                   kg | litre | metre
+  pack_size *      "24 x 330 ml cans", "50 kg"
+  units_per_pack   24 for a case of 24 (default 1): the app can show the
+                   price per item to a trader who resells singles
+  price_rands *    189.99 (max 2 decimals; stored in cents)
+  compare_at_rands the usual price while on special; must be higher
+  vat_rate *       standard (15%) | zero (zero-rated basic food: maize
+                   meal, samp, rice, brown bread, milk, maas, dried beans,
+                   vegetable oil, pilchards, eggs...). Needed per line for
+                   tax invoices. White bread, cake flour, sugar: standard.
+  vat_included     true (default): the price already includes VAT
+  stock *          what's left (0-1,000,000); traders see only in stock /
+                   only a few left (10 or fewer) / out of stock
+  min_qty, max_qty per order line (defaults 1 and 100; max 1000)
+  unit_barcode     GTIN on one item: EAN-13 / EAN-8, check digit verified
+  case_barcode     GTIN-14 on the outer case (ITF-14), check digit verified
+  weight_kg        for delivery planning (cement, bricks)
+  description, active
+
+  * required. Missing a required column, or any unknown column: the whole
+  file is refused, nothing changes. A bad row: listed with its row number,
+  column and reason on the import job; good rows still load. Same product
+  code twice: the first row wins, the second is reported. Max 5 MB / 5,000
+  rows. A full catalogue switches off products it no longer lists (never
+  deletes them: old orders point at them).
+
+  Seed barcodes use GS1's in-store prefix 2xx, never assigned to a real
+  company. Images (image_1..image_7) come with the images step.
+
+  Load:  python seed/generate_dataset.py   then   flask suppliers load
+  (development only; the feed can never mark a supplier verified -- only
+  our --verified flag does).
 
 
 IMAGES (no real photos: we generate them)

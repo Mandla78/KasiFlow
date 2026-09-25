@@ -1,0 +1,53 @@
+{
+  "external_id": "CLEANCARE-001",
+  "trading_name": "Clean & Care Distributors",
+  "legal_name": "Clean & Care Distributors (Pty) Ltd",
+  "about": "Cleaning, personal care and baby products at wholesale prices.",
+  "vat_number": null,
+  "orders_email": "orders@clean-and-care.example.com",
+  "phone": null,
+  "brand_color": "#3B6E5A",
+  "collection_address": {
+    "street": "8 Monument Road",
+    "suburb": "Kempton Park",
+    "city": "Ekurhuleni",
+    "province": "Gauteng",
+    "postal_code": "1619",
+    "latitude": -26.1,
+    "longitude": 28.23
+  },
+  "hours": [
+    {
+      "days": "mon-fri",
+      "open": "07:00",
+      "close": "17:00"
+    },
+    {
+      "days": "sat",
+      "open": "08:00",
+      "close": "13:00"
+    }
+  ],
+  "delivery": {
+    "offers": true,
+    "radius_km": 20,
+    "fee_cents": 5000,
+    "free_over_cents": 200000
+  },
+  "collect": true,
+  "payments": {
+    "in_app": true,
+    "cash": true,
+    "cash_limit_cents": 500000
+  },
+  "minimum_order_cents": 80000,
+  "categories": [
+    "household_cleaning",
+    "personal_care",
+    "baby_family",
+    "packaging_disposable"
+  ],
+  "payout": {
+    "merchant_id": null
+  }
+}

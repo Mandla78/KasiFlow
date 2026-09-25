@@ -1,2 +1,2 @@
-"""models -- the integration tables (SQLAlchemy). Add the import to _register_models in src/__init__.py and write a migration.
-"""
+"""models -- the integration tables (SQLAlchemy). Registered in _register_models in src/__init__.py."""
+from .import_job import ImportJob  # noqa: E402,F401
