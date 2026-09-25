@@ -16,6 +16,21 @@ FIX IN DEVELOPMENT (works today, nothing to install)
   (Some routers block names that resolve to private addresses; then use
   the tunnel below.)
 
+BUT PHONES THEN FORCE HTTPS (tested, 25 Sep)
+  Tapping the nip.io link, Chrome on Android (and WhatsApp's browser)
+  upgraded it to https:// -- the backend log shows TLS handshakes
+  ("\x16\x03\x01...") hitting the http server, and the page never loads.
+  So in practice a sign-off link needs https even in development.
+
+WHAT WORKS: A CLOUDFLARE QUICK TUNNEL (no account)
+    winget install --id Cloudflare.cloudflared
+    cloudflared tunnel --url http://localhost:5000
+  -> https://<random>.trycloudflare.com; put it in APP_BASE_URL and
+  restart the backend. Any network, https, clickable everywhere. The
+  address changes each time the tunnel starts; it exposes the dev
+  backend while running (everything still needs a login except the
+  one-use sign-off links), so stop it after testing.
+
 FOR THE DEMO / REAL CLIENTS
   An https tunnel (ngrok, your static domain) in APP_BASE_URL: works
   from any network and every app makes it clickable. Production is https
