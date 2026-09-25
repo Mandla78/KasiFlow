@@ -3,6 +3,59 @@
 Short, concrete, with substance. Mentors read these and reply.
 ===========================================================================
 
+THE SONKE FORM (4 fields), sent EVERY 2 HOURS: #1 now, then 22:00, 00:00, 02:00, ...
+  Where is your team? (0-10) / What has been accomplished? /
+  What will you focus on next? / What challenges are you facing?
+  One piece per update, only what is built and tested. No product name,
+  no description of the idea. The score climbs a little each time.
+
+  SCHEDULE (each slot = what that update shows; adjust as we go)
+    Fri NOW    auth: sign-up, email code, sign-in, reset links, limits   2
+    Fri 22:00  sign-up steps (onboarding): business details, CIPC check,
+               location with address search                              3
+    Sat 00:00  account security + privacy: new-phone check, sessions,
+               download my data, close account, audit trail, secure
+               photo upload                                              3
+    Sat 02:00  credit book (customers, credit sales, payments)           4
+    Sat 04:00  jobs (stages, camera photos, client sign-off link)        4
+    Sat 06:00  live Home/Account from the tools; supplier data feed       5
+    Sat 08:00  suppliers: recommendation, supplier pages, catalogue      5
+    Sat 10:00  cart and checkout (delivery/collect, how you pay)         6
+    Sat 12:00+ orders, payments, order book, ... (as they are built)
+
+
+#1 -- FRIDAY, NOW (~20:00)  (auth only)
+
+  WHERE IS YOUR TEAM?   2
+
+  WHAT HAS BEEN ACCOMPLISHED?
+  Secure sign-up and sign-in are complete, end to end (mobile app +
+  backend), with automated tests:
+  - Sign-up with email and password, confirmed by a 6-digit email code
+    (expires in 15 minutes, 5 tries), sent through real email templates.
+    Codes and links are never written to logs.
+  - Sign-in with short-lived access tokens (15 minutes) and refresh tokens
+    that rotate on every use.
+  - Forgot password: a one-use reset link (a ticket that expires in 30
+    minutes), stored only as a hash.
+  - Protection: rate limits on every sign-up and sign-in route, lockout
+    after 5 failed sign-ins (15 minutes), passwords hashed, and strict
+    input checks (hidden characters, fake names and oversized values are
+    refused).
+
+  WHAT WILL YOU FOCUS ON NEXT?
+  The sign-up steps after the account is created: a short onboarding that
+  asks only for what we can verify and actually use, so we can personalise
+  each user's app and power our recommendations from day one.
+
+  WHAT CHALLENGES ARE YOU FACING?
+  Setting up a secure https tunnel (ngrok) so we can test the full
+  password reset on real phones: the one-use reset ticket expires after 30
+  minutes, and links to a local development address don't open from email
+  or WhatsApp on a phone. We now send every link through the tunnel's
+  https address and are testing it end to end.
+
+
 TEMPLATE
   Milestone:   what now works end to end (one line)
   Built:       3-5 bullets, each a thing a user can do

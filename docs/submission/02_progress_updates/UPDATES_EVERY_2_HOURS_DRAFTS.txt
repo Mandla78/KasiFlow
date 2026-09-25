@@ -1,0 +1,274 @@
+===========================================================================
+[DRAFTS -- Mandla reviews each before sending] PROGRESS UPDATES EVERY 2 HOURS
+Sonke form: score (0-10) / accomplished / challenges / next
+===========================================================================
+
+RULES FOR EVERY UPDATE
+  - Only what is BUILT and TESTED goes in "accomplished". Slots marked
+    ESTIMATE describe work not done yet: send them only once it's built,
+    and rewrite from what really happened.
+  - No product name, no description of the whole idea (private until the
+    pitch). Describe the piece, not the plan.
+  - The score climbs slowly; "next" of one update = "accomplished" of the
+    next, so the story is continuous.
+  - Built vs test data: say "with test data" wherever screens still run
+    on sample data. Never claim live integrations we don't have.
+
+  #1 (auth) goes out NOW (Fri, ~20:00); it is final in
+  PROGRESS_UPDATES_DRAFT.txt. Then one every 2 hours from Fri 22:00.
+
+
+---------------------------------------------------------------------------
+#2 -- FRI 22:00   sign-up steps (onboarding)                BUILT
+---------------------------------------------------------------------------
+SCORE: 3
+
+ACCOMPLISHED
+  The sign-up steps after the account is created are complete (app +
+  backend, tested):
+  - Four short steps, one screen each: the business (name and type), its
+    registration (optional), where it trades, and what it buys.
+  - Company registration check: a CIPC number is accepted only if the
+    company is active AND the person signing up is one of its directors;
+    only then does the business get a verified badge. (Runs on a sandbox
+    register until a CIPC data provider is connected; the app never
+    fakes a result.)
+  - Where you trade: address search as you type (South Africa only) and a
+    map pin the user places themselves. The map key stays on our server.
+  - Every answer is checked on the server (business names must be real
+    words, no emoji-only or number-only names) and can be edited later.
+  - Steps left half-done continue where the user stopped, on any phone.
+
+CHALLENGES
+  Deciding what NOT to ask. We collect only what can be verified or is
+  actually used, which meant cutting fields we first planned (like ID
+  numbers) and keeping sign-up to email and password only.
+
+NEXT
+  Account security and privacy: a second check on a new phone, managing
+  signed-in sessions, and letting users download their data or close
+  their account.
+
+
+---------------------------------------------------------------------------
+#3 -- SAT 00:00   account security + privacy + photos       BUILT
+---------------------------------------------------------------------------
+SCORE: 3
+
+ACCOMPLISHED
+  - New phone, second check: signing in on an unknown phone needs an
+    email code; the phone is then trusted for 90 days.
+  - Sessions: see where you're signed in and sign out other phones.
+  - Privacy: download my data (one tap), close my account, consent
+    recorded at sign-up, and unverified accounts removed automatically.
+  - Audit trail: every security event (sign-ins, failed attempts, resets,
+    profile changes) is written to an append-only log, never containing
+    passwords, codes or links.
+  - Profile photos: uploaded straight from the phone to secure storage
+    with a one-time signed upload; the server checks the real size,
+    ownership and a daily limit, and verifies the storage service's
+    signed notifications.
+
+CHALLENGES
+  Photo uploads on Android: the image picker's crop screen crashed on
+  some phones, and a stray tap could remove a photo. We removed the crop
+  step and added a confirmation before anything is deleted.
+
+NEXT
+  The first business tool: a credit book for traders who sell to
+  customers on credit.
+
+
+---------------------------------------------------------------------------
+#4 -- SAT 02:00   credit book                                BUILT (Risuna)
+---------------------------------------------------------------------------
+SCORE: 4
+
+ACCOMPLISHED
+  The credit book is complete (app + backend, tested):
+  - Record a credit sale in a few taps: the customer (search or add, with
+    an optional cellphone), the amount, the date given and the date due,
+    like a paper book.
+  - Record part payments; see who owes what and what is overdue.
+  - Corrections and cancellations are recorded, never silently edited, so
+    the history can be trusted.
+  - Security: each trader sees only their own customers; a retried
+    request on a bad signal is saved once, not twice; rate limits per
+    trader; the audit trail never stores names or phone numbers.
+
+CHALLENGES
+  Hostile-input testing found that a very deeply nested request could
+  crash the server's input check (a bug in shared code, not the credit
+  book). It's logged with a test that will pass once it's fixed.
+
+NEXT
+  Jobs for builders: work paid in stages, with photos and the client's
+  sign-off.
+
+
+---------------------------------------------------------------------------
+#5 -- SAT 04:00   jobs for builders                          BUILT (Risuna)
+---------------------------------------------------------------------------
+SCORE: 4
+
+ACCOMPLISHED
+  Jobs for builders are complete (app + backend, tested):
+  - A job is split into stages whose amounts must add up to the total.
+  - Each stage gets a photo taken with the camera (never the gallery).
+    The server stamps its own time and a fingerprint (SHA-256) of the
+    stored photo, so a swapped or back-dated photo is detectable.
+  - Client sign-off without an app: the builder sends a link; the client
+    types the cash they paid. Matching amounts are confirmed by both;
+    different amounts are kept as "amounts don't match".
+  - The sign-off link is a one-use ticket that expires in 7 days, stored
+    only as a keyed hash; a newer link cancels the old one.
+
+CHALLENGES
+  WhatsApp and phone browsers: links to a bare address aren't clickable
+  and phones force https, so sign-off links now go through a secure
+  https address.
+
+NEXT
+  Bringing the tools together on the Home and Account screens, and
+  loading supplier data.
+
+
+---------------------------------------------------------------------------
+#6 -- SAT 06:00   live Home/Account + supplier data feed     BUILT
+---------------------------------------------------------------------------
+SCORE: 5
+
+ACCOMPLISHED
+  - Home and Account now show real numbers from the tools: money owed to
+    the trader, active jobs, stages waiting on clients, and a Today list.
+  - Supplier data feed: suppliers send their profile and catalogue as two
+    files (the same shape a supplier's own stock system can produce). The
+    loader checks every row and reports bad rows by row number, never
+    dropping them silently.
+  - Researched and built in: South African VAT per product (standard or
+    zero-rated basic foods), GS1 barcodes for items and outer cases, and
+    protection against spreadsheet-formula injection.
+  - Test dataset: 7 fictional suppliers and 887 products at realistic
+    South African prices.
+
+CHALLENGES
+  Merging two teammates' work: both branches added database migrations
+  with the same numbers. We renumbered them into one chain and re-ran
+  all 710 backend tests.
+
+NEXT
+  The supplier screens: which suppliers to recommend and why, and each
+  supplier's catalogue.
+
+
+---------------------------------------------------------------------------
+#7 -- SAT 08:00   suppliers screens                          BUILT (test data)
+---------------------------------------------------------------------------
+SCORE: 5
+
+ACCOMPLISHED
+  The supplier screens are built (with test data while the backend
+  connection is finished):
+  - Suppliers are grouped: your suppliers, near you (they deliver or you
+    can collect), recommended for you (they sell what you buy), and more.
+    Every recommendation has plain reasons, e.g. "4.2 km away, delivers
+    to you" and "sells 4 of your 6 categories".
+  - Connect with a supplier before ordering, with a confirmation.
+  - A supplier page with its catalogue: search and categories stay
+    pinned while you scroll; specials show the usual price crossed out;
+    out-of-stock items are shown but can't be added.
+  - Supplier details (delivery fee, minimum order, how they accept
+    payment, hours) are one tap away.
+
+CHALLENGES
+  Recommending without hiding: an early version only showed suppliers
+  inside a delivery radius, so traders in some areas saw none. The
+  recommendations now rank every supplier and explain the ranking
+  instead.
+
+NEXT
+  The cart and checkout: delivery or collection, and how to pay.
+
+
+---------------------------------------------------------------------------
+#8 -- SAT 10:00   cart + checkout                            BUILT (test data)
+---------------------------------------------------------------------------
+SCORE: 6
+
+ACCOMPLISHED
+  - A cart per supplier, with the supplier's minimum order checked and
+    the total always in view.
+  - Checkout in three steps: delivery (to the business or another
+    address) or collection, how to pay, then a review.
+  - Payment rules: digital payment is recommended; cash is offered only
+    if the supplier takes it, up to R1,000 per order, with at most two
+    cash orders waiting at a time. Cash orders can be cancelled until the
+    supplier accepts; paid digital orders can't.
+  - The server prices every order again from the catalogue; the phone
+    never decides the price.
+
+CHALLENGES
+  Balancing cash and safety: many traders still pay cash, but a cash
+  order costs nothing up front, so fake orders are cheap. Limits per
+  order and per trader keep that risk small.
+
+NEXT
+  Connecting the supplier screens to the real backend.
+
+
+---------------------------------------------------------------------------
+#9 -- SAT 12:00   suppliers on the real backend               ESTIMATE
+---------------------------------------------------------------------------
+SCORE: 6
+ACCOMPLISHED (rewrite from what's done)
+  - The app's supplier screens now read from the backend: recommended
+    suppliers with reasons, supplier pages, and catalogues with search.
+  - Connect and disconnect saved on the server.
+CHALLENGES  (fill in)
+NEXT        Placing orders on the server.
+
+
+---------------------------------------------------------------------------
+#10 -- SAT 14:00  orders on the server                        ESTIMATE
+---------------------------------------------------------------------------
+SCORE: 7
+ACCOMPLISHED (rewrite from what's done)
+  - Orders are placed on the server with a human reference, priced from
+    the catalogue, with the minimum order, delivery fee and cash rules
+    enforced; a retried "place order" never creates two orders.
+  - Order status history; the trader sees each step.
+CHALLENGES  (fill in)
+NEXT        Digital payment in a sandbox.
+
+
+---------------------------------------------------------------------------
+#11 -- SAT 16:00  digital payment (sandbox)                   ESTIMATE
+---------------------------------------------------------------------------
+SCORE: 7
+ACCOMPLISHED (rewrite from what's done)
+  - Paying for an order by card or instant EFT in the payment provider's
+    sandbox; the order only reaches the supplier once the server has
+    verified the payment notification.
+CHALLENGES  (fill in)
+NEXT        Order emails and receipts.
+
+
+---------------------------------------------------------------------------
+#12 -- SAT 18:00  order emails, receipts + new tool           ESTIMATE
+---------------------------------------------------------------------------
+SCORE: 8
+ACCOMPLISHED (rewrite from what's done)
+  - Order emails (received, accepted, on its way) and in-app
+    notifications.
+  - [Risuna] history and a bin for the credit book and jobs; the order
+    book for food sellers (if done).
+CHALLENGES  (fill in)
+NEXT        Polish, demo video and slides.
+
+
+---------------------------------------------------------------------------
+#13+ -- SAT 20:00 onward   polish, demo, slides               ESTIMATE
+---------------------------------------------------------------------------
+SCORE: 8-9
+  Fill in as it happens: bugs fixed, the demo recorded, the slides and
+  security write-up done. Final submission is Sun 09:00.

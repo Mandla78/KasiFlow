@@ -13,3 +13,7 @@ import enum
 class SupplierAuditEvent(str, enum.Enum):
     PROFILE_CREATED = "supplier.profile_created"
     PROFILE_UPDATED = "supplier.profile_updated"
+    #: A trader connected to / disconnected from a supplier (only connected
+    #: traders can order). Who, which supplier, when; nothing else.
+    TRADER_CONNECTED = "supplier.trader_connected"
+    TRADER_DISCONNECTED = "supplier.trader_disconnected"

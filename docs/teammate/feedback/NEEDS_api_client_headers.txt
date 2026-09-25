@@ -19,4 +19,11 @@ WHY IT MATTERS
   Spaza signal drops. Without it, "Save credit sale" that times out and
   is tapped again can add the sale twice.
 
-DECISION:
+DECISION: Done 25 Sep 2026 (Mandla), exactly as asked.
+  api(method, path, body, { auth: true, headers: { 'Idempotency-Key': key } })
+  - the retry after a token refresh sends the same headers (tested);
+  - your headers can never replace Authorization or Content-Type;
+  - newIdempotencyKey() from '@/shared/api/client' makes the key: call it
+    when the trader taps Save, keep it for retries of that same tap.
+  Tests: src/shared/api/__tests__/client.test.ts. Over to you for
+  httpCreditBookApi.ts (and the order book's writes).

@@ -27,8 +27,8 @@ PRIORITIES (in this order; deadline: final submission Sun 09:00)
 
   1. HISTORY + BIN on the credit book and jobs        small, do first
   2. ORDER BOOK (new tool), end to end                 the main task
-  3. JOBS beyond CRUD                                  see
-                                                       feedback/FEEDBACK_jobs_beyond_crud.txt
+  3. JOBS v2: THE BUILDER NETWORK (approved)           see
+                                                       15_JOBS_BUILDER_NETWORK_PLAN.txt
   4. SIGNALS for the engine (a service function per    small, last
      tool; Mandla wires it)
 

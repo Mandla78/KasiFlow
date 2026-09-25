@@ -179,13 +179,6 @@ def test_broken_bodies_never_crash(client, me, entry, raw, path):
     assert r.status_code != 500, (path, raw, r.get_data(as_text=True)[:200])
 
 
-@pytest.mark.xfail(
-    strict=True,
-    raises=RecursionError,
-    reason="App-wide, not the credit book: the NUL guard in src/__init__.py recurses into the JSON "
-    "and overflows on deep nesting (every route). See docs/teammate/feedback/FINDING_deep_json_crash.txt. "
-    "Passes (and this mark must go) once the guard is iterative or depth-limited.",
-)
 def test_deeply_nested_json_never_crashes(client, me, entry):
     r = send_raw(client, me, entry, "/entries", '{"a":' * 500 + "1" + "}" * 500)
     assert r.status_code != 500

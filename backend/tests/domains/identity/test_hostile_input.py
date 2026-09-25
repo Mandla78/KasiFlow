@@ -258,3 +258,19 @@ def test_owner_name_is_letters_only(client, outbox, name):
     business = {"business_type": "spaza", "trade": None, "owner_name": name, "years_trading": "1_3", "cellphone": None}
     r = client.patch("/api/v1/me/business-profile", headers=headers, json={"business": business})
     assert r.status_code == (200 if name in GOOD_PERSON_NAMES else 422), (name, r.status_code)
+
+
+@pytest.mark.parametrize("depth", [33, 500, 100_000])
+def test_deeply_nested_json_is_refused_not_crashed(client, depth):
+    """Public route, no account needed: the cheapest crash an attacker could try."""
+    body = '{"a":' * depth + "1" + "}" * depth
+    r = client.post("/api/v1/auth/login", data=body, content_type="application/json")
+    assert r.status_code == 400
+    assert r.get_json()["code"] == "INVALID_BODY"
+
+
+def test_json_within_the_depth_limit_still_gets_its_nul_check(client):
+    body = {"email": "a@example.com", "password": PASSWORD, "x": [[[[{"deep": "a\x00b"}]]]]}
+    r = client.post("/api/v1/auth/login", json=body)
+    assert r.status_code == 400
+    assert r.get_json()["code"] == "INVALID_CHARACTERS"
