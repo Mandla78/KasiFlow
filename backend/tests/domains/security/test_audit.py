@@ -17,7 +17,7 @@ from src.domains.security.audit.models import AuditEventRecord
 from src.extensions import db
 
 PASSWORD = "Spaza2026!"
-CONSENT = {"privacy_version": "0.1-draft", "terms_version": "0.1-draft"}
+CONSENT = {"privacy_version": "0.2-draft", "terms_version": "0.2-draft"}
 
 
 def fresh_email() -> str:
@@ -63,7 +63,7 @@ def test_sign_up_and_logins_are_stored(app, client, outbox):
         assert expected in names, f"{expected} missing from {names}"
 
     register = next(e for e in events_for(app, email, since) if e.event_name == "auth.register_success")
-    assert register.event_metadata["privacy_version"] == "0.1-draft"  # consent is on record
+    assert register.event_metadata["privacy_version"] == "0.2-draft"  # consent is on record
     assert register.ip_address  # where it came from
 
 

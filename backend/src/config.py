@@ -115,8 +115,8 @@ class BaseConfig:
 
     # The legal document versions a new account must accept. Must match the
     # app's content/legal files; bump both when a document changes.
-    PRIVACY_POLICY_VERSION = os.environ.get("PRIVACY_POLICY_VERSION", "0.1-draft")
-    TERMS_VERSION = os.environ.get("TERMS_VERSION", "0.1-draft")
+    PRIVACY_POLICY_VERSION = os.environ.get("PRIVACY_POLICY_VERSION", "0.2-draft")
+    TERMS_VERSION = os.environ.get("TERMS_VERSION", "0.2-draft")
 
     # Continue with Google: the OAuth client IDs our app uses (Android and
     # web), comma-separated. A Google token is only accepted if it was

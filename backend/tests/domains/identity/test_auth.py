@@ -13,7 +13,7 @@ from cryptography.hazmat.primitives.serialization import Encoding, PublicFormat
 
 EMAIL = "nomsa@example.com"
 PASSWORD = "Spaza2026!"
-CONSENT = {"privacy_version": "0.1-draft", "terms_version": "0.1-draft"}
+CONSENT = {"privacy_version": "0.2-draft", "terms_version": "0.2-draft"}
 
 
 def b64(b: bytes) -> str:
@@ -73,7 +73,7 @@ def test_weak_password_rejected_with_one_message(client):
 
 
 def test_outdated_consent_rejected(client):
-    r = register(client, consent={"privacy_version": "0.0-old", "terms_version": "0.1-draft"})
+    r = register(client, consent={"privacy_version": "0.0-old", "terms_version": "0.2-draft"})
     assert r.status_code == 422
     assert r.get_json()["code"] == "CONSENT_OUTDATED"
 
