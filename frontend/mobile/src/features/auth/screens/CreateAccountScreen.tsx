@@ -11,7 +11,7 @@ import { TextField } from '@/shared/components/TextField';
 import { AuthError, authApi } from '@/features/auth/api/authApi';
 import { consentNow } from '@/features/auth/profile';
 import { useSession } from '@/features/auth/session/SessionProvider';
-import { isEmail, isStrongPassword } from '@/shared/lib/validation';
+import { isEmail, isStrongPassword, businessNameProblem } from '@/shared/lib/validation';
 import { colors, fonts } from '@/shared/theme/tokens';
 
 /** Account stage: business name, email, password, and agreeing to the Privacy Policy and Terms. No SMS. */
@@ -35,7 +35,7 @@ export default function CreateAccount() {
 
   const matches = confirm.length > 0 && confirm === password;
   const errors = {
-    businessName: businessName.trim().length < 2 ? 'Give your business a name' : '',
+    businessName: !businessName.trim() ? 'Give your business a name' : businessNameProblem(businessName),
     email: !isEmail(email) ? 'Enter a valid email address' : serverError,
     // One message, shown only after they try: no rule list up front.
     password: !isStrongPassword(password)

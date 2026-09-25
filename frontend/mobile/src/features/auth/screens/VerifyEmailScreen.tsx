@@ -5,7 +5,7 @@ import { Pressable, StyleSheet, Text, View } from 'react-native';
 
 import { Button } from '@/shared/components/Button';
 import { CODE_LENGTH as LENGTH, CodeInput, CodeInputHandle } from '@/shared/components/CodeInput';
-import { IconTile, InfoNote } from '@/shared/components/Parts';
+import { IconTile } from '@/shared/components/Parts';
 import { BackButton, Screen } from '@/shared/components/Screen';
 import { Body, Title } from '@/shared/components/Text';
 import { AuthError, authApi } from '@/features/auth/api/authApi';
@@ -58,14 +58,7 @@ export default function VerifyEmail() {
 
   return (
     <Screen
-      footer={
-        <>
-          <InfoNote icon="key">
-            Once confirmed, Akayza creates a private key on this phone. It signs everything you confirm, so nobody can fake it.
-          </InfoNote>
-          <Button title="Verify email" onPress={verify} loading={busy} disabled={code.length !== LENGTH} />
-        </>
-      }>
+      footer={<Button title="Verify email" onPress={verify} loading={busy} disabled={code.length !== LENGTH} />}>
       <BackButton onPress={wrongEmail} />
       <View style={{ gap: 14 }}>
         <IconTile name="mail" size={50} />

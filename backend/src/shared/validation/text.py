@@ -17,7 +17,9 @@ clean_text() returns the tidy version or raises ValueError(message):
     letter or number
 
 CleanText is the marshmallow field that applies it; use it for every
-free-text field instead of fields.String.
+free-text field instead of fields.String. BusinessName and PersonName add
+the stricter rules for names (the app's shared/lib/validation.ts mirrors
+them for instant messages; the server decides).
 """
 from __future__ import annotations
 
@@ -69,3 +71,57 @@ class CleanText(fields.String):
             return clean_text(text, min_len=self._min_len, max_len=self._max_len)
         except ValueError as e:
             raise ValidationError(str(e)) from None
+
+
+# ------------------------------------------------------------------- names
+
+#: Symbols a real business name uses ("Nomsa's Spaza & Deli", "Shop 24/7").
+BUSINESS_NAME_SYMBOLS = set(" &'’-.,()/+#")
+#: Symbols in a person's name ("Mary-Jane O'Neil", "Dr. N. Dlamini").
+PERSON_NAME_SYMBOLS = set(" '’-.")
+
+BUSINESS_NAME_RULE = "Use letters for the business name (numbers and & - ' . are fine; no emoji)."
+PERSON_NAME_RULE = "Use letters for your name (no numbers or emoji)."
+
+
+def _letters(text: str) -> int:
+    return sum(1 for ch in text if ch.isalpha())
+
+
+def business_name(value: str) -> str:
+    """At least 2 DIFFERENT letters, only letters/digits/a few symbols:
+    refuses "12334566", "00000", emoji, "aaaa", "a1 a1"."""
+    text = clean_text(value, min_len=2, max_len=80)
+    allowed = all(ch.isalpha() or ch.isdigit() or ch in BUSINESS_NAME_SYMBOLS or unicodedata.category(ch).startswith("M") for ch in text)
+    distinct_letters = {ch.lower() for ch in text if ch.isalpha()}
+    if not allowed or len(distinct_letters) < 2:
+        raise ValueError(BUSINESS_NAME_RULE)
+    return text
+
+
+def person_name(value: str) -> str:
+    """At least 2 letters; letters, spaces and ' - . only."""
+    text = clean_text(value, min_len=2, max_len=80)
+    allowed = all(ch.isalpha() or ch in PERSON_NAME_SYMBOLS or unicodedata.category(ch).startswith("M") for ch in text)
+    if not allowed or _letters(text) < 2:
+        raise ValueError(PERSON_NAME_RULE)
+    return text
+
+
+class _RuleText(fields.String):
+    _rule = staticmethod(clean_text)
+
+    def _deserialize(self, value, attr, data, **kwargs):
+        text = super()._deserialize(value, attr, data, **kwargs)
+        try:
+            return self._rule(text)
+        except ValueError as e:
+            raise ValidationError(str(e)) from None
+
+
+class BusinessName(_RuleText):
+    _rule = staticmethod(business_name)
+
+
+class PersonName(_RuleText):
+    _rule = staticmethod(person_name)

@@ -1,6 +1,8 @@
 import { FontAwesome } from '@expo/vector-icons';
 import { router } from 'expo-router';
 import { useState } from 'react';
+
+import { businessNameProblem } from '@/shared/lib/validation';
 import { StyleSheet, Text, View } from 'react-native';
 
 import { useSession } from '@/features/auth/session/SessionProvider';
@@ -19,7 +21,7 @@ export default function NameBusinessScreen() {
   const [ownerName, setOwnerName] = useState(profile.ownerName);
   const [agreed, setAgreed] = useState(!!profile.consent);
   const [touched, setTouched] = useState(false);
-  const nameError = businessName.trim().length < 2 ? 'Give your business a name' : '';
+  const nameError = !businessName.trim() ? 'Give your business a name' : businessNameProblem(businessName);
   const needsConsent = !profile.consent;
 
   function next() {

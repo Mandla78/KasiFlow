@@ -1,6 +1,8 @@
 import { router } from 'expo-router';
 import { useState } from 'react';
 
+import { personNameProblem } from '@/shared/lib/validation';
+
 import { BUSINESS_TYPE_ORDER, BUSINESS_TYPES, BusinessType, TradeKey, TRADES } from '@/constants/businessTypes';
 import type { YearsTrading } from '@/features/auth/types';
 import { useSession } from '@/features/auth/session/SessionProvider';
@@ -35,7 +37,7 @@ export default function YourBusinessScreen({ editing = false }: { editing?: bool
   const errors = {
     type: !profile.businessType ? 'Choose the type that fits best' : '',
     trade: isBuilder && !profile.trade ? 'Choose the work you do' : '',
-    name: ownerName.trim().length < 2 ? 'Tell us your name' : '',
+    name: !ownerName.trim() ? 'Tell us your name' : personNameProblem(ownerName),
     years: !years ? 'Choose one' : '',
     cellphone: cellphone && !(digits.length === 10 && digits.startsWith('0')) ? 'A 10-digit number, like 082 123 4567' : '',
   };

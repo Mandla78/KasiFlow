@@ -217,3 +217,34 @@ def test_same_answer_for_bad_and_unknown_login_email_shapes(client):
     a = client.post("/api/v1/auth/login", json={"email": "nobody@example.com", "password": "Wrong2026!"})
     assert a.status_code == 401
     assert json.loads(a.get_data())["code"] == "INVALID_CREDENTIALS"
+
+
+# ------------------------------------------------------------- name rules
+
+BAD_BUSINESS_NAMES = ["12334566", "00000", "😀😀😀", "Spaza 😀", "aaaa", "A", "1a", "!!!!", "---", "Shop@home", "<b>Shop</b>", "a1 a1"]
+GOOD_BUSINESS_NAMES = ["Nomsa's Spaza", "Shop 24/7", "Mokoena Build (Pty) Ltd", "Thabo & Sons", "Ēbè Tuck-shop", "S. Dlamini Trading #2"]
+
+
+@pytest.mark.parametrize("name", BAD_BUSINESS_NAMES)
+def test_business_name_must_be_a_real_name(client, outbox, name):
+    r = register(client, business_name=name)
+    assert r.status_code == 422, (name, r.status_code)
+    assert outbox == []
+
+
+@pytest.mark.parametrize("name", GOOD_BUSINESS_NAMES)
+def test_real_business_names_are_accepted(client, outbox, name):
+    assert register(client, business_name=name).status_code == 202
+
+
+BAD_PERSON_NAMES = ["Nomsa2", "N0msa", "😀 Nomsa", "12345", "N", "Nomsa & Co", "--"]
+GOOD_PERSON_NAMES = ["Nomsa Dlamini", "Mary-Jane O'Neil", "Dr. N. Mokoena", "Sipho", "Thabo Mokoena-Ndlovu", "Zoë Müller"]
+
+
+@pytest.mark.parametrize("name", BAD_PERSON_NAMES + GOOD_PERSON_NAMES)
+def test_owner_name_is_letters_only(client, outbox, name):
+    data = signed_up(client, outbox)
+    headers = {"Authorization": f"Bearer {data['access_token']}"}
+    business = {"business_type": "spaza", "trade": None, "owner_name": name, "years_trading": "1_3", "cellphone": None}
+    r = client.patch("/api/v1/me/business-profile", headers=headers, json={"business": business})
+    assert r.status_code == (200 if name in GOOD_PERSON_NAMES else 422), (name, r.status_code)
