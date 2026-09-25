@@ -1,0 +1,32 @@
+FINDING -- stage photos: camera only, and where to hash them
+Risuna, Friday 25 September 2026. Research items b and c (file 10).
+
+b) CAMERA ONLY IN EXPO SDK 57
+  Options:
+    - ImagePicker.launchCameraAsync (expo-image-picker, ALREADY in the
+      dev build): opens the phone's camera app directly. The picker it
+      opens has no gallery option, and our app never calls
+      launchImageLibraryAsync for stages, so a gallery photo can't get in
+      through the app. Works today, no new build.
+    - expo-camera: our own viewfinder inside the screen, exactly like
+      PDF p13. A new native module -> a new phone build (yours to
+      schedule).
+  What survives: the phone's clock and EXIF can be changed by the user,
+  so neither is proof. The server's own time on upload is what counts.
+  On the web preview, "camera" becomes a file picker (browser rule):
+  development only.
+  RECOMMEND: launchCameraAsync now (built: StagePhotoScreen.tsx);
+  expo-camera only if we want the in-screen viewfinder look later.
+
+c) HASHING THE PHOTO (SHA-256)
+  - On the phone (expo-crypto digest of the bytes): expo-crypto is a
+    native module (new build), reading a 2-4 MB photo into JS on a cheap
+    Android is slow, and a hash computed by the phone is only as honest
+    as the phone.
+  - On the server: after uploads.finish(), fetch the stored file from
+    Cloudinary once and hash those bytes. That hash describes exactly the
+    file we keep and show, with no trust in the phone.
+  RECOMMEND: server-side hash, stored with the stage (contract 2, job_stages.photo_sha256)
+  and in the audit event, so a swapped photo is detectable.
+
+DECISION:
