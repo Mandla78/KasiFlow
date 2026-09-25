@@ -1,0 +1,75 @@
+===========================================================================
+DECISION -- Jobs v2: partners on a job, not "connect"
+===========================================================================
+
+WHAT:      Changes to 15_JOBS_BUILDER_NETWORK_PLAN.txt after reviewing the
+           first build on sample data
+FROM:      Risuna, Friday 25 September 2026
+APPROVED:  Mandla, verbally (25 Sep 2026, per Risuna). Mandla: please
+           confirm in writing at the bottom.
+
+
+WHY
+  The first build looked like "LinkedIn for the informal sector": suggestions,
+  Connect, a feed. Builders don't network for its own sake. They need
+  another pair of hands on a specific job, and proof that person can
+  build. So the network is built around the JOB, and the profile is a
+  portfolio of client-confirmed builds.
+
+
+THE 7 DECISIONS
+  1. Partners come from working a job together: an invite the other
+     builder accepts, or picking someone on a help post. No "connect".
+     "Save" is a private bookmark before that (the other builder isn't told).
+  2. Any trade can partner (two bricklayers to finish walls faster, or a
+     builder and a plumber for the bathroom). The job's trade decides who
+     is shown: that trade, within the partner's travel distance.
+  3. A partner sees their stages, their photos and their pay. Never the
+     client's name, number or price, and never the owner's margin.
+  4. Tabs: My jobs | Builders | Suppliers (My jobs first). "For you" is gone.
+  5. The pay is stated before anyone accepts, like a driver sees the fare
+     before a trip: a fixed amount or a day rate (never a percentage of the
+     stage, which would show the client's price), plus when it's paid
+     (when the client confirms the stage / every day / at the end).
+     Required on invites and on help posts. The owner sees a private line:
+     "Final pays you R9,000. You keep R4,500" (and a warning if they'd lose
+     money).
+  6. Paying a partner is confirmed by both, like the client's sign-off: the
+     owner records "I paid Thabo R4,500", the partner confirms "I got
+     R4,500". The same amount confirms it; different amounts are both kept.
+     Akayza never holds the money (plan §5 still holds); it keeps the record.
+     This also gives the partner a confirmed income record (My record, banks).
+  7. For Sunday: Accept / Decline only. "Ask for more" (one counter-offer)
+     comes after Sunday.
+
+
+WHAT CHANGES IN PLAN 15
+  §1 screens      My jobs | Builders | Suppliers; the builder profile is a
+                  portfolio of builds (cover photo, suburb, date, "5 of 5
+                  stages confirmed by the client", "Built with Sipho"), a
+                  build opens a slideshow of its stages.
+  §3 connecting   replaced by partners (decision 1). Numbers shared between
+                  partners only. Block and report unchanged.
+  §4 crew         becomes "Bring in a partner" on a job, with the pay
+                  (decisions 3, 5, 6).
+  §5 help posts   unchanged, plus the pay; picking someone makes them a
+                  partner on the job on the posted pay.
+  §6 recommend    "mutual connections" becomes "partners in common"
+                  ("Built with Sipho, your partner"); ranking for a job
+                  filters by the trade and the partner's travel distance.
+  §7 privacy      unchanged (Show me off by default, suburb only, no
+                  clients, report/block, rate limits, audit without names).
+  §8 data/API     job_crew becomes job_partners (job_id, builder_id,
+                  stage_ids, trade, starts_on, pay_kind, pay_cents, days,
+                  paid_when, status); new partner_payments (owner_cents,
+                  partner_cents, status); builder_connections becomes
+                  builder_saves. Proposed in full in CONTRACT_jobs_v2.txt.
+
+
+WHERE IT IS
+  App on sample data: branch risuna/jobs-network (not pushed until
+  Risuna's review). Hidden on the real API (NETWORK_READY) until the
+  backend exists.
+
+
+DECISION (Mandla, in writing):
