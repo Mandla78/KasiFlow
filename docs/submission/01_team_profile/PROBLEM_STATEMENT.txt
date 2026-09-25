@@ -4,29 +4,36 @@ PROBLEM STATEMENT  -- due FRIDAY 22:00 on Sonke (before assessing starts)
 
 No product name and no description of the solution here (the idea stays
 private until the pitch). This is the PROBLEM only. Every number has a
-source (bottom); check the [MANDLA] line before pasting.
+source (bottom); check the [MANDLA] / [RISUNA] lines before pasting.
+
+Scope: the whole informal trade. Spaza shops first (the biggest part),
+informal builders second, then other hustles (street vendors, resellers,
+food sellers), and the suppliers and clients on the other side of them.
 
 
 ---------------------------------------------------------------------------
-PASTE-READY (about 170 words)
+PASTE-READY (about 200 words)
 ---------------------------------------------------------------------------
 
-Spaza shop owners in South Africa's townships restock from wholesalers
-through phone calls, WhatsApp messages and cash handed to delivery
-drivers, and none of it leaves a record that both sides accept. That
-missing record costs them twice: a supplier can't reconcile the cash,
-and the owner can't prove the business trades at all.
+South Africa's informal traders -- spaza shops, informal builders,
+street vendors and resellers -- run their business on phone calls,
+WhatsApp messages, cash and a notebook. A spaza owner restocks from a
+wholesaler and pays a driver in cash; a builder buys materials and gets
+paid by a client in stages; none of it leaves a record that both sides
+accept. So suppliers can't reconcile cash, builders and clients argue
+over what was paid, and the trader can't prove the business is real.
 
-The scale is large. Spaza shops turn over about R180 billion a year
-inside a R900 billion township economy, yet about 80% of township
+The scale is large. The township economy is worth about R900 billion a
+year, R180 billion of it through spaza shops, yet about 80% of township
 businesses are unregistered, fewer than 9% can get a bank loan and 57%
-survive on personal savings (Standard Bank, 2025). When government
-opened a R500 million Spaza Shop Support Fund, only R179.6 million had
-reached 2,369 shops by May 2026: 354 applications failed verification
-(non-existent businesses, ownership mismatches) and only 58% of
-applicants held a valid municipal licence (DSBD, May 2026). Real shops
-can't prove themselves, and fake ones slip in. The owners are ready to
-change: more than 56% already prefer EFT to cash (Standard Bank, 2025).
+survive on personal savings (Standard Bank, 2025). Informal work is
+about a third of all jobs in South Africa, and Stats SA now defines an
+informal business partly by whether it keeps records at all. When
+government opened a R500 million Spaza Shop Support Fund, only R179.6
+million had reached 2,369 shops by May 2026: 354 applications failed
+verification (non-existent businesses, ownership mismatches) and only
+58% of applicants held a valid licence (DSBD, 2026). Real traders can't
+prove themselves, and fake ones slip in.
 
 
 ---------------------------------------------------------------------------
@@ -34,50 +41,72 @@ THE FIVE PARTS (what the organisers asked for)
 ---------------------------------------------------------------------------
 
 1. WHO
-   Spaza shop owners in South African townships: small, often
-   home-based (49% trade from a home or garage), mostly unregistered,
-   self-funded. And the wholesalers who supply them, who carry the
-   other half of every unrecorded order and cash handover.
+   Informal traders in South African townships:
+   - spaza shop owners (the largest group: trade is 48.2% of informal
+     businesses; Stats SA);
+   - informal builders and trades (plumbers, electricians, painters):
+     construction is one of the informal industries that is growing;
+   - other hustles: street vendors, resellers, food sellers.
+   And the people on the other side of every deal: the wholesalers and
+   hardware suppliers they buy from, and the clients who pay builders.
 
 2. WHAT
-   Restocking runs on calls, WhatsApp and cash with no shared record.
-   So: (a) orders and cash payments can't be confirmed by both sides,
-   (b) nothing proves the shop trades, so it can't reach credit,
-   support funds or better supplier terms, and (c) wholesalers can't
-   reconcile what drivers collect.
+   Business runs on calls, WhatsApp, cash and a notebook, with no record
+   both sides accept. So:
+   (a) orders, cash payments and stage payments can't be confirmed by
+       both sides, which leads to disputes (a driver's cash that doesn't
+       add up, a client who says a stage was already paid);
+   (b) nothing proves the business trades, so it can't reach credit,
+       support funds or better supplier terms;
+   (c) suppliers can't reconcile what drivers collect or what's owed.
 
 3. WHERE
-   South African townships, in the trade between spaza shops and their
-   wholesalers: at the counter, on the phone, and at the door when
-   stock and cash change hands. We start in Gauteng townships
-   (Tembisa, Ivory Park) and Limpopo, where our team is.
+   South African townships: at the spaza counter, on building sites, on
+   the phone and WhatsApp, and at the door when stock, work and cash
+   change hands. We start in Gauteng townships (Tembisa, Ivory Park) and
+   Limpopo, where our team is.
 
 4. WHY IT MATTERS AT SCALE
-   R180 billion a year flows through spaza shops (R900 billion township
-   economy). About 80% of township businesses are unregistered and
-   fewer than 9% can get a bank loan. Even a funded government
-   programme couldn't get money to them: R179.6 million of R500 million
-   deployed, because verification fails in both directions.
+   - R900 billion township economy; R180 billion through spaza shops.
+   - About a third of South Africa's jobs are informal (half for people
+     aged 15-24).
+   - About 80% of township businesses are unregistered; fewer than 9%
+     can get a bank loan; 57% are self-funded.
+   - Even funded help can't reach them: R179.6 million of a R500 million
+     fund deployed, because verification fails in both directions.
+   - Late payment and non-payment is a chronic problem even in formal
+     construction; informal builders have no contracts to fall back on.
 
 5. EVIDENCE
    - Standard Bank, Township Informal Economy Report 2025: R900bn
      economy; spaza about R180bn; ~80% unregistered; <9% bank loans;
-     57% self-funded; 49% operate from home/garage; >56% prefer EFT.
-   - DSBD / dtic update, May 2026: R179.6m approved for 2,369 shops
-     from the R500m fund; 354 applications failed verification
+     57% self-funded; 49% operate from home/garage; >56% prefer EFT
+     (they are ready for digital payment).
+   - Stats SA: trade is 48.2% of informal businesses (2023, down from
+     ~70% in 2001) as construction, transport and services grow;
+     informal jobs are about a third of all employment; from Q3 2025 an
+     informal business is defined partly by whether it keeps records for
+     tax purposes.
+   - DSBD / dtic, May 2026: R179.6m approved for 2,369 shops from the
+     R500m Spaza Shop Support Fund; 354 applications failed verification
      (non-existent businesses, ownership discrepancies, applicant vs
-     operator mismatches); only 58% linked to a valid licence/permit.
-   - Lived experience [MANDLA: one or two sentences of what you have
-     seen yourself, e.g. a spaza owner you know, how they order, a cash
-     dispute with a driver. Only real observations; delete this line
-     if there is none.]
+     operator mismatches); only 58% linked to a valid licence or permit.
+   - Construction payment studies (formal sector, SA): 89% of surveyed
+     practitioners agree (63%) or strongly agree (26%) that late and
+     non-payment is chronic.
+   - Lived experience:
+     [MANDLA: what you have seen at spaza shops -- how an owner you know
+     orders, a cash dispute with a driver. Only real observations.]
+     [RISUNA: what you have seen with builders -- a client payment
+     dispute, materials bought on cash with no slip. Only real.]
+     Delete either line if there is nothing real to say.
 
 
 ---------------------------------------------------------------------------
 DON'T SAY / SAY (the organisers' rule)
 ---------------------------------------------------------------------------
 
-  Don't: "Spaza shops struggle with records."
+  Don't: "Informal traders struggle with records."
   Say:   "About 80% of township businesses are unregistered and fewer
          than 9% can get a bank loan (Standard Bank, 2025); 354 Spaza
          Shop Support Fund applications failed verification and only 58%
@@ -92,7 +121,13 @@ SOURCES (checked 25 Sep 2026)
     https://www.standardbank.co.za/southafrica/news-and-media/newsroom/80-percent-of-township-businesses-unregistered-reveals-standard-bank-inaugural-informal-economy-report
     https://www.standardbank.co.za/southafrica/business/bizconnect/help-me-grow-my-business/articles/insights-from-the-launch-of-the-township-informal-economy-report-2025
     https://www.moneyweb.co.za/news/south-africa/four-in-five-township-businesses-unregistered-as-economy-nears-r1trn/
+  Stats SA
+    https://www.statssa.gov.za/?p=18255   (informal economy: trade 48.2%, growth of construction)
+    https://www.statssa.gov.za/?p=19240   (how informality shapes employment; new definition)
+    https://www.statssa.gov.za/publications/P0211/P02114thQuarter2025.pdf
   DSBD and dtic, Spaza Shop Support Fund update (May 2026)
     https://www.gov.za/news/media-statements/small-business-development-and-trade-industry-and-competition-update-spaza
     https://www.sanews.gov.za/south-africa/government-approves-r1796-million-spaza-shop-support
-    https://www.sowetan.co.za/news/2026-05-31-only-r1796m-of-r500m-spaza-shop-fund-allocated-as-licensing-hurdles-stall-applications/
+  Construction payment (formal sector)
+    https://www.scielo.org.za/scielo.php?script=sci_arttext&pid=S1021-20192012000200003
+    https://infrastructurenews.co.za/2026/05/19/payment-failures-are-driving-south-africas-construction-disputes/
