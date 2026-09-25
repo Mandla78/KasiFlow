@@ -1,14 +1,16 @@
 /**
- * Which JobsApi the app uses. Mock until the jobs contract is approved and
- * the backend exists; then httpJobsApi joins here behind USE_MOCK_AUTH
- * (EXPO_PUBLIC_USE_MOCK_API), like the credit book, and no screen changes.
+ * Which JobsApi the app uses: the real backend, or the mock when
+ * EXPO_PUBLIC_USE_MOCK_API is not "false" (the same switch as sign-in).
  */
+import { USE_MOCK_AUTH } from '@/constants/config';
+
+import { httpJobsApi } from './httpJobsApi';
 import { mockJobsApi } from './mockJobsApi';
 
-export const jobsApi = mockJobsApi;
+export const jobsApi = USE_MOCK_AUTH ? mockJobsApi : httpJobsApi;
 
 /**
- * The in-app practice sign-off (playing the client) exists only while jobs
- * run on the mock; with the backend, the client uses the real web page.
+ * The in-app practice sign-off (playing the client) only exists on the
+ * mock; with the backend, the client uses the real page from the link.
  */
-export const PRACTICE_SIGN_OFF = true;
+export const PRACTICE_SIGN_OFF = USE_MOCK_AUTH;
