@@ -11,7 +11,7 @@ import pytest
 from src.shared.geocoding import mapbox
 
 PASSWORD = "Spaza2026!"
-CONSENT = {"privacy_version": "0.1-draft", "terms_version": "0.1-draft"}
+CONSENT = {"privacy_version": "0.2-draft", "terms_version": "0.2-draft"}
 SESSION = "3f1c2b8e-1111-4a2b-9c3d-123456789abc"
 
 

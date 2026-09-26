@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex">
+  <title>Check a document · Akayza</title>
+  <style>
+    body { margin:0; background:linear-gradient(#E3EDF5,#F7FAFC); min-height:100vh; font-family:-apple-system,'Segoe UI',Roboto,Helvetica,Arial,sans-serif; color:#0F172A; }
+    .card { max-width:420px; margin:28px auto; padding:24px; background:#fff; border:1px solid #E2E8F0; border-radius:14px; }
+    .brand { font-size:22px; font-weight:800; letter-spacing:-0.5px; } .brand span { color:#2563EB; }
+    .ok { display:inline-block; margin:16px 0 6px; padding:6px 12px; border-radius:999px; background:#D1FAE5; color:#047857; font-weight:700; font-size:13px; }
+    .bad { display:inline-block; margin:16px 0 6px; padding:6px 12px; border-radius:999px; background:#FEE2E2; color:#B91C1C; font-weight:700; font-size:13px; }
+    h1 { font-size:20px; margin:6px 0 14px; }
+    table { width:100%; border-collapse:collapse; font-size:14.5px; }
+    td { padding:7px 0; border-top:1px solid #EEF2F6; } td.k { color:#64748B; } td.v { text-align:right; font-weight:600; }
+    p { font-size:14px; line-height:1.5; color:#334155; }
+    .muted { font-size:12px; color:#64748B; margin-top:14px; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div class="brand">akay<span>za</span></div>
+    {% if doc %}
+      <div class="ok">&#10003; Genuine document</div>
+      <h1>{{ doc.kind }} {{ doc.number }}</h1>
+      <table>
+        <tr><td class="k">Supplier</td><td class="v">{{ doc.supplier }}</td></tr>
+        <tr><td class="k">Order</td><td class="v">{{ doc.order_reference }}</td></tr>
+        <tr><td class="k">Date</td><td class="v">{{ doc.date }}</td></tr>
+        <tr><td class="k">Total</td><td class="v">{{ doc.total }}</td></tr>
+        <tr><td class="k">Paid</td><td class="v">{{ "Yes" if doc.paid else "Not yet" }}</td></tr>
+        <tr><td class="k">Proof</td><td class="v">{{ doc.evidence }}</td></tr>
+      </table>
+      <p class="muted">If the document in your hands shows different details, it has been changed.</p>
+    {% else %}
+      <div class="bad">Not found</div>
+      <h1>We can't confirm this document</h1>
+      <p>The code doesn't match any invoice or receipt we issued, or the link was changed. Ask the person who gave it to you for the original.</p>
+    {% endif %}
+  </div>
+</body>
+</html>

@@ -1,7 +1,8 @@
 import { Feather } from '@expo/vector-icons';
 import { router, useFocusEffect, useLocalSearchParams } from 'expo-router';
+import * as WebBrowser from 'expo-web-browser';
 import { useCallback, useEffect, useState } from 'react';
-import { ActivityIndicator, StyleSheet, Text, View } from 'react-native';
+import { ActivityIndicator, Pressable, StyleSheet, Text, View } from 'react-native';
 
 import { Button } from '@/shared/components/Button';
 import { Card, Tag } from '@/shared/components/Parts';
@@ -12,8 +13,9 @@ import { colors, fonts, radius } from '@/shared/theme/tokens';
 
 import { ordersApi } from '../api/ordersApi';
 import { StatusTimeline } from '../components/StatusTimeline';
-import { canCancel, isStopped, PAYMENT_LABEL, STATUS_LABEL, when } from '../lib/status';
-import { Order, OrderError } from '../types';
+import { EVIDENCE_LABEL, EVIDENCE_TONE, evidenceOf } from '../lib/evidence';
+import { canCancel, isStopped, STATUS_LABEL, when } from '../lib/status';
+import { DocumentKind, Order, OrderError } from '../types';
 
 const REFRESH_MS = 10_000;
 
@@ -50,6 +52,18 @@ export default function OrderScreen() {
     }
   }
 
+  async function openDocument(kind: DocumentKind) {
+    if (!order) return;
+    setError('');
+    try {
+      const url = await ordersApi.documentLink(order.id, kind);
+      if (url) await WebBrowser.openBrowserAsync(url);
+      else setError('Documents are not available here yet.');
+    } catch (e) {
+      setError(e instanceof OrderError ? e.message : "Couldn't open the document. Check your connection and try again.");
+    }
+  }
+
   if (!order) {
     return (
       <Screen back>
@@ -77,7 +91,8 @@ export default function OrderScreen() {
       </View>
       <View style={styles.tags}>
         <Tag label={STATUS_LABEL[order.status]} tone={isStopped(order) ? 'garnet' : 'info'} />
-        <Tag label={PAYMENT_LABEL[order.paymentStatus]} tone={order.paymentStatus === 'paid' || order.paymentStatus === 'confirmed_by_both' ? 'jade' : 'marigold'} />
+        {/* What backs the payment: only a PayFast payment is independent proof. */}
+        <Tag label={EVIDENCE_LABEL[evidenceOf(order)]} tone={EVIDENCE_TONE[evidenceOf(order)]} />
       </View>
 
       {unpaid ? (
@@ -137,16 +152,20 @@ export default function OrderScreen() {
 
       <Overline>Documents</Overline>
       <Card style={{ gap: 10 }}>
-        <View style={styles.doc}>
-          <Feather name="file-text" size={16} color={colors.textMuted} />
-          <Text style={styles.docText}>Invoice (PDF)</Text>
-          <Text style={styles.soon}>{order.paymentStatus === 'paid' || order.paymentStatus === 'confirmed_by_both' ? 'Coming soon' : 'After payment'}</Text>
-        </View>
-        <View style={styles.doc}>
-          <Feather name="check-square" size={16} color={colors.textMuted} />
-          <Text style={styles.docText}>Payment receipt (PDF)</Text>
-          <Text style={styles.soon}>{order.paymentStatus === 'paid' || order.paymentStatus === 'confirmed_by_both' ? 'Coming soon' : 'After payment'}</Text>
-        </View>
+        <DocumentRow
+          icon="file-text"
+          label="Invoice (PDF)"
+          ready={!!order.documents?.invoice}
+          waiting={order.payment === 'in_app' ? 'When the payment is confirmed' : 'When the supplier accepts'}
+          onOpen={() => openDocument('invoice')}
+        />
+        <DocumentRow
+          icon="check-square"
+          label="Payment receipt (PDF)"
+          ready={!!order.documents?.receipt}
+          waiting={order.payment === 'cash' ? 'When you both confirm the cash' : 'When the payment is confirmed'}
+          onOpen={() => openDocument('receipt')}
+        />
       </Card>
       {error ? <Text style={styles.error}>{error}</Text> : null}
     </Screen>
@@ -172,3 +191,13 @@ const styles = StyleSheet.create({
   soon: { fontFamily: fonts.semibold, fontSize: 12, color: colors.textMuted },
   error: { fontFamily: fonts.medium, fontSize: 13, color: colors.garnet, backgroundColor: colors.garnetTint, borderRadius: radius.sm, padding: 12 },
 });
+
+function DocumentRow({ icon, label, ready, waiting, onOpen }: { icon: 'file-text' | 'check-square'; label: string; ready: boolean; waiting: string; onOpen: () => void }) {
+  return (
+    <Pressable onPress={onOpen} disabled={!ready} accessibilityRole="button" accessibilityState={{ disabled: !ready }} style={styles.doc}>
+      <Feather name={icon} size={16} color={ready ? colors.accentDeep : colors.textMuted} />
+      <Text style={[styles.docText, !ready && { color: colors.textMuted }]}>{label}</Text>
+      {ready ? <Feather name="download" size={16} color={colors.accentDeep} /> : <Text style={styles.soon}>{waiting}</Text>}
+    </Pressable>
+  );
+}

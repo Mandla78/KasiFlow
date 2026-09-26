@@ -4,6 +4,7 @@
   POST /me/orders              place (send an Idempotency-Key: a retried
                                "Place order" never creates two orders)
   GET  /me/orders              newest first
+  GET  /me/orders/summary      money kept apart by what backs it
   GET  /me/orders/<id>
   POST /me/orders/<id>/cancel  cash orders, until the supplier accepts
 """
@@ -42,6 +43,15 @@ def place_order():
 @auth_required(dashboard="informal_business")
 def my_orders():
     return success_response({"orders": order_service.list_mine(current_user())})
+
+
+@api_bp.get("/me/orders/summary")
+@limiter.limit(READ_LIMIT)
+@auth_required(dashboard="informal_business")
+def my_order_money():
+    """Money by what backs it: verified digital, cash confirmed by both,
+    cash not yet confirmed. Kept apart, never one total."""
+    return success_response({"summary": order_service.money_summary(current_user())})
 
 
 @api_bp.get("/me/orders/<uuid:order_id>")

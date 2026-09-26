@@ -17,7 +17,7 @@ from src.extensions import db
 from src.shared.media.provider import get_provider
 
 PASSWORD = "Spaza2026!"
-CONSENT = {"privacy_version": "0.1-draft", "terms_version": "0.1-draft"}
+CONSENT = {"privacy_version": "0.2-draft", "terms_version": "0.2-draft"}
 BASE = "/api/v1/me/jobs"
 # An odd amount, easy to spot if it ever leaks onto the client's page.
 BUILDER_CENTS = 1_234_567

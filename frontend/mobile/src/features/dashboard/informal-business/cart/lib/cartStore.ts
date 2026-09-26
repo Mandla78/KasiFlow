@@ -57,6 +57,12 @@ export function useCart(supplierId: string): Cart {
 
 const EMPTY: CartLine[] = [];
 
+/** Items across every cart: the number on the cart icon. */
+export function useCartItemCount(): number {
+  const all = useSyncExternalStore(subscribe, () => carts);
+  return Object.values(all).reduce((sum, lines) => sum + itemCount(lines), 0);
+}
+
 /** Suppliers that have something in their cart (for the cart icon and Your carts). */
 export function useCartSupplierIds(): string[] {
   const all = useSyncExternalStore(subscribe, () => carts);

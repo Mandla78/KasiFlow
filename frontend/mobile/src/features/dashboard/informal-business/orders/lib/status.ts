@@ -4,7 +4,7 @@ import type { Order, OrderStatus, PaymentStatus } from '../types';
 export const STATUS_LABEL: Record<OrderStatus, string> = {
   awaiting_payment: 'Waiting for payment',
   placed: 'Waiting for the supplier',
-  accepted: 'Accepted',
+  accepted: 'Confirmed',
   out_for_delivery: 'On its way',
   ready_for_collection: 'Ready to collect',
   delivered: 'Delivered',
@@ -30,12 +30,24 @@ export const PAYMENT_LABEL: Record<PaymentStatus, string> = {
   refunded: 'Refunded',
 };
 
-/** The steps this order goes through, for the timeline. */
+/** The steps this order goes through, for the timeline. A digital order
+ *  is confirmed the moment it's paid (no waiting for the supplier), so its
+ *  first two steps are "placed" (awaiting payment) and "paid". */
 export function stepsFor(o: Order): OrderStatus[] {
-  if (o.status === 'cancelled' || o.status === 'rejected' || o.status === 'expired') return ['placed', o.status];
+  const first: OrderStatus = o.payment === 'in_app' ? 'awaiting_payment' : 'placed';
+  if (o.status === 'cancelled' || o.status === 'rejected' || o.status === 'expired') return [first, o.status];
   return o.fulfilment === 'collect'
-    ? ['placed', 'accepted', 'ready_for_collection', 'collected']
-    : ['placed', 'accepted', 'out_for_delivery', 'delivered'];
+    ? [first, 'accepted', 'ready_for_collection', 'collected']
+    : [first, 'accepted', 'out_for_delivery', 'delivered'];
+}
+
+/** A step's label on this order's timeline. */
+export function stepLabel(o: Order, s: OrderStatus): string {
+  if (o.payment === 'in_app') {
+    if (s === 'awaiting_payment') return 'Order placed';
+    if (s === 'accepted') return 'Paid and confirmed';
+  }
+  return STEP_LABEL[s];
 }
 
 /** Ended without a sale: cancelled, not accepted, or lapsed unpaid. */

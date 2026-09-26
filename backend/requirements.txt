@@ -44,3 +44,7 @@ cloudinary==1.46.0
 
 # Browser preview of the app (development only; phones don't use CORS)
 Flask-Cors==6.0.5
+
+# Order documents: invoices and receipts as PDF (pure Python, no system libraries)
+fpdf2==2.8.3
+segno==1.6.6
