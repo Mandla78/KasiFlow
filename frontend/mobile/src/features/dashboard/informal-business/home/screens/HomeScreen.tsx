@@ -96,7 +96,12 @@ export default function Home() {
         initial={profile.businessName[0] ?? 'K'}
         title={profile.businessName}
         subtitle={`${kind}${areaOf(profile)}`}
-        action={{ icon: 'bell', label: 'Notifications', dot: unread > 0, onPress: () => router.push('/informal-business/notifications') }}
+        action={{
+          icon: 'bell',
+          label: unread > 0 ? `Notifications, ${unread} unread` : 'Notifications',
+          badge: unread,
+          onPress: () => router.push('/informal-business/notifications'),
+        }}
       />
 
       <LinearGradient colors={['#1E293B', colors.ink]} style={styles.hero}>
