@@ -1,110 +1,124 @@
 ===========================================================================
-[DRAFT -- changes as we build] LEAN BUSINESS CANVAS (due Sat 21:30) -- PASTE INTO SONKE
-Source of truth for pasting (moved here from 06). (est.) = estimate.
+[PASTE-READY, Sat 26 Sep 15:20] LEAN BUSINESS CANVAS (due Sat 21:30) -- PASTE INTO SONKE
+Checked against the code (branch claude/youthful-thompson-9s2ne6 = main +
+plan v2). No product name (not before Sunday's submission); "where" is
+nationwide; tool records are never called proof. (est.) = estimate.
 ===========================================================================
 
-7. LEAN BUSINESS CANVAS -- PASTE INTO SONKE (due Sat 21:30)
+THE PROBLEM STATEMENT   (max 2 paragraphs)
 ---------------------------------------------------------------------------
+South Africa's small businesses and informal traders -- spaza shops,
+builders and other informal businesses -- run their business on phone
+calls, WhatsApp, cash and a notebook. A spaza owner restocks from a
+wholesaler and pays the driver in cash; a builder buys materials and is
+paid by a client in stages; credit to customers lives in memory. None of
+it leaves a record both sides accept, so suppliers can't reconcile cash,
+builders and clients argue over what was paid, and the owner can't show
+the business is real.
 
-  THE PROBLEM STATEMENT
-    South Africa's township economy turns over about R900 billion a
-    year, R180 billion of it through spaza shops, yet nearly 4 in 5
-    township businesses are unregistered and fewer than 9% can get a
-    bank loan (Standard Bank, 2025). Trade happens in cash, credit to
-    customers lives in notebooks, and orders and payments happen on
-    WhatsApp, so nothing a trader does leaves proof. When government
-    opened the R500 million Spaza Shop Support Fund, 354 applications
-    failed verification and only R179.6 million had been allocated by
-    May 2026 (DSBD, 29 May 2026). Real businesses cannot prove they
-    are real.
+The township economy is worth about R900 billion a year, R180 billion of
+it through spaza shops, yet about 80% of township businesses are
+unregistered, fewer than 9% can get a bank loan and 57% survive on
+personal savings (Standard Bank, 2025). When government opened a R500
+million Spaza Shop Support Fund, only R179.6 million had reached shops by
+May 2026, and 354 applications failed verification (DSBD, 2026).
 
-    The same gap costs owners every day. Construction employs about
-    1.2 million people, 38% of them informally (ILO, 2024), and
-    builders and homeowners argue over changes and payments that were
-    only ever agreed by word of mouth. Credit given to spaza customers
-    is tracked from memory, and cash handed to a supplier's counter or
-    driver has no receipt both sides agree on.
-    [add lived experience + validation calls]
 
-  SOLUTION & FEATURES
-    Akayza is an Android app for informal businesses: builders and
-    trades, spaza shops and other small businesses. Traders use it
-    free; suppliers pay.
-    - Credit book: who owes me, repayments, WhatsApp receipts.
-    - Order again from the suppliers I already use; collect or send my
-      runner with a one-time pass; pay in the app or cash on delivery.
-    - Suppliers near you: matched by distance and the categories the
-      trader buys, each with the reasons it was picked.
-    - Builders: jobs in stages, changes agreed with one tap, stages
-      signed off by the homeowner with photos.
-    - My record: a sealed, tamper-evident history the owner shares by
-      link for a set time and can revoke. Reputation with plain
-      reasons -- not a credit score.
-    - Sign in with email or Google, then a PIN or fingerprint.
+SOLUTION & FEATURES
+---------------------------------------------------------------------------
+A mobile app for small businesses and informal traders -- spaza shops,
+builders and other informal businesses -- to run the business and order
+from the suppliers they already work with. Free for the business;
+suppliers pay. Built and tested end to end:
+- Suppliers recommended with plain reasons (distance, what you buy, how
+  you pay); every supplier ranked, none hidden. Not a marketplace: we
+  recommend suppliers, never products.
+- Order from connected suppliers: server-priced catalogue, stock held,
+  delivery to saved addresses or collection, pay digitally (PayFast) or
+  cash on delivery (capped), invoices and receipts with a QR check page.
+- Business tools: credit book (who owes me, repayments), order book for
+  counter orders (works offline), jobs for builders (stages, camera-only
+  photos, client sign-off by link), builder network (find and bring
+  partners).
+- The tools privately tell the supplier engine what the business needs
+  (aggregates only, never shared).
+- Secure account: email-verified sign-up, a code on a new phone, data
+  export and account closure.
 
-  UNIQUE VALUE PROPOSITION
-    Run your business today, get funded tomorrow. Everyday tools (jobs,
-    credit book, stock orders from nearby suppliers) build a business
-    history the owner holds: digital payments confirmed by the payment
-    provider and records that can't be quietly changed, which a shop or
-    builder can show a funder, supplier or client -- without a
-    marketplace, or giving their data away.
 
-  UNFAIR ADVANTAGE
-    Trust is designed in, not added on: verified sign-in, one trusted
-    phone per account with its own signing key, payments verified with
-    the payment provider, and hash-chained records re-verified on every
-    view. Suppliers are matched by distance and what traders actually
-    buy, not by who pays for ads. Our team already won LP Dev DataQuest 2026 with a
-    tamper-evident decision ledger, and we have a researched
-    60-screen design and real build footage from a township house.
+UNIQUE VALUE PROPOSITION
+---------------------------------------------------------------------------
+Run your business and order from the suppliers you already trust -- in
+one free app. The tools you use every day (credit book, order book, jobs)
+make the supplier recommendations and orders fit your business, and
+every digital payment is confirmed by the payment provider, so both
+sides can trust the order, the invoice and the receipt.
 
-  CUSTOMER SEGMENTS
-    HYBRID-FACING: traders are our users; suppliers are our customers.
-    Users (free): township builders and small contractors (and the
-    homeowners they build for); spaza owners in townships (pilot: Tembisa and
-    Seshego, Polokwane), Android smartphone, cash-based, buying from
-    2-5 regular suppliers.
-    Payers: wholesalers and distributors serving those shops
-    (subscriptions); development-finance programmes, fund
-    administrators and licensed lenders checking records a trader has
-    chosen to share (verification fees).
 
-  KEY METRICS
-    6-month pilot (est.): 1 wholesaler + 50 shops, 20 builders;
-    70% of pilot users active weekly; 60% of cash payments confirmed by
-    both sides; 3 funders or programmes checking shared records; zero
-    unresolved chain breaks.
-    Year 1 (est.): 1,000 active traders, 15 suppliers, ~R55,000 monthly
-    revenue.
+UNFAIR ADVANTAGE
+---------------------------------------------------------------------------
+- Built from the everyday tools up: the demand the tools see is data no
+  marketplace or WhatsApp group has, and it stays private to the
+  business.
+- Honest by design: only provider-verified digital payments count as
+  proof; cash is at most "confirmed by both"; tool records are the
+  owner's own records. Nothing is added together to look bigger.
+- Recommendations are explainable and rank every supplier (no pay-to-hide).
+- Security built in and tested: 1,178 automated backend tests and 155
+  app tests, OWASP API Top 10 mapped, card data never touches us.
+- The team won LP Dev DataQuest 2026.
 
-  DISTRIBUTION CHANNELS
-    Trader-led: "Invite my supplier" sends the supplier a WhatsApp or
-    email invite from its own customer.
-    Supplier-led: one wholesaler onboards the shops it already serves
-    (~50 shops, est.).
-    A field agent at the wholesaler's counter during the pilot.
-    Every shared record link carries Akayza to funders and clients.
-    Download from Google Play; later, spaza and builder associations.
 
-  COST STRUCTURE
-    Running: pilot ~R460/month (DigitalOcean app R200, managed
-    PostgreSQL R250, domain R10; Cloudflare, Cloudinary media + malware
-    scanning, email, maps and monitoring on free tiers). Growth
-    ~R4,000-R4,700/month (AWS Cape Town hosting + database R1,500,
-    Cloudinary Plus R1,630, Cloudflare Pro R330, email R330, monitoring
-    R430). Once-off: Google Play R415.
-    Pilot ask: R300,000 for 6 months (builder stipends R96,000; field
-    agent R60,000; running costs R24,000; pilot data bundles R60,000;
-    POPIA legal review R30,000; test devices and contingency R30,000).
-    Break-even: pilot 2 suppliers on Starter; growth about 4 on Pro.
+CUSTOMER SEGMENTS
+---------------------------------------------------------------------------
+Hybrid: the businesses are our users; suppliers are our paying customers.
+Users (free): spaza shops and builders / trades (plumbers, electricians,
+painters and others), plus other informal businesses, across all nine
+provinces -- township, rural and small-town, Android smartphone, mostly
+cash, buying from 2-5 regular suppliers.
+Paying customers: wholesalers, cash-and-carries and hardware suppliers
+that serve these businesses and want more of their orders, fewer cash
+disputes and a view of demand.
 
-  REVENUE STREAMS
-    Free for traders and builders, always, for the core tools.
-    Suppliers: Starter R299/month; Pro R1,499/month; ERP integration
-    R4,999/month + R15,000 setup (later).
-    ~1% commission on PayFast orders via split payments (none on cash).
-    Verification: ~R50 per record check by a funder or lender, with the
-    owner's consent each time; programme licences for fund
-    administrators.
-    Later: trader Pro at R49/month; share of VAS commission.
+
+KEY METRICS
+---------------------------------------------------------------------------
+6-month pilot (est.): 2 suppliers and the 50-100 businesses they already
+serve; 60% of those businesses active weekly; 30% of their orders to the
+pilot suppliers placed in the app; 50% of in-app orders paid digitally;
+fewer than 1% of orders disputed.
+Year 1 (est.): 1,000 active businesses, 15 paying suppliers, about
+R55,000 monthly revenue.
+
+
+DISTRIBUTION CHANNELS
+---------------------------------------------------------------------------
+- Supplier-led: each paying supplier onboards the shops and builders it
+  already serves (at the counter, on the driver's route, on its
+  invoices).
+- Business-led: an owner invites the suppliers they already buy from.
+- Builder network: builders bring partners onto jobs.
+- Android app on Google Play; later, spaza and builder associations and
+  trade events.
+
+
+COST STRUCTURE
+---------------------------------------------------------------------------
+Running: pilot about R460/month (app hosting R200, managed PostgreSQL
+R250, domain R10; media, email, maps, monitoring on free tiers). Growth
+about R4,000-R4,700/month (Cape Town cloud hosting and database, media
+plan, CDN/WAF, email, monitoring). Once-off: Google Play R415.
+Pilot ask: R300,000 for 6 months (field agent, stipends for pilot
+businesses, data bundles, running costs, POPIA legal review and an
+external security test, test devices and contingency).
+
+
+REVENUE STREAMS
+---------------------------------------------------------------------------
+Free for small businesses and informal traders, always, for the core
+tools.
+Suppliers pay: Starter R299/month; Pro R1,499/month; ERP integration
+R4,999/month + R15,000 setup (later).
+About 1% on digital orders paid through the app (none on cash).
+Break-even (est.): 2 suppliers on Starter in the pilot; about 4 on Pro at
+growth.
