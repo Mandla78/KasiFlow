@@ -14,15 +14,13 @@ from dataclasses import dataclass, field
 from datetime import datetime
 from typing import Iterable, Optional
 
-from ..constants import COLORS, DEFAULT_TRAVEL_KM, FROM_SIGN_UP, TRADES
+from ..constants import COLORS, DEFAULT_TRAVEL_KM, TRADES
 from ..repositories import network_repository as repo
 from . import ranking
 
 
 def default_trades(sign_up_trade: Optional[str]) -> list[str]:
-    """The business profile's trade as network trades (painter_tiler -> painter + tiler)."""
-    if sign_up_trade in FROM_SIGN_UP:
-        return list(FROM_SIGN_UP[sign_up_trade])
+    """The business profile's trade as the builder profile's first trade."""
     return [sign_up_trade] if sign_up_trade in TRADES else ["general_builder"]
 
 

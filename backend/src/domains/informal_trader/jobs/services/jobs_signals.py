@@ -33,10 +33,15 @@ from ..repositories import jobs_repository as repo
 #: What each sign-up trade usually buys (the app's constants/businessTypes.ts TRADES).
 TRADE_CATEGORIES = {
     "general_builder": ("building_materials", "tools_hardware", "paint_finishes", "plumbing", "electrical"),
+    "bricklayer": ("building_materials", "tools_hardware"),
     "plumber": ("plumbing", "tools_hardware", "building_materials"),
     "electrician": ("electrical", "tools_hardware"),
     "carpenter": ("building_materials", "tools_hardware", "paint_finishes"),
-    "painter_tiler": ("paint_finishes", "building_materials", "tools_hardware"),
+    "roofer": ("building_materials", "tools_hardware"),
+    "tiler": ("paint_finishes", "building_materials"),
+    "painter": ("paint_finishes", "building_materials"),
+    "welder": ("tools_hardware", "building_materials"),
+    "glazier": ("building_materials", "tools_hardware"),
     "other_trade": ("tools_hardware", "building_materials"),
 }
 

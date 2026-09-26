@@ -15,7 +15,19 @@ type IconName = ComponentProps<typeof Feather>['name'];
 
 export type BusinessType = 'builder' | 'spaza' | 'food' | 'other';
 
-export type TradeKey = 'general_builder' | 'plumber' | 'electrician' | 'carpenter' | 'painter_tiler' | 'other_trade';
+/** The 11 trades (QUESTION_trades.txt, approved): options only, never free text. */
+export type TradeKey =
+  | 'general_builder'
+  | 'bricklayer'
+  | 'plumber'
+  | 'electrician'
+  | 'carpenter'
+  | 'roofer'
+  | 'tiler'
+  | 'painter'
+  | 'welder'
+  | 'glazier'
+  | 'other_trade';
 
 export type ToolKey = 'creditBook' | 'orderStock' | 'myRecord' | 'jobs' | 'orderBook';
 
@@ -64,10 +76,15 @@ export const BUSINESS_TYPE_ORDER: BusinessType[] = ['builder', 'spaza', 'food', 
 
 export const TRADES: { key: TradeKey; label: string; categories: CategoryCode[] }[] = [
   { key: 'general_builder', label: 'General builder', categories: ['building_materials', 'tools_hardware', 'paint_finishes', 'plumbing', 'electrical'] },
+  { key: 'bricklayer', label: 'Bricklayer', categories: ['building_materials', 'tools_hardware'] },
   { key: 'plumber', label: 'Plumber', categories: ['plumbing', 'tools_hardware', 'building_materials'] },
   { key: 'electrician', label: 'Electrician', categories: ['electrical', 'tools_hardware'] },
   { key: 'carpenter', label: 'Carpenter', categories: ['building_materials', 'tools_hardware', 'paint_finishes'] },
-  { key: 'painter_tiler', label: 'Painter / tiler', categories: ['paint_finishes', 'building_materials', 'tools_hardware'] },
+  { key: 'roofer', label: 'Roofer', categories: ['building_materials', 'tools_hardware'] },
+  { key: 'tiler', label: 'Tiler', categories: ['paint_finishes', 'building_materials'] },
+  { key: 'painter', label: 'Painter', categories: ['paint_finishes', 'building_materials'] },
+  { key: 'welder', label: 'Welder', categories: ['tools_hardware', 'building_materials'] },
+  { key: 'glazier', label: 'Glazier', categories: ['building_materials', 'tools_hardware'] },
   { key: 'other_trade', label: 'Other trade', categories: ['tools_hardware', 'building_materials'] },
 ];
 

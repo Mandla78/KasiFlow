@@ -5,10 +5,10 @@ CONTRACT -- THE ORDER BOOK (customer orders at a counter)
 TOOL:            Order book (14_ROUND_2_BRIEF.txt §2) -- kota shops and food
                  sellers first
 AUTHOR / DATE:   Risuna, Saturday 26 September 2026
-STATUS:          proposed. The app side is built on the mocks (branch
-                 risuna/order-book-ui); field names are the snake_case
-                 twins of order-book/types.ts, so the real API changes no
-                 screen. Backend after your yes (risuna/order-book-api).
+STATUS:          approved (DECISION below) and BUILT: the app on the mocks
+                 in PR 9; the backend and the app on it in
+                 risuna/order-book-api, migration 0021_order_book (section
+                 10 says what was built and where it differs from above).
 
 
 0. WHAT IT IS
@@ -149,16 +149,59 @@ STATUS:          proposed. The app side is built on the mocks (branch
   packaging_disposable. Aggregates only (no names, no orders).
 
 
-9. WHAT THE APP DOES TODAY
+9. WHAT THE APP DOES
 ---------------------------------------------------------------------------
-  Mock (EXPO_PUBLIC_USE_MOCK_API=true): everything above, with a week of
-  sample trade, "Test: signal" to play a dropped network, and "Pay later"
-  opening the credit book filled in (amount, "Order #12: ...", the name).
-  Real API: hidden (ORDER_BOOK_READY) until these endpoints exist. The
-  tool key "orderBook" needs you: NEEDS_order_book_tool.txt.
+  On the mock and the real API alike: everything above; "Pay later" opens
+  the credit book filled in (amount, "Order #12: ...", the name). The
+  tool shows where the trader switched it on (profile.tools.orderBook:
+  on by default for "Food seller", in Add a tool for everyone). Mock only:
+  a week of sample trade and "Test: signal" to play a dropped network.
 
 
-10. QUESTIONS FOR MANDLA
+10. AS BUILT (risuna/order-book-api, after the DECISION)
+---------------------------------------------------------------------------
+  Backend: domains/informal_trader/order_book (models, repository,
+  menu_service, orders_service, order_book_signals, order_book_service,
+  schemas, routes), migration 0021_order_book (5 tables, CHECKs for
+  statuses, payments, ingredients, qty and prices). Endpoints as section 3.
+
+  DECISION 1 (server key): order_book_orders.id is the server's;
+  client_key is the phone's UUID, unique(user_id, client_key); every
+  lookup is (user_id, client_key). The response's "id" is the
+  client_key, so the app changed nothing. The same key from another
+  trader is simply their own new order (tested: it never shows the
+  first trader's order). A retry: 200 with the same order and number; the
+  same retry from two phones at once lands once (the loser's number is
+  given back: the day counter rolls back with it).
+  DECISION 2 (price history): a new price is a new row from "now"; a line
+  is priced from the price valid at the order's created_at (the phone's
+  time, checked: up to 5 min ahead, 2 days back, and "day" must be the SA
+  date of it). The phone never sends a price (a price field is a 422).
+  ADDED (honest money): the Today tab says "money you recorded" with "As
+  you recorded them at the counter: your own record, not a bank
+  statement." Nothing here is added to orders' proof-backed totals.
+
+  Differences from the proposal, small: taken_at is the column for the
+  phone's created_at (BaseModel owns created_at); an item left off the
+  menu is hidden (active false, hidden_at) and accepted for 2 days after
+  that; a customer name with 5 or more digits is refused ("Use a first
+  name, not a number."); the first field error is the 422's message (the
+  outbox shows it when it drops an order). Menu saves take a per-trader
+  advisory lock, so two phones saving at once can't both add an item.
+
+  App: httpOrderBookApi (snake_case twins); order keys are v4 UUIDs
+  (crypto.randomUUID, or a Math.random fallback in the same shape for
+  phones without it: lib/keys.ts); Account's tile and Home's "Orders
+  today" come from GET /orders?day=today when the tool is on.
+
+  Signals: order_book_service.demand_signals(user) as section 8
+  (SIGNALS_jobs.txt, "ORDER BOOK SIGNALS").
+
+  Tests: test_order_book.py, test_order_book_security.py,
+  test_order_book_signals.py (95); app: httpOrderBookApi and keys tests.
+
+
+11. QUESTIONS FOR MANDLA (answered in the DECISION below)
 ---------------------------------------------------------------------------
   1. OK for the phone to make the order id (a UUID) and address orders by
      it? (It's what makes offline and retries simple.)

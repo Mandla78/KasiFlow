@@ -1,16 +1,14 @@
 /**
- * Which OrderBookApi the app uses. Only the mock exists until the backend
- * in CONTRACT_order_book.txt is approved and built; on the real API the
- * order book stays hidden (ORDER_BOOK_READY), so nothing breaks before then.
+ * Which OrderBookApi the app uses: the real backend, or the mock when
+ * EXPO_PUBLIC_USE_MOCK_API is not "false" (the same switch as sign-in).
+ * The tool shows where the trader switched it on (profile.tools.orderBook).
  */
 import { USE_MOCK_AUTH } from '@/constants/config';
 
+import { httpOrderBookApi } from './httpOrderBookApi';
 import { mockOrderBookApi, practice } from './mockOrderBookApi';
 
-export const orderBookApi = mockOrderBookApi;
-
-/** The Order book tile and screens show only where orderBookApi works. */
-export const ORDER_BOOK_READY = USE_MOCK_AUTH;
+export const orderBookApi = USE_MOCK_AUTH ? mockOrderBookApi : httpOrderBookApi;
 
 /** TEST ONLY (mock): "Test: no signal" plays a dropped network. */
 export const practiceSignal = USE_MOCK_AUTH ? practice : null;

@@ -91,6 +91,11 @@ class ClientAnswerSchema(_Strict):
     note = CleanText(load_default="", max_len=NOTE_MAX)
 
 
+class HistoryQuerySchema(_Strict):
+    #: A job's title or a client's name, or part of one.
+    q = CleanText(load_default="", max_len=TITLE_MAX)
+
+
 def load(schema: Schema, data) -> dict:
     """Validate a JSON body; one 422 with every field's message."""
     try:

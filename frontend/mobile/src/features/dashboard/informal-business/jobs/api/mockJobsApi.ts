@@ -227,7 +227,10 @@ export const mockJobsApi: JobsApi = {
   async moveToBin(id) {
     await wait();
     const all = await load();
-    find(all, id).binnedAt = new Date().toISOString();
+    const job = find(all, id);
+    job.binnedAt = new Date().toISOString();
+    // Like the server: links the client hasn't answered stop working, so nothing waits on them.
+    for (const s of job.stages) if (s.status === 'waiting') s.status = s.photo ? 'photo_taken' : 'not_started';
     await save(all);
   },
 

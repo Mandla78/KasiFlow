@@ -50,6 +50,8 @@ class BusinessAuditEvent(str, enum.Enum):
     CREDIT_ENTRY_CANCELLED = "credit.entry_cancelled"
     CREDIT_CUSTOMER_PHONE_CHANGED = "credit.customer_phone_changed"
     CREDIT_CUSTOMER_DELETED = "credit.customer_deleted"
+    CREDIT_ENTRY_BINNED = "credit.entry_binned"
+    CREDIT_ENTRY_RESTORED = "credit.entry_restored"
     # Jobs (informal_trader/jobs): ids, amounts, outcomes, photo hashes; never client names or phones
     JOB_CREATED = "job.created"
     JOB_STAGE_PHOTO_ADDED = "job.stage_photo_added"
@@ -57,6 +59,8 @@ class BusinessAuditEvent(str, enum.Enum):
     JOB_SIGN_OFF_ANSWERED = "job.sign_off_answered"
     JOB_SIGN_OFF_REFUSED = "job.sign_off_refused"
     JOB_DONE = "job.done"
+    JOB_BINNED = "job.binned"
+    JOB_RESTORED = "job.restored"
 
     BUILDER_PROFILE_SAVED = "builder.profile_saved"
     BUILDER_VISIBILITY_CHANGED = "builder.visibility_changed"
@@ -73,3 +77,8 @@ class BusinessAuditEvent(str, enum.Enum):
     HELP_POST_INTERESTED = "help_post.interested"
     HELP_POST_PICKED = "help_post.picked"
     HELP_POST_CLOSED = "help_post.closed"
+
+    # Order book (informal_trader.order_book): ids and counts only, never a name or amount.
+    ORDER_BOOK_MENU_SAVED = "order_book.menu_saved"
+    ORDER_BOOK_ORDER_CREATED = "order_book.order_created"
+    ORDER_BOOK_ORDER_CANCELLED = "order_book.order_cancelled"

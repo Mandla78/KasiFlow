@@ -193,7 +193,7 @@ def _render_invites(me: people.Me, rows: list[JobPartner]) -> list[dict]:
     suburbs = {i: p.suburb for i, p in people.load([r.owner_id for r in rows]).items()}
     out = []
     for r in rows:
-        job = repo.job(r.job_id)
+        job = repo.job_for_partner(r.job_id)
         if job is None or str(r.owner_id) not in owners:
             continue
         out.append(_invite_view(me, r, job, owners[str(r.owner_id)], suburbs.get(r.owner_id, "")))
@@ -207,7 +207,10 @@ def invites(user) -> list[dict]:
 
 def invite_view(user, invite_id: uuid.UUID) -> dict:
     me = _me(user)
-    return _render_invites(me, [_invite_or_404(me, invite_id)])[0]
+    shown = _render_invites(me, [_invite_or_404(me, invite_id)])
+    if not shown:
+        raise not_found("invite")
+    return shown[0]
 
 
 def answer(user, invite_id: uuid.UUID, accept: bool) -> dict:

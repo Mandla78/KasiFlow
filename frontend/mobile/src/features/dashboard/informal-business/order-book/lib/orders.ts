@@ -113,7 +113,7 @@ export function busiestHour(t: DayTotals): { hour: number; orders: number; text:
   return { hour: best, orders: t.byHour[best]!, text: `${pad(best)} to ${pad(best + 1)}` };
 }
 
-/** Money that came in (not "pay later"). */
+/** Money the trader recorded as paid: cash, card or EFT (not "pay later"). Their own record, not proof. */
 export function moneyIn(t: DayTotals): Cents {
   return t.cashCents + t.digitalCents;
 }

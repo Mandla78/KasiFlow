@@ -15,5 +15,5 @@ export const jobsApi = USE_MOCK_AUTH ? mockJobsApi : httpJobsApi;
  */
 export const PRACTICE_SIGN_OFF = USE_MOCK_AUTH;
 
-/** The bin needs the backend in CONTRACT_bin.txt; until then only the mock offers it. */
-export const BIN_READY = USE_MOCK_AUTH;
+/** The bin: on the mock and the backend alike (CONTRACT_bin.txt). */
+export const BIN_READY = true;

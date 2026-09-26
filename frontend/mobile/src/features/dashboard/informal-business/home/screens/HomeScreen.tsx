@@ -44,7 +44,7 @@ export default function Home() {
   const { profile } = useSession();
   const unread = useUnreadCount();
   const builder = profile.businessType === 'builder';
-  const { credit, jobs, reload } = useToolSummaries();
+  const { credit, jobs, orders, reload } = useToolSummaries();
   const [today, setToday] = useState<TodayItem[] | null>(null);
   const [todayFailed, setTodayFailed] = useState(false);
   const kind = builder ? 'Builder · ' : '';
@@ -126,7 +126,11 @@ export default function Home() {
             </Text>
             <View style={styles.heroRow}>
               <Mini label="You owe suppliers" value={formatRand(spazaSample.youOweSuppliers)} sample />
-              <Mini label="Cash in today" value={formatRand(spazaSample.cashInToday)} sample />
+              {profile.tools.orderBook ? (
+                <Mini label="Orders today" value={shown(orders, (d) => String(d.ordersToday))} />
+              ) : (
+                <Mini label="Cash in today" value={formatRand(spazaSample.cashInToday)} sample />
+              )}
             </View>
           </>
         )}

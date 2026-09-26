@@ -5,20 +5,28 @@ jobs -- a builder's jobs, paid in stages.
   get_job(user, id)
   create_job(user, data)     with stages that add up to the total
   summary(user)              for Home and the Account tile
+  history(user, q)           done jobs (search)
+  bin_jobs(user)             deleted in the last 30 days
+  move_to_bin(user, id)      "delete": hidden from the builder; open sign-off links stop working
+  restore(user, id)          back from the bin (old links stay off)
   demand_signals(user)       what the open work needs (supplier engine; jobs_signals.py)
   view(job)                  a job as the app sees it
 
 Every call acts on the signed-in user only; "not yours" is the same 404 as
 "doesn't exist". Photos: job_photo_service. Sign-offs: sign_off_service.
+A binned job (CONTRACT_bin.txt) is not there for any other call.
 """
 from __future__ import annotations
 
 import uuid
+from datetime import datetime, timedelta
 
+from src.core.base_model import utcnow
 from src.core.exceptions import NotFoundError
 from src.extensions import db
 from src.shared.audit.event_types.business import BusinessAuditEvent as E
 
+from ..constants import BIN_DAYS
 from ..models import Job, JobStage
 from ..repositories import jobs_repository as repo
 from . import jobs_audit
@@ -75,6 +83,55 @@ def summary(user) -> dict:
     }
 
 
+def history(user, q: str) -> list[dict]:
+    return [view(j) for j in repo.history(user.id, q)]
+
+
+def bin_jobs(user) -> list[dict]:
+    return [view(j) for j in repo.binned(user.id, _bin_since())]
+
+
+def move_to_bin(user, job_id: uuid.UUID) -> None:
+    """Hidden from the builder, never removed. A job binned by mistake must
+    not be confirmed by a client, so every link the client hasn't answered
+    stops working (like an expired one) and those stages stop waiting.
+    Confirmed stages, their sign-offs and photos stay as they are."""
+    job = job_or_404(user, job_id)
+    # Links, then stages: the order a client's answer locks them in, so a
+    # delete and an answer at the same moment queue instead of deadlocking.
+    # An answer that got there first has used its link and stays in the record.
+    now = utcnow()
+    links = repo.open_sign_offs_for_job(job.id)
+    for link in links:
+        link.revoked_at = now
+    stages = repo.lock_stages(job.id)
+    for s in stages:
+        if s.status == "waiting":
+            s.status = "photo_taken" if s.photo_url else "not_started"
+    job.soft_delete()
+    db.session.commit()
+    jobs_audit.record(E.JOB_BINNED, user_id=user.id, job_id=job.id, links_turned_off=len(links))
+
+
+def restore(user, job_id: uuid.UUID) -> dict:
+    """Back as it was when binned. Links turned off by the bin stay off:
+    the builder sends a new one."""
+    job = repo.binned_job(user.id, job_id, _bin_since())
+    if job is None:
+        db.session.rollback()
+        raise NotFoundError("We couldn't find that job.")
+    job.is_deleted = False
+    job.deleted_at = None
+    db.session.commit()
+    jobs_audit.record(E.JOB_RESTORED, user_id=user.id, job_id=job.id)
+    return view(job)
+
+
+def _bin_since() -> datetime:
+    """Older than this, a deleted job is out of the bin's view (still in the database)."""
+    return utcnow() - timedelta(days=BIN_DAYS)
+
+
 def mark_done_if_complete(job: Job) -> bool:
     """A job is done when every stage is confirmed by both."""
     if job.status == "active" and job.stages and all(s.status == "confirmed" for s in job.stages):
@@ -93,6 +150,7 @@ def view(job: Job) -> dict:
         "total_cents": job.total_cents,
         "status": job.status,
         "created_at": job.created_at.isoformat(),
+        "binned_at": job.deleted_at.isoformat() if job.is_deleted and job.deleted_at else None,
         "stages": [_stage_view(s) for s in job.stages],
     }
 

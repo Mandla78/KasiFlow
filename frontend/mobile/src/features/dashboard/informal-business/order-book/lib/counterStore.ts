@@ -11,10 +11,11 @@ import * as SecureStore from 'expo-secure-store';
 import { useSyncExternalStore } from 'react';
 
 import { todayIso } from '@/features/dashboard/informal-business/credit-book/lib/dueDates';
-import { ApiError, newIdempotencyKey } from '@/shared/api/client';
+import { ApiError } from '@/shared/api/client';
 
 import { orderBookApi } from '../api/orderBookApi';
 import type { MenuItem, Order, OrderLine, OrderStatus, Payment } from '../types';
+import { newOrderKey } from './keys';
 import { cleanName, total } from './orders';
 import { Entry, flush, merge, unsentIds } from './outbox';
 
@@ -161,7 +162,7 @@ export async function take(lines: OrderLine[], payment: Payment, customerName: s
   const now = new Date().toISOString();
   const temp = kept.temp + 1;
   const order: Order = {
-    id: newIdempotencyKey(),
+    id: newOrderKey(),
     number: null,
     tempNumber: `${kept.letter}${temp}`,
     day: kept.day,

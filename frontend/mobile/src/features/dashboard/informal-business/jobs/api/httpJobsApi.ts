@@ -39,7 +39,7 @@ type WireJob = {
   status: Job['status'];
   created_at: string;
   stages: WireStage[];
-  /** From the bin endpoints (CONTRACT_bin.txt); absent elsewhere until they exist. */
+  /** Set only on jobs in the bin. */
   binned_at?: string | null;
 };
 
@@ -137,10 +137,8 @@ export const httpJobsApi: JobsApi = {
   },
 
   async history(query) {
-    // Until GET /history exists (CONTRACT_bin.txt): the done jobs the server already lists.
-    const q = query.trim().toLowerCase();
-    const done = (await httpJobsApi.list()).filter((j) => j.status === 'done');
-    return done.filter((j) => !q || j.title.toLowerCase().includes(q) || j.clientName.toLowerCase().includes(q));
+    const q = encodeURIComponent(query.trim());
+    return (await api<{ jobs: WireJob[] }>('GET', `${BASE}/history?q=${q}`, undefined, { auth: true })).jobs.map(job);
   },
 
   async bin() {

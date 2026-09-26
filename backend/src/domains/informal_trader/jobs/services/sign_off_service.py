@@ -12,8 +12,8 @@ both (via link); different -> amounts don't match, both kept; "not yet"
 THE TICKET is the client's only key: 256 random bits (secrets), stored
 ONLY as an HMAC keyed with SECRET_KEY (our own copy of the idea in
 identity's secrets.py, which is sealed), one use, 7 days, revoked when a
-new link is sent for the stage. Used, expired, revoked and unknown all
-look the same to the page.
+new link is sent for the stage or the job goes to the bin. Used, expired,
+revoked and unknown all look the same to the page.
 """
 from __future__ import annotations
 
@@ -115,6 +115,9 @@ def page(ticket: str) -> Optional[dict]:
         return None
     stage = repo.stage_by_id(sign_off.stage_id)
     job = stage.job
+    if job.is_deleted:
+        # Binning revokes the links; this is the second lock on the same door.
+        return None
     return {
         "business": _business_name(job.user_id),
         "stage": stage.name,
@@ -142,6 +145,9 @@ def answer(ticket: str, kind: str, amount_cents: int, note: str) -> str:
     sign_off = _usable(ticket, lock=True)
     stage = repo.stage_by_id(sign_off.stage_id, lock=True)
     job = stage.job
+    if job.is_deleted:
+        db.session.rollback()
+        raise InvalidTicket()
     now = utcnow()
 
     sign_off.used_at = now

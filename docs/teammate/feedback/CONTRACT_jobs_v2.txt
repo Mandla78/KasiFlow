@@ -172,9 +172,9 @@ STATUS:          built (branch risuna/jobs-network, PR 7): backend
 
 4. TRADES
 ---------------------------------------------------------------------------
-  The network validates against its OWN list (the 11 in QUESTION_trades.txt)
-  so the sign-up list can stay as it is until Mandla answers that file.
-  painter_tiler from sign-up becomes [painter, tiler] on first GET.
+  The 11 in QUESTION_trades.txt (approved): since 0022_trades, sign-up and
+  the network use the same list. A new builder profile starts from the
+  sign-up trade.
 
 
 5. AUDIT (no names, no phones, no amounts)

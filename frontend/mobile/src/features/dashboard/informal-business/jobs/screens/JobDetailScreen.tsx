@@ -165,6 +165,11 @@ export default function JobDetailScreen() {
               ? `Stages ${job.clientName} confirmed stay in your record and in any record you share.`
               : undefined
           }
+          warns={
+            job.stages.some((s) => s.status === 'waiting')
+              ? `The sign-off link you sent ${job.clientName} stops working. If you restore the job, send a new one.`
+              : undefined
+          }
           onClose={() => setBinning(false)}
           onConfirm={async () => {
             await jobsApi.moveToBin(job.id);
