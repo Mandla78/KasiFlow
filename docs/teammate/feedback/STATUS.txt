@@ -48,14 +48,21 @@ DONE
     per QUESTION_trades.txt: the 11 trades in one list for sign-up, the
     builder network and the jobs signals; painter_tiler became painter.
   (PRs 11, 12, 13: merged)
-
-IN PROGRESS
-  - Client IP (risuna/client-ip, no migration) per
+  - Client IP (PR 14, merged) per
     FINDING_client_ip_behind_cloudflare.txt and its DECISION:
     shared/net/client_ip.py + BEHIND_CLOUDFLARE (off: remote_addr, full
     stop); the limiter, login key, sessions, consents, the 429 audit and
     audit_context use it. Fixes the forgeable IP in the audit trail. One
     question in the FINDING: an ngrok mode for the demo.
+
+IN PROGRESS
+  - Notifications (Mandla's task, CONTRACT_notifications.txt, his answers
+    approved): step 1 the contract (PR 15); step 2 the backend
+    (risuna/notifications-api, migration 0023_notifications): the shared
+    event is a template key + params, domains/platform/notifications keeps
+    alerts once per dedupe_key in their tab, the switches (orders, jobs,
+    credit; security always on), list / unread / read / read-all,
+    90-day clean-up. Next: step 3 hooks, step 4 the app.
 
 BLOCKED (and on what)
   - (none; the Idempotency-Key header and the deep-JSON crash are fixed on main)
