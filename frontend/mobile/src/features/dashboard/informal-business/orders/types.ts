@@ -86,6 +86,8 @@ export type PlaceOrderInput = {
    *  null = the business's own saved address. */
   deliveryAddress: string | null;
   deliveryPoint?: { latitude: number; longitude: number } | null;
+  /** One of the trader's saved places (the server looks it up); deliveryAddress then only labels it. */
+  deliveryAddressId?: string | null;
   /** One per "Place order" tap, reused on a retry: never two orders. */
   idempotencyKey?: string;
 };

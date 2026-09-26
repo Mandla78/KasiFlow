@@ -19,12 +19,15 @@ import { ordersApi } from '../../orders/api/ordersApi';
 import { CASH_RULES, cashLimitFor, MAX_OPEN_CASH_ORDERS } from '../../orders/lib/cashPolicy';
 import { isActive } from '../../orders/lib/status';
 import { Fulfilment, OrderError, PaymentMethod } from '../../orders/types';
+import { deliveryAddressesApi } from '../../delivery-addresses/api/deliveryAddressesApi';
+import type { DeliveryAddress } from '../../delivery-addresses/types';
 import { supplierApi } from '../../suppliers/api/supplierApi';
 import type { Supplier } from '../../suppliers/types';
 import { OptionCard } from '../components/OptionCard';
 import { StepHeader } from '../components/StepHeader';
 
-type Where = 'business' | 'other';
+/** My business, a saved place (its id), or somewhere typed in now. */
+type Where = 'business' | 'other' | { saved: string };
 const TITLES = ['How you get it', 'How you pay', 'Check and place your order'];
 
 /**
@@ -52,6 +55,19 @@ export default function CheckoutScreen() {
   const orderKey = useRef<string | null>(null);
   const [openCash, setOpenCash] = useState(0);
   const [cashHelp, setCashHelp] = useState(false);
+  const [saved, setSaved] = useState<DeliveryAddress[]>([]);
+
+  useEffect(() => {
+    // The trader's saved places; the default one is picked first.
+    deliveryAddressesApi
+      .list()
+      .then((list) => {
+        setSaved(list);
+        const d = list.find((a) => a.isDefault);
+        if (d) setWhere({ saved: d.id });
+      })
+      .catch(() => setSaved([]));
+  }, []);
 
   useEffect(() => {
     // Cash orders still waiting (placed, not yet delivered or collected).
@@ -97,7 +113,8 @@ export default function CheckoutScreen() {
           : '';
   const cashTitle = fulfilment === 'collect' ? 'Cash when you collect' : 'Cash on delivery';
   const businessAddress = profile.location ? formatPlace(profile.location) : '';
-  const deliveryAddress = where === 'other' && otherPlace ? formatPlace(otherPlace) : businessAddress;
+  const savedPlace = typeof where === 'object' ? (saved.find((a) => a.id === where.saved) ?? null) : null;
+  const deliveryAddress = savedPlace ? savedPlace.addressText : where === 'other' && otherPlace ? formatPlace(otherPlace) : businessAddress;
   const hours = supplier.hours.map((h) => `${h.days} ${h.open}-${h.close}`).join(', ');
 
   const stepError =
@@ -125,8 +142,10 @@ export default function CheckoutScreen() {
         fulfilment,
         payment,
         // Somewhere else: its address and pin. My business: the server uses the saved pin.
-        deliveryAddress: elsewhere ? deliveryAddress : null,
+        // A saved place: its id (the server looks it up); the text only labels it for sample data.
+        deliveryAddress: elsewhere || (fulfilment === 'delivery' && savedPlace) ? deliveryAddress : null,
         deliveryPoint: elsewhere ? { latitude: otherPlace.latitude, longitude: otherPlace.longitude } : null,
+        deliveryAddressId: fulfilment === 'delivery' && savedPlace ? savedPlace.id : null,
         idempotencyKey: orderKey.current,
       });
       clearCart(supplier.id);
@@ -184,6 +203,16 @@ export default function CheckoutScreen() {
                 selected={where === 'business'}
                 onPress={() => setWhere('business')}
               />
+              {saved.map((a) => (
+                <OptionCard
+                  key={a.id}
+                  icon="map-pin"
+                  title={a.label}
+                  line={a.addressText}
+                  selected={savedPlace?.id === a.id}
+                  onPress={() => setWhere({ saved: a.id })}
+                />
+              ))}
               <OptionCard icon="navigation" title="Somewhere else" line="A site, a second shop, a home" selected={where === 'other'} onPress={() => setWhere('other')} />
               {where === 'other' ? (
                 <AddressPickerField label="Delivery address" value={otherPlace} onChange={setOtherPlace} mapTitle="Where to deliver" confirmLabel="Deliver here" />

@@ -27,6 +27,7 @@ from typing import Optional
 from src.core.base_model import utcnow
 from src.core.exceptions import AppError, ConflictError, NotFoundError
 from src.domains.informal_trader.business_profile.services import business_profile_service
+from src.domains.informal_trader.delivery_addresses.services import delivery_address_service
 from src.domains.supplier.catalogue.services import catalogue_service
 from src.domains.supplier.connections.services import connection_service
 from src.domains.supplier.recommendation.services.recommendation_service import distance_km
@@ -151,7 +152,10 @@ def _where(user, s, data) -> tuple[str, Optional[tuple[Decimal, Decimal]]]:
     """(address text, delivery pin) -- checked against the delivery radius."""
     if data["fulfilment"] == "collect":
         return supplier_service.public_view(s)["address"], None
-    if data.get("delivery_point"):
+    if data.get("delivery_address_id"):
+        # One of the trader's own saved places (someone else's id: not found).
+        address, lat, lng = delivery_address_service.for_order(user, data["delivery_address_id"])
+    elif data.get("delivery_point"):
         lat, lng = data["delivery_point"]["latitude"], data["delivery_point"]["longitude"]
         address = data["delivery_address"]
     else:
