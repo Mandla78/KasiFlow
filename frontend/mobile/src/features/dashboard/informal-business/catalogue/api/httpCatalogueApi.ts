@@ -1,9 +1,10 @@
 /**
  * A supplier's catalogue on the server (/suppliers/{id}/products,
- * /products/{id}). The server pages 60 at a time; the grid shows a whole
- * search result, so this reads the pages in turn (a few hundred products
- * at most). Product codes, barcodes and stock numbers never come back:
- * only in stock / low / out.
+ * /products/{id}). The server pages 60 at a time: the supplier screen asks
+ * for one page and the next as the trader scrolls (page()); products()
+ * still reads every page, for the few places that need a whole list.
+ * Product codes, barcodes and stock numbers never come back: only
+ * in stock / low / out.
  */
 import type { CategoryCode } from '@/constants/categories';
 import { api } from '@/shared/api/client';
@@ -57,17 +58,26 @@ function product(p: WireProduct): Product {
   };
 }
 
+function params(query: { category?: string; search?: string }): URLSearchParams {
+  const p = new URLSearchParams();
+  if (query.category) p.set('category', query.category);
+  if (query.search?.trim()) p.set('q', query.search.trim());
+  return p;
+}
+
 export const httpCatalogueApi: CatalogueApi = {
+  async page(supplierId, query, page) {
+    const p = params(query);
+    p.set('page', String(page));
+    const data = await api<WirePage>('GET', `/suppliers/${encodeURIComponent(supplierId)}/products?${p}`, undefined, { auth: true });
+    return { products: data.products.map(product), hasMore: data.has_more };
+  },
   async products(supplierId, query = {}) {
-    const params = new URLSearchParams();
-    if (query.category) params.set('category', query.category);
-    if (query.search?.trim()) params.set('q', query.search.trim());
     const all: Product[] = [];
     for (let page = 1; page <= MAX_PAGES; page++) {
-      params.set('page', String(page));
-      const data = await api<WirePage>('GET', `/suppliers/${encodeURIComponent(supplierId)}/products?${params}`, undefined, { auth: true });
-      all.push(...data.products.map(product));
-      if (!data.has_more) break;
+      const data = await httpCatalogueApi.page(supplierId, query, page);
+      all.push(...data.products);
+      if (!data.hasMore) break;
     }
     return all;
   },

@@ -1,6 +1,6 @@
 import { Feather } from '@expo/vector-icons';
 import { router, useLocalSearchParams } from 'expo-router';
-import { ComponentProps, useEffect, useMemo, useState } from 'react';
+import { ComponentProps, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { ActivityIndicator, KeyboardAvoidingView, Platform, Pressable, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
@@ -61,18 +61,50 @@ export default function SupplierScreen() {
     supplierApi.get(id, trader).then(setSupplier).catch(() => setFailed(true));
   }, [id, trader]);
 
+  // Products arrive a page (60) at a time: the first page shows at once and
+  // the next one loads as the trader nears the bottom. Typing waits a moment
+  // before searching, so each keystroke isn't a request. A newer search or
+  // category always wins over an answer still on its way (the request id).
+  const [query, setQuery] = useState({ category, search });
   useEffect(() => {
-    if (!id) return;
-    let live = true;
-    // The current list stays on screen until the new one arrives.
-    catalogueApi
-      .products(id, { category: category === 'all' ? undefined : category, search })
-      .then((p) => live && setProducts(p))
-      .catch(() => live && setFailed(true));
-    return () => {
-      live = false;
-    };
-  }, [id, category, search]);
+    const t = setTimeout(() => setQuery({ category, search }), search === query.search ? 0 : 300);
+    return () => clearTimeout(t);
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- query is what this sets
+  }, [category, search]);
+  const [hasMore, setHasMore] = useState(false);
+  const [loadingMore, setLoadingMore] = useState(false);
+  const nextPage = useRef(1);
+  const request = useRef(0);
+
+  const loadPage = useCallback(
+    (first: boolean) => {
+      if (!id) return;
+      const mine = ++request.current;
+      const page = first ? 1 : nextPage.current;
+      catalogueApi
+        .page(id, { category: query.category === 'all' ? undefined : query.category, search: query.search }, page)
+        .then((r) => {
+          if (mine !== request.current) return;
+          setProducts((prev) => (first || !prev ? r.products : [...prev, ...r.products]));
+          setHasMore(r.hasMore);
+          nextPage.current = page + 1;
+        })
+        .catch(() => mine === request.current && first && setFailed(true))
+        .finally(() => mine === request.current && setLoadingMore(false));
+    },
+    [id, query],
+  );
+
+  // The current list stays on screen until the new one arrives.
+  useEffect(() => loadPage(true), [loadPage]);
+
+  const onScroll = (e: { nativeEvent: { layoutMeasurement: { height: number }; contentOffset: { y: number }; contentSize: { height: number } } }) => {
+    const { layoutMeasurement, contentOffset, contentSize } = e.nativeEvent;
+    if (hasMore && !loadingMore && layoutMeasurement.height + contentOffset.y >= contentSize.height - 600) {
+      setLoadingMore(true);
+      loadPage(false);
+    }
+  };
 
   const qtyOf = (productId: string) => cart.lines.find((l) => l.productId === productId)?.qty ?? 0;
   const setQty = (p: Product, qty: number) => setLine(p.supplierId, toCartLine(p), qty);
@@ -142,7 +174,12 @@ export default function SupplierScreen() {
       </View>
 
       <KeyboardAvoidingView style={{ flex: 1 }} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
-        <ScrollView stickyHeaderIndices={[1]} keyboardShouldPersistTaps="handled" showsVerticalScrollIndicator={false}>
+        <ScrollView
+          stickyHeaderIndices={[1]}
+          keyboardShouldPersistTaps="handled"
+          showsVerticalScrollIndicator={false}
+          onScroll={onScroll}
+          scrollEventThrottle={200}>
           <View style={styles.intro}>
             <Text style={styles.about}>{s.about}</Text>
             <Pressable onPress={() => setAbout(true)} style={styles.summary} accessibilityRole="button" accessibilityLabel="How they sell, more info">
@@ -185,6 +222,7 @@ export default function SupplierScreen() {
                 onAdd={(p) => whenConnected(() => setQty(p, Math.max(qtyOf(p.id) + 1, p.minQty)))}
               />
             )}
+            {loadingMore ? <ActivityIndicator color={colors.accent} style={{ marginTop: 16 }} /> : null}
           </View>
         </ScrollView>
         {cart.lines.length ? (

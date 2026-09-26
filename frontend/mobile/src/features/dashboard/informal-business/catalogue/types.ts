@@ -33,7 +33,12 @@ export type Product = {
 
 export type ProductQuery = { category?: CategoryCode; search?: string };
 
+/** One page of a supplier's catalogue (the server sends 60 at a time). */
+export type ProductPage = { products: Product[]; hasMore: boolean };
+
 export interface CatalogueApi {
   products(supplierId: string, query?: ProductQuery): Promise<Product[]>;
+  /** One page, for a list that loads more as the trader scrolls. */
+  page(supplierId: string, query: ProductQuery, page: number): Promise<ProductPage>;
   product(id: string): Promise<Product>;
 }
