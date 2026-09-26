@@ -54,6 +54,11 @@ DONE
     stop); the limiter, login key, sessions, consents, the 429 audit and
     audit_context use it. Fixes the forgeable IP in the audit trail. One
     question in the FINDING: an ngrok mode for the demo.
+  - The tools feed the supplier engine (TEAMMATE 20, risuna/engine-signals,
+    no migration): open job stages and this week's sales lift the
+    suppliers that sell what they need ("Your open jobs need plumbing",
+    "Your sales need bakery"); off, empty or failing = today's ranking.
+    FINDING_test_logs_disabled.txt: the app's loggers are off in tests.
 
 IN PROGRESS
   - Notifications (Mandla's task, CONTRACT_notifications.txt, his answers

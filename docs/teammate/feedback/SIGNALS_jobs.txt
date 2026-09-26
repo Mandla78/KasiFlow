@@ -13,7 +13,8 @@ THE FUNCTION (read-only, in the jobs domain; never a repository)
     jobs_service.demand_signals(user) ->
       {"categories": {"building_materials": 0.6, "plumbing": 0.4},
        "active_sites": [{"lat": -26.0, "lng": 28.23}],
-       "next_stages": ["walls", "roof"]}
+       "next_stages": ["walls", "roof"],
+       "based_on": "open_stages"}
 
   categories    shares (sum 1.0, 2 decimals, biggest first) of the work
                 STILL TO DO: every stage not yet confirmed counts with its
@@ -30,6 +31,9 @@ THE FUNCTION (read-only, in the jobs domain; never a repository)
                 and only while they have an active job. Empty otherwise.
   next_stages   the next unconfirmed stage of each active job, lower case,
                 each once, newest job first, at most 5.
+  based_on      "open_stages" when open work set the shares, "trade" when
+                there is none and the trade alone did (added for the
+                engine, TEAMMATE 20: only open work may move a ranking).
 
   Done jobs and jobs in the bin don't count.
 
@@ -40,6 +44,17 @@ PRIVACY (tested)
   street. Never send it to a supplier; use it to rank for this builder.
   The app should say it in plain words: "Your jobs help us suggest
   suppliers for what you need."
+
+
+USED BY THE SUPPLIER ENGINE (TEAMMATE 20, risuna/engine-signals)
+  recommendation_service reads both signals through the services, only
+  for tools switched on and only with real activity (open stages; sales
+  in the last 7 days). demand = the shares of the supplier's categories;
+  fit = max(sign-up fit, 0.5 x sign-up fit + 0.5 x demand)
+  (DEMAND_WEIGHT). A lift comes with "Your open jobs need plumbing" or
+  "Your sales need bakery" (one line on a 360-wide phone). Off, empty or
+  failing: today's ranking exactly. Tests:
+  tests/domains/supplier/test_recommendation_signals.py.
 
 
 HOW YOU MIGHT USE IT (your call)
