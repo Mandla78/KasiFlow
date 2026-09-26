@@ -276,7 +276,7 @@ def test_pay_backs_due_today_once_a_day_with_no_names(app, client, nomsa):
     poll(client, nomsa)  # the 20 s poll again: no second alert
     assert kinds(app, nomsa.id) == ["credit.due_today"]
     alert = one(client, nomsa.headers, "credit.due_today")
-    assert alert["body"] == "2 customers pay you back today: R140." and alert["link"] == {"type": "credit", "id": None}
+    assert alert["body"] == "2 customers due to pay you back today: R140." and alert["link"] == {"type": "credit", "id": None}
     assert "Thandi" not in alert["body"] and "Sipho" not in alert["body"]
     assert poll(client, nomsa)["inbox"] == 1
 

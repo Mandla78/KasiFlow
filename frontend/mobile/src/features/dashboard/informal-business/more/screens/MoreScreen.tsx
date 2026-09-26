@@ -68,7 +68,7 @@ export default function More() {
 
       <Overline>App</Overline>
       <Card style={styles.group}>
-        <ListRow icon="bell" title="Notifications" />
+        <ListRow icon="bell" title="Notifications" subtitle="Orders, jobs, credit book, security" onPress={() => router.push('/informal-business/notification-settings')} />
         <ListRow icon="lock" title="Security" subtitle="Phones, password, your data" onPress={() => router.push('/informal-business/security')} />
         <ListRow icon="credit-card" title="Payment cards" subtitle="Test mode" onPress={() => router.push('/informal-business/payment-cards')} />
         <ListRow icon="globe" title="Language" subtitle="English" />

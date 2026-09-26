@@ -1,6 +1,6 @@
 """
 The credit book's one alert (CONTRACT_notifications.txt, NEW): "3
-customers pay you back today: R140". A daily check registered with
+customers due to pay you back today: R140". A daily check registered with
 shared.notifications, so it runs on the trader's first unread check of
 the day -- no scheduler. The same day again is ignored (dedupe_key).
 Counts and money only: never a customer's name or phone.

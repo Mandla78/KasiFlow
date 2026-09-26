@@ -62,7 +62,14 @@ IN PROGRESS
     event is a template key + params, domains/platform/notifications keeps
     alerts once per dedupe_key in their tab, the switches (orders, jobs,
     credit; security always on), list / unread / read / read-all,
-    90-day clean-up. Next: step 3 hooks, step 4 the app.
+    90-day clean-up (PR 16). Step 3 the hooks (PR 17): orders, account,
+    jobs, the builder network, credit due today; each after its commit,
+    never breaking the action. Step 4 the app (risuna/notifications-app):
+    the API (real + mock with the same rules), the store with the 20 s
+    poll (stops in the background), Orders | Inbox with counts, the
+    pop-up sheet with "View order / job / invite / post", mark all read
+    per tab, pull to refresh, settings (security locked on); the Tabs
+    bar moved to shared/components (Mandla, Q4).
 
 BLOCKED (and on what)
   - (none; the Idempotency-Key header and the deep-JSON crash are fixed on main)
