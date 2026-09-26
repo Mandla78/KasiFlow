@@ -7,8 +7,9 @@ built yet is under "PLANNED" and says so.
 
 SECURITY REQUIREMENTS (RISK ASSESSMENT)
 
-  Assets: traders' accounts and sessions; their business details and
-  books (customer names and amounts stay private to the trader); photos
+  Assets: the accounts and sessions of our users -- small businesses and
+  informal traders; their business details and books (customer names and
+  amounts stay private to the business); photos
   and documents; suppliers' catalogues, prices and stock; orders, their
   money and their payment status; invoices and receipts; the two-sided
   record (credit given, stages a client signed off).
@@ -87,7 +88,7 @@ THREAT MODELLING & DESIGN REVIEW (STRIDE -- what is built)
     expire after 10 minutes and are valid for one document only. Every
     document carries a QR code to a signed public check page, so a forged
     or altered invoice is caught; that page shows no personal details.
-  - Builders' stage photos: the server records its own time and a SHA-256
+  - Job stage photos: the server records its own time and a SHA-256
     fingerprint of the stored file, so a swapped or back-dated photo is
     detectable; camera only, never the gallery.
   - Supplier data feeds are checked row by row: unknown columns refused,
@@ -101,7 +102,7 @@ THREAT MODELLING & DESIGN REVIEW (STRIDE -- what is built)
   - Every identity action is audited: who, which session, which phone,
     success or failure and why -- never passwords, codes or tokens.
   - Orders keep an append-only history of every step and who made it
-    (trader, supplier or system); order, payment, feed-import, connection
+    (business, supplier or system); order, payment, feed-import, connection
     and credit-book events are audited without names or phone numbers.
 
   Information disclosure
@@ -115,7 +116,7 @@ THREAT MODELLING & DESIGN REVIEW (STRIDE -- what is built)
   - Provider keys (Mapbox, Cloudinary, PayFast merchant key and
     passphrase) stay on the server; the app never receives them. Storage
     folders use HMAC keys, never database ids.
-  - Traders see only what they need: a supplier's orders email, payout
+  - Businesses see only what they need: a supplier's orders email, payout
     account, VAT and legal details are never sent to the app; product
     codes, barcodes and exact stock numbers never leave the server (only
     "in stock / low / out").
@@ -123,36 +124,41 @@ THREAT MODELLING & DESIGN REVIEW (STRIDE -- what is built)
     reference -- not the payer's name, email or card.
 
   Denial of service
-  - Rate limits on every sensitive route (sign-in 5/min per IP+email,
-    sign-up 5/hour, codes, resets, search, uploads, orders, payments,
-    catalogue search), 1 MB request cap, a daily upload quota per
+  - Rate limits on every route, per signed-in user or per IP, to protect
+    the server and the data: sign-in 5/min per IP+email, sign-up 5/hour,
+    codes, resets, address search, uploads; the supplier side --
+    catalogue browsing and search, product and supplier pages, supplier
+    recommendations, connections; orders, payments, invoice links and the
+    public invoice-check page; the business tools (credit book, jobs, order
+    book -- sized for a lunch-time rush from two phones) and the partner
+    network (profiles, help posts, reports). Plus a 1 MB request cap, a daily upload quota per
     account, and a daily cap on company checks.
   - JSON nested deeper than 32 levels is refused before any route runs
     (found by our own hostile-input tests: a deeply nested body crashed
     every route; now fixed and tested at 100,000 levels).
 
   Elevation of privilege
-  - Every route pins who may call it (signed-in trader, supplier, or a
+  - Every route pins who may call it (signed-in business, supplier, or a
     public page holding a one-time ticket).
   - Every query is scoped to the signed-in user from the token; a user id
-    from the request is never trusted (IDOR tests prove another trader
+    from the request is never trusted (IDOR tests prove another business
     gets nothing: orders, credit book, jobs, connections, documents, the
-    order book, the bin, builder profiles and help posts). Ids are random
+    order book, the bin, partner profiles and help posts). Ids are random
     UUIDs, and "not yours" answers exactly like "doesn't exist" (404), so
     nobody can even learn that someone else's record exists.
   - Order book orders made offline: the phone's id is kept as a separate
-    key, unique per trader, and always looked up together with the
-    signed-in trader, so two traders' phones can never collide and a clash
-    can't reveal another trader's order. The server prices every line from
+    key, unique per business, and always looked up together with the
+    signed-in business, so two businesses' phones can never collide and a
+    clash can't reveal another business's order. The server prices every line from
     the menu price valid at the time of the order -- never the phone's.
   - Deleting moves an item to a bin (restorable for 30 days, never
     erased); payments already recorded and stages a client confirmed stay.
     Binning a job revokes the client sign-off links not yet answered, so a
     job binned by mistake can't be confirmed.
-  - A trader can only order from a supplier they've connected to; cash is
+  - A business can only order from a supplier it has connected to; cash is
     limited to R1,000 per order and 2 waiting orders (a cash order costs
     nothing up front, so this caps the damage of fake orders); digital
-    orders can't be cancelled by the trader and lapse unpaid after 24 h.
+    orders can't be cancelled by the buyer and lapse unpaid after 24 h.
   - Developer tools (loading test suppliers, moving an order as the
     supplier) refuse to run outside development.
   - Sessions: 15-minute access tokens; refresh tokens rotate, and reusing
@@ -190,7 +196,7 @@ DEVELOPMENT (SECURE CODING PRACTICES)
 SECURITY TESTING (automated, run before every merge)
 
   - 1,052 backend tests and 147 app tests, including hostile-input suites
-    for identity, the credit book, jobs, the order book and the builder
+    for identity, the credit book, jobs, the order book and the partner
     network: malformed and
     injected emails (SQL, CR/LF header injection, script), emoji,
     control and invisible characters, template injection, wrong JSON
@@ -212,7 +218,7 @@ SECURITY TESTING (automated, run before every merge)
     lapse and give stock back; every PayFast check refuses a forged
     notification on its own (bad signature, wrong passphrase, wrong
     sender, wrong amount, not confirmed); payment links used up or
-    replaced; invoice links altered, expired or for another trader get
+    replaced; invoice links altered, expired or for another business get
     nothing. The PayFast sandbox accepts our signed payment.
   - IDOR, rate-limit, lockout, two-factor, refresh-token reuse, password
     reset (one use, expiry), account closure, data export (no secrets),
@@ -245,13 +251,26 @@ ASSESSMENT & SECURE INTEGRATION -- PLANNED (not built yet)
     merchant id), and automated refunds.
   - Supplier system integration (ERP): scoped, hashed API keys with
     rotation and revocation, signed requests, per-key limits.
+  - Offline first: much of the informal economy runs on patchy or no
+    signal. Already built: the order book keeps unsent orders on the phone
+    (secure storage) and sends them when the signal returns, with ids
+    that make a retry land only once. Next: an on-device SQLite store so
+    the business tools work fully offline -- encrypted with a key held in
+    the phone's secure keystore, wiped on sign-out, holding only the
+    business's own data. The server stays the authority: every offline
+    change is re-checked, priced and scoped to the signed-in business when
+    it syncs, and conflicts are settled on the server, never on the phone.
   - Two-sided proof: records sealed with hashes and phone-held signing
     keys (the server check for phone keys is built; the phone side comes
     with the next app build).
   - Refusing known leaked passwords; dependency and secret scanning in CI;
     an external penetration test and a POPIA legal review before launch.
 
-  Honest limits: a record proves what both sides confirmed, not that it
-  was true; email as a second factor is only as safe as the email
-  account; a signed-link confirmation is weaker than two signed phones,
-  and we label it as such.
+  Honest limits: what a business enters in its tools (a credit sale, a
+  cash payment, a counter order) is its own record, not proof. When both
+  sides confirm a cash payment, it proves they agreed -- not that money
+  changed hands. Only a digital payment confirmed by the payment provider
+  is independent proof, and every order and invoice says which of these
+  backs it; totals are never mixed. Email as a second factor is only as
+  safe as the email account, and a client's sign-off through a link is
+  weaker than two signed phones -- we label it as such.
