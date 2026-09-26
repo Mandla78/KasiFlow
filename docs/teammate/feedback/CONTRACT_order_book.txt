@@ -1,0 +1,171 @@
+===========================================================================
+CONTRACT -- THE ORDER BOOK (customer orders at a counter)
+===========================================================================
+
+TOOL:            Order book (14_ROUND_2_BRIEF.txt §2) -- kota shops and food
+                 sellers first
+AUTHOR / DATE:   Risuna, Saturday 26 September 2026
+STATUS:          proposed. The app side is built on the mocks (branch
+                 risuna/order-book-ui); field names are the snake_case
+                 twins of order-book/types.ts, so the real API changes no
+                 screen. Backend after your yes (risuna/order-book-api).
+
+
+0. WHAT IT IS
+---------------------------------------------------------------------------
+  A queue of hungry people and one person cooking and taking money. The
+  owner sets up a MENU once (a starter menu makes it 30 seconds), takes an
+  order in 2-3 taps (items, then "Paid cash" / "Card or EFT" / "Pay
+  later"), moves it through the QUEUE with one tap per step (New ->
+  Preparing -> Ready -> Collected), and sees TODAY in numbers (orders,
+  money in, best sellers, busiest hour; the week). No customer details: an
+  optional first name for the queue only, never a phone number.
+
+
+1. OFFLINE FIRST, AND TWO PHONES IN ONE SHOP (the brief asks us to propose)
+---------------------------------------------------------------------------
+  - The PHONE makes each order's id: a UUID (its "client key"). Every
+    retry sends the same id, so it lands once (unique(user_id, id)). The
+    same id is the order's address for status changes. The app sends an
+    Idempotency-Key too (the shared run_once), but the id alone is enough.
+  - The SERVER gives the day's number (#1, #2...) in arrival order, from
+    one counter row per trader per day:
+        INSERT INTO order_book_days (user_id, day, last_number) VALUES (.., .., 1)
+        ON CONFLICT (user_id, day) DO UPDATE SET last_number = order_book_days.last_number + 1
+        RETURNING last_number
+    Atomic, so two phones never get the same number.
+  - Until the server has it, the phone shows ITS OWN number: this phone's
+    letter + its own count for the day ("A3"; the other phone is "B").
+    The letter is set per phone on the menu screen. The customer hears
+    "A3"; the queue shows "#14" once it's sent (the app keeps both).
+  - Orders and steps are kept on the phone (secure storage) and sent in
+    order when the signal is back (every 20 s while the screen is open,
+    and on every new order). A refused one (4xx) is dropped with its
+    reason on screen; a dropped signal or 5xx keeps everything.
+  - created_at comes from the phone (when it was really taken): accepted
+    up to 5 minutes in the future and 2 days back; the day is the South
+    African date of created_at (checked, not trusted).
+
+
+2. PRICES (a snapshot, and fair when the phone was offline)
+---------------------------------------------------------------------------
+  - Lines keep the name and price AS SOLD (order_book_lines), like your
+    order lines: a menu change never changes a past order.
+  - The server prices each line from the menu price valid at the order's
+    created_at (order_book_item_prices keeps each item's price history),
+    so an order taken offline before a price change keeps the price the
+    customer paid. Totals are computed on the server.
+
+
+3. ENDPOINTS (/api/v1, all @auth_required, per-trader limits)
+---------------------------------------------------------------------------
+  GET   /me/order-book/menu                 -> {items: [item]}
+  PUT   /me/order-book/menu                 {items: [{id?, name, price_cents,
+                                              ingredients[]}]} the whole menu as
+                                              it should be; an item left out is
+                                              hidden (past orders keep it)
+  GET   /me/order-book/orders?day=YYYY-MM-DD -> {orders: [order]} (that day)
+  POST  /me/order-book/orders               {id, day, temp_number, lines:
+                                              [{item_id, qty}], payment,
+                                              customer_name|null, created_at}
+                                              -> 201 {order} (200 with the same
+                                              order on a retry)
+  PATCH /me/order-book/orders/<id>          {status, at} -> {order}
+                                              forward one step at a time
+                                              (new->preparing->ready->collected)
+                                              or cancelled (not after
+                                              collected); the same status again
+                                              is a no-op (retries)
+  GET   /me/order-book/week?end=YYYY-MM-DD  -> {days: [day_totals] x 7}
+
+  SHAPES
+    item        {id, name, price_cents, ingredients: [ingredient]}
+    order       {id, number|null, temp_number, day, lines: [{item_id, name,
+                 price_cents, qty}], total_cents, payment: cash|digital|later,
+                 customer_name|null, status: new|preparing|ready|collected|
+                 cancelled, created_at, status_at}
+    day_totals  {day, orders, cash_cents, digital_cents, later_cents,
+                 best_sellers: [{name, qty}] (top 3), by_hour: [24 ints]}
+                 cancelled orders don't count; "later" isn't money in
+    ingredient  quarter_loaf bun chips polony russian vienna cheese egg atchar
+                lettuce beef_patty chicken wors pap stew chakalaka vetkoek
+                mince cold_drink
+
+  ERRORS  404 for anything not yours. 409 WRONG_STEP (a step backwards).
+  422 VALIDATION_ERROR with the specific message on top. 429 RATE_LIMITED.
+
+
+4. RULES AND LIMITS
+---------------------------------------------------------------------------
+  menu            up to 40 items; names 1..40 with a letter, unique (case
+                  and spaces ignored); price R0.01..R2,000
+  order           1..20 lines, qty 1..50, items on this trader's menu
+                  (hidden items still accepted for 2 days: offline orders)
+  customer_name   optional, 1..30, must have a letter; digits-only refused
+                  (no phone numbers)
+  limits          orders 120/min and steps 240/min per trader (a lunch
+                  rush from two phones), menu 30/min, reads 120/min
+
+
+5. DATA (schema trader)
+---------------------------------------------------------------------------
+  order_book_items        user_id, name, ingredients (array), position,
+                          active
+  order_book_item_prices  item_id, price_cents, valid_from
+  order_book_days         user_id, day, last_number   (unique user_id+day)
+  order_book_orders       id (the phone's UUID), user_id, day, number,
+                          temp_number, payment, customer_name, status,
+                          created_at (phone), status_at, total_cents;
+                          unique(user_id, day, number)
+  order_book_lines        order_id, item_id, name, price_cents, qty
+
+
+6. AUDIT (no names, no amounts)
+---------------------------------------------------------------------------
+  order_book.menu_saved {items}, order_book.order_created {order_id},
+  order_book.order_cancelled {order_id}. Queue steps aren't audited
+  (hundreds a day; they're in the order row).
+
+
+7. SECURITY TESTS
+---------------------------------------------------------------------------
+  another trader can't read or change your menu or orders (404); a retry
+  with the same id lands once (same number); two concurrent orders get
+  different numbers; a step backwards is refused; hostile input (NUL,
+  long strings, negative/huge qty and prices, unknown fields, a phone
+  number as the name, created_at in the future); prices are the menu's
+  at created_at, never the phone's.
+
+
+8. SIGNALS FOR THE ENGINE (§4 of the brief)
+---------------------------------------------------------------------------
+  order_book_service.demand_signals(user) -> {"categories": {...},
+  "weekly_units": {...}, "since": ...} from ingredients x units sold in
+  the last 7 days: quarter_loaf/bun/vetkoek -> bakery; polony, russian,
+  vienna, wors, mince, chicken, beef_patty, stew -> meat_frozen; chips ->
+  meat_frozen (frozen chips) and fresh_produce; cheese, egg ->
+  dairy_chilled; atchar, chakalaka, pap -> food_grocery; lettuce ->
+  fresh_produce; cold_drink -> beverages; every order adds
+  packaging_disposable. Aggregates only (no names, no orders).
+
+
+9. WHAT THE APP DOES TODAY
+---------------------------------------------------------------------------
+  Mock (EXPO_PUBLIC_USE_MOCK_API=true): everything above, with a week of
+  sample trade, "Test: signal" to play a dropped network, and "Pay later"
+  opening the credit book filled in (amount, "Order #12: ...", the name).
+  Real API: hidden (ORDER_BOOK_READY) until these endpoints exist. The
+  tool key "orderBook" needs you: NEEDS_order_book_tool.txt.
+
+
+10. QUESTIONS FOR MANDLA
+---------------------------------------------------------------------------
+  1. OK for the phone to make the order id (a UUID) and address orders by
+     it? (It's what makes offline and retries simple.)
+  2. The price history table (fair offline prices) -- or simply accept the
+     phone's line price when it matches any price the item had in the
+     last 2 days?
+  3. A new business type for food sellers (NEEDS file), or order book as
+     an Add-a-tool option for "Other" only?
+
+DECISION:

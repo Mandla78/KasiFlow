@@ -13,6 +13,7 @@ import { formatRand } from '@/shared/lib/money';
 import { colors, fonts, radius } from '@/shared/theme/tokens';
 
 import { Loaded, useToolSummaries } from '../../home/useToolSummaries';
+import { ORDER_BOOK_READY } from '../../order-book/api/orderBookApi';
 import { AddToolSheet } from '../components/AddToolSheet';
 import { accountSample } from '../mock';
 
@@ -39,6 +40,8 @@ export default function Account() {
       : []),
     ...(t.orderStock ? [{ icon: 'package', title: builder ? 'Materials' : 'Order stock', line: `${accountSample.stockOnItsWay} on its way`, href: '/informal-business/suppliers', sample: true } as Tile] : []),
     ...(t.jobs ? [{ icon: 'tool', title: 'Jobs', href: '/informal-business/jobs', ...line(jobs, (d) => `${d.activeJobs} active`) } as Tile] : []),
+    // On sample data until the tool key "orderBook" exists (NEEDS_order_book_tool.txt).
+    ...(ORDER_BOOK_READY ? [{ icon: 'clipboard', title: 'Order book', line: 'Counter orders, queue, today', href: '/informal-business/order-book', sample: true } as Tile] : []),
     { icon: 'file-text', title: 'My orders', line: `${accountSample.ordersThisMonth} this month`, href: '/informal-business/orders', sample: true },
     { icon: 'shield', title: 'My record', line: `${accountSample.recordConfirmed} of ${accountSample.recordTotal} confirmed`, sample: true },
   ];

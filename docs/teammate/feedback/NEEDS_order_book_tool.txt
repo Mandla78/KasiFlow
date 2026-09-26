@@ -1,0 +1,47 @@
+===========================================================================
+NEEDS -- the "orderBook" tool key (and a food seller business type)
+===========================================================================
+
+FROM / DATE:   Risuna, Saturday 26 September 2026
+FOR:           Mandla (14_ROUND_2_BRIEF.txt §2: "Mandla adds it to
+               constants/businessTypes.ts and the Add-a-tool sheet")
+WHY:           the order book (CONTRACT_order_book.txt) is a tool; tools are
+               switched on per trader.
+
+
+THE CHANGE (yours: constants + backend business profile)
+
+  frontend/mobile/src/constants/businessTypes.ts
+    ToolKey:  add 'orderBook'
+    tools on every business type: orderBook: false, except the new type
+    below (true)
+
+  NEW BUSINESS TYPE (proposed): 'food'
+    label     "Food seller"
+    subtitle  "Kotas, plates, burgers, a food stall"
+    icon      'coffee'
+    tools     { creditBook: true, orderStock: true, myRecord: true,
+                jobs: false, orderBook: true }
+    categories (pre-ticked on "What do you buy?"):
+              bakery, meat_frozen, dairy_chilled, beverages,
+              packaging_disposable, fresh_produce, food_grocery
+    order     builder, spaza, food, other
+
+  backend business_profile constants: BUSINESS_TYPES gets 'food'; TOOLS
+  gets 'orderBook' (the profile's tools JSON accepts it).
+
+  THE TOOL IN THE ADD-A-TOOL SHEET
+    title     "Order book"
+    subtitle  "Counter orders fast: the queue and today's money"
+    icon      'clipboard'
+
+
+WHAT I DO AFTER YOUR CHANGE (my files)
+  - Account's tile: shown when profile.tools.orderBook (today it's shown
+    on sample data only, marked "sample", and hidden on the real API).
+  - Home: "N orders today" on the tool's line.
+
+
+IF YOU'D RATHER NOT ADD A TYPE
+  Keep the four types and offer "Order book" in Add a tool for everyone
+  (default off). Spaza shops that sell kotas at the counter switch it on.

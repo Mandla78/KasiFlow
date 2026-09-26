@@ -1,4 +1,4 @@
-import { router } from 'expo-router';
+import { router, useLocalSearchParams } from 'expo-router';
 import { useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 
@@ -29,15 +29,19 @@ import { Customer } from '../types';
  *
  * Copying the paper book: "Given on: Earlier" back-dates it (up to a year),
  * and the pay-back date may then already be past, so it shows as late.
+ *
+ * Other tools can start it filled in (the order book's "Pay later"):
+ * ?amount=94&description=Order #12: ...&name=Thabo
  */
 export default function NewCreditSaleScreen() {
   const { profile } = useSession();
+  const start = useLocalSearchParams<{ amount?: string; description?: string; name?: string }>();
   const [today] = useState(todayIso());
-  const [name, setName] = useState('');
+  const [name, setName] = useState(start.name ?? '');
   const [picked, setPicked] = useState<Customer | null>(null);
   const [phone, setPhone] = useState('');
-  const [amount, setAmount] = useState('');
-  const [description, setDescription] = useState('');
+  const [amount, setAmount] = useState(start.amount ?? '');
+  const [description, setDescription] = useState(start.description ?? '');
   const [givenOn, setGivenOn] = useState(today);
   const [calendar, setCalendar] = useState(false);
   const [dueOn, setDueOn] = useState<string | null>(nextFriday(today));
