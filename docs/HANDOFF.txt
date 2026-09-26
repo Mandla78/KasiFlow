@@ -56,9 +56,13 @@ READ FIRST, IN THIS ORDER
              policies 0.2-draft) and Risuna's PRs #6 (history + bin UI),
              #7 (builder network, migration 0019), #8 (jobs demand
              signals), #9 (order book UI). PR #1 is obsolete (close it).
-  Migrations 0001 ... 0018_payments, 0019_builder_network, 0020_food_seller.
-             The next one is 0021. Risuna was told his start at 0021, so
-             CHECK origin before numbering yours; rename if he got there.
+  Migrations 0001 ... 0018_payments, 0019_builder_network, 0020_food_seller,
+             0021_order_book, 0022_trades (Risuna's bin API, order book API
+             and 11 trades merged Sat afternoon; 1052 backend + 147 app
+             tests passed). The next one is 0023: CHECK origin before
+             numbering yours; rename if Risuna got there first.
+  Open       Risuna's client_ip fix (FINDING_client_ip_behind_cloudflare
+             DECISION) is expected as a PR: review it against that DECISION.
   Tests      last full run: backend 901 passed (14 min), app 140 passed,
              tsc clean. Since then only a small business-profile change
              (24 targeted tests passed). Run the full suite once on setup.
