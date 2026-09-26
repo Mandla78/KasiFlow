@@ -365,7 +365,9 @@ ASSESSMENT & SECURE INTEGRATION -- PLANNED (not built yet)
   - Two-sided proof: records sealed with hashes and phone-held signing
     keys (the server check for phone keys is built; the phone side comes
     with the next app build).
-  - Refusing known leaked passwords; dependency and secret scanning in CI;
+  - Refusing known leaked and common passwords, a password that contains
+    the email or name, and reuse of recent passwords (OWASP authentication
+    testing; no forced expiry, as NIST advises); dependency and secret scanning in CI;
     an external penetration test and a POPIA legal review before launch.
 
   Honest limits: what a business enters in its tools (the credit book,
