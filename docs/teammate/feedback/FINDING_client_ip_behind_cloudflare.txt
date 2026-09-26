@@ -1,0 +1,100 @@
+FINDING: behind Cloudflare, every caller looks like 127.0.0.1 (rate limits, sessions, audit)
+BY / DATE: Risuna, Saturday 26 September 2026
+FOR TOOL: platform (shared/rate_limit, identity auth, shared/audit) -- your area
+
+QUESTION WE HAD
+  With Cloudflare in front of the API (07_AKAYZA_BUILD_FOR_USE.txt §2,
+  SSDLC "planned"), does the backend still see who is calling?
+
+WHAT I FOUND
+  No. Behind a Cloudflare Tunnel, Flask's request.remote_addr is always
+  cloudflared's own connection: 127.0.0.1. Tested today with a quick
+  tunnel and a header-echo server: the peer was 127.0.0.1, while
+  Cloudflare sent the real caller in two headers:
+      CF-Connecting-IP: 102.222.199.117   (one value, set by Cloudflare)
+      X-Forwarded-For:  102.222.199.117
+  Cloudflare removes any CF-Connecting-IP a caller sends and sets its
+  own, so behind Cloudflare it's the header to trust -- but ONLY when the
+  server can't be reached any other way (anyone who can reach Flask
+  directly can type that header).
+
+  Where our code uses the connection address today (main, 26 Sep):
+    shared/rate_limit/limiter.py        key_func=get_remote_address: the
+                                        default for every IP-keyed limit
+                                        (register, codes, reset, the
+                                        public pages, PayFast notify)
+    identity/auth/rate_limit/policies.py  login key = get_remote_address()
+                                        + email
+    identity/auth/services/session_service.py  Session.ip_address =
+                                        request.remote_addr
+    identity/auth/services/auth_service.py  _ip() = request.remote_addr
+    shared/rate_limit/responses.py      audit ip_address = remote_addr
+    shared/audit/audit_context.py       FIRST X-Forwarded-For entry
+                                        (typed by the caller; its own
+                                        comment says fix it before it's
+                                        used for security)
+    commerce/payments/api/routes.py     already right: with
+                                        PAYFAST_TRUST_PROXY it takes the
+                                        LAST X-Forwarded-For entry
+
+RISKS (what happens if we turn Cloudflare on without fixing it)
+  - Every anonymous limit becomes ONE bucket for the whole internet: one
+    person hammering sign-in, register or "send me a code" uses up the
+    allowance and everybody else gets 429s. An easy lock-out of all users.
+  - The per-IP part of the login key stops meaning anything (all
+    "127.0.0.1:<email>").
+  - Sessions and the audit trail record 127.0.0.1 for everyone: useless
+    for investigation, and "new sign-in from ..." can't be told apart.
+  - Turning on trust carelessly is worse: if Flask is still reachable
+    directly (0.0.0.0:5000 on a LAN or an open port), anyone can send a
+    fake CF-Connecting-IP and pick their own rate-limit bucket.
+
+MY RECOMMENDATION
+  One small helper in shared/, one switch, used everywhere:
+
+    # config.py
+    BEHIND_CLOUDFLARE = _bool("BEHIND_CLOUDFLARE", "false")
+
+    # shared/net/client_ip.py
+    def client_ip() -> str:
+        """The caller's address. Behind Cloudflare, Cloudflare's own
+        CF-Connecting-IP (it strips any the caller sends); otherwise the
+        connection's address."""
+        if current_app.config["BEHIND_CLOUDFLARE"]:
+            ip = (request.headers.get("CF-Connecting-IP") or "").strip()
+            if ip and _is_ip(ip):          # ipaddress.ip_address()
+                return ip
+        return request.remote_addr or ""
+
+  Then: Limiter(key_func=client_ip); policies.py login key uses
+  client_ip(); Session.ip_address, auth_service._ip(), responses.py and
+  audit_context.get_ip_address() all call client_ip(). (PayFast can use
+  it too, or keep its own last-X-Forwarded-For rule.)
+
+  BEHIND_CLOUDFLARE=true only where the API is reachable ONLY through
+  Cloudflare: a named tunnel, gunicorn bound to 127.0.0.1, no inbound
+  port open (PLAN_cloudflare_security.txt, step 2). Off in development
+  (Flask listens on 0.0.0.0 for the phone on the Wi-Fi).
+
+  Tests (all with the test client):
+    - switch off: CF-Connecting-IP is ignored (a caller can't pick a
+      bucket)
+    - switch on: two callers with different CF-Connecting-IP get
+      separate sign-in / register / code limits; once ONE of them is
+      over the limit, the other still gets in
+    - switch on: a junk header ("abc", "1.2.3.4, 5.6.7.8") falls back to
+      remote_addr
+    - sessions and audit rows store the CF-Connecting-IP address
+
+WHAT I NEED FROM MANDLA
+  A yes, and who writes it (it's shared/ and identity: yours; I'm happy
+  to do it in a PR for you to review). It must be in before Cloudflare
+  goes in front of the real API.
+
+SOURCES
+  Trusting CF-Connecting-IP safely (and only from Cloudflare):
+    https://stackharbor.com/en/knowledge-base/cfops-real-client-ip-at-origin/
+  Flask behind a proxy / Cloudflare (ProxyFix, real IP):
+    https://medium.com/@01one/get-the-real-ip-address-in-flask-when-behind-a-proxy-like-nginx-or-cloudflare-aab57629b27d
+
+DECISION:

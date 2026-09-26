@@ -1,0 +1,165 @@
+===========================================================================
+PLAN -- Cloudflare in front of Akayza (network security), on the free plan
+===========================================================================
+
+FROM / DATE:   Risuna, Saturday 26 September 2026
+FOR:           Mandla
+STATUS:        proposed. Turns the "planned" line in SSDLC_DRAFT.txt
+               ("Cloudflare in front of the API: TLS, WAF, DDoS protection,
+               bot rules; the origin accepts traffic only from Cloudflare.
+               HSTS.") into concrete settings.
+
+
+0. WHAT OUR DOCS ALREADY SAY (so this plan matches them)
+---------------------------------------------------------------------------
+  docs/hackathon/07_AKAYZA_BUILD_FOR_USE.txt §1-§4
+      "Cloudflare in front of everything public": DNS, TLS, DDoS, the free
+      managed WAF; rate limits on sign-in, codes and the public pages; bot
+      protection on the record and sign-off pages; the origin reachable
+      only from Cloudflare ("or a Cloudflare Tunnel so the server has no
+      open port at all"). Free now (R0), Pro ~R330/month at growth.
+  docs/submission/03_ssdlc/SSDLC_DRAFT.txt -- listed under PLANNED.
+  TEAM_PROFILE_DRAFT, LEAN_CANVAS_DRAFT, FINAL_SUBMISSION_DRAFT -- the
+      architecture "app -> Cloudflare -> domain-driven API"; Tunnel + WAF
+      "in progress".
+  Today we only use an anonymous quick tunnel for links and PayFast
+  (SETUP_cloudflare_tunnel.txt).
+
+
+1. WHAT THE FREE PLAN GIVES US (Cloudflare's docs, checked today)
+---------------------------------------------------------------------------
+  DDoS protection + TLS certificates       unmetered, on by default
+  WAF: Free Managed Ruleset                OFF by default: turn it on
+  WAF: custom rules                        5 rules; Block / Managed
+                                           Challenge / Skip; no regex
+  Rate limiting rules                      1 rule; counts per IP; 10 s
+                                           period; 10 s block; fields:
+                                           Path, Verified Bot
+                                           (Pro: 2 rules, periods up to
+                                           1 min, blocks up to 1 h)
+  Cloudflare Tunnel (named)                free: fixed address on our
+                                           domain, no open port
+  Turnstile (CAPTCHA replacement)          free, unlimited, checked on our
+                                           server (siteverify)
+  Zero Trust Access                        free up to 50 people: a login
+                                           in front of admin/staging
+  Data centres in South Africa             Johannesburg, Cape Town, Durban
+
+  DON'T: Bot Fight Mode on the API hostname. On the free plan it can't
+  skip any path, and it challenges non-browser traffic: our Expo app, the
+  PayFast ITN and Cloudinary's callbacks would break. (Pro's Super Bot
+  Fight Mode can skip paths.) Use Turnstile on the web pages instead.
+
+
+2. THE SETUP, IN ORDER
+---------------------------------------------------------------------------
+  Needs: our domain (e.g. akayza.co.za) with its nameservers moved to a
+  free Cloudflare account.
+
+  STEP 1 -- fix the client address FIRST (FINDING_client_ip_behind_cloudflare.txt)
+    Without it every caller is 127.0.0.1 and one person can use up the
+    sign-in/register/code limits for everyone.
+
+  STEP 2 -- a named tunnel, no open port
+      cloudflared tunnel login
+      cloudflared tunnel create akayza-api
+      cloudflared tunnel route dns akayza-api api.akayza.co.za
+    config.yml: ingress api.akayza.co.za -> http://127.0.0.1:5000, then
+    a catch-all http_status:404. Run cloudflared as a service. The app
+    server (gunicorn) listens on 127.0.0.1 only; the server's firewall
+    allows NO inbound traffic. Then set BEHIND_CLOUDFLARE=true,
+    PAYFAST_TRUST_PROXY=true, APP_BASE_URL=https://api.akayza.co.za
+    (fixed: WhatsApp and PayFast links stop changing).
+
+  STEP 3 -- HTTPS settings (SSL/TLS in the dashboard)
+    Always Use HTTPS: on. Minimum TLS: 1.2. TLS 1.3: on.
+    HSTS: on, max-age 6 months; includeSubDomains only once every
+    subdomain is https. (Behind a tunnel the Cloudflare -> server leg is
+    already encrypted inside the tunnel.)
+
+  STEP 4 -- WAF (Security -> WAF)
+    Managed rules: deploy the Cloudflare Free Managed Ruleset.
+    Custom rules (we have 5):
+      1. SKIP managed rules for our signed callbacks (they check their
+         own signatures; never block them):
+           (http.request.uri.path eq "/api/v1/payments/payfast/notify")
+           or (http.request.uri.path eq "/api/v1/media/webhooks/cloudinary-notifications")
+           -> Skip: managed rules
+      2. BLOCK scanner paths:
+           (http.request.uri.path contains "/.env")
+           or (http.request.uri.path contains "/.git")
+           or (http.request.uri.path contains "/wp-")
+           or (http.request.uri.path contains "phpmyadmin")
+           -> Block
+      3. BLOCK odd methods:
+           not (http.request.method in {"GET" "POST" "PUT" "PATCH" "DELETE" "OPTIONS" "HEAD"})
+           -> Block
+      4. BLOCK anything that isn't ours (the API, the public pages, the
+         callbacks):
+           not (starts_with(http.request.uri.path, "/api/")
+             or starts_with(http.request.uri.path, "/sign-off")
+             or starts_with(http.request.uri.path, "/reset-password")
+             or starts_with(http.request.uri.path, "/pay/")
+             or starts_with(http.request.uri.path, "/documents/")
+             or starts_with(http.request.uri.path, "/verify/")
+             or http.request.uri.path eq "/favicon.ico")
+           -> Block
+         (Update this list when a new public page is added. The pages
+         load no /static/ files today; if they start to, add the path.)
+      5. Spare (e.g. a country or ASN block during an attack).
+
+  STEP 5 -- the one free rate-limiting rule: a flood cap on sign-in
+      if (starts_with(http.request.uri.path, "/api/v1/auth/")),
+      more than 30 requests per 10 s from one IP -> Block for 10 s.
+    Our Flask limits (per user, per IP+email, lockout) stay the real
+    rules; this only stops floods before they reach the server.
+
+  STEP 6 -- Turnstile on the web pages people open from links
+    /sign-off (the client's page), /reset-password, /verify/<number>.
+    A widget on the form + a siteverify call on POST (TURNSTILE_SECRET in
+    .env, a test key in tests). Not on the API: the app can't show it.
+
+  STEP 7 -- Access in front of anything only we should open
+    Staging, a future admin / supplier-review screen, database tools:
+    Access -> Applications -> Self-hosted, a policy "emails of the team".
+
+  STEP 8 -- Bot Fight Mode: leave OFF on api.akayza.co.za (section 1).
+
+
+3. PRIVACY (POPIA)
+---------------------------------------------------------------------------
+  Cloudflare terminates TLS and sees the traffic in transit (in its South
+  African data centres for South African users): it's an operator for
+  us, and the privacy policy should name it. Data at rest stays in our
+  database (af-south-1 at growth, per 07 §2). No change to what we
+  collect.
+
+
+4. COST
+---------------------------------------------------------------------------
+  Pilot: R0 (free plan). Pro (~R330/month, 07 §3) when we need more rate
+  limit rules, longer blocks, or Super Bot Fight Mode with path skips.
+
+
+5. WHO DOES WHAT (proposal)
+---------------------------------------------------------------------------
+  Mandla     step 1 (shared/ + identity, or I do it in a PR for you),
+             the domain and the Cloudflare account (steps 2-5, 7-8)
+  Risuna     Turnstile on /sign-off (my page); on /reset-password and
+             /verify if you want me to; tests; the SSDLC line moves from
+             "planned" to "built" as each step lands
+
+
+SOURCES (checked 26 Sep 2026)
+  WAF overview                  https://developers.cloudflare.com/waf/
+  Custom rules (limits by plan) https://developers.cloudflare.com/waf/custom-rules/
+  Rate limiting rules (by plan) https://developers.cloudflare.com/waf/rate-limiting-rules/
+  Managed rules by plan         https://www.runxbuild.com/blog/cloudflare-managed-ruleset/
+  Bot Fight Mode                https://developers.cloudflare.com/bots/get-started/bot-fight-mode/
+  ...and APIs/webhooks          https://stackharbor.com/en/knowledge-base/cffix-bot-fight-mode-blocking-webhooks/
+  Turnstile is free             https://blog.cloudflare.com/turnstile-ga/
+  Turnstile server check        https://developers.cloudflare.com/turnstile/get-started/server-side-validation/
+  Zero Trust free (50 users)    https://www.cloudflare.com/plans/zero-trust-services/
+  South Africa data centres     https://blog.cloudflare.com/cape-town-south-africa/
+
+DECISION:
