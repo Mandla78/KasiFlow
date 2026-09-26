@@ -20,12 +20,14 @@ export class ApiError extends Error {
     public code: string,
     message: string,
     public data?: Record<string, unknown>,
+    /** The server's field errors on a 422 (marshmallow's shape, nested by section). */
+    public errors?: unknown,
   ) {
     super(message);
   }
 }
 
-type Envelope<T> = { success: boolean; message?: string; data?: T; code?: string };
+type Envelope<T> = { success: boolean; message?: string; data?: T; code?: string; errors?: unknown };
 
 const TIMEOUT_MS = 15000;
 
@@ -129,5 +131,11 @@ export async function api<T>(
   }
 
   if (status >= 200 && status < 300 && json.success) return (json.data ?? {}) as T;
-  throw new ApiError(status, json.code ?? 'ERROR', json.message ?? 'Something went wrong. Try again.', (json.data as Record<string, unknown>) ?? undefined);
+  throw new ApiError(
+    status,
+    json.code ?? 'ERROR',
+    json.message ?? 'Something went wrong. Try again.',
+    (json.data as Record<string, unknown>) ?? undefined,
+    json.errors,
+  );
 }

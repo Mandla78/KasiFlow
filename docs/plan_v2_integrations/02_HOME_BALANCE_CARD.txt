@@ -1,0 +1,149 @@
+===========================================================================
+PLAN 02 -- THE HOME BALANCE CARD: HIDE/SHOW, REAL NUMBERS, TAPPABLE
+Backend + app. The main piece of v2.
+===========================================================================
+
+TODAY (checked in the code)
+  HomeScreen.tsx, the dark card:
+    spaza    big: "Customers owe you"   LIVE (credit book summary)
+             mini: "You owe suppliers"  SAMPLE (home/mock.ts R2,340)
+             mini: "Orders today"       LIVE (order book) or
+                   "Cash in today"      SAMPLE (R1,120)
+    builder  big: "Waiting on clients"  LIVE (jobs summary)
+             mini: "Active jobs"        LIVE
+             mini: "You owe hardware"   SAMPLE (R4,860)
+  Today list: real items from the credit book / jobs, PLUS a sample
+  delivery card (spazaSampleToday / builderSampleToday).
+  Footer: "Sample numbers come from orders, which are still being built."
+  The numbers can't be hidden, and tapping them does nothing.
+
+  Orders are REAL now (commerce/orders): GET /me/orders/summary gives
+  money by evidence. Cash orders start as payment_status "cash_due", and
+  NOTHING moves them on yet (the cash handshake isn't built), so a
+  delivered cash order would stay "owed" forever. See 2c.
+
+
+---------------------------------------------------------------------------
+2a. HIDE / SHOW BALANCES
+---------------------------------------------------------------------------
+  - An eye icon on the card, top right (Feather "eye" / "eye-off"),
+    44x44 touch target, accessibilityLabel "Hide balances" / "Show
+    balances".
+  - Hidden: every rand amount on the card AND in the Today list shows
+    "R ••••" (counts like "3 customers" stay). The layout doesn't jump.
+  - Remembered on THIS phone only (expo-secure-store, key
+    "home.hideBalances"); read failure = shown. Default: shown.
+  - Signing out clears it. Not sent to the server (a viewing preference).
+  - One small hook, shared/lib/useHideBalances.ts, so My record (plan 03)
+    uses the same switch.
+
+
+---------------------------------------------------------------------------
+2b. EVERY NUMBER SAYS WHAT IT IS AND OPENS WHERE IT COMES FROM
+---------------------------------------------------------------------------
+  Each amount gets a one-line source under it and is a button:
+
+  spaza
+    Customers owe you     "From your credit book"   -> /credit-book
+    You owe suppliers     "Cash orders not paid yet" -> /orders?filter=cash_due
+    Orders today          "From your order book"    -> /order-book
+  builder
+    Waiting on clients    "From your jobs"          -> /jobs
+    Active jobs           "From your jobs"          -> /jobs
+    You owe suppliers     "Cash orders not paid yet" -> /orders?filter=cash_due
+      (rename "You owe hardware": builders buy from hardware AND other
+       suppliers; one name everywhere)
+
+  "Cash in today" (sample) GOES: there is no daily tally yet. Spaza
+  without the order book shows "You owe suppliers" alone (full width).
+  A tool that is switched off shows "Switch on <tool> in Account", not
+  "—" and not a sample.
+  The footer about sample numbers goes; nothing on Home is sample.
+
+
+---------------------------------------------------------------------------
+2c. "YOU OWE SUPPLIERS" = CASH ORDERS ONLY (the rule)
+---------------------------------------------------------------------------
+  Counts:  payment_method = cash, payment_status = cash_due, and status in
+           accepted | out_for_delivery | ready_for_collection |
+           delivered | collected
+  Never:   digital (in_app) orders -- they're paid up front, nobody owes
+           anything; placed-but-not-accepted cash orders (the supplier
+           hasn't agreed yet: shown as "1 waiting for the supplier" in
+           the note, not in the amount); rejected / cancelled / expired.
+  Leaves the total when the cash is settled. Today nothing settles it,
+  so this plan adds the smallest honest step:
+    POST /me/orders/<id>/cash-paid   the TRADER says "I paid the cash"
+      - only their own cash order, status delivered | collected (or
+        out_for_delivery for cash on delivery), payment_status cash_due
+      - sets trader_paid_at (new column on commerce.orders) and adds an
+        OrderEvent ("Trader says cash paid"). payment_status stays
+        "cash_due", so the evidence stays "not_confirmed": only the
+        trader said it. "Confirmed by both" still needs the supplier
+        (the two-phone handshake, later).
+      - rate limit 20/min, idempotent, audit ORDER_CASH_MARKED_PAID
+    The order screen gets the button "I paid the cash" on cash orders
+    that are due; the amount then drops out of "You owe suppliers".
+  (Question 1: OK to add this? Migration 0024 -- 0023 is taken by the
+  notifications plan, docs/teammate/17; check origin before numbering.)
+
+
+---------------------------------------------------------------------------
+2d. ONE SERVER SUMMARY FOR HOME (fewer calls, one place for the rules)
+---------------------------------------------------------------------------
+  GET /me/home/summary   @auth_required(dashboard="informal_business"),
+                         60/min per user, no query params
+    {
+      owe_suppliers: {cents, orders, waiting_for_supplier},
+      deliveries_today: [{order_id, reference, supplier, status,
+                          fulfilment, total_cents, cash_due}]  (max 5)
+    }
+  Lives in commerce/orders (order_service.home_summary(user)) -- orders'
+  own data only. The credit book, jobs and order book summaries stay on
+  their own endpoints (each tool loads and fails on its own, as now).
+  Rules: user_id scoped in the query; sums in SQL, not in Python loops
+  over every order; money in cents; no customer or client names.
+  Tests: cash vs digital, each status in/out, placed counted as waiting,
+  trader_paid drops out, another trader's orders never counted (IDOR),
+  rate limit hit, unknown query params ignored/refused.
+
+
+---------------------------------------------------------------------------
+2e. THE TODAY LIST FROM REAL ORDERS
+---------------------------------------------------------------------------
+  The sample delivery cards go. From deliveries_today:
+    out_for_delivery  "Delivery on its way"  "<supplier> · <ref>"
+                      tag "Pay cash on delivery" when cash_due
+    ready_for_collection "Ready to collect"  "<supplier> · <ref>"
+    accepted (cash, not yet sent) "Order accepted" ...
+  Each opens the order (/orders/<id>). Mixed with the credit book / jobs
+  items (today.ts builds them; add ordersToday(items) + jest tests).
+
+
+---------------------------------------------------------------------------
+2f. SECURITY CHECKLIST (put in the PR)
+---------------------------------------------------------------------------
+  - new routes: auth, dashboard check, per-user rate limit, 404 for not
+    yours, strict schema (cash-paid takes no body; any body = 422)
+  - hostile tests: bad uuid, someone else's order, digital order,
+    already paid, wrong status, 21 calls a minute
+  - no amounts or names in logs; audit ids + amounts only
+  - hide-balances stays on the phone; nothing sensitive in SecureStore
+    keys
+  - the app never computes "you owe" itself: the server's number only
+
+TESTS
+  backend: the above + full suite. app: useHideBalances, today.ts
+  orders items, Home renders hidden/shown, switched-off tools. tsc.
+  phone (Mandla): place a cash order -> `flask orders move <REF>
+  accepted` -> Home "You owe suppliers" goes up, Today shows it ->
+  move out_for_delivery -> "Delivery on its way" -> delivered -> "I paid
+  the cash" -> it drops out. A digital order never appears in "owe".
+
+QUESTIONS FOR MANDLA
+  1. Add "I paid the cash" (trader_paid_at, new migration)? Without it,
+     "You owe suppliers" never goes down.
+  2. Count cash orders from "accepted" (suggested), or from "placed"?
+  3. Rename "You owe hardware" to "You owe suppliers" for builders?
+
+DECISION: yes to all (Mandla, Sat 26 Sep). Add "I paid the cash" (trader_paid_at, migration 0024); count cash orders from accepted; builders see "You owe suppliers".

@@ -8,6 +8,7 @@ import { useSession } from '@/features/auth/session/SessionProvider';
 import { SelectField, SelectOption } from '@/shared/components/SelectField';
 
 import { StepScaffold } from '../components/StepScaffold';
+import { savedToast, useSectionSave } from '../sync/useSectionSave';
 
 type NN<K extends keyof Buying> = NonNullable<Buying[K]>;
 
@@ -44,11 +45,17 @@ export default function WhatYouBuyScreen({ editing = false }: { editing?: boolea
   };
   const e = (k: keyof typeof errors) => (touched ? errors[k] : '');
 
-  function next() {
+  const { save, busy, error } = useSectionSave();
+
+  async function next() {
     setTouched(true);
     if (Object.values(errors).some(Boolean)) return;
+    if (editing) {
+      if (!(await save({ categories, buying: b }, ['buying']))) return;
+      savedToast();
+      return router.back();
+    }
     updateProfile({ categories, buying: b });
-    if (editing) return router.back();
     finishOnboarding();
   }
 
@@ -62,6 +69,8 @@ export default function WhatYouBuyScreen({ editing = false }: { editing?: boolea
       ]}
       primaryLabel="Open my business"
       onPrimary={next}
+      busy={busy}
+      error={error}
       editing={editing}>
       <SelectField<CategoryCode>
         multiple
