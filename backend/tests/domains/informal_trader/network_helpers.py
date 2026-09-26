@@ -13,7 +13,7 @@ from src.domains.informal_trader.jobs.models import Job
 from src.extensions import db
 
 PASSWORD = "Spaza2026!"
-CONSENT = {"privacy_version": "0.1-draft", "terms_version": "0.1-draft"}
+CONSENT = {"privacy_version": "0.2-draft", "terms_version": "0.2-draft"}
 API = "/api/v1"
 
 TEMBISA = (-25.9964, 28.2268)
