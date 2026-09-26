@@ -81,6 +81,8 @@ FINDINGS / NEEDS / QUESTIONS FOR MANDLA
   - FINDING_stage_photos.txt: camera-only and hashing on the server
   - NEEDS_camera_permission_text.txt, NEEDS_shared_components.txt
   - FINDING_whatsapp_ip_links.txt, QUESTION_bluetooth_sales.txt (roadmap)
+  - Demo data: flask tools seed --me EMAIL (risuna/tools-demo) fills one
+    account's credit book, jobs (real photos + sign-offs) and order book
 
 NEXT (all approved 26 Sep; see the DECISION lines)
   - after Sunday: crew on a job, short videos, "ask for more" (counter-offer)
