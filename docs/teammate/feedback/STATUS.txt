@@ -69,6 +69,8 @@ BLOCKED (and on what)
 
 FINDINGS / NEEDS / QUESTIONS FOR MANDLA
   - QUESTION_trades.txt: answered YES (the 11 trades); built (risuna/trades)
+  - QUESTION_supplier_banners.txt: 3 seed suppliers have real logos now
+    (risuna/supplier-logos); cover banners + the real brands on them: yours
   - FINDING_stage_photos.txt: camera-only and hashing on the server
   - NEEDS_camera_permission_text.txt, NEEDS_shared_components.txt
   - FINDING_whatsapp_ip_links.txt, QUESTION_bluetooth_sales.txt (roadmap)

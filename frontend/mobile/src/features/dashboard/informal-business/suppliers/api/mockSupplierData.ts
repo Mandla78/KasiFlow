@@ -86,7 +86,9 @@ export const MOCK_SUPPLIERS: MockSupplier[] = [
     address: '120 New Road, Midrand, 1685',
     latitude: -25.99, longitude: 28.13, hours: [WEEKDAYS],
     deliveryRadiusKm: 30, deliveryFeeCents: 35000, freeDeliveryOverCents: 800000, collect: true,
-    categories: ['plumbing', 'electrical', 'building_materials'], payfast: true, cash: false, cashLimitCents: null, minOrderCents: 200000, verified: true, logoUrl: null,
+    categories: ['plumbing', 'electrical', 'building_materials'], payfast: true, cash: false, cashLimitCents: null, minOrderCents: 200000, verified: true,
+    // The same logo the seed feed gives this supplier (backend/seed/demo_images.csv).
+    logoUrl: 'https://res.cloudinary.com/f5fbqhac/image/upload/f_auto,q_auto,c_limit,w_200/v1790425123/akayza-dev/demo/suppliers/midrand-build-and-plumb.jpg',
   },
   {
     id: 'sw', name: 'Soweto Cash & Carry', initials: 'SC', color: '#4A4E8A', area: 'Soweto',
@@ -95,7 +97,8 @@ export const MOCK_SUPPLIERS: MockSupplier[] = [
     latitude: -26.24, longitude: 27.9, hours: [WEEKDAYS, SATURDAY],
     deliveryRadiusKm: 20, deliveryFeeCents: 4000, freeDeliveryOverCents: 150000, collect: true,
     categories: ['food_grocery', 'beverages', 'household_cleaning', 'snacks_confectionery'],
-    payfast: true, cash: true, cashLimitCents: 400000, minOrderCents: 40000, verified: true, logoUrl: null,
+    payfast: true, cash: true, cashLimitCents: 400000, minOrderCents: 40000, verified: true,
+    logoUrl: 'https://res.cloudinary.com/f5fbqhac/image/upload/f_auto,q_auto,c_limit,w_200/v1790425129/akayza-dev/demo/suppliers/soweto-cash-and-carry.jpg',
   },
 ];
 

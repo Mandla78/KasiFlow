@@ -7,7 +7,7 @@
   "orders_email": "orders@polokwane-build-depot.example.com",
   "phone": null,
   "brand_color": "#5B4636",
-  "logo_url": null,
+  "logo_url": "https://res.cloudinary.com/f5fbqhac/image/upload/v1790425126/akayza-dev/demo/suppliers/polokwane-build-depot.jpg",
   "collection_address": {
     "street": "27 Industria Road",
     "suburb": "Polokwane Industrial",

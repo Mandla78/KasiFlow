@@ -1,0 +1,47 @@
+===========================================================================
+QUESTION -- supplier banners (a cover photo on the supplier's page)
+===========================================================================
+
+FROM / DATE:   Risuna, Saturday 26 September 2026
+FOR:           Mandla (suppliers are your area)
+STATUS:        waiting for a yes / no
+
+
+WHAT'S DONE (risuna/supplier-logos, no migration)
+  Three seed suppliers now have real logos, wired the way HANDOFF section 6
+  says: backend/seed/upload_demo_images.py uploads seed/demo_images/*.jpg
+  to our Cloudinary (<MEDIA_ROOT_FOLDER>/demo/suppliers/, signed upload,
+  safe to re-run) and writes logo:<slug> rows into seed/demo_images.csv;
+  generate_dataset.py puts them in supplier.json; flask suppliers load.
+    midrand-build-and-plumb, polokwane-build-depot, soweto-cash-and-carry
+  The logos are the round badges on each supplier's delivery truck,
+  cropped from three team banners (16:9 adverts). The other 8 suppliers
+  still show initials: drop more images in seed/demo_images/ and re-run.
+
+
+THE QUESTION
+  The full banners would make a strong cover at the top of a supplier's
+  page (and in the slides). Today a supplier has one picture, logo_url,
+  shown as a 38-48 px circle -- a wide advert full of text can't go there.
+
+  A cover would need, in your area:
+    feed          supplier.json "cover_url" (our Cloudinary only, like
+                  logo_url)
+    data          suppliers.cover_url + migration 0024
+    API           the supplier view returns it (delivered ~1200 px wide)
+    app           a banner at the top of SupplierScreen, the logo and name
+                  over it; nothing changes where there's no cover
+  About 2 hours with tests. Or skip it for the weekend.
+
+  One thing to decide either way: the banners show REAL product brands
+  on the fictional suppliers' stock (Kwikot geysers, Surfix cable, Five
+  Roses tea). generate_dataset.py promises "no real business is
+  imitated". The logos don't have this (only the fictional names); the
+  banners would. If we use them, we could blur or crop those packs, or
+  use them only in the slides.
+
+  1. Cover banners on supplier pages: build it (0024), or not now?
+  2. The real brands on the banners: OK for the demo, edit them out, or
+     slides only?
+
+DECISION:

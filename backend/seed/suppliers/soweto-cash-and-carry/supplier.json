@@ -7,7 +7,7 @@
   "orders_email": "orders@soweto-cash-and-carry.example.com",
   "phone": null,
   "brand_color": "#4A4E8A",
-  "logo_url": null,
+  "logo_url": "https://res.cloudinary.com/f5fbqhac/image/upload/v1790425129/akayza-dev/demo/suppliers/soweto-cash-and-carry.jpg",
   "collection_address": {
     "street": "9 Chris Hani Road",
     "suburb": "Dube",
