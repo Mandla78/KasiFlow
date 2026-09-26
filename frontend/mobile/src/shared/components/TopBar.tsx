@@ -8,7 +8,7 @@ type Props = {
   initial: string;
   title: string;
   subtitle?: string;
-  action?: { icon: ComponentProps<typeof Feather>['name']; label: string; onPress: () => void; dot?: boolean };
+  action?: { icon: ComponentProps<typeof Feather>['name']; label: string; onPress: () => void; dot?: boolean; badge?: number };
   /** A small green tick on the avatar (CIPC-verified business). */
   verified?: boolean;
   /** Tapping the avatar opens the business profile. */
@@ -43,7 +43,13 @@ export function TopBar({ initial, title, subtitle, action, verified, onAvatarPre
       {action ? (
         <Pressable accessibilityRole="button" accessibilityLabel={action.label} onPress={action.onPress} style={styles.action}>
           <Feather name={action.icon} size={17} color={colors.ink} />
-          {action.dot ? <View style={styles.dot} /> : null}
+          {action.badge ? (
+            <View style={styles.badge}>
+              <Text style={styles.badgeText}>{action.badge > 99 ? '99+' : action.badge}</Text>
+            </View>
+          ) : action.dot ? (
+            <View style={styles.dot} />
+          ) : null}
         </Pressable>
       ) : null}
     </View>
@@ -81,4 +87,19 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   dot: { position: 'absolute', top: 7, right: 8, width: 7, height: 7, borderRadius: 4, backgroundColor: colors.marigold },
+  badge: {
+    position: 'absolute',
+    top: -6,
+    right: -6,
+    minWidth: 20,
+    height: 20,
+    borderRadius: 10,
+    paddingHorizontal: 5,
+    backgroundColor: colors.accent,
+    borderWidth: 2,
+    borderColor: colors.porcelain,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  badgeText: { fontFamily: fonts.bold, fontSize: 10.5, color: colors.white },
 });

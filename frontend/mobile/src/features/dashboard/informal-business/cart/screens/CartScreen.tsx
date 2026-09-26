@@ -29,6 +29,8 @@ export default function CartScreen() {
   const total = estimatedTotal(lines);
   const count = itemCount(lines);
   const short = supplier ? Math.max(0, supplier.minOrderCents - total) : 0;
+  const toFreeDelivery =
+    supplier?.delivers && supplier.freeDeliveryOverCents !== null ? Math.max(0, supplier.freeDeliveryOverCents - total) : null;
 
   if (!lines.length) {
     return (
@@ -64,8 +66,35 @@ export default function CartScreen() {
       }>
       <View style={{ gap: 4 }}>
         <Title>Your cart</Title>
-        {supplier ? <Text style={styles.muted}>{supplier.name}</Text> : null}
+        {supplier ? (
+          <Text style={styles.muted}>
+            {supplier.name} · {lines.length} {lines.length === 1 ? 'product' : 'products'}, {count} {count === 1 ? 'item' : 'items'}
+          </Text>
+        ) : null}
       </View>
+
+      {supplier ? (
+        <Card style={{ gap: 10 }}>
+          {/* How close the cart is to the minimum order, and to free delivery. */}
+          <View style={{ gap: 6 }}>
+            <View style={styles.row}>
+              <Text style={styles.hintTitle}>{short > 0 ? `Add ${formatRand(short)} more to order` : 'Minimum order reached'}</Text>
+              <Text style={styles.muted}>min. {formatRand(supplier.minOrderCents)}</Text>
+            </View>
+            <View style={styles.track}>
+              <View style={[styles.fill, short === 0 && styles.fillDone, { width: `${Math.min(100, Math.round((total / Math.max(supplier.minOrderCents, 1)) * 100))}%` }]} />
+            </View>
+          </View>
+          {toFreeDelivery !== null ? (
+            <View style={styles.hint}>
+              <Feather name="truck" size={14} color={toFreeDelivery === 0 ? colors.jade : colors.textMuted} />
+              <Text style={styles.hintText}>
+                {toFreeDelivery === 0 ? 'Free delivery on this order' : `${formatRand(toFreeDelivery)} more for free delivery`}
+              </Text>
+            </View>
+          ) : null}
+        </Card>
+      ) : null}
 
       <Card style={{ gap: 14 }}>
         {lines.map((l) => (
@@ -78,6 +107,10 @@ export default function CartScreen() {
               <Text style={styles.muted}>
                 {l.packSize} · {formatRand(l.seenPriceCents)}
               </Text>
+              {l.unitsPerPack && l.unitsPerPack > 1 ? (
+                // For traders who sell singles: what each one costs them.
+                <Text style={styles.each}>{formatRand(Math.round(l.seenPriceCents / l.unitsPerPack))} each</Text>
+              ) : null}
               <QuantityStepper value={l.qty} max={l.maxQty} onChange={(n) => setLine(supplierId ?? '', l, n)} />
             </View>
             <Text style={styles.lineTotal}>{formatRand(l.seenPriceCents * l.qty)}</Text>
@@ -85,14 +118,6 @@ export default function CartScreen() {
         ))}
       </Card>
 
-      {supplier && short > 0 ? (
-        <View style={styles.note}>
-          <Feather name="info" size={14} color={colors.marigoldDeep} />
-          <Text style={styles.noteText}>
-            {supplier.name}&apos;s minimum order is {formatRand(supplier.minOrderCents)}.
-          </Text>
-        </View>
-      ) : null}
       <Text style={styles.small}>The supplier&apos;s price when you place the order is the one you pay. Delivery is added at checkout.</Text>
     </Screen>
   );
@@ -107,7 +132,13 @@ const styles = StyleSheet.create({
   totals: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'baseline' },
   totalLabel: { fontFamily: fonts.semibold, fontSize: 14, color: colors.text },
   total: { fontFamily: fonts.display, fontSize: 22, color: colors.ink },
-  note: { flexDirection: 'row', gap: 8, backgroundColor: colors.marigoldTint, borderRadius: radius.sm, padding: 12 },
-  noteText: { flex: 1, fontFamily: fonts.medium, fontSize: 13, color: colors.text },
+  row: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'baseline', gap: 8 },
+  hintTitle: { flex: 1, fontFamily: fonts.bold, fontSize: 13.5, color: colors.ink },
+  track: { height: 8, borderRadius: radius.pill, backgroundColor: colors.line, overflow: 'hidden' },
+  fill: { height: 8, borderRadius: radius.pill, backgroundColor: colors.marigold },
+  fillDone: { backgroundColor: colors.jade },
+  hint: { flexDirection: 'row', alignItems: 'center', gap: 8 },
+  hintText: { flex: 1, fontFamily: fonts.medium, fontSize: 13, color: colors.text },
+  each: { fontFamily: fonts.semibold, fontSize: 12, color: colors.accentDeep },
   small: { fontFamily: fonts.body, fontSize: 12, lineHeight: 17, color: colors.textMuted },
 });

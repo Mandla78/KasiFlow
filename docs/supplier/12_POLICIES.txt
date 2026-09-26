@@ -38,10 +38,26 @@ reviewed before launch. Numbers live in ONE place in code:
 
 3. DIGITAL PAYMENT (recommended)
 ---------------------------------------------------------------------------
-  - Card or instant EFT on the payment provider's secure page. Akayza
-    never sees or stores card details.
+  - Card or instant EFT on the payment provider's (PayFast's) secure page.
+    Akayza never sees or stores card details, and the app never sees the
+    amount it asks for, the merchant key or the passphrase: it gets a
+    one-time pay link (30 minutes) from our server, which builds and signs
+    the payment from the ORDER. [BUILT 26 Sep 2026]
   - The order waits for payment; the supplier only sees it once it's paid.
-    An unpaid order is cancelled automatically after 24 hours.
+    A PAID order is CONFIRMED at once -- the money is in, so the supplier
+    doesn't accept it separately; it goes straight to delivery or
+    collection. The trader gets a "payment received" email. [BUILT]
+    An unpaid order lapses automatically after 24 hours and its stock goes
+    back (checked every 10 minutes). [BUILT]
+  - An order is PAID only when PayFast's notification passes all four
+    checks: our signature, PayFast's own servers, the exact amount, and
+    PayFast confirming it VALID. Coming back from the payment page proves
+    nothing. A repeated notification changes nothing. [BUILT]
+  - Paid after the order lapsed (rare: the trader paid at the last
+    minute): the payment is recorded and flagged; we refund it in full.
+    [BUILT: flagged; the refund itself is done by us for now]
+  - What we keep from a payment: amounts, status and PayFast's reference.
+    Not the payer's name, email or card.
   - The money goes to the supplier through the provider's split; our
     commission comes off in that split (07_PAYMENTS_AND_PAYOUTS.txt).
   - No limit per order beyond the provider's own.
@@ -80,6 +96,31 @@ reviewed before launch. Numbers live in ONE place in code:
     documents).
 
 
+5b. INVOICES AND RECEIPTS  [BUILT 26 Sep 2026]
+---------------------------------------------------------------------------
+  - The INVOICE is the supplier's: they sold the goods. Akayza issues it
+    in their name, as their agent (VAT Act s54(2)); the Supplier
+    Agreement must give us that authority and say the supplier keeps
+    responsibility for the VAT.
+  - Supplier registered for VAT -> TAX INVOICE: abridged up to R5,000,
+    full (also naming the buyer) above R5,000 (VAT Act s20). VAT is shown
+    per line: 15% standard, 0% for zero-rated basic food.
+    Not registered -> INVOICE, with no VAT charged, and it says so.
+  - Issued once the sale is firm: the supplier accepted it, or a digital
+    order was paid. Number INV-<year>-<order number>, dated that day
+    (SARS: within 21 days of the supply).
+  - The PAYMENT RECEIPT is ours: it confirms the money (paid digitally,
+    or cash confirmed by both), number RCT-<year>-<order number>.
+  - Both are PDFs, opened from a link that works for 10 minutes and only
+    for that document; a trader only gets links for their own orders.
+  - They carry the seller's and the buyer's details (names, address,
+    emails, phones; the buyer's CIPC number when they gave one, marked
+    verified only if our check said so) and a QR code. The QR opens a
+    public page that confirms the document is genuine (number, supplier,
+    date, total, paid) and shows NO personal details; the link is signed,
+    so numbers can't be tried one by one.
+
+
 6. DISPUTES AND REFUNDS
 ---------------------------------------------------------------------------
   - Wrong, short or damaged delivery: report from the order within 48
@@ -94,3 +135,6 @@ reviewed before launch. Numbers live in ONE place in code:
   - Commission rate(s), and whether it differs for cash.
   - Who pays the payment provider's fee.
   - Whether suppliers may set a lower cash limit than R1,000 per trader.
+  - PayFast: whether split payments work in the sandbox; how refunds of a
+    split payment are made; the fee on a split.
+  - The Supplier Agreement's agent clause for invoices (legal review).

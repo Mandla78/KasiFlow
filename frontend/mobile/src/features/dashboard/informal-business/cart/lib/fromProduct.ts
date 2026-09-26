@@ -11,6 +11,7 @@ export function toCartLine(p: Product): Omit<CartLine, 'qty'> {
     category: p.category,
     image: p.images[0] ?? null,
     seenPriceCents: p.priceCents,
+    unitsPerPack: p.unitsPerPack,
     maxQty: p.maxQty,
   };
 }

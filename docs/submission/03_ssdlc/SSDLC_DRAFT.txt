@@ -1,21 +1,28 @@
 ===========================================================================
 [DRAFT] SSDLC -- SECURITY (due Sat 12:30) -- PASTE INTO SONKE
-Rewritten Fri 25 Sep to match what is BUILT AND TESTED. Anything not built
-yet is under "PLANNED" and says so. Update the numbers before pasting.
+Updated Sat 26 Sep (01:30) to match what is BUILT AND TESTED: identity,
+the business tools, suppliers, orders, payments and invoices. Anything not
+built yet is under "PLANNED" and says so.
 ===========================================================================
 
 SECURITY REQUIREMENTS (RISK ASSESSMENT)
 
   Assets: traders' accounts and sessions; their business details and
   books (customer names and amounts stay private to the trader); photos
-  and documents; payment status of orders; the two-sided record.
+  and documents; suppliers' catalogues, prices and stock; orders, their
+  money and their payment status; invoices and receipts; the two-sided
+  record (credit given, stages a client signed off).
 
   Main risks: account takeover (guessed, leaked or reused passwords, a
   stolen phone, a stolen token); fishing for which emails have accounts;
   one user reading another's data (IDOR); injection (SQL, email header,
   template, script); junk or malicious input crashing the service;
   forged callbacks from our providers; malicious or oversized uploads;
-  personal data leaking into logs; automated abuse of sign-in and search.
+  personal data leaking into logs; automated abuse of sign-in and search;
+  a phone changing a price or a total; one order placed twice on a bad
+  signal; the same last stock sold twice; a forged "payment complete";
+  a supplier feed smuggling spreadsheet formulas or foreign image links;
+  a supplier marking itself verified; guessable invoice links.
 
   Requirements we set ourselves:
   - The server trusts nothing the phone claims: identity only from a
@@ -25,7 +32,10 @@ SECURITY REQUIREMENTS (RISK ASSESSMENT)
   - POPIA: collect only what we can verify or need; consent versions
     recorded at sign-up; users can download their data and close their
     account; unconfirmed sign-ups deleted after 7 days.
-  - We never hold money: payments go through a licensed provider.
+  - We never hold money: payments go through a licensed provider
+    (PayFast); card details never touch our systems.
+  - The server prices every order from its own catalogue; the phone only
+    says which products and how many.
 
 
 THREAT MODELLING & DESIGN REVIEW (STRIDE -- what is built)
@@ -42,6 +52,13 @@ THREAT MODELLING & DESIGN REVIEW (STRIDE -- what is built)
   - No account enumeration: sign-up, sign-in, resend and forgot-password
     answer identically whether or not the email exists, with equal
     timing (a dummy password check runs for unknown emails).
+  - Payment notifications: an order becomes PAID only if PayFast's
+    notification passes all four checks -- our MD5 signature with a
+    secret passphrase, the sender is one of PayFast's own servers, the
+    amount equals the order to the cent, and PayFast answers VALID when we
+    post it back. Returning from the payment page proves nothing.
+  - Suppliers can't verify themselves: a feed claiming "verified" is
+    refused; only our own check sets it.
 
   Tampering
   - Append-only audit trail, enforced by database triggers (rows cannot
@@ -51,10 +68,37 @@ THREAT MODELLING & DESIGN REVIEW (STRIDE -- what is built)
   - Uploaded files are checked with the provider itself before they are
     accepted: real size and URL, and the upload must have been started by
     the same user for the same purpose.
+  - Prices can't be tampered with: an order request carrying a price or a
+    total is refused; each order line keeps a snapshot of the price at
+    order time, so a later price change never alters a placed order.
+  - Stock is held with one atomic database update that succeeds only if
+    enough is left, so the same last item can't be sold twice; stock goes
+    back when an order is cancelled, rejected or lapses.
+  - A retried "place order" (Idempotency-Key) returns the first order
+    instead of creating a second one; a key reused for a different order
+    is refused.
+  - Payment links and client sign-off links are 256-bit tickets stored
+    only as HMAC-SHA256 hashes, short-lived and revoked by a newer link.
+    Invoice and receipt downloads use links signed with a server key that
+    expire after 10 minutes and are valid for one document only. Every
+    document carries a QR code to a signed public check page, so a forged
+    or altered invoice is caught; that page shows no personal details.
+  - Builders' stage photos: the server records its own time and a SHA-256
+    fingerprint of the stored file, so a swapped or back-dated photo is
+    detectable; camera only, never the gallery.
+  - Supplier data feeds are checked row by row: unknown columns refused,
+    money parsed exactly, barcodes' GS1 check digits verified, cells that
+    start with = + - @ refused (spreadsheet-formula injection), image
+    links accepted only from our own image service (no tracking pixels or
+    foreign content), 5 MB / 5,000-row caps; bad rows reported by row
+    number, never silently dropped.
 
   Repudiation
   - Every identity action is audited: who, which session, which phone,
     success or failure and why -- never passwords, codes or tokens.
+  - Orders keep an append-only history of every step and who made it
+    (trader, supplier or system); order, payment, feed-import, connection
+    and credit-book events are audited without names or phone numbers.
 
   Information disclosure
   - Secrets stored only as hashes: bcrypt for passwords; HMAC-SHA256 for
@@ -64,20 +108,37 @@ THREAT MODELLING & DESIGN REVIEW (STRIDE -- what is built)
   - Security headers on every response: no content sniffing, no framing,
     no referrer, no caching. The password-reset page carries the ticket
     with no-referrer and no-store.
-  - Provider keys (Mapbox, Cloudinary) stay on the server; the app never
-    receives them. Storage folders use HMAC keys, never database ids.
+  - Provider keys (Mapbox, Cloudinary, PayFast merchant key and
+    passphrase) stay on the server; the app never receives them. Storage
+    folders use HMAC keys, never database ids.
+  - Traders see only what they need: a supplier's orders email, payout
+    account, VAT and legal details are never sent to the app; product
+    codes, barcodes and exact stock numbers never leave the server (only
+    "in stock / low / out").
+  - From a payment notification we keep amounts, status and PayFast's
+    reference -- not the payer's name, email or card.
 
   Denial of service
   - Rate limits on every sensitive route (sign-in 5/min per IP+email,
-    sign-up 5/hour, codes, resets, search, uploads), 1 MB request cap,
-    a daily upload quota per account, and a daily cap on company checks.
+    sign-up 5/hour, codes, resets, search, uploads, orders, payments,
+    catalogue search), 1 MB request cap, a daily upload quota per
+    account, and a daily cap on company checks.
+  - JSON nested deeper than 32 levels is refused before any route runs
+    (found by our own hostile-input tests: a deeply nested body crashed
+    every route; now fixed and tested at 100,000 levels).
 
   Elevation of privilege
   - Every route pins who may call it (signed-in trader, supplier, or a
     public page holding a one-time ticket).
   - Every query is scoped to the signed-in user from the token; a user id
     from the request is never trusted (IDOR tests prove another trader
-    gets nothing).
+    gets nothing: orders, credit book, jobs, connections, documents).
+  - A trader can only order from a supplier they've connected to; cash is
+    limited to R1,000 per order and 2 waiting orders (a cash order costs
+    nothing up front, so this caps the damage of fake orders); digital
+    orders can't be cancelled by the trader and lapse unpaid after 24 h.
+  - Developer tools (loading test suppliers, moving an order as the
+    supplier) refuse to run outside development.
   - Sessions: 15-minute access tokens; refresh tokens rotate, and reusing
     an old one ends the session (theft detection); every request checks
     the session is still live, so sign-out and password changes cut
@@ -112,14 +173,23 @@ DEVELOPMENT (SECURE CODING PRACTICES)
 
 SECURITY TESTING (automated, run before every merge)
 
-  - 338 backend tests, including 210 hostile-input tests: malformed and
+  - 790 backend tests and 95 app tests, including hostile-input suites
+    for identity, the credit book and jobs: malformed and
     injected emails (SQL, CR/LF header injection, script), emoji,
     control and invisible characters, template injection, wrong JSON
     types, broken bodies, NaN/Infinity, very long values. Rule: refuse,
     never crash, never accept junk, never leak whether an account exists.
-  - These tests found and we fixed three real bugs: long/emoji passwords
+  - These tests found and we fixed real bugs: long/emoji passwords
     crashing bcrypt (over 72 bytes), a NUL character crashing the
-    database write, and invisible characters accepted as a name.
+    database write, invisible characters accepted as a name, and deeply
+    nested JSON crashing every route.
+  - Commerce: the phone can't send prices; out-of-stock holds nothing;
+    a retried order lands once; cash limits; cancel rules; unpaid orders
+    lapse and give stock back; every PayFast check refuses a forged
+    notification on its own (bad signature, wrong passphrase, wrong
+    sender, wrong amount, not confirmed); payment links used up or
+    replaced; invoice links altered, expired or for another trader get
+    nothing. The PayFast sandbox accepts our signed payment.
   - IDOR, rate-limit, lockout, two-factor, refresh-token reuse, password
     reset (one use, expiry), account closure, data export (no secrets),
     audit-trail immutability, and architecture-boundary tests.
@@ -136,8 +206,9 @@ ASSESSMENT & SECURE INTEGRATION -- PLANNED (not built yet)
   - Malware scanning of every upload (Cloudinary + Perception Point) with
     files hidden until approved -- the approval path is built and tested;
     switched on once the add-on is enabled.
-  - Payments: PayFast notifications validated (signature, amount, server
-    confirmation) before an order is marked paid.
+  - Payments: PayFast split payments straight to each supplier's own
+    PayFast account (built behind a switch; needs each supplier's
+    merchant id), and automated refunds.
   - Supplier system integration (ERP): scoped, hashed API keys with
     rotation and revocation, signed requests, per-key limits.
   - Two-sided proof: records sealed with hashes and phone-held signing
