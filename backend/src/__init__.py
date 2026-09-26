@@ -80,6 +80,7 @@ def _register_models() -> None:
     from src.domains.informal_trader.credit_book import models as _credit_book  # noqa: F401
     from src.domains.informal_trader.jobs import models as _jobs  # noqa: F401
     from src.domains.informal_trader.builder_network import models as _builder_network  # noqa: F401
+    from src.domains.informal_trader.order_book import models as _order_book  # noqa: F401
     # supplier schema: suppliers, their catalogues, their feed runs
     from src.domains.supplier.supplier_profile import models as _supplier_profile  # noqa: F401
     from src.domains.supplier.catalogue import models as _catalogue  # noqa: F401

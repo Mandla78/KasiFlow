@@ -77,3 +77,8 @@ class BusinessAuditEvent(str, enum.Enum):
     HELP_POST_INTERESTED = "help_post.interested"
     HELP_POST_PICKED = "help_post.picked"
     HELP_POST_CLOSED = "help_post.closed"
+
+    # Order book (informal_trader.order_book): ids and counts only, never a name or amount.
+    ORDER_BOOK_MENU_SAVED = "order_book.menu_saved"
+    ORDER_BOOK_ORDER_CREATED = "order_book.order_created"
+    ORDER_BOOK_ORDER_CANCELLED = "order_book.order_cancelled"
