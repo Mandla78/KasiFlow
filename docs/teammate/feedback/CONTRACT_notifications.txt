@@ -1,0 +1,265 @@
+===========================================================================
+CONTRACT -- NOTIFICATIONS (server-made alerts, two tabs, read state)
+===========================================================================
+
+TOOL:            Notifications (Mandla's task, WhatsApp, Sat 26 Sep; his
+                 plan's sections 3-8 are kept word for word in spirit
+                 below, with additions marked NEW)
+AUTHOR / DATE:   Risuna, Saturday 26 September 2026
+STATUS:          proposed -- step 1 of the plan. Nothing is built until the
+                 DECISION below (answers to section 9).
+
+
+0. WHAT IT IS
+---------------------------------------------------------------------------
+  Alerts the SERVER makes when something happens that the trader should
+  know about -- above all when SOMEONE ELSE acts: a supplier moves their
+  order, a client signs off a stage, another builder invites them or says
+  "I paid". Two tabs: Orders | Inbox. Read state lives on the server, so
+  the badge is the same on every phone. The app asks every 20 s while it's
+  open (no push this weekend).
+
+  Today: shared/notifications can publish (NotificationEvent with ready-made
+  title/body strings, tabs STOCK_ORDER/INBOX) but NOTHING persists it, and
+  the app's alerts are made on the phone (notificationStore + mock.ts).
+
+  What the dev database says (Risuna's, read-only count, 26 Sep): 27 jobs
+  (31 stages client-confirmed, 3 sign-off links open), 5 partner invites
+  (1 pending, 4 accepted), 4 open help posts, 10 order-book orders, 5
+  credit entries, 9 trusted phones, 17 auth.login_failed -- and 0
+  suppliers / 0 supplier orders (`flask suppliers load` not run there).
+  So on a fresh dev machine the orders tab stays empty until suppliers are
+  loaded, while the tools already have real events to alert about; hence
+  the NEW builder-network, job-done, account-locked and due-today alerts.
+
+
+1. DATA (schema platform; migration 0023_notifications)
+---------------------------------------------------------------------------
+  notifications
+    id, user_id (-> identity.users, CASCADE), tab ('orders' | 'inbox'),
+    kind (a template key, e.g. 'order.accepted'), params (JSONB, filled
+    by the server), link_type + link_id (what tapping opens, or null),
+    dedupe_key, read_at, created_at (BaseModel)
+    UNIQUE (user_id, dedupe_key)          -- the same event lands once
+    INDEX  (user_id, tab, created_at DESC) -- the list and the counts
+    CHECK  tab IN (...), kind IN (the template keys)
+  notification_settings
+    user_id (unique), orders (default true), jobs (default true), credit
+    (NEW, default true). Security isn't stored: it's always on.
+  Rows older than 90 days are deleted by the existing scheduler
+  (master_scheduler, next to the identity clean-up).
+
+
+2. SHARED EVENT (shared/notifications -- Mandla's area, Q2)
+---------------------------------------------------------------------------
+  NotificationEvent becomes:
+    recipient_user_id, template (key), params (dict), dedupe_key,
+    link_type / link_id (optional)
+  The tab and the topic (orders / jobs / credit / security) come from the
+  template, so a caller can't put an order alert in the wrong tab or skip
+  a switch. publish_notification() stays: enqueue, never raises. The
+  persisting side is a NEW domain, domains/platform/notifications
+  (models, repository, service, templates, routes), registered as a
+  listener like security/audit. It never imports a publishing feature.
+
+
+3. HOOKS -- who publishes what (after db.session.commit(), never before)
+---------------------------------------------------------------------------
+  From Mandla's plan:
+  order_service.place()             order.sent | order.awaiting_payment
+  order_service.supplier_move()     order.accepted / rejected /
+                                    on_its_way / ready / delivered /
+                                    collected
+  order_service.mark_paid()         order.paid
+  order_service.expire_unpaid()     order.expired (one per order)
+  auth_service._tokens(new device)  account.new_phone
+  auth_service.change_password()    account.password_changed
+  auth_service.sign_out_other_phones() account.phones_signed_out
+  sign_off_service.answer()         job.stage_confirmed /
+                                    amounts_dont_match / not_yet (to the
+                                    BUILDER)
+
+  NEW (Risuna's tools, same rules):
+  sign_off_service.answer()         job.done -- when that answer confirms
+                                    the LAST stage (to the builder)
+  auth_service (lockout, 2 places)  account.locked -- 5 wrong passwords
+                                    locked the account (to the owner)
+  partners_service.invite()         partner.invited (to the invited builder)
+  partners_service.answer()         partner.accepted | partner.declined
+                                    (to the job's owner)
+  partners_service.record_payment() partner.payment_recorded (to the
+                                    partner: "confirm what you got")
+  partners_service.confirm_payment() partner.payment_confirmed |
+                                    partner.payment_mismatch (to the owner)
+  help_posts_service.interested()   help.interested (to the post's owner,
+                                    one per builder)
+  help_posts_service.pick()         help.picked (to the picked builder)
+  credit book "due today"           credit.due_today -- NO scheduler: the
+                                    first GET /unread of the trader's day
+                                    asks credit_book_service.summary()
+                                    and adds ONE alert if anyone is due
+                                    today (dedupe per day)
+
+  dedupe_key on every one:
+    order:{id}:{status}             job:{stage_id}:{sign_off_id}
+    job:{job_id}:done               account:{user}:phone:{trusted_phone_id}
+    account:{user}:password:{changed_at}   account:{user}:signout:{at}
+    account:{user}:locked:{locked_until}   partner:{id}:invited|answered
+    help:{post_id}:picked:{builder} payment:{id}:recorded|answered
+    help:{post_id}:interested:{builder}    credit:{user}:due:{YYYY-MM-DD}
+  A publishing feature calls shared.notifications only -- never the
+  platform domain (boundaries test).
+
+
+4. TEMPLATES (server-side; the title is fixed text, params only in the body)
+---------------------------------------------------------------------------
+  tab orders, topic orders:
+    order.sent             Order sent          "{ref} · {total} to {supplier}. Waiting for them to accept."
+    order.awaiting_payment Pay to send it      "{ref} · {total}. Pay in the app to send it to {supplier}."
+    order.accepted         Order accepted      "{supplier} accepted {ref}."
+    order.rejected         Order not accepted  "{supplier} can't take {ref}. Nothing was charged." *
+    order.on_its_way       On its way          "{supplier} is delivering {ref}." (+ "Have {total} cash ready." for cash)
+    order.ready            Ready to collect    "{ref} is ready at {supplier}."
+    order.delivered        Delivered           "{ref} was delivered."
+    order.collected        Collected           "You collected {ref}."
+    order.paid             Paid in the app     "{total} for {ref}, confirmed by the payment provider."
+    order.expired          Order lapsed        "{ref} wasn't paid within 24 h, so it was never sent."
+  tab inbox, topic security (always on):
+    account.new_phone         New phone signed in   "Your account was opened on a new phone. Not you? Change your password."
+    account.password_changed  Password changed      "Your password was changed. Not you? Reset it now."
+    account.phones_signed_out Other phones signed out "Every other phone was signed out of your account."
+    account.locked (NEW)      Account locked        "Someone typed a wrong password 5 times. Sign-in is paused for {minutes} minutes."
+  tab inbox, topic jobs:
+    job.stage_confirmed       Stage confirmed       "The client confirmed {stage} of {job}: {amount}."
+    job.amounts_dont_match    Amounts don't match   "The amounts for {stage} of {job} differ. Both are kept."
+    job.not_yet               Not signed off yet    "{stage} of {job} isn't signed off yet. See the note."
+    job.done (NEW)            Job done              "{job}: every stage confirmed by the client."
+    partner.invited (NEW)     New job invite        "{owner} invites you: {trade}, {stages} · {pay} · starts {day}."
+    partner.accepted (NEW)    Invite accepted       "{partner} is on {job}. You have each other's number now."
+    partner.declined (NEW)    Invite declined       "{partner} can't do {job}."
+    partner.payment_recorded (NEW) Confirm a payment "{owner} says they paid you {amount}. Confirm what you got."
+    partner.payment_confirmed (NEW) Payment confirmed "{partner} confirmed {amount}."
+    partner.payment_mismatch (NEW)  Amounts don't match "{partner} says they got a different amount. Both are kept."
+    help.interested (NEW)     Someone is interested "{builder} can do your {trade} post."
+    help.picked (NEW)         You're on a job       "{owner} picked you: {trade}, {stages} in {suburb} · {pay}."
+  tab inbox, topic credit:
+    credit.due_today (NEW)    Pay-backs due today   "{count} customer(s) pay you back today: {amount}."
+
+  * wording to check with Mandla. Params are names and numbers the SERVER
+  already has (supplier, ref, total, stage, job title, builder first name,
+  pay); never a client's name or phone, never an IP, place, email or
+  device name, never anything a user typed into a free-text note. A
+  partner alert never shows the client's price (the network's rule). Only
+  order.paid says "paid", and only after the provider-verified path.
+  (Q7: the builder's OWN job title in their own alerts -- "Room extension
+  is done" -- the jobs screens already show it.)
+
+
+5. ENDPOINTS (/api/v1, @auth_required, per-user limits)
+---------------------------------------------------------------------------
+  GET  /me/notifications?tab=orders|inbox&before=<id>&limit=20
+        -> {notifications: [{id, tab, kind, icon, title, body,
+            link: {type, id} | null, created_at, read_at}], next_before}
+        newest first; limit 1..50                         120/min
+  GET  /me/notifications/unread
+        -> {orders: n, inbox: n, latest_id}  (the 20 s poll; also makes
+           the day's credit.due_today once)              120/min
+  POST /me/notifications/<id>/read -> {notification, unread}   120/min
+  POST /me/notifications/read-all {tab} -> {unread}             30/min
+  GET  /me/notification-settings -> {orders, jobs, credit, security: true}
+  PUT  /me/notification-settings {orders, jobs, credit}          30/min
+        ("security": false -> 422)
+  Not yours -> 404. A switch that's off stops NEW rows of that topic;
+  security is always written.
+
+
+6. THE APP (Mandla's plan section 4, with the NEW links)
+---------------------------------------------------------------------------
+  notifications/api (interface + http + mock), lib/notificationStore.ts
+  fed by the API + the 20 s poll (AppState aware), NotificationsScreen
+  with Orders (n) | Inbox (n), Today / Earlier, unread border, "Mark all
+  read" per tab from the server's answer, NotificationSheet on tap
+  (opening it marks it read), loading / empty / error, pull to refresh;
+  NotificationSettingsScreen from More -> Notifications (Orders, Jobs and
+  partners, Credit book reminders, Security "Always on for your safety").
+  mockOrdersApi stops calling notify(); HomeScreen bell = orders + inbox.
+  What a tap opens (the app maps link type -> screen):
+    order      /informal-business/orders/<id>        "View order"
+    job        /informal-business/jobs/<id>          "View job"
+    invite     /informal-business/jobs/invites/<id>  "View invite"   NEW
+    help_post  /informal-business/jobs/help/<id>     "View post"     NEW
+    credit     /informal-business/credit-book        "Open credit book" NEW
+    security   the security screens (change password) "Change password"
+
+
+7. TESTS (the PR isn't done without these)
+---------------------------------------------------------------------------
+  Mandla's list, all of it: each hook -> exactly one row with the right
+  template and tab (queue run at once or wait_until_idle); a retry (same
+  dedupe_key) -> still one row; a rolled-back action -> no row; orders
+  switched off -> no order rows, security still written; list newest
+  first, paging with before=, tab filter, rendered text; unread per tab
+  and latest_id; read once (again = 200, unchanged); read-all only mine
+  and only that tab; IDOR (B reads / marks A's -> 404, B's list and
+  counts never include A's); hostile input (bad uuid, tab=../x,
+  limit=10000, unknown fields, "security": false, huge / nested JSON);
+  every template renders with its params and none has an IP / email /
+  phone placeholder; the boundaries test; app jest (poll, markRead /
+  markAllRead from the server's answer, AppState stops the poll, the
+  mock follows the same rules); tsc clean; full backend suite green.
+  NEW: each builder-network hook (invite, answer, pay, confirm,
+  interested, pick) -> one row for the RIGHT person and none for the one
+  who acted; a partner alert never contains the client's name, phone or
+  price; job.done once, only on the last stage; account.locked once per
+  lock; credit.due_today once a day, not when nothing is due, not when
+  the credit switch is off, never another trader's entries.
+
+
+8. SECURITY BY DESIGN (for the PR)
+---------------------------------------------------------------------------
+  IDOR     every query WHERE user_id = current_user().id; 404 for others
+  Input    strict schemas; tab an enum; limit capped at 50
+  Content  templates only, server-filled params; no user-typed text in
+           titles; no IP / place / email / device name in security
+           alerts; no client name or phone in job alerts; no client
+           price in partner alerts
+  Abuse    rate limits above; dedupe_key unique; 90-day clean-up
+  Audit    notification.settings_changed (which switch, on/off). Reading
+           isn't audited (too noisy, not disputable).
+  Honest   an order alert is not proof of payment: "paid in the app" only
+           after mark_paid (the provider-verified path)
+
+
+9. ORDER OF WORK (small PRs, each testable)
+---------------------------------------------------------------------------
+  1. This contract -> Mandla's answers
+  2. Backend: shared event change, table + 0023, listener, templates,
+     routes, tests (no hooks yet)
+  3. Hooks: orders first (the demo flow), then account, then jobs and the
+     builder network (NEW), then credit due today (NEW)
+  4. App: API + store + two tabs + pop-up sheet, then settings
+  5. Demo check with Mandla: place a cash order -> `flask orders move
+     <REF> accepted` -> the alert on the phone within 20 s -> tap -> sheet
+     -> View order -> back: read, the badge dropped. And for the tools:
+     `flask builders seed --me <email>` -> "Sipho invites you" is waiting.
+  Not this weekend ("Not done" in the PR): phone push; the supplier's own
+  Orders tab (suppliers need accounts first); scheduled reminders (bin
+  clean-up, sign-off link about to expire, help post expiring); emails
+  per alert (orders already email).
+
+
+10. QUESTIONS FOR MANDLA (answer before step 2)
+---------------------------------------------------------------------------
+  1. Migration 0023 for notifications: OK?
+  2. OK to change shared/notifications (template key + params instead of
+     title/body, tabs ORDERS/INBOX)?
+  3. Poll every 20 s now, push later: OK for the demo?
+  4. Move the order book's Tabs component to shared/components?
+  5. Do cancelled-by-me orders need an alert? (Suggest no: you did it.)
+  6. NEW: yes to the builder-network, job.done, account.locked and
+     credit.due_today alerts (same tabs, same rules), and the third
+     switch "Credit book reminders"?
+  7. NEW: the builder's own job title in their own job alerts ("Room
+     extension is done") -- OK? (Never the client's name or phone.)
+
+DECISION:
