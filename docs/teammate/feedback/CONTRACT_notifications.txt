@@ -263,3 +263,20 @@ STATUS:          proposed -- step 1 of the plan. Nothing is built until the
      extension is done") -- OK? (Never the client's name or phone.)
 
 DECISION:
+YES -- Mandla, Saturday 26 September 2026.
+  1. YES: 0023_notifications (merged into main with your step 2).
+  2. YES: template key + params; the wording stays on the server.
+  3. YES: poll every 20 s ONLY while the app is open (data + battery);
+     push later.
+  4. YES: move Tabs to shared/components.
+  5. NO alert for an order you cancelled yourself.
+  6. YES to the partner-network, job.done, account.locked and
+     credit.due_today alerts and the "Credit book reminders" switch.
+     account.locked goes only to the owner, in the app, and never says why
+     or from where.
+  7. YES: the business's own job title in its own alerts; never the
+     client's name or phone.
+  ALSO: every notification belongs to its owner -- read/mark-read by
+  anyone else is 404 (IDOR tests); rate limits on the notification
+  routes; no customer names, phone numbers or card details in any alert.
+  Go ahead with step 3 (hooks, orders first) and step 4 (app).
