@@ -1,0 +1,133 @@
+===========================================================================
+WAR ROOM -- Saturday 26 September, 14:00-16:00 (mentors)
+Team PR: Mandla + Risuna. Both join; one talks, one notes.
+===========================================================================
+
+WHAT A WAR ROOM IS FOR
+  Mentors help teams get unstuck and sharpen the pitch before the final
+  submission (Sun 09:00). Use it to TEST the story and get answers we
+  can act on tonight -- not to show every screen. Come with 3 asks.
+
+
+---------------------------------------------------------------------------
+1. THE 45-SECOND INTRO (say it first)
+---------------------------------------------------------------------------
+  "A mobile app for small businesses and informal traders -- spaza shops,
+  builders and other informal businesses -- to run their business and
+  order from the suppliers they already work with.
+  Business tools -- a credit book, an order book, jobs -- help them run
+  the business day to day, and privately feed our supplier
+  recommendation engine, which improves their relationship with their
+  suppliers. The businesses use it free; suppliers are our paying
+  customers, because most small businesses already have suppliers they
+  trust. We're not a marketplace.
+  It's built and tested end to end: sign-up, suppliers recommended with
+  reasons, connect, order, pay digitally or cash, invoices and receipts
+  with a QR check -- and the tools."
+
+
+---------------------------------------------------------------------------
+2. OUR 3 ASKS (the point of the session)
+---------------------------------------------------------------------------
+  ASK 1 -- Business model (15 points)
+    "Suppliers pay us. Which works best to start: a monthly subscription,
+    a small fee per order, or paid placement in recommendations (clearly
+    labelled)? What would a supplier in the townships actually pay?"
+  ASK 2 -- Pitch and demo (Sun 10:00, 3 minutes; top 12 demo 5 minutes)
+    "We have more features than 3 minutes allow. Which ONE flow should
+    the 90-second video show: the supplier order with digital payment
+    and a verified invoice, or a spaza/builder using a tool that feeds a
+    supplier recommendation?"
+  ASK 3 -- TRL (the final submission asks for a TRL statement)
+    "We think we're TRL 4-5: validated end to end in our own environment,
+    payments in the provider's sandbox, no real users yet. Is that how
+    you'd rate it, and what gets us to 6?"
+
+  Spare asks if there's time:
+  - "Would suppliers trust a recommendation engine that ranks them? How
+    do we show it's fair?" (we rank every supplier, never hide one, and
+    show the reasons)
+  - "What would make a supplier sign up first -- the order flow, or the
+    demand signals from the tools?"
+  - "Lean Canvas (due 21:30): does our unfair advantage hold?"
+
+
+---------------------------------------------------------------------------
+3. WHAT'S BUILT (if they ask "what works?")
+---------------------------------------------------------------------------
+  Suppliers   integration feed (checked row by row), recommendation engine
+              with reasons, connect, catalogue, cart, map address
+  Orders      server pricing, stock held atomically, retries never order
+              twice, cash (R1,000 limit) or digital
+  Payments    PayFast sandbox, 4-check notification, paid digital orders
+              confirmed at once, payment email
+  Documents   invoices (tax invoice when VAT-registered) and receipts,
+              QR to a check page with no personal details
+  Tools       credit book (history, bin), order book (works offline),
+              jobs (stages, camera photos, client sign-off), partner
+              network (builders find and bring partners), demand signals
+  Account     email-verified sign-up, second check on a new phone,
+              sessions, data export, account closure
+  Tests       1,071 backend + 147 app, run before every merge
+  Honest gaps My record + daily tally, Home/More tabs being wired,
+              Cloudflare (plan written), offline SQLite, malware scan,
+              split payouts to suppliers
+
+
+---------------------------------------------------------------------------
+4. QUESTIONS THEY MAY ASK -- SHORT ANSWERS
+---------------------------------------------------------------------------
+  "Who pays?"            Suppliers. The businesses use it free.
+  "Why suppliers?"       Most small businesses already buy from suppliers
+                         they trust; we make that relationship work better.
+  "Isn't it a marketplace?"  No: businesses order from suppliers they've
+                         connected to. We recommend suppliers, never
+                         products.
+  "How is this different from WhatsApp orders?"  Prices from the
+                         supplier's own catalogue, stock checked, payment
+                         verified, a proper invoice, and a record of what
+                         you owe and are owed.
+  "What stops fake orders?"  Only connected suppliers; cash capped at
+                         R1,000 and 2 waiting; digital is paid up front.
+  "Is the tool data proof?"  No -- it's the business's own record. Only a
+                         digital payment confirmed by the provider is
+                         proof; every order says which it is.
+  "How does the engine use their data?"  Aggregates only (e.g. "open jobs
+                         need plumbing"), private to that business, never
+                         shared with suppliers or other users. It's
+                         rule-based scoring, not a model trained on
+                         people's data -- so nobody can probe it to learn
+                         whether a person's record was used (the
+                         "membership inference" attack from the security
+                         session).
+  "Security?"            SSDLC submitted: STRIDE, OWASP API Top 10 mapped,
+                         data inventory, card data never touches us, IDOR
+                         tests on every feature, incident response plan.
+  "What's next after the hackathon?"  Pilot with a few suppliers and the
+                         businesses they already serve; Cloudflare, split
+                         payouts, offline tools.
+
+
+---------------------------------------------------------------------------
+5. RULES FOR THE CALL
+---------------------------------------------------------------------------
+  - Don't say the product name on shared calls or in chat until Sunday's
+    submission; say "our app".
+  - "Where": nationwide (all nine provinces), never our test places.
+  - Both spaza shops AND builders in every example.
+  - Honest about what's planned vs built.
+  - Write every suggestion below; after the call we pick what to act on
+    tonight (Lean Canvas 21:30, slides, video).
+
+
+---------------------------------------------------------------------------
+6. NOTES FROM THE WAR ROOM
+---------------------------------------------------------------------------
+  Mentor feedback:
+  -
+  Answers to our 3 asks:
+  1.
+  2.
+  3.
+  To do tonight:
+  -
