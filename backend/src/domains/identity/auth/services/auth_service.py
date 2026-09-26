@@ -38,7 +38,7 @@ from src.shared.net.client_ip import client_ip
 from src.shared.security.security import hash_password, validate_password_complexity, verify_password
 
 from ..models import CodePurpose, EmailCode, GoogleIdentity, PasswordCredential, PasswordReset
-from . import auth_audit, google_verifier, secrets, session_service, trusted_phones
+from . import auth_alerts, auth_audit, google_verifier, secrets, session_service, trusted_phones
 
 logger = logging.getLogger("akayza.auth")
 
@@ -271,13 +271,16 @@ def login(
 
     if not correct:
         credential.failed_attempts += 1
-        if credential.failed_attempts >= current_app.config["LOGIN_MAX_FAILED_ATTEMPTS"]:
+        just_locked = credential.failed_attempts >= current_app.config["LOGIN_MAX_FAILED_ATTEMPTS"]
+        if just_locked:
             credential.locked_until = now + timedelta(minutes=current_app.config["LOGIN_LOCKOUT_MINUTES"])
             credential.failed_attempts = 0
             auth_audit.record(E.LOGIN_LOCKED, False, user_id=user.id, email=user.email, reason="too_many_failed_passwords")
         else:
             auth_audit.record(E.LOGIN_FAILED, False, user_id=user.id, email=user.email, reason="wrong_password", attempts=credential.failed_attempts)
         db.session.commit()
+        if just_locked:
+            auth_alerts.locked(user.id, credential.locked_until, current_app.config["LOGIN_LOCKOUT_MINUTES"])
         raise UnauthorizedError(GENERIC_LOGIN_ERROR, code="INVALID_CREDENTIALS")
 
     credential.failed_attempts = 0
@@ -378,6 +381,8 @@ def verify_sign_in(challenge: str, code: str, device: Optional[DeviceInfo], phon
     result = _tokens(user, device, trusted.id)
     db.session.commit()
     auth_audit.record(E.LOGIN_SUCCESS, user_id=user.id, email=user.email, second_factor="email_code", trusted_phone_id=str(trusted.id))
+    # A phone that needed an emailed code is a phone the account hasn't seen: tell the owner.
+    auth_alerts.new_phone(user.id, trusted.id)
     return {**result, "trusted_phone_token": trusted_token}
 
 
@@ -483,6 +488,7 @@ def reset_password(token: str, new_password: str) -> None:
     ended = session_service.revoke_all(user.id, session_service.RevokeReason.PASSWORD_RESET)
     db.session.commit()
     auth_audit.record(E.PASSWORD_RESET_SUCCESS, user_id=user.id, email=user.email)
+    auth_alerts.password_changed(user.id, now)
     auth_audit.record(E.TOKEN_REVOKED, user_id=user.id, email=user.email, reason="password_reset", sessions_ended=ended)
 
 
@@ -502,11 +508,14 @@ def _require_password(user, password: str, failed_event) -> PasswordCredential:
         raise AccountLockedError("Too many attempts. Try again in a few minutes.")
     if not verify_password(password, credential.password_hash):
         credential.failed_attempts += 1
-        if credential.failed_attempts >= current_app.config["LOGIN_MAX_FAILED_ATTEMPTS"]:
+        just_locked = credential.failed_attempts >= current_app.config["LOGIN_MAX_FAILED_ATTEMPTS"]
+        if just_locked:
             credential.locked_until = now + timedelta(minutes=current_app.config["LOGIN_LOCKOUT_MINUTES"])
             credential.failed_attempts = 0
         db.session.commit()
         auth_audit.record(failed_event, False, user_id=user.id, email=user.email, reason="wrong_password")
+        if just_locked:
+            auth_alerts.locked(user.id, credential.locked_until, current_app.config["LOGIN_LOCKOUT_MINUTES"])
         raise AppError("That password is incorrect.", status_code=400, code="WRONG_PASSWORD")
     credential.failed_attempts = 0
     return credential
@@ -522,6 +531,7 @@ def change_password(user, current_sid: str, current_password: str, new_password:
     ended = session_service.revoke_all_except(user.id, current_sid, session_service.RevokeReason.PASSWORD_CHANGE)
     db.session.commit()
     auth_audit.record(E.PASSWORD_CHANGED, user_id=user.id, email=user.email, session_id=current_sid, other_sessions_ended=ended)
+    auth_alerts.password_changed(user.id, credential.changed_at)
     return ended
 
 
@@ -538,6 +548,7 @@ def sign_out_other_phones(user, current_sid: str) -> int:
     )
     if untrusted:
         auth_audit.record(E.TRUSTED_PHONE_REVOKED, user_id=user.id, email=user.email, reason="others_signed_out", count=untrusted)
+    auth_alerts.phones_signed_out(user.id, utcnow())
     return ended
 
 

@@ -37,7 +37,7 @@ from src.shared.audit.event_types.business import BusinessAuditEvent as E
 from ..constants import MAX_JOB_CENTS, SIGN_OFF_DAYS
 from ..models import JobSignOff
 from ..repositories import jobs_repository as repo
-from . import jobs_audit
+from . import job_alerts, jobs_audit
 from .jobs_service import job_or_404, mark_done_if_complete, stage_or_404, view
 
 
@@ -178,4 +178,5 @@ def answer(ticket: str, kind: str, amount_cents: int, note: str) -> str:
     )
     if done:
         jobs_audit.record(E.JOB_DONE, user_id=job.user_id, job_id=job.id, total_cents=job.total_cents)
+    job_alerts.answered(job, stage, sign_off, done)
     return stage.status

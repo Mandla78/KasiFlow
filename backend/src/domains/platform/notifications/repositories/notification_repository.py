@@ -9,7 +9,7 @@ import uuid
 from datetime import datetime
 from typing import Optional
 
-from sqlalchemy import func, tuple_
+from sqlalchemy import func, select, tuple_
 from sqlalchemy.dialects.postgresql import insert
 
 from src.extensions import db
@@ -17,16 +17,26 @@ from src.extensions import db
 from ..models import Notification, NotificationSettings
 
 
-def insert_once(values: dict) -> bool:
-    """Write one alert in its own transaction (the listener runs on the
-    background queue, after the action's own commit). The same
-    (user_id, dedupe_key) again is ignored. True when a row was written."""
+def insert_once(values: dict, switch: Optional[str]) -> bool:
+    """Write one alert in its own transaction, on ONE connection (the
+    listener runs on the background queue, after the action's own commit):
+    the owner's switch is read and the row written together, so a job never
+    holds one connection open while it waits on another. `switch`: the
+    settings column that must be on, or None (security: always written).
+    The same (user_id, dedupe_key) again is ignored. True when written."""
+    settings = NotificationSettings.__table__
     stmt = (
         insert(Notification.__table__)
         .values(id=uuid.uuid4(), created_at=func.now(), updated_at=func.now(), is_deleted=False, **values)
         .on_conflict_do_nothing(index_elements=["user_id", "dedupe_key"])
     )
     with db.engine.begin() as conn:
+        if switch is not None:
+            on = conn.execute(
+                select(settings.c[switch]).where(settings.c.user_id == values["user_id"], settings.c.is_deleted.is_(False))
+            ).scalar()
+            if on is False:
+                return False
         return conn.execute(stmt).rowcount == 1
 
 

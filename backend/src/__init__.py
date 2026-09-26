@@ -108,6 +108,11 @@ def _register_listeners(app: Flask) -> None:
     from src.domains.platform.notifications.services import notification_service
 
     notification_service.register(app)
+    # Daily checks: a feature's one alert a day, run on the first poll of the day.
+    from src.domains.informal_trader.credit_book.services import credit_alerts
+    from src.shared.notifications import notifications as shared_notifications
+
+    shared_notifications.register_daily(credit_alerts.due_today)
     rate_limit_responses.register_audit_events(RATE_LIMIT_AUDIT_EVENTS)
 
     # Cloudinary scan verdicts, routed to the feature that owns the folder.

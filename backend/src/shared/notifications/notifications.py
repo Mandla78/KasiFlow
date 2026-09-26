@@ -24,8 +24,9 @@ site of publish(), needs to change when that day comes.
 """
 from __future__ import annotations
 
+import functools
 import logging
-from typing import Callable
+from typing import Any, Callable
 
 from src.shared.notifications.notification_types import NotificationEvent
 from src.shared.queue.queue import enqueue
@@ -68,3 +69,42 @@ def publish_notification(event: NotificationEvent) -> None:
                 logger.exception("notification listener failed for template=%s", event.template)
 
     enqueue(_deliver)
+
+
+# ------------------------------------------------------------ daily checks
+
+_daily: list[Callable[[Any], None]] = []
+
+
+def register_daily(check: Callable[[Any], None]) -> None:
+    """A check that may publish ONE alert a day for a user (the credit
+    book's "pay-backs due today"), run on that user's first unread check
+    of the day -- no scheduler needed. The owning feature registers it at
+    startup (src/__init__.py); the persisting domain runs them, knowing
+    nothing about what they check."""
+    if check not in _daily:
+        _daily.append(check)
+
+
+def run_daily(user: Any) -> None:
+    """Runs every daily check for `user`. Never raises."""
+    for check in _daily:
+        try:
+            check(user)
+        except Exception:  # noqa: BLE001 -- a failed check must never break the poll
+            logger.exception("daily notification check failed")
+
+
+def safely(build: Callable[..., None]) -> Callable[..., None]:
+    """For a feature's alert function. Its params are built in the request,
+    after the action's commit: a bug there must never turn a saved action
+    into an error for the user. Logged and swallowed, like publish."""
+
+    @functools.wraps(build)
+    def wrapper(*args: Any, **kwargs: Any) -> None:
+        try:
+            build(*args, **kwargs)
+        except Exception:  # noqa: BLE001 -- see docstring
+            logger.exception("building the %s notification failed", build.__name__)
+
+    return wrapper

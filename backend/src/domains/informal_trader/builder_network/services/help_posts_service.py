@@ -24,7 +24,7 @@ from src.shared.audit.event_types.business import BusinessAuditEvent as E
 from ..constants import INTERESTED_PER_DAY, MAX_OPEN_POSTS, MAX_PARTNERS_PER_JOB, POST_DAYS
 from ..models import HelpPost, HelpResponse
 from ..repositories import network_repository as repo
-from . import network_audit, people, ranking
+from . import network_alerts, network_audit, people, ranking
 from .common import check_deal, conflict, day_ago, hidden, invalid, not_found, now, offer_view, too_many
 from .partners_service import _new_partner
 
@@ -173,6 +173,7 @@ def interested(user, post_id: uuid.UUID) -> dict:
         repo.add(HelpResponse(post_id=post.id, builder_id=me.id))
         db.session.commit()
         network_audit.record(E.HELP_POST_INTERESTED, user_id=me.id, post_id=post.id)
+        network_alerts.help_interested(post, me.id)
     return _render(me, post)
 
 
@@ -195,11 +196,12 @@ def pick(user, post_id: uuid.UUID, builder_id: uuid.UUID) -> dict:
         raise conflict("TOO_MANY_PARTNERS", f"A job can have {MAX_PARTNERS_PER_JOB} partners.")
     # They said yes to the posted offer: a partner on the job straight away.
     data = {"stage_ids": list(post.stage_ids), "trade": post.trade, "starts_on": post.starts_on, "offer": offer_view(post)}
-    _new_partner(job, me.id, builder_id, data, status="accepted")
+    row = _new_partner(job, me.id, builder_id, data, status="accepted")
     post.status = "filled"
     post.picked_builder_id = builder_id
     db.session.commit()
     network_audit.record(E.HELP_POST_PICKED, user_id=me.id, post_id=post.id)
+    network_alerts.help_picked(post, row, job)
     return _render(people.load_me(user), post)
 
 

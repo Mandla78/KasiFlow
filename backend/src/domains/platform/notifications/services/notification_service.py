@@ -6,7 +6,9 @@ owner (CONTRACT_notifications.txt).
   store(event)                     one alert, if its template, params and
                                    the owner's switch allow it (the listener)
   list_for(user, tab, before, n)   newest first -> (alerts, next_before)
-  unread(user)                     {orders, inbox, latest_id}: the 20 s poll
+  unread(user)                     {orders, inbox, latest_id}: the 20 s poll;
+                                   the first of the day also runs the daily
+                                   checks (shared.notifications.run_daily)
   read(user, id)                   -> (alert, unread)
   read_all(user, tab)              -> unread (that tab only)
   get_settings(user) / save_settings(user, data)
@@ -19,7 +21,9 @@ from __future__ import annotations
 
 import logging
 import uuid
+from datetime import datetime
 from typing import Any, Optional
+from zoneinfo import ZoneInfo
 
 from flask import Flask
 
@@ -27,9 +31,11 @@ from src.core.base_model import utcnow
 from src.core.exceptions import NotFoundError
 from src.extensions import db
 from src.shared.audit.event_types.platform import PlatformAuditEvent as E
+from src.shared.cache.cache import cache
 from src.shared.notifications import notifications as shared_notifications
 from src.shared.notifications.notification_types import NotificationEvent
 
+from ..constants import TIMEZONE
 from ..models import Notification, NotificationSettings
 from ..repositories import notification_repository as repo
 from ..templates import LINK_TYPES, TEMPLATES, missing, render
@@ -86,8 +92,6 @@ def store(event: NotificationEvent) -> bool:
         logger.warning("notification template=%s dropped: unknown link_type=%s", event.template, event.link_type)
         return False
     user_id = uuid.UUID(str(event.recipient_user_id))
-    if template.topic != "security" and not _switch_on(user_id, template.topic):
-        return False
     return repo.insert_once(
         {
             "user_id": user_id,
@@ -97,13 +101,9 @@ def store(event: NotificationEvent) -> bool:
             "link_type": event.link_type,
             "link_id": str(event.link_id) if event.link_id is not None else None,
             "dedupe_key": event.dedupe_key[:160],
-        }
+        },
+        switch=None if template.topic == "security" else template.topic,
     )
-
-
-def _switch_on(user_id: uuid.UUID, topic: str) -> bool:
-    row = repo.settings(user_id)
-    return True if row is None else bool(getattr(row, topic))
 
 
 # -------------------------------------------------------------------- reads
@@ -120,9 +120,19 @@ def list_for(user, tab: str, before: Optional[uuid.UUID], limit: int) -> tuple[l
 
 
 def unread(user) -> dict:
+    _daily_once(user)
     counts = repo.unread_counts(user.id)
     newest = repo.latest(user.id)
     return {"orders": counts.get("orders", 0), "inbox": counts.get("inbox", 0), "latest_id": str(newest.id) if newest else None}
+
+
+def _daily_once(user) -> None:
+    """The daily checks, once per user per South African day (per server
+    process; the alerts' dedupe_key keeps it to one row either way). What
+    they publish shows on the next poll."""
+    day = datetime.now(ZoneInfo(TIMEZONE)).date().isoformat()
+    if cache.increment(f"notifications:daily:{user.id}:{day}", ttl_seconds=2 * 86_400) == 1:
+        shared_notifications.run_daily(user)
 
 
 # ------------------------------------------------------------------- writes
