@@ -1,0 +1,122 @@
+===========================================================================
+TEAMMATE 20 -- THE TOOLS FEED THE SUPPLIER ENGINE (the story judges need)
+From Mandla, Saturday 26 September 2026, 18:45. Push by 23:00 tonight.
+Do this BEFORE 19 (My record) -- it's the heart of the pitch.
+===========================================================================
+
+WHY
+  Our pitch says: "the everyday tools tell us, privately, what the
+  business needs, so we recommend the right suppliers." Today that is
+  only half true. Your demand_signals() are built and tested, but the
+  recommendation engine doesn't read them yet. Tonight it must, so the
+  demo can show: a builder with open plumbing stages -> plumbing
+  suppliers rise, with the reason "Your open jobs need plumbing".
+
+
+---------------------------------------------------------------------------
+0. START (main has everything)
+---------------------------------------------------------------------------
+
+  git switch main
+  git pull origin main
+  git switch -c risuna/engine-signals
+  backend: activate venv, flask db upgrade, python -m pytest -q tests (green first)
+  No migration needed.
+
+
+---------------------------------------------------------------------------
+1. WHAT EXISTS
+---------------------------------------------------------------------------
+
+  Engine: backend/src/domains/supplier/recommendation/services/recommendation_service.py
+    score = what you buy (fit 40) + reach (35 delivers / 25 collect / 0)
+            + closeness (10) + how you pay (10) + minimum fits spend (5)
+    fit today = the trader's sign-up categories vs the supplier's.
+    Every active supplier is returned with plain reasons; none hidden.
+
+  Your signals (service functions, re-exported on each service):
+    jobs_service.demand_signals(user)
+      -> {"categories": {"plumbing": 0.4, ...}, "active_sites": [...], "next_stages": [...]}
+    order_book_service.demand_signals(user)   (check the export name)
+      -> {"categories": {"meat_frozen": 0.41, ...}, "weekly_units": {...}, "since": ...}
+  Both: aggregates only, private to that trader, shares that sum to ~1.
+
+
+---------------------------------------------------------------------------
+2. WHAT TO BUILD
+---------------------------------------------------------------------------
+
+  a) In recommendation_service: read the signals of the tools the trader
+     has switched ON (jobs for builders, order book for food / spaza),
+     through the SERVICES only (never the repositories: the boundary test
+     must stay green). If a tool is off, or its call fails, the ranking is
+     exactly today's (catch, log without personal data, carry on).
+
+  b) Demand boost to "fit" -- keep it simple and explainable:
+       demand = sum over the supplier's categories of the signal share
+                (0..1)
+       fit    = max(today's fit, 0.5 * today's fit + 0.5 * demand)
+     (so demand can lift a supplier, never push one below today's score;
+     the total still tops out at 100). Put the 0.5 weights in one named
+     constant with a comment saying why.
+
+  c) A reason the trader can read, only when demand added something:
+       builder:  "Your open jobs need plumbing"          (top 1-2 categories,
+                                                           their labels)
+       food:     "You sell a lot that needs bakery and meat & frozen"
+     Use the existing _LABELS. Never an amount, a client, a job title or
+     an item name in a reason or a log.
+
+  d) Still rank EVERY supplier. Never hide one. Honest reasons stay
+     ("outside their delivery area").
+
+  e) Optional if time: active_sites -> "delivers to your site" when a
+     supplier's radius covers an open job's site but not the business.
+     Skip it if it isn't clean by 22:00.
+
+
+---------------------------------------------------------------------------
+3. TESTS (tests/domains/supplier/test_recommendation_signals.py)
+---------------------------------------------------------------------------
+
+  - builder with open plumbing stages: the plumbing supplier rises above
+    where it ranked without jobs, and its reasons contain
+    "Your open jobs need plumbing"
+  - same builder, jobs tool OFF -> ranking identical to today's
+  - no jobs at all -> ranking identical to today's
+  - food seller with order-book sales -> the matching category rises
+  - IDOR: trader B's jobs / orders never change trader A's ranking
+  - every supplier is still in the list (count before == after)
+  - no reason text contains a client name, job title, amount or item
+  - the signals call raising -> today's ranking, no 500
+  - architecture boundary test + FULL suite green
+
+
+---------------------------------------------------------------------------
+4. APP (small)
+---------------------------------------------------------------------------
+
+  The suppliers screen already shows the server's reasons. Check the new
+  reason fits on one line on a small phone; nothing else should change.
+  tsc + jest green.
+
+
+---------------------------------------------------------------------------
+5. DEMO CHECK (with Mandla, before 23:00)
+---------------------------------------------------------------------------
+
+  A builder account (general builder) -> Suppliers: note the order.
+  New job with a stage "Bathroom pipes" -> back to Suppliers: the
+  plumbing supplier moved up, reason "Your open jobs need plumbing".
+  Confirm the stage (practice sign-off) -> the boost fades.
+  Screenshots of before / after for the slides.
+
+  Then: merge origin/main, push risuna/engine-signals, PR into main with
+  the counts and the before/after screenshots. Don't merge it yourself.
+  After that, start 19_MY_RECORD_BRIEF.txt.
+
+  Also please merge-ready your risuna/tools-demo branch (flask tools seed
+  --me EMAIL): open a PR for it now, so the demo account has real tool
+  data tonight.
+
+DECISION:
