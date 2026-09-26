@@ -20,6 +20,7 @@ Companion: 02_QA_PREP.txt (the questions judges may ask).
        5.7 The business tools
        5.8 My record and Home
        5.9 Notifications
+       5.10 Sealed records (post-quantum signed)
   6. Honest proof: the three kinds of money
   7. Security, layer by layer
   8. Privacy and POPIA
@@ -70,8 +71,9 @@ Companion: 02_QA_PREP.txt (the questions judges may ask).
     PostgreSQL 16 split into schemas (identity, trader, supplier,
     commerce, platform, audit). marshmallow 4 for request schemas,
     Flask-JWT-Extended (tokens), Flask-Bcrypt (passwords), Flask-Limiter
-    (rate limits), cryptography (Ed25519, HMAC), fpdf2 + segno (PDFs and
-    QR codes). One versioned API: /api/v1.
+    (rate limits), cryptography (Ed25519, HMAC), dilithium-py (ML-DSA-65,
+    the NIST post-quantum signature), fpdf2 + segno (PDFs and QR codes).
+    One versioned API: /api/v1.
 
   Outside services (each behind one module; tests use fakes)
     PayFast        payments (sandbox today)
@@ -112,8 +114,9 @@ Companion: 02_QA_PREP.txt (the questions judges may ask).
                      recommendation, integration (feed import)
     commerce         orders, payments, documents
     platform         notifications
-    proof            ledger (My record). handshake, integrity, reputation
-                     and share are empty folders: planned, NOT BUILT.
+    proof            ledger (My record), integrity (sealed records).
+                     handshake, reputation and share are empty folders:
+                     planned, NOT BUILT.
     security         audit
 
   backend/src/shared/  cross-cutting helpers that know no feature: audit
@@ -417,6 +420,40 @@ Companion: 02_QA_PREP.txt (the questions judges may ask).
   bell shows the unread count (99+). Alerts are kept 90 days; every
   alert belongs to its owner (anyone else gets "not found").
 
+5.10 SEALED RECORDS (POST-QUANTUM SIGNED)             (proof/integrity)
+
+  "Seal my record" (POST /me/record/seal) fingerprints every record in
+  the business's tools and signs the lot; the OWNER keeps the seal on
+  their phone -- we keep no copy. "Check my record" (POST
+  /me/record/check) later shows whether anything sealed has changed.
+    - What's sealed: the facts that never change once recorded -- credit
+      as first given, repayments, corrections, stages the client
+      confirmed (with the photo's SHA-256), sign-off answers, counter
+      orders as taken, menu price history. Status and the bin are left
+      out, so paying off, binning or correcting is never "tampering".
+      Each tool hands over its own records through its SERVICE.
+    - How: each record is canonical JSON -> a SHA-256 leaf; the leaves
+      form an RFC 6962 Merkle tree; the root, the time, the count and the
+      account are signed with Ed25519 AND ML-DSA-65 (NIST FIPS 204, the
+      post-quantum standard). Both keys come from one server secret
+      (HKDF, SEAL_SECRET or SECRET_KEY). GET /proof/keys publishes the
+      public keys, so anyone can check a seal without us.
+    - The check refuses a seal that was altered (a leaf, the root, the
+      time, the count, a missing or swapped signature) or belongs to
+      another account; then it compares every sealed record with today's
+      and names what changed or disappeared, and how many were added.
+    - Why the owner holds it: if a record changes later -- even straight
+      in our database -- the owner's seal shows it, and we can't re-sign
+      an old seal they already have.
+    - What it is NOT: proof a record is true. It proves nothing changed
+      since sealing; payments are proof only when PayFast verified them.
+    - Numbers: ML-DSA-65 signs in about 85 ms and checks in about 13 ms
+      in pure Python; a seal holds only kinds, ids and fingerprints (no
+      names, amounts or text). No migration: nothing is stored on our side.
+    - Demo: seal, then `flask tools tamper --me EMAIL` (development only)
+      changes one repayment straight in the database; "Check my record"
+      answers "1 record changed since you sealed: Repayment".
+
 
 ---------------------------------------------------------------------------
 6. HONEST PROOF: THE THREE KINDS OF MONEY
@@ -532,6 +569,11 @@ Companion: 02_QA_PREP.txt (the questions judges may ask).
       address that isn't https. Developer tools refuse to run outside
       development.
 
+  Tamper evidence
+    - Sealed records (5.10): a change or deletion made after sealing is
+      caught, even one made straight in our database; seals are signed
+      twice, classically and post-quantum.
+
   Architecture
     - Domain boundaries enforced by tests (section 3), so a feature can't
       quietly reach into another's data -- identity above all.
@@ -577,8 +619,8 @@ Companion: 02_QA_PREP.txt (the questions judges may ask).
 9. TESTING AND HOW WE WORK
 ---------------------------------------------------------------------------
 
-  - About 1,240 automated backend tests and 196 app tests on main
-    tonight, run before every merge (the backend suite takes 12-14
+  - About 1,280 automated backend tests and 204 app tests (main plus the
+    sealed-records pull request), run before every merge (the backend suite takes 12-14
     minutes).
   - Hostile-input suites for identity and every tool: SQL and header
     injection, script and template injection, emoji, control and
@@ -632,8 +674,10 @@ Companion: 02_QA_PREP.txt (the questions judges may ask).
     progress).
   - Sharing a record with a funder, owner-approved and revocable
     (proof/share is an empty folder).
-  - Post-quantum sealing (ML-DSA countersigned record roots) and the
-    phone side of the Ed25519 signing keys.
+  - The phone side of the Ed25519 signing keys (records signed on the
+    phone), and recording money phone to phone with no signal -- QR first,
+    then Bluetooth and a BitChat-style mesh
+    (docs/teammate/feedback/PLAN_offline_mesh.txt).
   - The live CIPC company check (sandbox only; "Get verified" is coming
     soon) and Google sign-in (built on the server, switched off).
   - Account deletion and data export IN THE APP (built on the server).

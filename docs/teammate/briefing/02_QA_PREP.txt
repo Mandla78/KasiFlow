@@ -54,8 +54,13 @@ B. DO NOT CLAIM THESE (older drafts say them; they're not built)
     we play the supplier." [5.4, 11]
   "Share your record with a funder, and revoke it"
     NOT BUILT (proof/share is empty). Say it as the roadmap.
-  "Post-quantum sealed records" / "ML-DSA"
-    NOT BUILT. See section J.
+  "Post-quantum secure" / "quantum-proof"
+    Too broad. What's true (sealed-records PR): record SEALS are signed
+    with ML-DSA-65 (NIST FIPS 204) as well as Ed25519. Say "post-quantum
+    signed seals". See section J.
+  "Bluetooth mesh" / "works with no signal" (beyond the order book)
+    NOT BUILT. Designed in PLAN_offline_mesh.txt; the order book already
+    works offline. See section D.
   "Verified company (CIPC check)" as live
     It's a sandbox check; "Get verified" shows as coming soon. [5.2]
   "One trusted phone per account"
@@ -68,10 +73,11 @@ B. DO NOT CLAIM THESE (older drafts say them; they're not built)
   "Download my data / delete my account" in the app
     Built and tested on the server; the app shows "coming soon". [8]
   "Records can't be changed" (in general)
-    Say exactly what: credit-book corrections add a line and keep the
-    old one; the audit trail can't be edited (database triggers); every
-    invoice has a QR check that catches a forged or altered copy; stage
-    photos carry the server's time and fingerprint. [7]
+    Say exactly what: after the owner SEALS their record, any change or
+    deletion of a sealed record is caught -- even one made straight in
+    our database [5.10]; corrections add a line and keep the old one; the
+    audit trail can't be edited (database triggers); every invoice has a
+    QR check; stage photos carry the server's time and fingerprint. [7]
   Split payouts to suppliers, automated refunds, full offline, other
   languages, Google sign-in, malware scanning -- all "next", not live.
 
@@ -104,7 +110,7 @@ C. NUMBERS TO KNOW
       in-app orders digital; under 1% disputed. Year 1: 1,000 active
       businesses, 15 paying suppliers, about R55,000 a month
   The build
-    about 1,240 backend tests and 196 app tests, run before every merge
+    about 1,280 backend tests and 204 app tests, run before every merge
     11 demo suppliers, about 1,670 products; 11 builder trades
     engine score: fit 40 + reach 35/25 + closeness 10 + pay 10 +
       minimum 5; tools' demand = half of fit, only ever lifts
@@ -150,6 +156,19 @@ D. PROBLEM AND USERS
      double orders.
      If they push: full offline for every tool (an encrypted store on
      the phone) is next.
+
+  Q: What about places with no signal at all? Something like BitChat's
+     Bluetooth mesh?
+  A: The order book already works with no signal and sends later without
+     double orders. Phone to phone, we've designed it in steps: records
+     signed on the phone, a cash hand-over done by scanning QR codes with
+     no network, then Bluetooth between two phones, then a BitChat-style
+     mesh that carries sealed, signed records to whoever has signal. The
+     server re-checks everything when it arrives.
+     If they push "why not tonight?": Bluetooth needs a native module and
+     a custom build, and a mesh has to be tested on several phones -- a
+     radio demo that drops on stage helps nobody. The integrity layer it
+     needs, sealed records, is built.
 
   Q: Languages? People who don't read English well?
   A: English only today, written the way traders speak, with icons and
@@ -331,6 +350,18 @@ H. SECURITY, PRIVACY AND ETHICS
      branch, a review by a team member and the full test suite before
      merge, under written security rules. We can explain any part of it.
 
+  Q: Can you show that a business's records weren't changed later --
+     even by you?
+  A: Yes. The owner taps "Seal my record": we fingerprint every record
+     in their tools, build a Merkle tree and sign the root twice -- Ed25519
+     and ML-DSA-65, the NIST post-quantum standard. The owner keeps the
+     seal; we keep no copy. "Check my record" names any record changed or
+     deleted since -- even if the change was made straight in our
+     database -- and our public keys are published so anyone can check a
+     seal without us. [5.10]
+     If they push: a seal proves nothing changed since sealing, not that
+     the records are true. Proof of payment is still only PayFast's.
+
   Q: What was your best security catch?
   A: Behind a proxy, every caller looks like one address -- one attacker
      could use up everyone's sign-in attempts, and the audit trail
@@ -388,18 +419,20 @@ J. QUANTUM
 ---------------------------------------------------------------------------
 
   Q: Where's the quantum in this?
-  A: Honestly: outlined, not built. Our records must stay provable for
-     years -- longer than today's signatures may be safe. The design is
-     to countersign each record chain with ML-DSA, the NIST post-quantum
-     signature standard (FIPS 204), so a record sealed today still
-     checks out later. What's built today is the ground for it: SHA-256
-     fingerprints on stage photos, HMAC-SHA256 hashes for every link
-     ticket and code, and the server check for phones' Ed25519 signing
-     keys.
-     If they push: in transit, Cloudflare's tunnel already prefers the
-     hybrid post-quantum key exchange (X25519MLKEM768) -- we saw it in
-     our tunnel logs -- and our launch plan puts the API behind
-     Cloudflare.
+  A: Record seals are signed with ML-DSA-65, the NIST post-quantum
+     signature standard (FIPS 204), alongside Ed25519. A business's
+     records must stay checkable for years -- tax law keeps them five --
+     and a quantum computer that could forge Ed25519 couldn't forge
+     ML-DSA. Signing with both means a seal stays checkable if either
+     scheme ever falls. Show it: seal, change one number in the database,
+     check -- it names the record. [5.10]
+     (Only if the sealed-records pull request is merged. If it isn't,
+     say: "outlined, and built on a branch".)
+     If they push on speed: pure Python, about 85 ms to sign and 13 ms to
+     check; keys are derived from one server secret with HKDF.
+     If they push on transport: Cloudflare's tunnel already prefers the
+     hybrid post-quantum key exchange X25519MLKEM768 -- we saw it in our
+     tunnel logs -- and our launch plan puts the API behind Cloudflare.
      Don't say: "post-quantum secure", "quantum-proof", or that we use
      quantum computing.
 
@@ -461,9 +494,9 @@ L. HARD QUESTIONS
      honestly.
 
   Q: What would you build next with more time?
-  A: The supplier API, split payouts to suppliers, sharing a record with
-     a funder (owner-approved, revocable), full offline, South African
-     languages, then the post-quantum sealing.
+  A: The supplier API, split payouts to suppliers, sharing a sealed
+     record with a funder (owner-approved, revocable), the offline
+     hand-over (QR, then Bluetooth), and South African languages.
 
   Q: Who are you, and why you?
   A: Two developers who built and tested all of this in the hackathon,
@@ -482,6 +515,8 @@ M. IF THE DEMO BREAKS
       on stage (a trusted phone skips it).
     - Seed data loaded (suppliers, builders, the tools demo).
     - A terminal ready with `flask orders move AKZ-2026-... accepted`.
+    - For the tamper moment: seal on the phone first; then
+      `flask tools tamper --me EMAIL`, then "Check my record".
     - The recorded demo clips on the laptop as a backup.
 
   During

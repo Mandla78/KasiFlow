@@ -321,3 +321,28 @@ def test_the_tamper_tool_changes_one_number_and_is_development_only(app, client,
         assert result.exit_code != 0 and "Development only" in result.output
     finally:
         app.config["ENV_NAME"] = was
+
+
+# ------------------------------------------------------------------ the standalone verifier
+
+
+def test_the_standalone_verifier_agrees_without_our_code(client, me, full, tmp_path, capsys):
+    import importlib.util
+    from pathlib import Path
+
+    path = Path(__file__).resolve().parents[3] / "scripts" / "verify_seal.py"
+    spec = importlib.util.spec_from_file_location("verify_seal", path)
+    verifier = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(verifier)
+
+    s = seal(client, me)
+    keys = client.get(KEYS).get_json()["data"]["keys"]
+    assert verifier.verify(s, keys) == {"ed25519": True, "ml_dsa_65": True, "tree": True}
+    for how in ("leaf", "time", "no_pq_signature"):
+        r = verifier.verify(_altered(s, how), keys)
+        assert not (r["ed25519"] and r["tree"] and r["ml_dsa_65"] is not False), how
+
+    (tmp_path / "seal.json").write_text(json.dumps({"seal": s}), encoding="utf-8")
+    (tmp_path / "keys.json").write_text(json.dumps({"data": {"keys": keys}}), encoding="utf-8")
+    assert verifier.main(["verify_seal.py", str(tmp_path / "seal.json"), str(tmp_path / "keys.json")]) == 0
+    assert "This seal is ours and unaltered." in capsys.readouterr().out
