@@ -45,7 +45,7 @@ IN PROGRESS
     rules are tested (lib/recommend.ts, lib/pay.ts). "Test: answer as
     Thabo" plays the other builder on the mock. Backend per
     CONTRACT_jobs_v2.txt: domains/informal_trader/builder_network,
-    migration 0018_builder_network (8 tables, pay rules as CHECKs too),
+    migration 0019_builder_network (8 tables, pay rules as CHECKs too),
     92 tests (flows, ranking = the app's cases, security, hostile
     input); the app on it via httpNetworkApi. flask builders seed
     [--me EMAIL] makes sample builders for development (photos to

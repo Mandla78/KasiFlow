@@ -7,7 +7,7 @@ TOOL:            The builder network (15_JOBS_BUILDER_NETWORK_PLAN.txt as
 AUTHOR / DATE:   Risuna, 25 September 2026
 STATUS:          built (branch risuna/jobs-network, PR 7): backend
                  domains/informal_trader/builder_network + migration
-                 0018_builder_network, the app on it (httpNetworkApi).
+                 0019_builder_network, the app on it (httpNetworkApi).
                  Field names are the snake_case twins of network/types.ts.
                  Sample builders for development: flask builders seed
                  [--me EMAIL] (refused outside development).
@@ -148,7 +148,7 @@ STATUS:          built (branch risuna/jobs-network, PR 7): backend
                  builder who joined in the last 30 days
 
 
-3. DATA (migration 0018_builder_network, schema trader)
+3. DATA (migration 0019_builder_network, schema trader)
 ---------------------------------------------------------------------------
   builder_profiles   user_id (unique), trades (JSON list), about, travel_km,
                      visible, visible_changed_at, hidden_job_ids (JSON)
