@@ -23,7 +23,7 @@ from flask import current_app
 
 from src.core.base_model import utcnow
 from src.core.exceptions import AppError
-from src.domains.commerce.orders.services import order_audit, order_service
+from src.domains.commerce.orders.services import order_alerts, order_audit, order_service
 from src.extensions import db
 from src.shared.audit.event_types.commerce import CommerceAuditEvent as E
 
@@ -151,6 +151,7 @@ def handle_itn(posted: list[tuple[str, str]], remote_ip: Optional[str]) -> str:
     )
     if paid_in_time:
         payment_emails.payment_received(order, payment.provider_reference)
+        order_alerts.alert(order, "paid")
     return "paid" if paid_in_time else "paid_late"
 
 

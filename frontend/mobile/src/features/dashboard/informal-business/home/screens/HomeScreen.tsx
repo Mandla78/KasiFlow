@@ -18,7 +18,7 @@ import { formatRand } from '@/shared/lib/money';
 import { colors, fonts, radius } from '@/shared/theme/tokens';
 
 import { AddToolSheet } from '../../account/components/AddToolSheet';
-import { useUnreadCount } from '../../notifications/lib/notificationStore';
+import { usePoll, useUnread } from '../../notifications/lib/notificationStore';
 import { creditToday, jobsToday, TodayItem } from '../lib/today';
 import { builderSample, builderSampleToday, spazaSample, spazaSampleToday } from '../mock';
 import { Loaded, useToolSummaries } from '../useToolSummaries';
@@ -43,7 +43,8 @@ function shown<T>(loaded: Loaded<T>, pick: (d: T) => string): string {
  */
 export default function Home() {
   const { profile } = useSession();
-  const unread = useUnreadCount();
+  usePoll();
+  const unread = useUnread().total;
   const builder = profile.businessType === 'builder';
   const { credit, jobs, orders, reload } = useToolSummaries();
   const [today, setToday] = useState<TodayItem[] | null>(null);

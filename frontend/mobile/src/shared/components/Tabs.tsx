@@ -2,7 +2,7 @@ import { Pressable, StyleSheet, Text, View } from 'react-native';
 
 import { colors, fonts, radius } from '@/shared/theme/tokens';
 
-/** The bar under the title: [ New order | Queue | Today ]. Big targets, one selected. */
+/** A bar of tabs under a title ([ New order | Queue | Today ], [ Orders | Inbox ]): big targets, one selected, an optional count. */
 export function Tabs<T extends string>({ tabs, value, onChange }: { tabs: { key: T; label: string; badge?: number }[]; value: T; onChange: (t: T) => void }) {
   return (
     <View style={styles.bar} accessibilityRole="tablist">

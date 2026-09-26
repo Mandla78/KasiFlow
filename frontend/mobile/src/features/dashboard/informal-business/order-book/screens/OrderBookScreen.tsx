@@ -9,7 +9,7 @@ import { BackButton, Screen } from '@/shared/components/Screen';
 import { Title } from '@/shared/components/Text';
 import { colors, fonts, radius } from '@/shared/theme/tokens';
 
-import { Tabs } from '../components/Tabs';
+import { Tabs } from '@/shared/components/Tabs';
 import { forgetRefused, open, useCounter } from '../lib/counterStore';
 import { NewOrderTab } from './NewOrderTab';
 import { QueueTab } from './QueueTab';

@@ -26,7 +26,7 @@ from src.shared.audit.event_types.business import BusinessAuditEvent as E
 from ..constants import INVITES_PER_DAY, MAX_PARTNERS_PER_JOB, TRADES
 from ..models import JobPartner, PartnerPayment
 from ..repositories import network_repository as repo
-from . import network_audit, people, ranking
+from . import network_alerts, network_audit, people, ranking
 from .common import check_deal, conflict, day_ago, hidden, invalid, not_found, now, offer_view, payment_view, too_many
 
 
@@ -133,6 +133,7 @@ def invite(user, job_id: uuid.UUID, data: dict) -> dict:
     row = _new_partner(job, me.id, builder_id, data, status="invited")
     db.session.commit()
     network_audit.record(E.PARTNER_INVITED, user_id=me.id, job_id=job.id, partner_id=row.id, trade=row.trade)
+    network_alerts.invited(row, job)
     return _partner_view(me, row, job, people.cards(me, [builder_id], now())[0])
 
 
@@ -171,9 +172,11 @@ def record_payment(user, partner_id: uuid.UUID, cents: int) -> dict:
         raise not_found("partner")
     if row.status != "accepted":
         raise conflict("NOT_ACCEPTED", "They have to accept the invite first.")
-    row.payments.append(PartnerPayment(owner_cents=cents, status="waiting"))
+    payment = PartnerPayment(owner_cents=cents, status="waiting")
+    row.payments.append(payment)
     db.session.commit()
     network_audit.record(E.PARTNER_PAYMENT_RECORDED, user_id=me.id, partner_id=row.id)
+    network_alerts.payment_recorded(row, payment)
     job = repo.job(row.job_id)
     return _partner_view(me, row, job, people.cards(me, [row.builder_id], now())[0])
 
@@ -222,6 +225,7 @@ def answer(user, invite_id: uuid.UUID, accept: bool) -> dict:
     row.answered_at = utcnow()
     db.session.commit()
     network_audit.record(E.PARTNER_ANSWERED, user_id=me.id, partner_id=row.id, accepted=accept)
+    network_alerts.answered(row, repo.job_for_partner(row.job_id))
     me = _me(user)  # partners changed: the owner's number is now shared
     return _render_invites(me, [row])[0]
 
@@ -239,4 +243,5 @@ def confirm_payment(user, invite_id: uuid.UUID, payment_id: uuid.UUID, cents: in
     pay.answered_at = utcnow()
     db.session.commit()
     network_audit.record(E.PARTNER_PAYMENT_ANSWERED, user_id=me.id, partner_id=row.id, outcome=pay.status)
+    network_alerts.payment_answered(row, pay)
     return _render_invites(me, [row])[0]

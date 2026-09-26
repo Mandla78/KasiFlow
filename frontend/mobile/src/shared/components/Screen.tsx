@@ -1,7 +1,7 @@
 import { Feather } from '@expo/vector-icons';
 import { router } from 'expo-router';
 import { ReactNode } from 'react';
-import { KeyboardAvoidingView, Platform, Pressable, ScrollView, StyleSheet, View } from 'react-native';
+import { KeyboardAvoidingView, Platform, Pressable, RefreshControl, ScrollView, StyleSheet, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { colors, radius, space } from '@/shared/theme/tokens';
@@ -13,6 +13,9 @@ type Props = {
   back?: boolean;
   /** Tab screens: the tab bar already covers the bottom inset. */
   tab?: boolean;
+  /** Pull down to refresh (only screens that pass it). */
+  onRefresh?: () => void;
+  refreshing?: boolean;
 };
 
 /**
@@ -20,7 +23,7 @@ type Props = {
  * that never hides the field you're typing in, and an action pinned at the
  * bottom where the thumb is.
  */
-export function Screen({ children, footer, back, tab }: Props) {
+export function Screen({ children, footer, back, tab, onRefresh, refreshing = false }: Props) {
   return (
     <SafeAreaView style={styles.safe} edges={tab ? ['top'] : ['top', 'bottom']}>
       <KeyboardAvoidingView style={styles.flex} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
@@ -28,7 +31,8 @@ export function Screen({ children, footer, back, tab }: Props) {
           style={styles.flex}
           contentContainerStyle={styles.content}
           keyboardShouldPersistTaps="handled"
-          showsVerticalScrollIndicator={false}>
+          showsVerticalScrollIndicator={false}
+          refreshControl={onRefresh ? <RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor={colors.ink} /> : undefined}>
           {back ? <BackButton /> : null}
           {children}
         </ScrollView>

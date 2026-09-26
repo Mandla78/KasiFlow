@@ -143,7 +143,7 @@ STATUS:          proposed -- step 1 of the plan. Nothing is built until the
     help.interested (NEW)     Someone is interested "{builder} can do your {trade} post."
     help.picked (NEW)         You're on a job       "{owner} picked you: {trade}, {stages} in {suburb} · {pay}."
   tab inbox, topic credit:
-    credit.due_today (NEW)    Pay-backs due today   "{count} customer(s) pay you back today: {amount}."
+    credit.due_today (NEW)    Pay-backs due today   "{customers} due to pay you back today: {amount}." (1 customer / 3 customers)
 
   * wording to check with Mandla. Params are names and numbers the SERVER
   already has (supplier, ref, total, stage, job title, builder first name,

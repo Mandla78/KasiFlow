@@ -74,7 +74,7 @@ TEMPLATES: dict[str, Template] = {
     "help.interested": _inbox("jobs", "thumbs-up", "Someone is interested", "{builder} can do your {trade} post."),
     "help.picked": _inbox("jobs", "briefcase", "You're on a job", "{owner} picked you: {trade}, {stages} in {suburb} · {pay}."),
     # Credit book (Inbox)
-    "credit.due_today": _inbox("credit", "book", "Pay-backs due today", "{customers} pay you back today: {amount}."),
+    "credit.due_today": _inbox("credit", "book", "Pay-backs due today", "{customers} due to pay you back today: {amount}."),
 }
 
 
