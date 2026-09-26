@@ -5,7 +5,7 @@ option lists on the onboarding screens: the server rejects anything else.
 """
 from __future__ import annotations
 
-BUSINESS_TYPES = ("builder", "spaza", "other")
+BUSINESS_TYPES = ("builder", "spaza", "food", "other")
 TRADES = ("general_builder", "plumber", "electrician", "carpenter", "painter_tiler", "other_trade")
 YEARS_TRADING = ("under_1", "1_3", "3_plus")
 
@@ -17,7 +17,7 @@ SPEND = ("under_1k", "1k_5k", "5k_20k", "over_20k")
 PAYMENT = ("payfast", "cash", "both")
 FULFILMENT = ("delivery", "collect", "either")
 
-TOOLS = ("creditBook", "orderStock", "myRecord", "jobs")
+TOOLS = ("creditBook", "orderStock", "myRecord", "jobs", "orderBook")
 #: "My record" is the proof everything else writes to: it can't be switched off.
 ALWAYS_ON_TOOLS = ("myRecord",)
 

@@ -57,4 +57,13 @@ QUESTIONS
   1. Yes to the 11 above? Anything to add (e.g. "handyman", "paver")?
   2. OK for sign-up to keep ONE trade and the builder profile to allow 3?
 
-DECISION:
+DECISION: YES -- Mandla, Saturday 26 September 2026.
+  1. YES to the 11. No "handyman" (too vague for "works with" matching)
+     and no "paver" (bricklayer covers paving).
+  2. YES: sign-up keeps ONE trade; the builder profile allows up to 3.
+  The change is yours in your backend PR, all in one go so nothing breaks
+  half-way: constants/businessTypes.ts TradeKey + TRADES (with the
+  categories you listed), business_profile/constants.py TRADES, the
+  ck_business_profiles_trade check and the painter_tiler data migration.
+  Your migration is 0021 or later: main has 0020_food_seller (see
+  CONTRACT_order_book DECISION).

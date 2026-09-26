@@ -168,4 +168,24 @@ STATUS:          proposed. The app side is built on the mocks (branch
   3. A new business type for food sellers (NEEDS file), or order book as
      an Add-a-tool option for "Other" only?
 
-DECISION:
+DECISION: YES -- Mandla, Saturday 26 September 2026. Go ahead with the
+order book backend (risuna/order-book-api).
+  1. YES, with one change: the SERVER makes the row's primary key; the
+     phone's UUID is a separate column, client_key, unique(user_id,
+     client_key), and the order's address in the URL is that client_key,
+     always looked up WITH user_id. So two traders' phones can never
+     collide, and a clash can never tell one trader that another's order
+     exists (IDOR). Response field stays "id" = the client_key, so the
+     app changes nothing.
+  2. YES: the price history table. The server prices every line, never
+     the phone (same rule as supplier orders; we told the DevLab panel).
+  3. BOTH: a new "Food seller" type (orderBook on by default) AND "Order
+     book" in Add a tool for every type (spaza shops sell kotas too).
+     Done on main: businessTypes.ts ('food', 'orderBook'), AddToolSheet,
+     backend BUSINESS_TYPES + TOOLS, migration 0020_food_seller. Your
+     order book migration is 0021 or later.
+  ADDED -- honest money: "Paid cash" and "Card or EFT" in the order book
+  are the trader's OWN records (the card machine is theirs, not ours).
+  Today's totals say "Money you recorded", never "verified" or "paid", and
+  they are never added to the orders' proof-backed totals (GET
+  /me/orders/summary). Same rule as the evidence labels in 12_POLICIES.

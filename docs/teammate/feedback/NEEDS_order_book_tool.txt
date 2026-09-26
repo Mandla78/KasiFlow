@@ -45,3 +45,11 @@ WHAT I DO AFTER YOUR CHANGE (my files)
 IF YOU'D RATHER NOT ADD A TYPE
   Keep the four types and offer "Order book" in Add a tool for everyone
   (default off). Spaza shops that sell kotas at the counter switch it on.
+
+
+DONE -- Mandla, Saturday 26 September 2026: all of the above as proposed,
+plus "Order book" in Add a tool for every type (default off except Food
+seller). Migration 0020_food_seller allows business_type 'food'. My record's
+subtitle is now "Always on: your trading history in one place" (tool
+records aren't proof). Your turn: the Account tile on profile.tools.orderBook
+and "N orders today" on Home.

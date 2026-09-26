@@ -106,4 +106,15 @@ STATUS:          proposed (the app side is built on the mocks: branch
   3. After 30 days: computed from deleted_at (my proposal), or a
      purged_from_view_at column?
 
-DECISION:
+DECISION: YES -- Mandla, Saturday 26 September 2026. Go ahead with the
+history + bin backend.
+  1. YES: History takes paid-back entries off the credit book's main list
+     and done jobs off the jobs list.
+  2. CHANGED: binning a job REVOKES its sign-off links the client hasn't
+     answered yet (a job binned by mistake must not be confirmed by a
+     client). Stages already confirmed, their sign-offs and photos stay.
+     Restoring the job does NOT revive old links; the builder sends a new
+     one. Test it: an open link answers like an expired one after the bin.
+  3. YES: computed from deleted_at, no column and no job.
+  Also: this bin is not a POPIA erasure. A person's request to erase their
+  data is a separate path (Privacy Policy); nothing to build here.

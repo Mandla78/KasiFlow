@@ -80,6 +80,18 @@ def test_my_record_cannot_be_switched_off(client, me):
     assert p["tools"]["myRecord"] is True and p["tools"]["jobs"] is False
 
 
+def test_a_food_seller_with_the_order_book(client, me):
+    body = {"business": {**BUSINESS, "business_type": "food"}, "tools": {"orderBook": True, "jobs": False}}
+    p = patch(client, me, body).get_json()["data"]["profile"]
+    assert p["business"]["business_type"] == "food"
+    assert p["tools"]["orderBook"] is True and p["tools"]["myRecord"] is True
+
+
+def test_unknown_types_and_tools_are_refused(client, me):
+    assert patch(client, me, {"business": {**BUSINESS, "business_type": "kota"}}).status_code == 422
+    assert patch(client, me, {"tools": {"stockTake": True}}).status_code == 422
+
+
 def test_cipc_director_match_earns_the_badge(client, me):
     patch(client, me, {"business": BUSINESS})
     p = patch(client, me, {"registration": {"sole_trader": False, "cipc_number": "2020/123456/07"}}).get_json()["data"]["profile"]

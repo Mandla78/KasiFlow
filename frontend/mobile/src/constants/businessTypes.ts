@@ -13,11 +13,11 @@ import { CategoryCode } from './categories';
 
 type IconName = ComponentProps<typeof Feather>['name'];
 
-export type BusinessType = 'builder' | 'spaza' | 'other';
+export type BusinessType = 'builder' | 'spaza' | 'food' | 'other';
 
 export type TradeKey = 'general_builder' | 'plumber' | 'electrician' | 'carpenter' | 'painter_tiler' | 'other_trade';
 
-export type ToolKey = 'creditBook' | 'orderStock' | 'myRecord' | 'jobs';
+export type ToolKey = 'creditBook' | 'orderStock' | 'myRecord' | 'jobs' | 'orderBook';
 
 type TypeConfig = {
   label: string;
@@ -34,26 +34,33 @@ export const BUSINESS_TYPES: Record<BusinessType, TypeConfig> = {
     label: 'Builder / trade',
     subtitle: 'Building, plumbing, electrical and other trades',
     icon: 'tool',
-    tools: { creditBook: false, orderStock: true, myRecord: true, jobs: true },
+    tools: { creditBook: false, orderStock: true, myRecord: true, jobs: true, orderBook: false },
     categories: ['building_materials', 'plumbing', 'electrical', 'tools_hardware', 'paint_finishes'],
   },
   spaza: {
     label: 'Spaza shop',
     subtitle: 'A shop selling groceries and everyday goods',
     icon: 'shopping-bag',
-    tools: { creditBook: true, orderStock: true, myRecord: true, jobs: false },
+    tools: { creditBook: true, orderStock: true, myRecord: true, jobs: false, orderBook: false },
     categories: ['food_grocery', 'beverages', 'snacks_confectionery', 'household_cleaning', 'personal_care'],
+  },
+  food: {
+    label: 'Food seller',
+    subtitle: 'Kotas, plates, burgers, a food stall',
+    icon: 'coffee',
+    tools: { creditBook: true, orderStock: true, myRecord: true, jobs: false, orderBook: true },
+    categories: ['bakery', 'meat_frozen', 'dairy_chilled', 'beverages', 'packaging_disposable', 'fresh_produce', 'food_grocery'],
   },
   other: {
     label: 'Other',
     subtitle: 'Another kind of small business',
     icon: 'grid',
-    tools: { creditBook: true, orderStock: true, myRecord: true, jobs: false },
+    tools: { creditBook: true, orderStock: true, myRecord: true, jobs: false, orderBook: false },
     categories: [],
   },
 };
 
-export const BUSINESS_TYPE_ORDER: BusinessType[] = ['builder', 'spaza', 'other'];
+export const BUSINESS_TYPE_ORDER: BusinessType[] = ['builder', 'spaza', 'food', 'other'];
 
 export const TRADES: { key: TradeKey; label: string; categories: CategoryCode[] }[] = [
   { key: 'general_builder', label: 'General builder', categories: ['building_materials', 'tools_hardware', 'paint_finishes', 'plumbing', 'electrical'] },

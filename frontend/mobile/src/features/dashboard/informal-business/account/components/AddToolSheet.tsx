@@ -7,11 +7,13 @@ import { Button } from '@/shared/components/Button';
 import { ToggleRow } from '@/shared/components/Parts';
 import { colors, fonts } from '@/shared/theme/tokens';
 
-const TOOLS: { key: ToolKey; icon: 'book' | 'package' | 'tool' | 'shield'; title: string; subtitle: string }[] = [
+const TOOLS: { key: ToolKey; icon: 'book' | 'package' | 'tool' | 'clipboard' | 'shield'; title: string; subtitle: string }[] = [
   { key: 'creditBook', icon: 'book', title: 'Credit book', subtitle: 'Who owes you, and when they pay' },
   { key: 'orderStock', icon: 'package', title: 'Order stock', subtitle: 'Buy from suppliers who deliver to you' },
   { key: 'jobs', icon: 'tool', title: 'Jobs', subtitle: 'Stages, photos and the client’s sign-off' },
-  { key: 'myRecord', icon: 'shield', title: 'My record', subtitle: 'Always on: it’s your proof of trading' },
+  { key: 'orderBook', icon: 'clipboard', title: 'Order book', subtitle: 'Counter orders fast: the queue and today’s money' },
+  // Not "proof": what a trader records in the tools is theirs, not verified.
+  { key: 'myRecord', icon: 'shield', title: 'My record', subtitle: 'Always on: your trading history in one place' },
 ];
 
 /**
@@ -30,7 +32,7 @@ export function AddToolSheet({ onClose }: { onClose: () => void }) {
           icon={t.icon}
           title={t.title}
           subtitle={t.subtitle}
-          value={t.key === 'myRecord' ? true : profile.tools[t.key]}
+          value={t.key === 'myRecord' ? true : Boolean(profile.tools[t.key])}
           locked={t.key === 'myRecord'}
           onChange={(on) => setTool(t.key, on)}
         />
