@@ -146,4 +146,4 @@ QUESTIONS FOR MANDLA
   2. Count cash orders from "accepted" (suggested), or from "placed"?
   3. Rename "You owe hardware" to "You owe suppliers" for builders?
 
-DECISION:
+DECISION: yes to all (Mandla, Sat 26 Sep). Add "I paid the cash" (trader_paid_at, migration 0024); count cash orders from accepted; builders see "You owe suppliers".

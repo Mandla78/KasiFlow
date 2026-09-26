@@ -35,4 +35,4 @@ QUESTIONS FOR MANDLA
      same way (Home shows [Credit book] instead)? Suggest: yes, same rule
      -- tools own their actions, Home only opens tools.
 
-DECISION:
+DECISION: yes (Mandla, Sat 26 Sep). Home only opens tools: builder [My jobs], spaza [Credit book]; New job and Credit sale live inside their tools.

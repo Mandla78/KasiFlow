@@ -82,4 +82,4 @@ QUESTIONS FOR MANDLA
      (Suggest order date: it's what the invoice says.)
   3. Keep "My orders" as an Account tile, or only inside Order stock?
 
-DECISION:
+DECISION: yes to all (Mandla, Sat 26 Sep). Record summary in proof/ledger; stock bought by order date; My orders stays an Account tile.
