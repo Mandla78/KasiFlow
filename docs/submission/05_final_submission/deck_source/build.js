@@ -370,7 +370,7 @@ async function icon(Comp, color, px = 256) {
     const s = pres.addSlide(); base(s);
     kicker(s, "Traction");
     title(s, "Not an idea. It's built, and it works.");
-    const nums = [["1,239", "automated system tests pass"], ["197", "app tests pass"], ["1,672", "products from 11 sample suppliers"], ["0", "card numbers ever touch our servers"]];
+    const nums = [["1,281", "automated system tests pass"], ["204", "app tests pass"], ["1,672", "products from 11 sample suppliers"], ["0", "card numbers ever touch our servers"]];
     for (let i = 0; i < 4; i++) {
       const x = 0.6 + i * 3.08;
       card(s, x, 1.95, 2.85, 2.0);
