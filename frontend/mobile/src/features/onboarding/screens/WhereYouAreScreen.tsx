@@ -6,6 +6,7 @@ import { useSession } from '@/features/auth/session/SessionProvider';
 import { AddressPickerField } from '@/shared/location-picker/components/AddressPickerField';
 
 import { StepScaffold } from '../components/StepScaffold';
+import { savedToast, useSectionSave } from '../sync/useSectionSave';
 
 /** Step 3: where the business is (a pin the trader confirms). Delivery addresses come later, with orders. */
 export default function WhereYouAreScreen({ editing = false }: { editing?: boolean }) {
@@ -16,11 +17,17 @@ export default function WhereYouAreScreen({ editing = false }: { editing?: boole
 
   const placeError = !place ? 'Set your business location to continue' : '';
 
-  function next() {
+  const { save, busy, error } = useSectionSave();
+
+  async function next() {
     setTouched(true);
     if (placeError) return;
+    if (editing) {
+      if (!(await save({ location: place }, ['location']))) return;
+      savedToast();
+      return router.back();
+    }
     updateProfile({ location: place });
-    if (editing) return router.back();
     router.push('/what-you-buy');
   }
 
@@ -33,6 +40,8 @@ export default function WhereYouAreScreen({ editing = false }: { editing?: boole
         'Suppliers only see your area, and your address when you order from them.',
       ]}
       onPrimary={next}
+      busy={busy}
+      error={error}
       editing={editing}>
       <AddressPickerField
         label={isBuilder ? 'Your base or yard' : 'Your shop'}

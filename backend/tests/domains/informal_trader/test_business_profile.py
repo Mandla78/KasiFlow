@@ -162,3 +162,25 @@ def test_each_trader_only_sees_their_own(client, outbox, me):
     patch(client, me, EVERYTHING)
     other = signed_in(client, outbox, email="thabo@example.com")
     assert client.get(URL, headers=other).get_json()["data"]["profile"] is None
+
+
+def test_a_refused_field_is_named_so_the_app_can_show_it(client, me):
+    """The edit screens show the server's reason under the field, not "try again"."""
+    patch(client, me, EVERYTHING)
+    r = patch(client, me, {"business": {**BUSINESS, "cellphone": "12345"}})
+    assert r.status_code == 422
+    errors = r.get_json()["errors"]
+    assert "cellphone" in str(errors) and "10-digit" in str(errors)
+    # Nothing in the refused save was kept.
+    assert client.get(URL, headers=me).get_json()["data"]["profile"]["business"]["cellphone"] == "0821234567"
+
+
+def test_tools_switch_on_and_off_in_quick_succession(client, me):
+    """More -> Tools saves each switch at once; a few taps in a row must all land."""
+    patch(client, me, EVERYTHING)
+    for on in (True, False, True, False, True, False, True, False, True, False):
+        r = patch(client, me, {"tools": {**EVERYTHING["tools"], "jobs": on}})
+        assert r.status_code == 200
+        assert r.get_json()["data"]["profile"]["tools"]["jobs"] is on
+    tools = client.get(URL, headers=me).get_json()["data"]["profile"]["tools"]
+    assert tools["jobs"] is False and tools["creditBook"] is True and tools["myRecord"] is True

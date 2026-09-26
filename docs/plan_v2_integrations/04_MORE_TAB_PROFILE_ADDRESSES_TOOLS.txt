@@ -153,4 +153,4 @@ QUESTIONS FOR MANDLA
      informal_trader/delivery_addresses (suggested: own feature)?
   3. A WhatsApp support number to use, or hide the Help row for now?
 
-DECISION:
+DECISION: go with the suggestions (Mandla, Sat 26 Sep). Delivery addresses are their own feature (informal_trader/delivery_addresses); the Help row is hidden until there's a support number.
