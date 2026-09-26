@@ -94,3 +94,9 @@ FOR A FIXED ADDRESS LATER (demo day, production)
   - Or ngrok's free static domain (see backend/.env.example):
         ngrok http 5000 --url=https://<your-domain>.ngrok-free.dev
   - Production: the backend's real https address, no tunnel.
+
+
+DECISION: THANKS -- Mandla, Saturday 26 September 2026. Good as your own
+laptop guide. Mandla keeps the ngrok static domain (the address never
+changes, so links already sent keep working). Either works with
+PAYFAST_TRUST_PROXY=true.

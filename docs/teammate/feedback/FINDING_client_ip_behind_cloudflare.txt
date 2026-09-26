@@ -97,4 +97,16 @@ SOURCES
   Flask behind a proxy / Cloudflare (ProxyFix, real IP):
     https://medium.com/@01one/get-the-real-ip-address-in-flask-when-behind-a-proxy-like-nginx-or-cloudflare-aab57629b27d
 
-DECISION:
+DECISION: YES -- Mandla, Saturday 26 September 2026. Risuna writes it, as a
+PR for Mandla to review (branch risuna/client-ip).
+  - shared/net/client_ip.py + BEHIND_CLOUDFLARE (default false), used by
+    the limiter, the login key, sessions, auth_service._ip(), the 429
+    audit and audit_context.get_ip_address() -- as you proposed.
+  - ALSO FIX TODAY'S BUG: audit_context takes the FIRST X-Forwarded-For
+    entry, which the caller types, so anyone can fake the IP in our audit
+    trail right now. With the switch off it must be remote_addr, full stop.
+  - PayFast keeps its own rule (PAYFAST_TRUST_PROXY, LAST X-Forwarded-For)
+    because we run ngrok today; don't change it in this PR.
+  - Your tests as listed, plus: switch off + a forged X-Forwarded-For
+    never reaches sessions or audit rows.
+  - No migration. Run the full backend suite before the PR.

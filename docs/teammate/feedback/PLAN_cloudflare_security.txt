@@ -162,4 +162,13 @@ SOURCES (checked 26 Sep 2026)
   Zero Trust free (50 users)    https://www.cloudflare.com/plans/zero-trust-services/
   South Africa data centres     https://blog.cloudflare.com/cape-town-south-africa/
 
-DECISION:
+DECISION: YES as the plan -- Mandla, Saturday 26 September 2026.
+  - Before Sunday: ngrok stays (fixed address). Cloudflare goes live after
+    the hackathon, when Mandla has the domain + a Cloudflare account (the
+    owner's account; keys never in git: the tunnel credentials file lives
+    on the server only, TURNSTILE_SECRET in .env).
+  - Now: step 1 only (FINDING_client_ip DECISION). Steps 2-8 are copied
+    into the SSDLC as "planned" with these exact settings, never "built".
+  - Turnstile (step 6): yes later, Risuna on /sign-off first.
+  - Bot Fight Mode OFF on the API: agreed.
+  - Privacy policy: name Cloudflare as an operator when it goes live.
