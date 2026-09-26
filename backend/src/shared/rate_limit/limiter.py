@@ -32,17 +32,21 @@ STORAGE: in-memory (Flask-Limiter's default), for Phase 1.
     scope. Grep for "storage_uri" if you're looking for the one line
     that needs to change.
 
-KEY FUNCTION: get_remote_address (IP-based) is the DEFAULT for every
-route that doesn't override it. Login overrides this with a composite
-IP+email key -- see policies.py's login_key_func for why.
+KEY FUNCTION: client_ip_key (IP-based) is the DEFAULT for every route
+that doesn't override it: the connection's own address, or Cloudflare's
+CF-Connecting-IP when BEHIND_CLOUDFLARE is on (shared/net/client_ip.py).
+A forged X-Forwarded-For never splits one caller into many. Login
+overrides this with a composite IP+email key -- see policies.py's
+login_key_func for why.
 """
 from __future__ import annotations
 
 from flask_limiter import Limiter
-from flask_limiter.util import get_remote_address
+
+from src.shared.net.client_ip import client_ip_key
 
 limiter = Limiter(
-    key_func=get_remote_address,
+    key_func=client_ip_key,
     default_limits=[],  # no blanket global limit -- every limited route opts in explicitly via @limiter.limit(...); see policies.py
     storage_uri="memory://",  # Phase 1 -- see module docstring above before changing deployment topology
     headers_enabled=True,  # adds RateLimit-* / Retry-After response headers, on top of the JSON body responses.py returns

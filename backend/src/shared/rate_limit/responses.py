@@ -32,6 +32,7 @@ from flask_limiter.errors import RateLimitExceeded
 from src.core.responses import error_response
 from src.shared.audit import audit as shared_audit
 from src.shared.audit.audit_types import AuditEventNameType
+from src.shared.net.client_ip import client_ip
 
 logger = logging.getLogger(__name__)
 
@@ -112,7 +113,7 @@ def handle_rate_limit_exceeded(error: RateLimitExceeded):
         try:
             shared_audit.log_rate_limit_exceeded(
                 event_name,
-                ip_address=request.remote_addr,
+                ip_address=client_ip(),
                 email=_current_email(),
                 user_id=_current_user_id(),
                 endpoint=request.endpoint,

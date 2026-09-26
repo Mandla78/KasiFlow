@@ -18,6 +18,7 @@ from flask_jwt_extended import create_access_token, create_refresh_token, decode
 
 from src.core.base_model import utcnow
 from src.extensions import db
+from src.shared.net.client_ip import client_ip
 
 from ..models import Session
 
@@ -52,7 +53,7 @@ def start(user_id: uuid.UUID, device_id: Optional[uuid.UUID], trusted_phone_id: 
             trusted_phone_id=trusted_phone_id,
             refresh_jti=jti,
             expires_at=utcnow() + current_app.config["JWT_REFRESH_TOKEN_EXPIRES"],
-            ip_address=request.remote_addr,
+            ip_address=client_ip(),
             user_agent=(request.headers.get("User-Agent") or "")[:300] or None,
         )
     )

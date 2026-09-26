@@ -113,6 +113,13 @@ class BaseConfig:
     PAYFAST_PASSPHRASE = os.environ.get("PAYFAST_PASSPHRASE", "").strip()
     PAYFAST_TRUST_PROXY = _bool("PAYFAST_TRUST_PROXY", "false")
 
+    # The client's IP (shared/net/client_ip.py). Off: the connection's own
+    # address, and every forwarding header is ignored. On: Cloudflare's
+    # CF-Connecting-IP. Switch it on ONLY when the server is reachable
+    # through Cloudflare alone (a cloudflared tunnel, or a firewall that
+    # lets in Cloudflare's addresses only), or anyone can send that header.
+    BEHIND_CLOUDFLARE = _bool("BEHIND_CLOUDFLARE", "false")
+
     # The legal document versions a new account must accept. Must match the
     # app's content/legal files; bump both when a document changes.
     PRIVACY_POLICY_VERSION = os.environ.get("PRIVACY_POLICY_VERSION", "0.2-draft")
