@@ -219,11 +219,11 @@ async function icon(Comp, color, px = 256) {
     const rings = [[0.6, 1.95, 4.6, C.panel, C.faint], [1.3, 2.9, 3.2, C.panel2, C.am], [1.95, 3.8, 1.9, C.em, C.em]];
     for (const [x, y, d, fill, line] of rings) s.addShape(pres.shapes.OVAL, { x, y, w: d, h: d, fill: { color: fill }, line: { color: line, width: 1.5 } });
     t(s, "R900 bn", { x: 0.6, y: 2.2, w: 4.6, h: 0.5, fontFace: TITLE, fontSize: 22, bold: true, align: "center", color: C.muted });
-    t(s, "R150 bn", { x: 1.3, y: 3.15, w: 3.2, h: 0.5, fontFace: TITLE, fontSize: 20, bold: true, align: "center", color: C.amL });
+    t(s, "R180 bn", { x: 1.3, y: 3.15, w: 3.2, h: 0.5, fontFace: TITLE, fontSize: 20, bold: true, align: "center", color: C.amL });
     t(s, "20,000", { x: 1.95, y: 4.5, w: 1.9, h: 0.5, fontFace: TITLE, fontSize: 20, bold: true, align: "center", color: C.bg });
     const rows = [
       ["R900 bn", "The township economy a year: every informal and small business we can serve.", C.muted],
-      ["R150 bn", "Spent in cash at about 150,000 spaza shops alone: one segment, already buying from suppliers every week.", C.amL],
+      ["R180 bn", "Moves through spaza shops alone every year: one segment, already buying from suppliers every week.", C.amL],
       ["20,000", "Businesses and 200 paying suppliers by year 3: about R13 million a year in revenue.", C.emL],
     ];
     for (let i = 0; i < 3; i++) {
@@ -231,10 +231,10 @@ async function icon(Comp, color, px = 256) {
       t(s, rows[i][0], { x: 5.9, y, w: 2.2, h: 0.6, fontFace: TITLE, fontSize: 28, bold: true, color: rows[i][2] });
       t(s, rows[i][1], { x: 8.15, y: y + 0.05, w: 4.55, h: 1.2, fontSize: 16, color: C.white });
     }
-    foot(s, 8, "Standard Bank 2025 (economy size; ~R150 bn cash spend at spaza shops, reported with the report's launch). Year-3 figures are our estimates.");
+    foot(s, 8, "Standard Bank 2025 (economy size; spaza segment ~R180 bn a year). Year-3 figures are our estimates.");
     s.addNotes(
-      "SAY (20 s): 'The whole township economy is R900 billion. Spaza shops alone spend about R150 billion in cash a year with their suppliers: one segment, already buying every week. Our goal is 20,000 businesses and 200 paying suppliers by year three, about R13 million a year.'\n\n" +
-      "R150 bn is specifically spaza shops (that's what the evidence measures), so we name them here. Everywhere else: informal and small businesses.");
+      "SAY (20 s): 'The whole township economy is R900 billion. Spaza shops alone move about R180 billion a year: one segment, already buying every week. Our goal is 20,000 businesses and 200 paying suppliers by year three, about R13 million a year.'\n\n" +
+      "R180 bn is specifically spaza shops (that's what the evidence measures), so we name them here. Everywhere else: informal and small businesses.");
   }
 
   // ================================================================ 9. WHY SOUTH AFRICA FIRST
