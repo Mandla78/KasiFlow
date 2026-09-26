@@ -266,8 +266,8 @@ ASSESSMENT & SECURE INTEGRATION -- PLANNED (not built yet)
   - Refusing known leaked passwords; dependency and secret scanning in CI;
     an external penetration test and a POPIA legal review before launch.
 
-  Honest limits: what a business enters in its tools (a credit sale, a
-  cash payment, a counter order) is its own record, not proof. When both
+  Honest limits: what a business enters in its tools (the credit book,
+  the order book, jobs) is its own record, not proof. When both
   sides confirm a cash payment, it proves they agreed -- not that money
   changed hands. Only a digital payment confirmed by the payment provider
   is independent proof, and every order and invoice says which of these
