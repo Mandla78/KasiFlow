@@ -59,6 +59,29 @@ def add(row) -> None:
     db.session.add(row)
 
 
+def confirmed_between(user_id: uuid.UUID, start: datetime, end: datetime) -> list[JobStage]:
+    """Stages the client confirmed in [start, end), on jobs not in the bin."""
+    return (
+        JobStage.query.join(Job)
+        .filter(Job.user_id == user_id, Job.is_deleted.is_(False), JobStage.status == "confirmed", JobStage.confirmed_at >= start, JobStage.confirmed_at < end)
+        .all()
+    )
+
+
+def mismatched_between(user_id: uuid.UUID, start: datetime, end: datetime) -> int:
+    """Stages whose amounts still don't match, answered that way in [start, end)."""
+    return (
+        db.session.query(func.count(func.distinct(JobStage.id)))
+        .join(Job, Job.id == JobStage.job_id)
+        .join(JobSignOff, JobSignOff.stage_id == JobStage.id)
+        .filter(
+            Job.user_id == user_id, Job.is_deleted.is_(False), JobStage.status == "amounts_dont_match",
+            JobSignOff.outcome == "amounts_dont_match", JobSignOff.used_at >= start, JobSignOff.used_at < end,
+        )
+        .scalar()
+    )  # fmt: skip
+
+
 def open_sign_offs_for_job(job_id: uuid.UUID) -> list[JobSignOff]:
     """Links the client hasn't answered yet, held until commit (the client's
     answer locks the same rows, so an answer and a delete queue)."""
