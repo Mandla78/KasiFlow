@@ -17,6 +17,7 @@ import { TopBar } from '@/shared/components/TopBar';
 import { formatRand } from '@/shared/lib/money';
 import { colors, fonts, radius } from '@/shared/theme/tokens';
 
+import { AddToolSheet } from '../../account/components/AddToolSheet';
 import { useUnreadCount } from '../../notifications/lib/notificationStore';
 import { creditToday, jobsToday, TodayItem } from '../lib/today';
 import { builderSample, builderSampleToday, spazaSample, spazaSampleToday } from '../mock';
@@ -47,6 +48,7 @@ export default function Home() {
   const { credit, jobs, orders, reload } = useToolSummaries();
   const [today, setToday] = useState<TodayItem[] | null>(null);
   const [todayFailed, setTodayFailed] = useState(false);
+  const [addingTool, setAddingTool] = useState(false);
   const kind = builder ? 'Builder · ' : '';
   const creditOn = profile.tools.creditBook;
   const jobsOn = profile.tools.jobs;
@@ -142,11 +144,16 @@ export default function Home() {
       </LinearGradient>
 
       <View style={styles.actions}>
+        {/* Home only opens tools: a job or a credit sale is started inside its own tool. */}
         <Button
           compact
-          icon="plus"
-          title={builder ? 'New job' : 'Credit sale'}
-          onPress={() => router.push(builder ? '/informal-business/jobs/new' : '/informal-business/credit-book/new')}
+          icon={builder ? 'tool' : 'book'}
+          title={builder ? (jobsOn ? 'My jobs' : 'Add Jobs') : creditOn ? 'Credit book' : 'Add credit book'}
+          onPress={() =>
+            (builder ? jobsOn : creditOn)
+              ? router.push(builder ? '/informal-business/jobs' : '/informal-business/credit-book')
+              : setAddingTool(true)
+          }
         />
         <Button compact icon="shopping-cart" title={builder ? 'Materials' : 'Order stock'} onPress={() => router.push('/informal-business/suppliers')} />
       </View>
@@ -170,6 +177,8 @@ export default function Home() {
         ))}
       </View>
       <Text style={styles.sample}>&ldquo;Sample&rdquo; numbers come from orders, which are still being built.</Text>
+
+      {addingTool ? <AddToolSheet onClose={() => setAddingTool(false)} /> : null}
     </Screen>
   );
 }

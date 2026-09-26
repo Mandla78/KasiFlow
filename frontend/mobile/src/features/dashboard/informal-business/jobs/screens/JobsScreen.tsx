@@ -80,7 +80,7 @@ export default function JobsScreen() {
           </>
         ) : undefined
       }>
-      <Title>Jobs</Title>
+      <Title>My jobs</Title>
       {NETWORK_READY ? <SegmentedTabs tabs={TABS} value={tab} onChange={setTab} /> : null}
 
       {tab === 'builders' ? (
