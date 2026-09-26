@@ -4,6 +4,9 @@ The jobs tool's allowed values and limits. The app has the same numbers
 """
 from __future__ import annotations
 
+#: One bin for the credit book and jobs: the same 30 days and the same list size.
+from src.domains.informal_trader.credit_book.constants import BIN_DAYS, HISTORY_LIMIT  # noqa: F401
+
 JOB_STATUSES = ("active", "done")
 STAGE_STATUSES = ("not_started", "photo_taken", "waiting", "confirmed", "amounts_dont_match")
 SIGN_OFF_OUTCOMES = ("confirmed", "amounts_dont_match", "not_yet")

@@ -11,11 +11,17 @@ credit_book -- the rules of the trader's book of customers who owe them.
   set_customer_phone(user, id, phone)
   delete_customer(user, id)           anonymise; the amounts stay
   summary(user)                       totals for Home and the Account tile
+  history(user, q)                    paid and cancelled entries (search)
+  bin_entries(user)                   deleted in the last 30 days
+  move_to_bin(user, id)               "delete": hidden from the trader only
+  restore(user, id)                   back from the bin
 
 Every call acts on the signed-in user only: the user comes from the token,
 never the request, and "not yours" is the same 404 as "doesn't exist".
 Nothing in the book is edited in place or deleted: corrections keep the
-old values, payments are never changed.
+old values, payments are never changed. The bin (CONTRACT_bin.txt) only
+hides an entry: it leaves every list and total, and every other call
+treats it as not there, until it's restored.
 """
 from __future__ import annotations
 
@@ -24,11 +30,12 @@ from datetime import date, datetime, timedelta
 from typing import Optional
 from zoneinfo import ZoneInfo
 
+from src.core.base_model import utcnow
 from src.core.exceptions import ConflictError, NotFoundError, ValidationError
 from src.extensions import db
 from src.shared.audit.event_types.business import BusinessAuditEvent as E
 
-from ..constants import DELETED_CUSTOMER_NAME, MAX_DAYS_AHEAD, MAX_DAYS_BACK, TIMEZONE
+from ..constants import BIN_DAYS, DELETED_CUSTOMER_NAME, MAX_DAYS_AHEAD, MAX_DAYS_BACK, TIMEZONE
 from ..models import CreditCorrection, CreditCustomer, CreditEntry, CreditPayment
 from ..repositories import credit_book_repository as repo
 from . import credit_audit
@@ -252,6 +259,47 @@ def delete_customer(user, customer_id: uuid.UUID) -> None:
     credit_audit.record(E.CREDIT_CUSTOMER_DELETED, user_id=user.id, customer_id=customer.id)
 
 
+# ---------------------------------------------------------- history and bin
+
+
+def history(user, q: str) -> list[dict]:
+    rows = repo.history(user.id, q)
+    paid = repo.paid_by_entry(user.id, [e.id for e in rows])
+    return [_view(e, paid.get(e.id, 0)) for e in rows]
+
+
+def bin_entries(user) -> list[dict]:
+    rows = repo.binned(user.id, _bin_since())
+    paid = repo.paid_by_entry(user.id, [e.id for e in rows])
+    return [_view(e, paid.get(e.id, 0)) for e in rows]
+
+
+def move_to_bin(user, entry_id: uuid.UUID) -> None:
+    """Hidden from the trader, never removed: its payments and corrections
+    stay with it, and restore brings all of it back."""
+    entry = _entry(user, entry_id, lock=True)
+    entry.soft_delete()
+    db.session.commit()
+    credit_audit.record(E.CREDIT_ENTRY_BINNED, user_id=user.id, entry_id=entry.id)
+
+
+def restore(user, entry_id: uuid.UUID) -> dict:
+    entry = repo.binned_entry(user.id, entry_id, _bin_since())
+    if entry is None:
+        db.session.rollback()
+        raise _not_found()
+    entry.is_deleted = False
+    entry.deleted_at = None
+    db.session.commit()
+    credit_audit.record(E.CREDIT_ENTRY_RESTORED, user_id=user.id, entry_id=entry.id)
+    return _view(entry, repo.paid_by_entry(user.id, [entry.id]).get(entry.id, 0))
+
+
+def _bin_since() -> datetime:
+    """Older than this, a deleted entry is out of the bin's view (still in the database)."""
+    return utcnow() - timedelta(days=BIN_DAYS)
+
+
 def _customers_with_owed(user, customers: list[CreditCustomer]) -> list[dict]:
     """Each customer with what they still owe across their open entries."""
     open_entries = repo.open_entries_for_customers(user.id, [c.id for c in customers])
@@ -296,6 +344,7 @@ def _view(e: CreditEntry, paid_cents: int) -> dict:
         "due_on": e.due_on.isoformat(),
         "status": e.status,
         "created_at": e.created_at.isoformat(),
+        "binned_at": e.deleted_at.isoformat() if e.is_deleted and e.deleted_at else None,
     }
 
 

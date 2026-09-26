@@ -11,6 +11,10 @@
   PATCH  /customers/<id>                    set or clear the cellphone
   DELETE /customers/<id>                    anonymise; the amounts stay
   GET    /summary                           totals for Home and Account
+  GET    /history?q=                        paid and cancelled entries (search)
+  DELETE /entries/<id>                      move to the bin (hidden, never removed)
+  POST   /entries/<id>/restore              back from the bin
+  GET    /bin                               deleted in the last 30 days
 
 Thin: validate -> service -> answer. Every route is signed-in traders only,
 rate-limited per trader, and scoped to current_user() by the service. A
@@ -131,3 +135,33 @@ def delete_credit_customer(customer_id: uuid.UUID):
 @auth_required(dashboard=TRADER)
 def credit_summary():
     return success_response({"summary": service.summary(current_user())})
+
+
+@api_bp.get(f"{BASE}/history")
+@limiter.limit(limits.READ, key_func=limits.per_user)
+@auth_required(dashboard=TRADER)
+def credit_history():
+    query = load(SearchQuerySchema(), request.args.to_dict())
+    return success_response({"entries": service.history(current_user(), query["q"])})
+
+
+@api_bp.delete(f"{BASE}/entries/<uuid:entry_id>")
+@limiter.limit(limits.CHANGE, key_func=limits.per_user)
+@auth_required(dashboard=TRADER)
+def bin_credit_entry(entry_id: uuid.UUID):
+    service.move_to_bin(current_user(), entry_id)
+    return success_response({}, message="Moved to the bin.")
+
+
+@api_bp.post(f"{BASE}/entries/<uuid:entry_id>/restore")
+@limiter.limit(limits.CHANGE, key_func=limits.per_user)
+@auth_required(dashboard=TRADER)
+def restore_credit_entry(entry_id: uuid.UUID):
+    return success_response({"entry": service.restore(current_user(), entry_id)}, message="Restored.")
+
+
+@api_bp.get(f"{BASE}/bin")
+@limiter.limit(limits.READ, key_func=limits.per_user)
+@auth_required(dashboard=TRADER)
+def credit_bin():
+    return success_response({"entries": service.bin_entries(current_user())})

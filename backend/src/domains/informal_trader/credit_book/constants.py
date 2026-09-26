@@ -31,3 +31,9 @@ SEARCH_LIMIT = 50
 
 #: What a deleted customer becomes: their amounts stay, the person doesn't.
 DELETED_CUSTOMER_NAME = "Deleted customer"
+
+#: The bin: a deleted entry (or job) can be restored for this many days.
+#: After that it stays in the database, just no longer shown.
+BIN_DAYS = 30
+#: History (paid and cancelled entries, done jobs) and the bin show at most this many.
+HISTORY_LIMIT = 200

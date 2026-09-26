@@ -5,7 +5,9 @@ their repositories): a builder's builds are their done jobs, and their
 name, suburb, pin and phone are their business profile.
 
 Every query about "my" things takes my user_id; a row that isn't mine is
-simply not found (IDOR rule).
+simply not found (IDOR rule). A job in its owner's bin takes its help posts
+and unanswered invites with it; a partner who accepted keeps theirs (their
+pay record).
 """
 from __future__ import annotations
 
@@ -14,7 +16,7 @@ from collections import defaultdict
 from datetime import datetime
 from typing import Iterable, Optional
 
-from sqlalchemy import func, or_
+from sqlalchemy import exists, func, or_
 
 from src.domains.informal_trader.business_profile.models import BusinessProfile
 from src.domains.informal_trader.jobs.models import Job, JobStage
@@ -27,6 +29,16 @@ Ids = Iterable[uuid.UUID]
 
 def add(row) -> None:
     db.session.add(row)
+
+
+def _job_live(job_id):
+    """The job isn't in its owner's bin (a row with no job counts as live)."""
+    return or_(job_id.is_(None), ~exists().where(Job.id == job_id, Job.is_deleted.is_(True)))
+
+
+def _invite_shown():
+    """An invite the builder still sees: accepted ones always, others only while the job is live."""
+    return or_(JobPartner.status == "accepted", _job_live(JobPartner.job_id))
 
 
 # ------------------------------------------------------------------ people
@@ -187,6 +199,13 @@ def job(job_id: uuid.UUID) -> Optional[Job]:
     return Job.query.filter_by(id=job_id, is_deleted=False).first()
 
 
+def job_for_partner(job_id: uuid.UUID) -> Optional[Job]:
+    """The job an invite is for, even from its owner's bin: which invites
+    show at all is decided by _invite_shown (accepted ones stay: the
+    partner's pay record)."""
+    return db.session.get(Job, job_id)
+
+
 def partners_on_job(job_id: uuid.UUID) -> list[JobPartner]:
     return JobPartner.query.filter_by(job_id=job_id, is_deleted=False).order_by(JobPartner.created_at).all()
 
@@ -196,18 +215,19 @@ def live_partner(job_id: uuid.UUID, builder_id: uuid.UUID) -> Optional[JobPartne
 
 
 def partner_as_owner(owner_id: uuid.UUID, partner_id: uuid.UUID, *, lock: bool = False) -> Optional[JobPartner]:
-    q = JobPartner.query.filter_by(id=partner_id, owner_id=owner_id, is_deleted=False)
-    return (q.with_for_update() if lock else q).first()
+    """The owner's partner row, while the job is out of the owner's bin."""
+    q = JobPartner.query.filter_by(id=partner_id, owner_id=owner_id, is_deleted=False).filter(_job_live(JobPartner.job_id))
+    return (q.with_for_update(of=JobPartner) if lock else q).first()
 
 
 def partner_as_builder(builder_id: uuid.UUID, partner_id: uuid.UUID, *, lock: bool = False) -> Optional[JobPartner]:
-    q = JobPartner.query.filter_by(id=partner_id, builder_id=builder_id, is_deleted=False)
-    return (q.with_for_update() if lock else q).first()
+    q = JobPartner.query.filter_by(id=partner_id, builder_id=builder_id, is_deleted=False).filter(_invite_shown())
+    return (q.with_for_update(of=JobPartner) if lock else q).first()
 
 
 def invites_to(builder_id: uuid.UUID) -> list[JobPartner]:
     return (
-        JobPartner.query.filter(JobPartner.builder_id == builder_id, JobPartner.status != "declined", JobPartner.is_deleted.is_(False))
+        JobPartner.query.filter(JobPartner.builder_id == builder_id, JobPartner.status != "declined", JobPartner.is_deleted.is_(False), _invite_shown())
         .order_by(JobPartner.created_at.desc())
         .all()
     )
@@ -231,24 +251,28 @@ def stages(job_id: uuid.UUID, stage_ids: Ids) -> list[JobStage]:
 
 
 def open_posts(now: datetime) -> list[HelpPost]:
-    return HelpPost.query.filter(HelpPost.status == "open", HelpPost.expires_at > now, HelpPost.is_deleted.is_(False)).all()
+    return HelpPost.query.filter(HelpPost.status == "open", HelpPost.expires_at > now, HelpPost.is_deleted.is_(False), _job_live(HelpPost.job_id)).all()
 
 
 def my_posts(owner_id: uuid.UUID, now: datetime) -> list[HelpPost]:
     return (
-        HelpPost.query.filter(HelpPost.owner_id == owner_id, HelpPost.status != "closed", HelpPost.expires_at > now, HelpPost.is_deleted.is_(False))
+        HelpPost.query.filter(
+            HelpPost.owner_id == owner_id, HelpPost.status != "closed", HelpPost.expires_at > now, HelpPost.is_deleted.is_(False), _job_live(HelpPost.job_id)
+        )
         .order_by(HelpPost.created_at.desc())
         .all()
     )
 
 
 def post(post_id: uuid.UUID, *, lock: bool = False) -> Optional[HelpPost]:
-    q = HelpPost.query.filter_by(id=post_id, is_deleted=False)
-    return (q.with_for_update() if lock else q).first()
+    q = HelpPost.query.filter_by(id=post_id, is_deleted=False).filter(_job_live(HelpPost.job_id))
+    return (q.with_for_update(of=HelpPost) if lock else q).first()
 
 
 def open_post_count(owner_id: uuid.UUID, now: datetime) -> int:
-    return HelpPost.query.filter(HelpPost.owner_id == owner_id, HelpPost.status == "open", HelpPost.expires_at > now, HelpPost.is_deleted.is_(False)).count()
+    return HelpPost.query.filter(
+        HelpPost.owner_id == owner_id, HelpPost.status == "open", HelpPost.expires_at > now, HelpPost.is_deleted.is_(False), _job_live(HelpPost.job_id)
+    ).count()
 
 
 def responses(post_id: uuid.UUID) -> list[HelpResponse]:

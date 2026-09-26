@@ -9,6 +9,10 @@
   POST   /me/jobs/<id>/stages/<sid>/photo                 {public_id} -> kept, hashed
   POST   /me/jobs/<id>/stages/<sid>/sign-off              {builder_amount_cents}
                                                           -> {job, link, message}
+  GET    /me/jobs/history?q=                              done jobs (search)
+  DELETE /me/jobs/<id>                                    move to the bin; open links stop working
+  POST   /me/jobs/<id>/restore                            back from the bin
+  GET    /me/jobs/bin                                     deleted in the last 30 days
 
 Thin: validate -> service -> answer. Signed-in traders only, rate-limited
 per trader, scoped to current_user() by the services. The client's page
@@ -31,7 +35,7 @@ from src.domains.informal_trader.credit_book.api import limits
 from src.domains.informal_trader.credit_book.api.idempotent import run_once
 from src.shared.rate_limit.limiter import limiter
 
-from ..schemas.jobs_schemas import NewJobSchema, PhotoSchema, SignOffSchema, load
+from ..schemas.jobs_schemas import HistoryQuerySchema, NewJobSchema, PhotoSchema, SignOffSchema, load
 from ..services import job_photo_service, jobs_service, sign_off_service
 
 BASE = "/me/jobs"
@@ -98,3 +102,33 @@ def send_stage_sign_off(job_id: uuid.UUID, stage_id: uuid.UUID):
         return success_response({"job": job, "link": link, "message": text}, message="Sign-off link ready.", status_code=201)
 
     return run_once(handler)
+
+
+@api_bp.get(f"{BASE}/history")
+@limiter.limit(limits.READ, key_func=limits.per_user)
+@auth_required(dashboard=TRADER)
+def jobs_history():
+    query = load(HistoryQuerySchema(), request.args.to_dict())
+    return success_response({"jobs": jobs_service.history(current_user(), query["q"])})
+
+
+@api_bp.delete(f"{BASE}/<uuid:job_id>")
+@limiter.limit(limits.CHANGE, key_func=limits.per_user)
+@auth_required(dashboard=TRADER)
+def bin_job(job_id: uuid.UUID):
+    jobs_service.move_to_bin(current_user(), job_id)
+    return success_response({}, message="Moved to the bin.")
+
+
+@api_bp.post(f"{BASE}/<uuid:job_id>/restore")
+@limiter.limit(limits.CHANGE, key_func=limits.per_user)
+@auth_required(dashboard=TRADER)
+def restore_job(job_id: uuid.UUID):
+    return success_response({"job": jobs_service.restore(current_user(), job_id)}, message="Restored.")
+
+
+@api_bp.get(f"{BASE}/bin")
+@limiter.limit(limits.READ, key_func=limits.per_user)
+@auth_required(dashboard=TRADER)
+def jobs_bin():
+    return success_response({"jobs": jobs_service.bin_jobs(current_user())})

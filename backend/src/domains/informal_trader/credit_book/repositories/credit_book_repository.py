@@ -1,18 +1,20 @@
 """
 All database access for the credit book. Only this feature's services call
 this, and EVERY query takes the trader's user_id: a row that isn't theirs
-is simply not found (IDOR rule).
+is simply not found (IDOR rule). A binned entry (is_deleted) is not found
+either, except by the history and bin queries at the end.
 """
 from __future__ import annotations
 
 import uuid
+from datetime import datetime
 from typing import Iterable, Optional
 
-from sqlalchemy import func
+from sqlalchemy import func, select
 
 from src.extensions import db
 
-from ..constants import LIST_LIMIT, SEARCH_LIMIT
+from ..constants import HISTORY_LIMIT, LIST_LIMIT, SEARCH_LIMIT
 from ..models import CreditCorrection, CreditCustomer, CreditEntry, CreditPayment
 
 
@@ -44,7 +46,7 @@ def add_customer(user_id: uuid.UUID, name: str, phone: Optional[str]) -> CreditC
 
 def entries(user_id: uuid.UUID, statuses: Iterable[str]) -> list[CreditEntry]:
     return (
-        CreditEntry.query.filter(CreditEntry.user_id == user_id, CreditEntry.status.in_(list(statuses)))
+        CreditEntry.query.filter(CreditEntry.user_id == user_id, CreditEntry.is_deleted.is_(False), CreditEntry.status.in_(list(statuses)))
         .order_by(CreditEntry.due_on, CreditEntry.created_at)
         .limit(LIST_LIMIT)
         .all()
@@ -54,7 +56,7 @@ def entries(user_id: uuid.UUID, statuses: Iterable[str]) -> list[CreditEntry]:
 def entry(user_id: uuid.UUID, entry_id: uuid.UUID, *, lock: bool = False) -> Optional[CreditEntry]:
     """lock=True holds the row (SELECT ... FOR UPDATE) until commit, so two
     payments at the same moment are counted one after the other."""
-    query = CreditEntry.query.filter_by(id=entry_id, user_id=user_id)
+    query = CreditEntry.query.filter_by(id=entry_id, user_id=user_id, is_deleted=False)
     if lock:
         # Lock only the entry: the joined customer row is only read.
         query = query.with_for_update(of=CreditEntry)
@@ -70,7 +72,7 @@ def open_entries_for_customers(user_id: uuid.UUID, customer_ids: list[uuid.UUID]
     if not customer_ids:
         return []
     return CreditEntry.query.filter(
-        CreditEntry.user_id == user_id, CreditEntry.status == "open", CreditEntry.customer_id.in_(customer_ids)
+        CreditEntry.user_id == user_id, CreditEntry.is_deleted.is_(False), CreditEntry.status == "open", CreditEntry.customer_id.in_(customer_ids)
     ).all()
 
 
@@ -99,10 +101,11 @@ def corrections(user_id: uuid.UUID, entry_id: uuid.UUID) -> list[CreditCorrectio
 
 
 def payments_since(user_id: uuid.UUID, since) -> int:
-    """Money paid back from `since` (a date) on, across the whole book."""
+    """Money paid back from `since` (a date) on, across the book (binned entries left out)."""
     total = (
         db.session.query(func.coalesce(func.sum(CreditPayment.amount_cents), 0))
-        .filter(CreditPayment.user_id == user_id, CreditPayment.paid_on >= since)
+        .join(CreditEntry, CreditEntry.id == CreditPayment.entry_id)
+        .filter(CreditPayment.user_id == user_id, CreditPayment.paid_on >= since, CreditEntry.is_deleted.is_(False))
         .scalar()
     )
     return int(total)
@@ -110,3 +113,47 @@ def payments_since(user_id: uuid.UUID, since) -> int:
 
 def add(row) -> None:
     db.session.add(row)
+
+
+# ----------------------------------------------------------- history and bin
+
+
+def _contains(q: str) -> str:
+    """q as a plain "contains" pattern: % and _ are letters, not wildcards."""
+    return "%" + q.lower().replace("\\", "\\\\").replace("%", "\\%").replace("_", "\\_") + "%"
+
+
+def history(user_id: uuid.UUID, q: str) -> list[CreditEntry]:
+    """Paid and cancelled entries, not binned, the latest activity (a
+    payment, a correction, the entry itself) first. q: the customer's name."""
+    last_payment = select(func.max(CreditPayment.created_at)).where(CreditPayment.entry_id == CreditEntry.id).scalar_subquery()
+    last_correction = select(func.max(CreditCorrection.created_at)).where(CreditCorrection.entry_id == CreditEntry.id).scalar_subquery()
+    query = CreditEntry.query.filter(
+        CreditEntry.user_id == user_id, CreditEntry.is_deleted.is_(False), CreditEntry.status.in_(("paid", "cancelled"))
+    )
+    if q:
+        query = query.join(CreditCustomer, CreditCustomer.id == CreditEntry.customer_id).filter(
+            func.lower(CreditCustomer.name).like(_contains(q), escape="\\")
+        )
+    # GREATEST skips NULLs: an entry with no payments or corrections is its own date.
+    activity = func.greatest(CreditEntry.created_at, last_payment, last_correction)
+    return query.order_by(activity.desc(), CreditEntry.id).limit(HISTORY_LIMIT).all()
+
+
+def binned(user_id: uuid.UUID, since: datetime) -> list[CreditEntry]:
+    """In the bin: deleted at `since` or later, newest first."""
+    return (
+        CreditEntry.query.filter(CreditEntry.user_id == user_id, CreditEntry.is_deleted.is_(True), CreditEntry.deleted_at >= since)
+        .order_by(CreditEntry.deleted_at.desc())
+        .limit(HISTORY_LIMIT)
+        .all()
+    )
+
+
+def binned_entry(user_id: uuid.UUID, entry_id: uuid.UUID, since: datetime) -> Optional[CreditEntry]:
+    return (
+        CreditEntry.query.filter_by(id=entry_id, user_id=user_id, is_deleted=True)
+        .filter(CreditEntry.deleted_at >= since)
+        .with_for_update(of=CreditEntry)
+        .first()
+    )
