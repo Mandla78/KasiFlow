@@ -11,9 +11,9 @@ Two layers work together:
 from __future__ import annotations
 
 from flask import request
-from flask_limiter.util import get_remote_address
 
 from src.shared.audit.event_types.auth import AuthAuditEvent
+from src.shared.net.client_ip import client_ip_key
 
 LOGIN = "5 per minute"
 REGISTER = "5 per hour"
@@ -43,7 +43,7 @@ def login_key_func() -> str:
     payload = request.get_json(silent=True) or {}
     email = payload.get("email")
     email = email.strip().lower() if isinstance(email, str) else ""
-    return f"{get_remote_address()}:{email}" if email else get_remote_address()
+    return f"{client_ip_key()}:{email}" if email else client_ip_key()
 
 
 # Which audit event a tripped limit records. Keys are Flask endpoint names

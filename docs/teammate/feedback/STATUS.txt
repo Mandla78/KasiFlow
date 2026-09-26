@@ -27,8 +27,6 @@ DONE
   - Order book, app on the mocks (PR 9) + CONTRACT_order_book, merged;
     approved with two changes (server primary key + client_key; "Money
     you recorded").
-
-IN PROGRESS
   - History + bin, phase 2: the backend (risuna/bin-api, no migration),
     per CONTRACT_bin.txt with Mandla's change: binning a job turns off the
     sign-off links the client hasn't answered (they answer like expired
@@ -49,6 +47,15 @@ IN PROGRESS
   - Trades (risuna/trades, on top of the order book, migration 0022_trades)
     per QUESTION_trades.txt: the 11 trades in one list for sign-up, the
     builder network and the jobs signals; painter_tiler became painter.
+  (PRs 11, 12, 13: merged)
+
+IN PROGRESS
+  - Client IP (risuna/client-ip, no migration) per
+    FINDING_client_ip_behind_cloudflare.txt and its DECISION:
+    shared/net/client_ip.py + BEHIND_CLOUDFLARE (off: remote_addr, full
+    stop); the limiter, login key, sessions, consents, the 429 audit and
+    audit_context use it. Fixes the forgeable IP in the audit trail. One
+    question in the FINDING: an ngrok mode for the demo.
 
 BLOCKED (and on what)
   - (none; the Idempotency-Key header and the deep-JSON crash are fixed on main)

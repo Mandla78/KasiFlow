@@ -68,6 +68,12 @@ PAYFAST (sandbox) BEHIND THE TUNNEL
   "is this really PayFast's server?" check sees PayFast's address.
   Without the tunnel it must be false (anyone could type the header).
 
+  BEHIND_CLOUDFLARE=true (backend/.env) makes rate limits, sessions and
+  the audit trail see each caller's real address (Cloudflare's
+  CF-Connecting-IP) instead of 127.0.0.1. Only while the backend is
+  reached through the tunnel alone: a phone on the same Wi-Fi calling
+  the PC directly could type that header. Default false.
+
   Don't restart the tunnel in the middle of a payment: the address
   changes, PayFast's ITN for that payment goes to the old address and
   never arrives, so the order keeps waiting for payment (and lapses after

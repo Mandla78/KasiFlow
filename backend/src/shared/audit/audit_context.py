@@ -27,6 +27,8 @@ from typing import Optional
 
 from flask import g, has_request_context, request
 
+from src.shared.net.client_ip import client_ip
+
 CORRELATION_HEADER = "X-Correlation-ID"
 REQUEST_ID_HEADER = "X-Request-ID"
 
@@ -60,24 +62,14 @@ def get_request_id() -> Optional[str]:
 
 def get_ip_address() -> Optional[str]:
     """
-    Client IP, honouring X-Forwarded-For since this will sit behind a
-    proxy/load balancer in production (where request.remote_addr would
-    otherwise be the proxy's own address, making every audit row useless
-    for investigation).
+    Client IP, decided in one place: shared/net/client_ip.py.
 
-    NOTE: X-Forwarded-For is client-supplied and therefore spoofable. It
-    is trusted here because the value is used for investigation and
-    display, not for authorization decisions. If it ever becomes an input
-    to a security control (e.g. IP allow-listing), configure Werkzeug's
-    ProxyFix with an explicit trusted-proxy count instead of reading the
-    header directly.
+    This used to take the FIRST X-Forwarded-For entry, which the caller
+    types: anyone could put any address in the audit trail. Now it's the
+    connection's own address unless BEHIND_CLOUDFLARE is on, and then
+    Cloudflare's CF-Connecting-IP (FINDING_client_ip_behind_cloudflare.txt).
     """
-    if not has_request_context():
-        return None
-    forwarded = request.headers.get("X-Forwarded-For")
-    if forwarded:
-        return forwarded.split(",")[0].strip()
-    return request.remote_addr
+    return client_ip()
 
 
 def get_user_agent() -> Optional[str]:

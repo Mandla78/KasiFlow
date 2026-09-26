@@ -97,6 +97,34 @@ SOURCES
   Flask behind a proxy / Cloudflare (ProxyFix, real IP):
     https://medium.com/@01one/get-the-real-ip-address-in-flask-when-behind-a-proxy-like-nginx-or-cloudflare-aab57629b27d
 
+AS BUILT (risuna/client-ip, after the DECISION below)
+  backend/src/shared/net/client_ip.py: client_ip() (None outside a
+  request) and client_ip_key() for rate-limit keys. BEHIND_CLOUDFLARE in
+  config.py, default false:
+    off -> request.remote_addr, full stop (X-Forwarded-For,
+           CF-Connecting-IP, X-Real-IP all ignored)
+    on  -> CF-Connecting-IP when it is exactly one valid IP (normal form,
+           so 2001:DB8::1 and 2001:db8::1 are one key); anything else
+           (a list, a port, a name, garbage, too long) -> remote_addr
+  Used by: the limiter's default key, the login key (policies.py),
+  credit_book limits.per_user's fallback, the 429 audit (responses.py),
+  session_service (sessions.ip_address), auth_service._ip (consents) and
+  audit_context.get_ip_address -- the bug: it took the FIRST
+  X-Forwarded-For entry; now it's client_ip(). PayFast untouched.
+  Tests: tests/shared/test_client_ip.py (19), including "switch off + a
+  forged X-Forwarded-For / CF-Connecting-IP never reaches sessions,
+  consents or audit rows" and "forged headers don't buy more tries".
+
+  ONE QUESTION (for the demo): on ngrok the backend sees ngrok's own
+  connection, so with the switch off every caller is ONE address. Per-IP
+  limits (register 5/hour, forgot password 3/hour; login is IP + email)
+  then count everyone together: judges signing up at once could hit 429.
+  If you want it, a second switch (say BEHIND_ONE_PROXY, off by default)
+  would take the LAST X-Forwarded-For entry -- the one ngrok adds itself,
+  the same rule PayFast uses. Not built: your DECISION says off means
+  remote_addr, full stop.
+
+
 DECISION: YES -- Mandla, Saturday 26 September 2026. Risuna writes it, as a
 PR for Mandla to review (branch risuna/client-ip).
   - shared/net/client_ip.py + BEHIND_CLOUDFLARE (default false), used by

@@ -34,6 +34,7 @@ from src.domains.identity.devices.services import device_service
 from src.extensions import db
 from src.shared.audit.event_types.auth import AuthAuditEvent as E
 from src.shared.email.email import EmailService
+from src.shared.net.client_ip import client_ip
 from src.shared.security.security import hash_password, validate_password_complexity, verify_password
 
 from ..models import CodePurpose, EmailCode, GoogleIdentity, PasswordCredential, PasswordReset
@@ -77,7 +78,7 @@ class DeviceInfo:
 
 
 def _ip() -> Optional[str]:
-    return request.remote_addr
+    return client_ip()
 
 
 def _check_password_rule(password: str) -> None:

@@ -10,7 +10,8 @@ refused by @auth_required anyway).
 from __future__ import annotations
 
 from flask_jwt_extended import get_jwt_identity, verify_jwt_in_request
-from flask_limiter.util import get_remote_address
+
+from src.shared.net.client_ip import client_ip_key
 
 READ = "120 per minute"
 #: The app searches customers as you type (200 ms pause between searches).
@@ -25,4 +26,4 @@ def per_user() -> str:
         identity = get_jwt_identity()
     except Exception:  # noqa: BLE001 -- expired or broken token: count by IP
         identity = None
-    return f"user:{identity}" if identity else f"ip:{get_remote_address()}"
+    return f"user:{identity}" if identity else f"ip:{client_ip_key()}"
