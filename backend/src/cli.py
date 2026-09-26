@@ -7,6 +7,9 @@
     flask builders seed [--me EMAIL]  sample builders with client-confirmed
                                    builds (development only; see
                                    builder_network/seed.py)
+    flask tools seed --me EMAIL    demo data in that account's credit book,
+                                   jobs and order book (development only;
+                                   see informal_trader/tools_demo.py)
     flask suppliers load [FOLDER]  load supplier feeds (supplier.json +
                                    products.csv per sub-folder) through the
                                    same checks a supplier's own system gets.
@@ -98,3 +101,7 @@ def register_cli(app: Flask) -> None:
     from src.domains.informal_trader.builder_network.seed import register as register_builders
 
     register_builders(app)
+
+    from src.domains.informal_trader.tools_demo import register as register_tools
+
+    register_tools(app)
