@@ -1,0 +1,240 @@
+===========================================================================
+HANDOFF -- from the local Claude session to the cloud Claude session
+Written Saturday 26 September 2026 (GKHack26, day 2), for Mandla
+===========================================================================
+
+WHO READS THIS
+  You: Claude Code in the cloud, working on github.com/Mandla78/KasiFlow.
+  Mandla (team lead) reviews everything you do; he dictates his messages,
+  so read past typos. Risuna (teammate) works on the business tools on his
+  own branches and sends pull requests.
+
+READ FIRST, IN THIS ORDER
+  1. CLAUDE.md (repo root)                       the standing rules
+  2. this file                                   state, schedule, next work
+  3. README.md                                   setup and layout
+  4. docs/hackathon/06_AKAYZA_MERGED_PLAN.txt    the plan of record
+  5. docs/supplier/12_POLICIES.txt               cash, digital, proof rules
+  6. docs/submission/README_DRAFT.txt            every deadline + drafts
+  7. docs/submission/03_ssdlc/SSDLC_DRAFT.txt    what security we built
+  8. docs/teammate/14_ROUND_2_BRIEF.txt and the DECISION lines at the end
+     of docs/teammate/feedback/*.txt              Risuna's work + our answers
+  Docs are hints: the code is the truth. Edit plans in place; never make a
+  second copy of a folder.
+
+
+---------------------------------------------------------------------------
+1. WHAT THE PRODUCT IS (say it this way)
+---------------------------------------------------------------------------
+
+  A mobile app for small businesses and informal traders -- spaza shops,
+  builders and other informal businesses -- to run their business and to
+  order from the suppliers they already work with.
+
+  - Business tools (credit book, order book, jobs, builder network) help
+    them run the business, and privately feed our SUPPLIER RECOMMENDATION
+    ENGINE, which optimises their relationship with their suppliers.
+  - Hybrid-facing: users = small businesses / informal traders (free);
+    paying customers = suppliers. Why suppliers: most businesses already
+    have suppliers they trust. NOT a marketplace. We recommend suppliers,
+    never products.
+  - Always name BOTH spaza shops and builders. Never list "street vendors".
+  - Tool records are the trader's OWN records, NOT proof. Only a digital
+    payment verified by the payment provider is proof. Never write "proof"
+    about tool data.
+
+
+---------------------------------------------------------------------------
+2. WHERE THE CODE IS (state at hand-over)
+---------------------------------------------------------------------------
+
+  Branches   main = mandla/supplier, at the commit that added this file
+             (Mandla pushes both before you start; if origin/main has no
+             docs/HANDOFF.txt, STOP and ask him to push).
+  Merged     everything of Mandla's (supplier engine, catalogue, cart,
+             orders, PayFast, invoices/receipts with QR, proof labels,
+             policies 0.2-draft) and Risuna's PRs #6 (history + bin UI),
+             #7 (builder network, migration 0019), #8 (jobs demand
+             signals), #9 (order book UI). PR #1 is obsolete (close it).
+  Migrations 0001 ... 0018_payments, 0019_builder_network, 0020_food_seller.
+             The next one is 0021. Risuna was told his start at 0021, so
+             CHECK origin before numbering yours; rename if he got there.
+  Tests      last full run: backend 901 passed (14 min), app 140 passed,
+             tsc clean. Since then only a small business-profile change
+             (24 targeted tests passed). Run the full suite once on setup.
+
+  Backend  backend/  Flask 3.1, SQLAlchemy 2, Alembic, PostgreSQL schemas
+           identity / trader / supplier / commerce / platform / audit.
+           Domains in backend/src/domains/<area>/<feature>/{api, models,
+           repositories, schemas, services}. shared/ never imports a domain;
+           no feature reads another feature's repositories (call its
+           service); identity is sealed (use account_service).
+           tests/architecture/test_domain_boundaries.py enforces this.
+  App      frontend/mobile/  Expo SDK 57, expo-router typed routes, screens
+           in src/app/(dashboard)/<area>/<feature>, code in
+           src/features/... ; api() client in src/shared/api.
+           EXPO_PUBLIC_USE_MOCK_API=true runs the app on sample data.
+
+
+---------------------------------------------------------------------------
+3. SET UP YOUR SANDBOX (first thing)
+---------------------------------------------------------------------------
+
+  Your OWN PostgreSQL inside the cloud sandbox. You can't reach Mandla's PC
+  and must never ask for his real .env, his database or any production
+  database. His dev database (akayza_dev on his PC) is his; he runs things
+  there himself when needed.
+
+  a) PostgreSQL 16+:
+       sudo apt-get update && sudo apt-get install -y postgresql
+       sudo service postgresql start
+       sudo -u postgres psql -v app_password="<make one up>" \
+            -f backend/scripts/setup_db.sql
+     (creates role akayza and databases akayza_dev and akayza_test)
+  b) Python 3.12:
+       cd backend && python -m venv .venv && . .venv/bin/activate
+       pip install -r requirements.txt
+  c) backend/.env for the SANDBOX ONLY (never commit it; it's gitignored):
+       copy .env.example, set POSTGRES_USER=akayza, POSTGRES_PASSWORD=<the
+       one you made up>, POSTGRES_HOST=localhost, POSTGRES_DB=akayza_dev,
+       POSTGRES_TEST_DB=akayza_test, MAIL_PROVIDER=fake, made-up long
+       SECRET_KEY / JWT_SECRET_KEY. Leave PayFast, Cloudinary, Mapbox and
+       mail credentials EMPTY. Tests use fakes for all of them.
+  d) Backend tests (they migrate akayza_test themselves):
+       python -m pytest -q tests          (~14 min; run ONE suite at a
+                                           time: parallel runs deadlock on
+                                           the shared test database)
+  e) App (Node 22):
+       cd frontend/mobile && npm ci
+       npx tsc --noEmit && npx jest --silent
+     If tsc complains a route like "/informal-business/..." isn't
+     assignable, the generated route types are stale: run
+     `CI=1 npx expo start --port 8083` until .expo/types/router.d.ts
+     contains the route, then stop it.
+  f) Report to Mandla: "sandbox ready, N backend + M app tests pass".
+
+
+---------------------------------------------------------------------------
+4. HOW WE WORK (the workflow from now on)
+---------------------------------------------------------------------------
+
+  - Mandla plans and reviews; you build. He's on low local credits, so the
+    cloud session does most building now. The local session may still do
+    small things on his PC (his dev database, his phone, ngrok).
+  - One branch per piece of work, from the latest main:
+      mandla/<topic>   e.g. mandla/engine-signals
+    Small commits, clear messages (what + why), end each message with the
+    Co-Authored-By line Claude Code gives you.
+  - Before asking for review: rebase/merge the latest origin/main, run
+    the tests that matter (full backend suite before any merge to main),
+    tsc + jest for app changes. Say what you ran and the counts.
+  - Pull requests into main. Mandla reviews. MERGE ONLY WHEN HE SAYS SO,
+    and only if there are no conflicts and the tests pass.
+  - Risuna's PRs: when Mandla asks, review them (scope, security, the
+    migration number, tests), merge them into a local copy of main, run
+    everything, then tell Mandla the result. Don't edit his files except to
+    fix a conflict, and say so.
+  - Answers to Risuna go as DECISION lines at the end of his
+    docs/teammate/feedback/*.txt files (Mandla approves the wording first).
+  - Keep docs/submission/* drafts in step with what really works.
+  - Never push --force to main. Never delete branches that aren't yours.
+
+
+---------------------------------------------------------------------------
+5. SCHEDULE (SAST) -- remind Mandla of the next one each time you report
+---------------------------------------------------------------------------
+
+  Sat 26 Sep
+    12:30  SSDLC due on Sonke. docs/submission/03_ssdlc/SSDLC_DRAFT.txt
+           + DevLab feedback (Mandla's notes from the 11:00 session).
+    14:00-17:00  war room with mentors (Mandla attends; prep questions)
+    every 2 h    progress update on Sonke: score / accomplished /
+                 challenges / next. One built-and-tested piece each, score
+                 climbing slowly. Drafts:
+                 docs/submission/02_progress_updates/UPDATES_EVERY_2_HOURS_DRAFTS.txt
+                 Write the next one from what was really built.
+    20:00  presentations session
+    21:30  LEAN CANVAS due. docs/submission/04_lean_canvas/LEAN_CANVAS_DRAFT.txt
+    23:59  last progress update of the day
+  Sun 27 Sep
+    09:00  FINAL SUBMISSION (hard): slides (more than 10), demo video under
+           90 s, TRL statement. docs/submission/05_final_submission/
+    10:00  3-minute sales pitch (docs/submission/06_pitch/); top 12 then
+           give a 5-minute demo + 3 minutes of Q&A.
+  Judging: innovation 15, technical 15, design 10, security + ethics 10,
+  business + pitch 15, quantum bonus 5. Ask: which criterion does this
+  piece of work improve?
+
+  NOTHING sent to organisers or posted on Sonke may say "Akayza" or
+  describe the product in detail before Sunday's submission: use the
+  codename/wording already in the drafts. "Where" is nationwide (all nine
+  provinces), never the demo places (those are test data).
+
+
+---------------------------------------------------------------------------
+6. WHAT'S NEXT (in order; confirm the order with Mandla)
+---------------------------------------------------------------------------
+
+  1. SET UP + FULL TEST RUN (section 3).
+
+  2. TOOLS FEED THE ENGINE (the story judges need to see working)
+     Wire jobs_service.demand_signals(user) (Risuna's PR #8, see
+     docs/teammate/feedback/SIGNALS_jobs.txt) into
+     backend/src/domains/supplier/recommendation/services/recommendation_service.py.
+     Today the score is fit 40 + reach 35/25 + closeness 10 + pay 10 +
+     minimum 5 from the sign-up answers. Add the tools' demand (categories
+     a builder's open jobs need; later the order book's
+     order_book_service.demand_signals) as a boost to "fit", with a reason
+     line the trader can read ("Your open jobs need plumbing"). Rules:
+     - call the jobs SERVICE, never its repositories (boundary test);
+     - aggregates only, never names/amounts in reasons or logs;
+     - still rank every supplier, never hide one;
+     - tests: a builder with open plumbing jobs sees plumbing suppliers
+       rise; no jobs -> same ranking as today; another user's jobs never
+       count (IDOR).
+     Then the "catalogue ranked by tools + past orders" idea (products are
+     ORDERED for the trader, never recommended as "buy this").
+
+  3. REVIEW RISUNA'S NEXT PRs as they come: bin backend, trades (11, with
+     the painter_tiler data migration), order book backend (server primary
+     key + client_key unique per trader; price history; "Money you
+     recorded", never "verified"). Check each against its DECISION.
+     Then: the Account tile for profile.tools.orderBook and "N orders
+     today" on Home are his.
+
+  4. DEMO READINESS (before Sunday 09:00)
+     - seed: backend/seed/generate_dataset.py + `flask suppliers load`
+       (11 suppliers, 1,672 products), `flask builders seed --me <email>`
+     - profile photos: Mandla will supply them; wire via
+       backend/seed/demo_images.csv "logo:" keys (images only on our
+       Cloudinary; the feed refuses other hosts)
+     - a demo script (90-second video) walking: sign-up -> suppliers
+       recommended with reasons -> connect -> catalogue -> cart -> pay
+       (PayFast sandbox) -> auto-confirmed -> invoice + QR check page ->
+       a builder's job with client sign-off -> builder network.
+     - slides + TRL statement drafts in docs/submission/05_final_submission.
+
+  5. LATER / HONEST GAPS (list them, don't pretend)
+     malware scanning of uploads switched on; Cloudflare/WAF; shared
+     rate-limit store (Redis); split payouts to suppliers
+     (payout_merchant_id prepared); the two-phone cash handshake; supplier
+     API keys for ERP; external penetration test; POPIA legal review.
+
+
+---------------------------------------------------------------------------
+7. THINGS THAT BIT US (save yourself the time)
+---------------------------------------------------------------------------
+
+  - Long bash heredocs with quotes fail: write a script file instead.
+  - Two pytest runs at once deadlock on akayza_test. One at a time.
+  - Jest mock factories may only use variables named mock*.
+  - fpdf2 + PNG QR came out garbled: QR codes are drawn as vector squares
+    from the segno matrix (documents/services/pdf.py).
+  - A random ticket in a link can contain "R5": tests that look for money
+    strings in an email remove the link first.
+  - PayFast signature: fields in the documented order, empty ones skipped,
+    PHP urlencode (space "+", "~" "%7E"), passphrase last, MD5; the ITN is
+    trusted only after 4 checks (signature, PayFast IP, amount, validate
+    POST back). Don't "simplify" it.
+  - Consent versions are "0.2-draft" (app legal content, backend
+    PRIVACY_POLICY_VERSION / TERMS_VERSION, tests). Bump all three together.
