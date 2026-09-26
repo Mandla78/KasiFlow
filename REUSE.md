@@ -26,3 +26,9 @@ The reused code was adapted: the product name was replaced, and imports of TruCo
 | TruConnect `backend/scripts/verify_cloudinary_connection.py` (reference only) | `backend/scripts/verify_media.py` | our own end-to-end check of the real Cloudinary setup |
 
 Coming later, with the features that need them: the PayFast provider and payment notifications, the backend Mapbox geocoding proxy. Each gets a row here when it's copied.
+
+## Third-party libraries worth naming
+
+| Library | Licence | Where | Why |
+|---|---|---|---|
+| [dilithium-py](https://github.com/GiacomoPope/dilithium-py) 1.4.0 (Giacomo Pope) | MIT | `backend/src/domains/proof/integrity/services/seal_keys.py` | ML-DSA-65 (NIST FIPS 204) post-quantum signatures on record seals, in pure Python. Used as a library, not copied; if it isn't installed, seals are signed with Ed25519 alone. |

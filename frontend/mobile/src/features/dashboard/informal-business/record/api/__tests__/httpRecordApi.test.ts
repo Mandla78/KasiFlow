@@ -53,3 +53,38 @@ test('the three blocks come back apart, and a switched-off tool stays null', asy
     jobs: null,
   });
 });
+
+test('sealing posts nothing and keeps the seal exactly as it came', async () => {
+  const seal = { v: 1, alg: ['Ed25519', 'ML-DSA-65'], business: 'b', sealed_at: 't', count: 0, root: 'r', leaves: [], sig: { ed25519: 's', ml_dsa_65: 'q' }, key_ids: { ed25519: 'k', ml_dsa_65: 'm' } };
+  mockReply = () => ({ seal });
+  expect(await httpRecordApi.seal()).toEqual(seal);
+  expect(mockCalls[0]).toEqual({ method: 'POST', path: '/me/record/seal', opts: { auth: true } });
+});
+
+test('checking sends the seal back untouched and maps the answer', async () => {
+  mockReply = () => ({
+    check: {
+      intact: false,
+      signatures: { ed25519: 'valid', ml_dsa_65: 'valid' },
+      sealed_at: 't',
+      sealed: 3,
+      unchanged: 2,
+      changed: [{ kind: 'Repayment', id: 'r', on: '2026-09-26' }],
+      missing: [],
+      added_since: 1,
+    },
+  });
+  const seal = { v: 1 } as never;
+  const c = await httpRecordApi.check(seal);
+  expect(c).toEqual({
+    intact: false,
+    signatures: { ed25519: 'valid', mlDsa65: 'valid' },
+    sealedAt: 't',
+    sealed: 3,
+    unchanged: 2,
+    changed: [{ kind: 'Repayment', id: 'r', on: '2026-09-26' }],
+    missing: [],
+    addedSince: 1,
+  });
+  expect(mockCalls[0]!.path).toBe('/me/record/check');
+});

@@ -12,6 +12,7 @@ credit_book -- the rules of the trader's book of customers who owe them.
   delete_customer(user, id)           anonymise; the amounts stay
   summary(user)                       totals for Home and the Account tile
   money_for_month(user, start, end)   credit given and paid back, for My record
+  seal_records(user)                  what never changes once recorded, for a record seal
   history(user, q)                    paid and cancelled entries (search)
   bin_entries(user)                   deleted in the last 30 days
   move_to_bin(user, id)               "delete": hidden from the trader only
@@ -40,6 +41,7 @@ from ..constants import BIN_DAYS, DELETED_CUSTOMER_NAME, MAX_DAYS_AHEAD, MAX_DAY
 from ..models import CreditCorrection, CreditCustomer, CreditEntry, CreditPayment
 from ..repositories import credit_book_repository as repo
 from . import credit_audit
+from .credit_seal import seal_records  # noqa: F401 -- proof/integrity reads it here
 
 
 def today() -> date:

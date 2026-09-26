@@ -93,3 +93,16 @@ def orders_since(user_id: uuid.UUID, since: datetime) -> int:
 
 def add(row) -> None:
     db.session.add(row)
+
+
+def all_for_seal(user_id: uuid.UUID) -> tuple[list[OrderBookOrder], list[OrderBookLine], list]:
+    """Every counter order with its lines, and the menu's price history:
+    for a record seal. Cancelled orders stay (cancelling is a step, not a
+    deletion)."""
+    from ..models import OrderBookItemPrice
+
+    orders = OrderBookOrder.query.filter_by(user_id=user_id).all()
+    ids = [o.id for o in orders]
+    lines = OrderBookLine.query.filter(OrderBookLine.order_id.in_(ids)).all() if ids else []
+    prices = OrderBookItemPrice.query.join(OrderBookItem, OrderBookItem.id == OrderBookItemPrice.item_id).filter(OrderBookItem.user_id == user_id).all()
+    return orders, lines, prices

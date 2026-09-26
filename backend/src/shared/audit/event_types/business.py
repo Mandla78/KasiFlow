@@ -66,6 +66,9 @@ class BusinessAuditEvent(str, enum.Enum):
     DELIVERY_ADDRESS_CHANGED = "delivery_address.changed"
     DELIVERY_ADDRESS_REMOVED = "delivery_address.removed"
     DELIVERY_ADDRESS_DEFAULT_SET = "delivery_address.default_set"
+    # Record seals (proof/integrity): counts and outcomes only, never what was sealed
+    RECORD_SEALED = "record.sealed"
+    RECORD_CHECKED = "record.checked"
 
     BUILDER_PROFILE_SAVED = "builder.profile_saved"
     BUILDER_VISIBILITY_CHANGED = "builder.visibility_changed"

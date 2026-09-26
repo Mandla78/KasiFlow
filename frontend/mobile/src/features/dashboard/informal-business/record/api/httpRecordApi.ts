@@ -4,7 +4,7 @@
  */
 import { api } from '@/shared/api/client';
 
-import type { MoneyCount, RecordApi, RecordSummary } from '../types';
+import type { MoneyCount, RecordApi, RecordSeal, RecordSummary, SealCheck, SealItem } from '../types';
 
 type WireMoney = { cents: number; orders: number };
 type WireRecord = {
@@ -27,9 +27,40 @@ export function fromWire(r: WireRecord): RecordSummary {
   };
 }
 
+type WireCheck = {
+  intact: boolean;
+  signatures: { ed25519: string; ml_dsa_65: string };
+  sealed_at: string;
+  sealed: number;
+  unchanged: number;
+  changed: SealItem[];
+  missing: SealItem[];
+  added_since: number;
+};
+
+export function checkFromWire(c: WireCheck): SealCheck {
+  return {
+    intact: c.intact,
+    signatures: { ed25519: c.signatures.ed25519, mlDsa65: c.signatures.ml_dsa_65 },
+    sealedAt: c.sealed_at,
+    sealed: c.sealed,
+    unchanged: c.unchanged,
+    changed: c.changed,
+    missing: c.missing,
+    addedSince: c.added_since,
+  };
+}
+
 export const httpRecordApi: RecordApi = {
   async summary(month) {
     const q = month ? `?month=${encodeURIComponent(month)}` : '';
     return fromWire((await api<{ record: WireRecord }>('GET', `/me/record/summary${q}`, undefined, { auth: true })).record);
+  },
+  async seal() {
+    // Kept exactly as it came: the server checks it byte for byte later.
+    return (await api<{ seal: RecordSeal }>('POST', '/me/record/seal', undefined, { auth: true })).seal;
+  },
+  async check(seal) {
+    return checkFromWire((await api<{ check: WireCheck }>('POST', '/me/record/check', { seal }, { auth: true })).check);
   },
 };

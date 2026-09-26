@@ -51,4 +51,17 @@ def register(app: Flask) -> None:
             click.echo(f"  {line}")
         click.echo("Done. Open the app: Account shows the tools; Home the numbers.")
 
+    @tools.command("tamper")
+    @click.option("--me", "email", required=True, help="The account whose credit book gets one number changed.")
+    def tamper(email: str) -> None:
+        """Change one credit-book number straight in the database, to show a record seal catching it."""
+        # Simulates an intruder: never in a real database.
+        if app.config.get("ENV_NAME") not in ("development", "testing"):
+            raise click.ClickException("Development only.")
+        user = account_service.find_by_email(email.strip().lower())
+        if user is None:
+            raise click.ClickException(f"No account for {email}.")
+        click.echo(f"  changed: {credit_demo.tamper(user)}")
+        click.echo("Now tap Check my record in the app: the seal shows it.")
+
     app.cli.add_command(tools)

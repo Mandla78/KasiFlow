@@ -36,6 +36,7 @@ from src.domains.informal_trader.delivery_addresses.api import routes as _delive
 from src.domains.commerce.orders.api import routes as _orders_routes  # noqa: E402,F401
 from src.domains.platform.notifications.api import routes as _notifications_routes  # noqa: E402,F401
 from src.domains.proof.ledger.api import routes as _record_routes  # noqa: E402,F401
+from src.domains.proof.integrity.api import routes as _seal_routes  # noqa: E402,F401
 from src.domains.commerce.payments.api import routes as _payments_routes  # noqa: E402,F401
 from src.domains.commerce.documents.api import routes as _documents_routes  # noqa: E402,F401
 from src.domains.supplier.catalogue.api import routes as _catalogue_routes  # noqa: E402,F401

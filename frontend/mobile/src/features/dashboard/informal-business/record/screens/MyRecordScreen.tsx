@@ -12,6 +12,7 @@ import { useHideBalances } from '@/shared/lib/useHideBalances';
 import { colors, fonts } from '@/shared/theme/tokens';
 
 import { recordApi } from '../api/recordApi';
+import { SealCard } from '../components/SealCard';
 import { addMonths, monthLabel, thisMonth } from '../lib/months';
 import { HIDDEN, RecordBlock, RecordLine, recordView } from '../lib/view';
 import type { RecordSummary } from '../types';
@@ -130,6 +131,7 @@ export default function MyRecordScreen() {
               </View>
             );
           })}
+          <SealCard />
         </>
       )}
     </Screen>
