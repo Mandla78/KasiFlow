@@ -1,0 +1,287 @@
+===========================================================================
+TEAMMATE 18 -- GOOGLE SIGN-UP AND SIGN-IN, FOR REAL (Google Cloud + app)
+From Mandla, Saturday 26 September 2026. Your biggest task. Read it all.
+===========================================================================
+
+WHAT WE WANT
+  "Continue with Google" works on a real phone against the real backend:
+    - a NEW person taps it, picks their Google account, ticks the
+      Privacy Policy + Terms, and lands in onboarding (signed up);
+    - a RETURNING Google user taps it and is signed in;
+    - someone who signed up with EMAIL + PASSWORD taps it, enters their
+      password once, and Google is linked to that account.
+  No fake account picker any more.
+
+  Branch: risuna/google-sign-in (from the latest main; git pull first).
+  Same rules (11_AI_AGENT_BRIEF.txt, 12_DEFINITION_OF_DONE.txt).
+
+
+---------------------------------------------------------------------------
+0. WHAT EXISTS TODAY (checked in the code, 26 Sep)
+---------------------------------------------------------------------------
+
+  BACKEND: DONE AND TESTED. Don't rewrite it.
+    POST /api/v1/auth/google       {id_token, consent?, device?}  10/min
+    POST /api/v1/auth/google/link  {id_token, password, device?}   5/min
+    identity/auth/services/google_verifier.py checks Google's signature,
+      the issuer, the expiry, that the AUDIENCE is one of OUR client IDs
+      (config GOOGLE_CLIENT_IDS, comma-separated), and that the email is
+      verified by Google.
+    auth_service.google_sign_in() answers:
+      200  signed in (already linked), or signed up (new + consent sent)
+      409  GOOGLE_LINK_REQUIRED          the email has a password account
+                                         -> the app asks for the password
+                                            and calls /auth/google/link
+      422  GOOGLE_SIGNUP_DETAILS_REQUIRED  new person, no consent yet
+                                         -> the app shows the consent
+                                            tick and calls again with it
+      503  GOOGLE_NOT_CONFIGURED          GOOGLE_CLIENT_IDS is empty
+      401  INVALID_GOOGLE_TOKEN
+    Pre-hijack defence: an UNVERIFIED email sign-up is taken over by the
+    real owner (proven by Google) and its password deleted.
+    tests/domains/identity/test_google.py covers it with a fake verifier.
+
+  APP: NOT DONE. This is your work.
+    src/constants/config.ts             GOOGLE_READY = false
+    src/features/auth/api/httpAuthApi.ts continueWithGoogle / linkGoogle
+                                         throw "isn't available yet"
+    src/features/auth/screens/GooglePickerScreen.tsx  a MOCK picker (two
+                                         made-up accounts); on the real
+                                         backend it says "coming soon"
+    src/features/auth/screens/LinkGoogleScreen.tsx    asks for the
+                                         password (keep it, feed it the
+                                         token)
+    src/features/auth/types.ts          continueWithGoogle(email) and
+                                         linkGoogle(email, password): these
+                                         must carry the ID TOKEN instead
+    SignInScreen + CreateAccountScreen already show the Google button
+    (-> /google).
+    No Google native module is installed yet: this needs a NEW DEV BUILD.
+
+  App identity (don't change): android.package = za.akayza.app,
+  ios.bundleIdentifier = za.akayza.app, scheme = akayza (app.json).
+
+
+---------------------------------------------------------------------------
+1. GOOGLE CLOUD CONSOLE (console.cloud.google.com) -- step by step
+---------------------------------------------------------------------------
+
+  Use the TEAM Google account Mandla gives you (not a personal one), so
+  the project isn't lost if one of us leaves. Take screenshots of each
+  screen for the PR (with the IDs blurred is fine, they're public anyway).
+
+  1. Create a project
+     Top bar -> project picker -> New project -> name "Team PR app" (the
+     project name isn't shown to users) -> Create -> select it.
+
+  2. OAuth consent screen  (Google Auth Platform -> Branding / Audience)
+     - User type: External.
+     - App name: the app's name (users see it in the Google pop-up).
+       Support email: the team email. Logo: skip (a logo triggers
+       Google's review).
+     - Scopes: ONLY  openid, .../auth/userinfo.email,
+       .../auth/userinfo.profile  (non-sensitive: no Google review
+       needed). Add nothing else.
+     - Audience / publishing status: leave it in TESTING.
+       Test users: add every Google account that will sign in before
+       Sunday (Mandla's, yours, the demo phone's account). Max 100.
+       In Testing, anyone NOT on this list gets "access blocked".
+     - Privacy policy / homepage links: optional in Testing; needed
+       before "In production" (after the hackathon).
+
+  3. Create the WEB client ID  (Clients -> Create client)
+     - Application type: Web application. Name: "backend + app token".
+     - No redirect URIs, no JavaScript origins needed.
+     - Create. Copy the CLIENT ID (ends in .apps.googleusercontent.com).
+     WHY a web client for a phone app: the Android library returns an ID
+     token whose AUDIENCE is this web client ID (you pass it as
+     webClientId). The backend checks that audience. So this is the ID
+     the backend must know.
+     THE CLIENT SECRET: we don't use it (ID-token flow). Don't download
+     the JSON, don't paste the secret anywhere: not in chat, git, the
+     app, or .env.
+
+  4. Create the ANDROID client ID  (Clients -> Create client)
+     - Application type: Android. Package name: za.akayza.app
+     - SHA-1 certificate fingerprint of the key that SIGNS the build:
+         EAS build (what we use):  cd frontend/mobile
+                                   eas credentials -p android
+                                   -> development (or the build profile)
+                                   -> copy "SHA1 Fingerprint"
+         a local `expo run:android` build instead: the debug keystore:
+           keytool -list -v -keystore %USERPROFILE%\.android\debug.keystore
+                   -alias androiddebugkey -storepass android -keypass android
+       Different keys = different SHA-1s: add one Android client per key
+       you use (dev EAS key, and later the production/Play key).
+     - Create. Nothing to copy into our code: Google uses it only to trust
+       that the app asking is really za.akayza.app signed by our key.
+       If the SHA-1 is wrong you get DEVELOPER_ERROR (code 10) in the app.
+
+  5. iOS: skip this weekend (Android only). Later: an iOS client with
+     bundle ID za.akayza.app, and its reversed client ID as the URL
+     scheme in the config plugin.
+
+  6. Wait: new clients can take a few minutes (up to ~30) to work.
+
+
+---------------------------------------------------------------------------
+2. WHERE THE IDS GO (they are PUBLIC, but still never commit .env files)
+---------------------------------------------------------------------------
+
+  backend/.env (each machine that runs the backend -- Mandla puts it in
+  his; the cloud sandbox uses a made-up one):
+      GOOGLE_CLIENT_IDS=<WEB client ID>
+      (later, comma-separated: ,<iOS client ID>)
+  frontend/mobile/.env:
+      EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID=<the same WEB client ID>
+  Add both keys, EMPTY, to backend/.env.example and
+  frontend/mobile/.env.example with a one-line comment each.
+  Add EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID to the EAS build's environment
+  (eas env / the build profile) so the dev build has it.
+  Send Mandla the web client ID in the team chat (it's public); never the
+  client secret.
+
+
+---------------------------------------------------------------------------
+3. THE APP
+---------------------------------------------------------------------------
+
+  3a. The library
+    npx expo install @react-native-google-signin/google-signin
+    Add its config plugin to app.json "plugins" (Android needs no extra
+    options; iOS would need iosUrlScheme later). Check the library's
+    CURRENT Expo docs for the exact plugin line and the signIn() result
+    shape (it changed in recent versions) -- don't guess.
+    Declare it in REUSE.md (library, licence).
+    This is a native module: it only works in a NEW DEV BUILD (not Expo
+    Go, not the current build). Mandla schedules the build: ask him
+    before you run `eas build --profile development -p android`, and do
+    it EARLY (the build queue can take a while).
+
+  3b. Code (src/features/auth/)
+    google/googleSignIn.ts  (new, the only file that imports the library)
+      configure once:  GoogleSignin.configure({ webClientId:
+        GOOGLE_WEB_CLIENT_ID })   (scopes: none extra; email + profile
+        are the default)
+      getGoogleIdToken(): Promise<string | null>
+        hasPlayServices() -> signIn() -> the idToken;
+        null when the user closes the picker (NOT an error);
+        a clear AuthError for no Play Services / network / DEVELOPER_ERROR
+        ("Google sign-in isn't set up on this build")
+      googleSignOut(): call on our sign-out, so the next "Continue with
+        Google" lets them pick an account again
+    constants/config.ts
+      GOOGLE_WEB_CLIENT_ID = process.env.EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID ?? ''
+      GOOGLE_READY = GOOGLE_WEB_CLIENT_ID !== ''   (no longer hard false)
+    types.ts + httpAuthApi.ts + mockAuthApi.ts
+      continueWithGoogle(idToken, consent?) ->
+          {kind: 'signed_in', profile}
+        | {kind: 'needs_consent', email, name}     (422 SIGNUP_DETAILS)
+        | {kind: 'needs_link', email}              (409 LINK_REQUIRED)
+      linkGoogle(idToken, password) -> profile
+      Send the same device info the email sign-in already sends.
+      The mock keeps working (EXPO_PUBLIC_USE_MOCK_API=true): it fakes the
+      three outcomes from a fake token.
+    screens/GooglePickerScreen.tsx
+      No fake accounts on the real backend any more. Flow:
+        tap -> getGoogleIdToken() (Android's REAL picker opens)
+            -> null: just close
+            -> continueWithGoogle(token, consent from Create account)
+               signed_in     -> the session (onboarding opens by itself
+                                 for new accounts)
+               needs_consent -> a sheet: "Accept the Privacy Policy and
+                                 Terms" with links + tick -> call again
+                                 WITH consent (same token if still valid,
+                                 else ask Google again)
+               needs_link    -> LinkGoogleScreen with the email; keep the
+                                 token in memory only (never storage,
+                                 never the URL/params)
+      Loading state while waiting; one clear error line on failure.
+    screens/LinkGoogleScreen.tsx
+      password -> linkGoogle(token, password). Wrong password: the
+      existing message. If the token expired (401), send them back to
+      "Continue with Google".
+    Sign out (SessionProvider): also googleSignOut().
+
+  3c. Never
+    - never send the Google access token, only the ID token
+    - never store the ID token (SecureStore, AsyncStorage, logs, URL)
+    - never log it or the email in console.log
+    - never trust the email the app sees: the SERVER reads it from the
+      verified token (it already does)
+
+
+---------------------------------------------------------------------------
+4. TESTS AND CHECKS
+---------------------------------------------------------------------------
+
+  Backend (small; the flow is already tested)
+  - GOOGLE_CLIENT_IDS with two IDs: a token for EITHER audience is
+    accepted, any other audience refused (extend test_google.py)
+  - (GOOGLE_CLIENT_IDS empty -> 503 is tested already)
+  - full suite green
+  App (jest; mock the library in googleSignIn.ts -- jest mock factories
+  may only use variables named mock*)
+  - picker closed -> nothing happens, no error
+  - 200 / 409 / 422 each go to the right screen
+  - consent sheet sends consent on the second call
+  - sign-out calls googleSignOut
+  - GOOGLE_READY false (no ID) -> the "use your email" message, no crash
+  tsc clean.
+
+  ON THE PHONE (the real test, with Mandla, backend via ngrok)
+  [ ] new Google account (a test user) -> consent -> onboarding
+  [ ] sign out, Continue with Google again -> signed straight in
+  [ ] an email+password account with the SAME Gmail -> "enter your
+      password once" -> linked -> next time signed straight in
+  [ ] a Google account NOT on the test-user list -> Google's own "access
+      blocked" (expected in Testing; note it)
+  [ ] airplane mode -> one clear error, no crash
+  [ ] closing the picker -> back where you were
+  [ ] audit rows: REGISTER_SUCCESS / LOGIN_SUCCESS / GOOGLE_LINKED with
+      method=google (Mandla checks in his dev DB)
+
+
+---------------------------------------------------------------------------
+5. SECURITY BY DESIGN (put in the PR)
+---------------------------------------------------------------------------
+
+  - Server verifies every token (signature, issuer, expiry, audience,
+    email_verified); the app's word is never trusted. (done)
+  - No silent merge: an existing password account needs the password
+    once. (done) Pre-hijack defence on unverified sign-ups. (done)
+  - Minimal scopes: openid, email, profile. No Drive, no contacts.
+  - No client secret anywhere; ID token never stored or logged.
+  - Rate limits 10/min and 5/min per IP (done). Consent versions recorded
+    exactly like email sign-up (done).
+  - Testing mode = only listed test users until we publish.
+
+
+---------------------------------------------------------------------------
+6. ORDER OF WORK
+---------------------------------------------------------------------------
+
+  1. Google Cloud: project, consent screen (Testing + test users), WEB
+     client, ANDROID client with the dev build's SHA-1. Send Mandla the
+     web client ID. (~30 min)
+  2. App: install the library + plugin, googleSignIn.ts, the API changes
+     with the mock, the screens, jest. (~2 h)
+  3. Ask Mandla for the dev build (or run it when he says). While it
+     builds: the backend test additions and .env.example lines.
+  4. Phone test together (the checklist in 4). Screenshots in the PR.
+
+  Not this weekend (write in "Not done"): iOS client, publishing the
+  consent screen "In production" (needs privacy policy + homepage URLs
+  on a domain we own), a Play Store signing key's SHA-1.
+
+
+---------------------------------------------------------------------------
+7. QUESTIONS FOR MANDLA (answer before step 3)
+---------------------------------------------------------------------------
+
+  1. Which Google account owns the Cloud project?
+  2. Which Google accounts go on the test-user list (the demo phone's)?
+  3. When can we do the new dev build (tonight is best: final Sun 09:00)?
+  4. For the demo video: Google sign-up, or email sign-up (already works)?
+
+DECISION:

@@ -8,6 +8,7 @@ import { TextField } from '@/shared/components/TextField';
 
 import { onboardingApi } from '../api/onboardingApi';
 import { StepScaffold } from '../components/StepScaffold';
+import { savedToast, useSectionSave } from '../sync/useSectionSave';
 
 type Setup = 'cipc' | 'sole' | 'unsure';
 
@@ -48,7 +49,9 @@ export default function RegistrationScreen({ editing = false }: { editing?: bool
 
   const cipcError = setup === 'cipc' && cipcNumber ? cipcFormatError(cipcNumber) : '';
 
-  function save() {
+  const { save: saveSection, busy, error } = useSectionSave();
+
+  async function save() {
     setTouched(true);
     if (cipcError) return;
     const wantsCheck = setup === 'cipc' && !!cipcNumber;
@@ -58,6 +61,12 @@ export default function RegistrationScreen({ editing = false }: { editing?: bool
       soleTrader: setup === 'sole',
       cipc: wantsCheck ? (unchanged && reg.cipc ? reg.cipc : { number: cipcNumber, status: 'pending' }) : null,
     };
+    if (editing) {
+      // The server checks the CIPC number itself; its answer comes back with the save.
+      if (!(await saveSection({ registration: next }, ['registration']))) return;
+      savedToast();
+      return router.back();
+    }
     updateProfile({ registration: next });
     if (wantsCheck && !unchanged) {
       // Stands in for the backend job that checks CIPC after this step is saved.
@@ -66,7 +75,6 @@ export default function RegistrationScreen({ editing = false }: { editing?: bool
         .then((r) => setCipcResult(cipcNumber, r))
         .catch(() => setCipcResult(cipcNumber, { status: 'unavailable', checkedAt: new Date().toISOString() }));
     }
-    if (editing) return router.back();
     router.push('/where-you-are');
   }
 
@@ -81,6 +89,8 @@ export default function RegistrationScreen({ editing = false }: { editing?: bool
       ]}
       onPrimary={save}
       onSkip={() => router.push('/where-you-are')}
+      busy={busy}
+      error={error}
       editing={editing}>
       <SelectField<Setup> label="How is your business set up?" options={SETUP_OPTIONS} value={setup} onChange={setSetup} />
       {setup === 'cipc' ? (

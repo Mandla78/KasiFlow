@@ -10,6 +10,7 @@ import { SelectField } from '@/shared/components/SelectField';
 import { TextField } from '@/shared/components/TextField';
 
 import { StepScaffold } from '../components/StepScaffold';
+import { savedToast, useSectionSave } from '../sync/useSectionSave';
 
 const TYPE_OPTIONS = BUSINESS_TYPE_ORDER.map((t) => ({
   value: t,
@@ -32,6 +33,7 @@ export default function YourBusinessScreen({ editing = false }: { editing?: bool
   const [years, setYears] = useState<YearsTrading | null>(profile.yearsTrading);
   const [cellphone, setCellphone] = useState(profile.cellphone);
   const [touched, setTouched] = useState(false);
+  const { save, busy, error } = useSectionSave();
 
   const isBuilder = profile.businessType === 'builder';
   const digits = cellphone.replace(/\D/g, '');
@@ -45,11 +47,17 @@ export default function YourBusinessScreen({ editing = false }: { editing?: bool
   };
   const e = (k: keyof typeof errors) => (touched ? errors[k] : '');
 
-  function next() {
+  async function next() {
     setTouched(true);
     if (Object.values(errors).some(Boolean)) return;
-    updateProfile({ businessName: businessName.trim(), ownerName: ownerName.trim(), yearsTrading: years, cellphone: cellphone.trim() });
-    if (editing) return router.back();
+    const change = { businessName: businessName.trim(), ownerName: ownerName.trim(), yearsTrading: years, cellphone: cellphone.trim() };
+    if (editing) {
+      // Type and trade change the tools and categories too, so those go with it.
+      if (!(await save(change, ['business', 'tools', 'buying']))) return;
+      savedToast();
+      return router.back();
+    }
+    updateProfile(change);
     router.push('/registration');
   }
 
@@ -64,6 +72,8 @@ export default function YourBusinessScreen({ editing = false }: { editing?: bool
         'Your cellphone is optional and only used for delivery calls and WhatsApp receipts, never to sign in or for marketing. We never ask for your ID number.',
       ]}
       onPrimary={next}
+      busy={busy}
+      error={error}
       editing={editing}>
       <TextField
         label="Business name"

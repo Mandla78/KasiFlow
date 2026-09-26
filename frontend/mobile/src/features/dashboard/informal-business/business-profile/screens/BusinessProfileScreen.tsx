@@ -7,6 +7,7 @@ import { CATEGORIES } from '@/constants/categories';
 import { isVerified } from '@/features/auth/profile';
 import { useSession } from '@/features/auth/session/SessionProvider';
 import type { Profile } from '@/features/auth/types';
+import { useProfileUnsaved } from '@/features/onboarding/sync/useBusinessProfileSync';
 import { Card, ListRow } from '@/shared/components/Parts';
 import { Screen } from '@/shared/components/Screen';
 import { Overline } from '@/shared/components/Text';
@@ -48,6 +49,7 @@ function registrationLine(p: Profile): string {
  */
 export default function BusinessProfileScreen() {
   const { profile } = useSession();
+  const { unsaved, retry } = useProfileUnsaved();
   const verified = isVerified(profile);
   const cipc = profile.registration.cipc;
 
@@ -71,6 +73,12 @@ export default function BusinessProfileScreen() {
           )}
         </View>
       </View>
+
+      {unsaved ? (
+        <Card onPress={retry}>
+          <Text style={styles.unsaved}>Some changes aren&apos;t saved yet. Tap to try again.</Text>
+        </Card>
+      ) : null}
 
       <Overline>Registration</Overline>
       {cipc ? <CipcStatusCard cipc={cipc} businessName={profile.businessName} /> : null}
@@ -96,6 +104,7 @@ export default function BusinessProfileScreen() {
 }
 
 const styles = StyleSheet.create({
+  unsaved: { fontFamily: fonts.bold, fontSize: 13, color: colors.marigoldDeep },
   head: { flexDirection: 'row', alignItems: 'flex-start', gap: 14 },
   name: { fontFamily: fonts.display, fontSize: 21, color: colors.ink },
   sub: { fontFamily: fonts.body, fontSize: 13, color: colors.textMuted },

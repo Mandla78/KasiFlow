@@ -146,7 +146,12 @@ export function ListRow({
   last?: boolean;
 }) {
   return (
-    <Pressable onPress={onPress} style={({ pressed }) => [styles.listRow, !last && styles.listRule, pressed && { opacity: 0.7 }]}>
+    // A row that opens nothing doesn't look tappable: no chevron, no press effect.
+    <Pressable
+      onPress={onPress}
+      disabled={!onPress}
+      accessibilityRole={onPress ? 'button' : undefined}
+      style={({ pressed }) => [styles.listRow, !last && styles.listRule, pressed && { opacity: 0.7 }]}>
       <IconTile
         name={icon}
         size={34}
@@ -157,7 +162,7 @@ export function ListRow({
         <Text style={[styles.rowTitle, danger && { color: colors.garnet }]}>{title}</Text>
         {subtitle ? <Text style={styles.rowSub}>{subtitle}</Text> : null}
       </View>
-      <Feather name="chevron-right" size={18} color={colors.textFaint} />
+      {onPress ? <Feather name="chevron-right" size={18} color={colors.textFaint} /> : null}
     </Pressable>
   );
 }

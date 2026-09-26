@@ -62,8 +62,8 @@ export default function More() {
           subtitle={profile.businessType ? `${BUSINESS_TYPES[profile.businessType].label} · edit your sign-up answers` : 'Not set'}
           onPress={() => router.push('/informal-business/business')}
         />
-        <ListRow icon="map-pin" title="Delivery addresses" subtitle="Shop · Home" />
-        <ListRow icon="grid" title="Tools" subtitle={`${toolsOn} on`} last />
+        <ListRow icon="map-pin" title="Delivery addresses" subtitle="Your business address · more places coming" />
+        <ListRow icon="grid" title="Tools" subtitle={`${toolsOn} on`} onPress={() => router.push('/informal-business/tools')} last />
       </Card>
 
       <Overline>App</Overline>
@@ -71,13 +71,11 @@ export default function More() {
         <ListRow icon="bell" title="Notifications" subtitle="Orders, jobs, credit book, security" onPress={() => router.push('/informal-business/notification-settings')} />
         <ListRow icon="lock" title="Security" subtitle="Phones, password, your data" onPress={() => router.push('/informal-business/security')} />
         <ListRow icon="credit-card" title="Payment cards" subtitle="Test mode" onPress={() => router.push('/informal-business/payment-cards')} />
-        <ListRow icon="globe" title="Language" subtitle="English" />
-        <ListRow icon="refresh-cw" title="Data saver" subtitle="On" last />
+        {/* Shown, not tappable: English is the only language so far. Data saver returns when it does something. */}
+        <ListRow icon="globe" title="Language" subtitle="English · more languages coming" last />
       </Card>
 
-      <Overline>Support</Overline>
       <Card style={styles.group}>
-        <ListRow icon="help-circle" title="Help and WhatsApp support" />
         <ListRow icon="log-out" title="Sign out" danger onPress={signOut} last />
       </Card>
       <Text style={styles.version}>Akayza 0.1.0 · preview build</Text>
