@@ -1,0 +1,171 @@
+===========================================================================
+TEAMMATE 19 -- MY RECORD (plan v2 03): Account shows tools; the money
+records get their own screen
+From Mandla, Saturday 26 September 2026, 18:30. Deadline: push by 23:00
+tonight (final submission Sun 09:00, aim 08:00). Read it all first.
+===========================================================================
+
+WHY
+  Account still shows "sample" numbers (Stock bought, My orders "12 this
+  month", My record "38 of 41 confirmed"). Judges will tap them. Every
+  number must be real, and the money records must sit on ONE screen,
+  kept apart by what backs them -- never added together.
+
+  Full plan (approved): docs/plan_v2_integrations/03_ACCOUNT_AND_MY_RECORD.txt
+  DECISION there: summary lives in proof/ledger; stock bought by ORDER
+  date; "My orders" stays an Account tile.
+
+
+---------------------------------------------------------------------------
+0. START (main has everything: notifications 1-4, plan v2 01 + 04,
+   delivery addresses 0025, supplier logos)
+---------------------------------------------------------------------------
+
+  git switch main
+  git pull origin main
+  git switch -c risuna/my-record
+  cd backend  ->  .\.venv\Scripts\Activate.ps1  ->  flask db upgrade
+  python -m pytest -q tests        (should be all green before you start)
+  cd ..\frontend\mobile  ->  npm ci  ->  npx tsc --noEmit  ->  npx jest
+
+  Migrations: head is 0025_delivery_addresses. 0024 is reserved for
+  Mandla's "I paid the cash". My record needs NO migration (read-only).
+  If you think you need one, ask first.
+
+
+---------------------------------------------------------------------------
+1. BACKEND: GET /me/record/summary?month=YYYY-MM
+---------------------------------------------------------------------------
+
+  Where: backend/src/domains/proof/ledger/ (the folders exist, empty).
+    api/routes.py, schemas/record_schemas.py, services/record_service.py
+    Import the routes in src/api/__init__.py (one line, like the others).
+
+  Route: @auth_required(dashboard="informal_business"),
+         @limiter.limit("30 per minute"), no body.
+  month: strict YYYY-MM; default this month (SAST); not in the future;
+         not before the account was created; anything else -> 422
+         (2026-13, 2026-9, ../, 9999-01, empty, a list...).
+
+  Build it by calling each tool's SERVICE -- never its repositories
+  (tests/architecture/test_domain_boundaries.py must stay green):
+    - orders:      commerce/orders/services/order_service
+    - credit book: informal_trader/credit_book/services/credit_book_service
+    - jobs:        informal_trader/jobs/services/jobs_service
+  Today's service summaries are "all time" or "this month" only. Add a
+  month-aware function in each (e.g. money_for_month(user, start, end))
+  next to the existing summary():
+    - credit book + jobs: your own features, go ahead.
+    - orders (Mandla's): add ONE function money_summary_for(user, start,
+      end) that reuses payment_evidence(); nothing else in orders
+      changes. Say so in the PR.
+
+  Answer (three blocks, NO grand total field anywhere):
+    {
+      "month": "2026-09",
+      "orders": {                          # by ORDER date, only mine
+        "provider_verified": {"cents", "orders"},   # paid in the app, PayFast-confirmed
+        "confirmed_by_both": {"cents", "orders"},   # cash, both sides said so
+        "not_confirmed":     {"cents", "orders"}    # cash, not confirmed
+      },
+      "credit_book": {"given_cents", "paid_back_cents"} | null (tool off),
+      "jobs": {"confirmed_cents", "confirmed_stages", "amounts_dont_match"} | null
+    }
+  Cancelled / rejected / expired orders never count.
+  No audit event (read-only, own data). No names, phones or addresses in
+  the answer.
+
+
+---------------------------------------------------------------------------
+2. APP
+---------------------------------------------------------------------------
+
+  a) Account (account/screens/AccountScreen.tsx)
+     - Tools only, every line live, NO "sample" marks, no footnote.
+     - "Order stock / Materials": "<n> open" from ordersApi.list()
+       (open = placed, accepted, on its way, ready) -- or just "Order from
+       your suppliers" if that fails. Never a made-up number.
+     - "My orders": "<n> this month" from ordersApi.list().
+     - "My record": "Your money, kept apart" -> /informal-business/record
+     - The "This month" row (Stock bought, Credit given, Paid back) LEAVES
+       Account. Delete account/mock.ts when nothing uses it.
+
+  b) My record (new): features/dashboard/informal-business/record/
+       api/recordApi.ts (+ http + mock with the same rules), types.ts,
+       screens/MyRecordScreen.tsx; route app/(dashboard)/informal-business/record.tsx
+     - One month at a time: ‹ September 2026 ›  (no future months; not
+       before sign-up).
+     - Three cards, each opening its source:
+         STOCK YOU BOUGHT
+           Paid in the app, verified by PayFast   R ...  (n orders)
+           Cash, confirmed by both                R ...  (n)
+           Cash, not confirmed                    R ...  (n)
+           -> My orders
+         YOUR CREDIT BOOK (your own record)
+           Credit given R ...   Paid back R ...   -> credit book
+         YOUR JOBS (builders; your own record)
+           Stages confirmed by clients R ... (n)
+           Amounts that don't match n            -> My jobs
+     - A tool that is off: its card says "Switch on <tool> in Account"
+       (the AddToolSheet / More -> Tools switches).
+     - Under the title: "Only payments verified by the payment provider
+       are proof. The rest is your own record." Never write "proof" next
+       to tool numbers.
+     - Loading, empty ("Nothing recorded in September"), error with
+       "Tap to try again".
+     - Hide balances: Mandla is adding shared/lib/useHideBalances.ts in
+       plan 02. If it isn't on main yet, leave a // TODO line; don't
+       build your own.
+
+
+---------------------------------------------------------------------------
+3. TESTS (the PR isn't done without them)
+---------------------------------------------------------------------------
+
+  backend (tests/domains/proof/test_record_summary.py + a hostile file)
+  - needs a token; supplier accounts refused
+  - month parsing: good, default, future, before sign-up, garbage -> 422
+  - orders: digital-paid / cash-confirmed / cash-not-confirmed kept
+    apart; cancelled/expired excluded; only that month (order date)
+  - credit book and jobs: only that month; tool off -> null
+  - IDOR: trader B's orders, credit and jobs never appear in A's answer
+  - no "total" key anywhere in the JSON (a test walks the dict)
+  - rate limit: the 31st call in a minute -> 429
+  - architecture boundary test green; FULL suite green
+  app (jest)
+  - mock recordApi follows the same rules (month bounds, no total)
+  - a small lib test for the month arrows (no future, no before sign-up)
+  - npx tsc --noEmit clean, npx expo lint clean
+
+
+---------------------------------------------------------------------------
+4. RULES (CLAUDE.md -- the ones that bite here)
+---------------------------------------------------------------------------
+
+  - HONEST PROOF: only a PayFast-verified payment is proof; cash is at
+    most "confirmed by both"; credit book and jobs are the owner's own
+    records. NEVER add the blocks together, in the API or on screen.
+  - Every query scoped to current_user(); not yours = not shown / 404.
+  - Strict schema, rate limit, hostile-input tests.
+  - Only your folders + the one-line wiring + the one orders function.
+  - No secrets, no .env, no debug prints.
+
+
+---------------------------------------------------------------------------
+5. WHEN YOU'RE DONE
+---------------------------------------------------------------------------
+
+  git fetch origin && git merge origin/main     (fix conflicts, re-test)
+  git push -u origin risuna/my-record
+  Open a PR into main with the 12_DEFINITION_OF_DONE checklist, the test
+  counts (backend N passed, app M passed), 2-3 screenshots (Account,
+  My record for this month, a switched-off tool) and a "Not done" list.
+  Tell Mandla on WhatsApp. Don't merge it yourself.
+
+  Questions? Put them at the end of this file as QUESTIONS and ping
+  Mandla; don't guess on the rules above.
+
+  After this (only if Mandla says the new phone build is happening
+  tonight): Google sign-in, docs/teammate/18_GOOGLE_SIGN_IN_PLAN.txt.
+
+DECISION:
