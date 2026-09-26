@@ -6,6 +6,7 @@ every test so tests never depend on each other.
 from __future__ import annotations
 
 import os
+import re
 from pathlib import Path
 
 import pytest
@@ -16,6 +17,14 @@ load_dotenv(Path(__file__).resolve().parent.parent / ".env")
 # Tests never talk to Cloudinary, and never write under the real folders.
 os.environ["MEDIA_PROVIDER"] = "fake"
 os.environ["MEDIA_ROOT_FOLDER"] = "akayza-test"
+# The seed suppliers' logos live on the team's Cloudinary (seed/demo_images.csv)
+# and the feed only accepts our own cloud. A sandbox with no Cloudinary set up
+# trusts that cloud, so every seed supplier still loads. (A cloud name is
+# public: it's in every image link. The keys are never needed here.)
+if not os.environ.get("CLOUDINARY_CLOUD_NAME"):
+    _seed_cloud = re.search(r"res\.cloudinary\.com/([A-Za-z0-9_-]+)/", (Path(__file__).resolve().parent.parent / "seed" / "demo_images.csv").read_text(encoding="utf-8"))
+    if _seed_cloud:
+        os.environ["CLOUDINARY_CLOUD_NAME"] = _seed_cloud.group(1)
 
 from src import create_app  # noqa: E402
 from src.extensions import db  # noqa: E402
