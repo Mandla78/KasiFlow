@@ -56,6 +56,21 @@ TESTS
   only their own.
 
 
-ORDER BOOK SIGNALS
-  Come with the order book's backend (CONTRACT_order_book.txt proposes
-  order_book_service.demand_signals from menu ingredients x units sold).
+ORDER BOOK SIGNALS (built: risuna/order-book-api)
+
+    from src.domains.informal_trader.order_book.services import order_book_service
+    order_book_service.demand_signals(user) ->
+      {"categories": {"meat_frozen": 0.32, "bakery": 0.12, ...},
+       "weekly_units": {"chips": 3, "quarter_loaf": 2, ...},
+       "since": "2026-09-19"}
+
+  categories    shares (2 decimals, biggest first) of the last 7 days: each
+                item's ingredients x units sold (an ingredient in two
+                categories splits its units: chips -> meat_frozen +
+                fresh_produce), plus packaging_disposable once per order.
+                Ingredient -> category: order_book/constants.py
+                INGREDIENT_CATEGORIES.
+  weekly_units  ingredient -> units sold in the last 7 days, most first.
+  since         the first day counted.
+  Cancelled orders and other traders' orders never count. Aggregates
+  only: no names, orders or amounts (tested in test_order_book_signals.py).

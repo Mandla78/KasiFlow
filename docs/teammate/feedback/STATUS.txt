@@ -35,7 +35,17 @@ IN PROGRESS
     ones; restore never brings them back); a binned job's help posts and
     unanswered invites go with it. The app's Delete / Bin now work on the
     real API too (BIN_READY true). 36 new tests. As built: CONTRACT_bin.txt
-    section 6.
+    section 6. (PR 11)
+  - Order book backend (risuna/order-book-api, on top of PR 11, migration
+    0021_order_book) per CONTRACT_order_book.txt and its DECISION: the
+    server's own id with the phone's client_key (unique per trader, the
+    order's address), day numbers from one atomic counter, lines priced by
+    the server from the price valid when the phone took the order, the
+    queue one step at a time, the week, demand_signals for the engine.
+    The app on it: the tool follows profile.tools.orderBook, Account and
+    Home show "orders today" live, Today says "money you recorded", order
+    keys are real UUIDs on every phone. 95 new tests. As built:
+    CONTRACT_order_book.txt section 10.
 
 BLOCKED (and on what)
   - (none; the Idempotency-Key header and the deep-JSON crash are fixed on main)
@@ -47,8 +57,7 @@ FINDINGS / NEEDS / QUESTIONS FOR MANDLA
   - FINDING_whatsapp_ip_links.txt, QUESTION_bluetooth_sales.txt (roadmap)
 
 NEXT (all approved 26 Sep; see the DECISION lines)
-  - order book backend: risuna/order-book-api, migration 0021_order_book
-  - trades (11, painter_tiler split): risuna/trades on top of it, 0022_trades
+  - trades (11, painter_tiler split): risuna/trades on top of the order book, 0022_trades
   - after Sunday: crew on a job, short videos, "ask for more" (counter-offer)
 
 FROM MANDLA'S SIDE (26 Sep, night)

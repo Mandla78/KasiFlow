@@ -16,9 +16,11 @@ const DAY_NAMES = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 const dayName = (iso: string) => DAY_NAMES[new Date(`${iso}T12:00:00Z`).getUTCDay()]!;
 
 /**
- * Today in numbers -- the trader's own value: orders, money in (cash and
- * card or EFT; "pay later" is on the credit book, not in yet), best
- * sellers, the busiest hour; and the same for the week.
+ * Today in numbers -- the trader's own value: orders, the money they
+ * recorded (cash and card or EFT, as they tapped it; "pay later" is on the
+ * credit book), best sellers, the busiest hour; and the same for the week.
+ * It's their own record, so it says "recorded", never "verified" or "paid":
+ * only a payment the provider verified is proof (CONTRACT_order_book DECISION).
  */
 export function TodayTab() {
   const { day, orders } = useCounter();
@@ -53,13 +55,14 @@ export function TodayTab() {
     <>
       <View style={styles.tiles}>
         <Tile value={String(t.orders)} label={t.orders === 1 ? 'order today' : 'orders today'} />
-        <Tile value={formatRand(moneyIn(t))} label="money in" />
+        <Tile value={formatRand(moneyIn(t))} label="money you recorded" />
       </View>
 
       <Card style={{ gap: 10 }}>
         <Row label="Cash" value={formatRand(t.cashCents)} />
         <Row label="Card or EFT" value={formatRand(t.digitalCents)} />
         <Row label="Pay later (credit book)" value={formatRand(t.laterCents)} muted />
+        <Text style={styles.small}>As you recorded them at the counter: your own record, not a bank statement.</Text>
       </Card>
 
       <View style={styles.section}>
@@ -108,7 +111,7 @@ export function TodayTab() {
                 <Text style={styles.weekOrders}>{d.orders}</Text>
               </View>
             ))}
-            <Text style={styles.small}>Money in per day, and the number of orders. From {dayName(addDays(day, -6))} to today.</Text>
+            <Text style={styles.small}>Money you recorded per day, and the number of orders. From {dayName(addDays(day, -6))} to today.</Text>
           </Card>
         ) : (
           <Text style={styles.muted}>{weekFailed ? 'The week needs a signal. Today above is from this phone.' : 'Loading the week…'}</Text>
