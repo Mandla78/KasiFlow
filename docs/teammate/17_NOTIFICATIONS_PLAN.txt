@@ -1,0 +1,333 @@
+===========================================================================
+TEAMMATE 17 -- NOTIFICATIONS: REAL IN-APP ALERTS (Orders + Inbox)
+From Mandla, Saturday 26 September 2026. Read this first.
+===========================================================================
+
+WHAT WE WANT
+  Notifications that are REAL: written by the server when something really
+  happens, read from the database, marked read on the server, and showing
+  up on the phone within seconds without the trader pulling to refresh.
+  Two tabs:
+
+    ORDERS  everything about orders with suppliers: sent, waiting for
+            payment, paid, accepted, rejected, on its way, ready to
+            collect, delivered, collected, lapsed.
+    INBOX   everything else: account and security (a new phone signed
+            in, password changed, other phones signed out), and the
+            tools (a client confirmed a job stage, amounts don't match).
+
+  Every notification comes from a TEMPLATE (never free text typed at the
+  call site). Tapping one opens it in a pop-up sheet with the full text
+  and a button to the real thing (the order, the job). Opening it marks
+  it read -- on the server.
+
+  Branch: risuna/notifications (from the latest main; git pull first).
+  Same rules as always (11_AI_AGENT_BRIEF.txt, 12_DEFINITION_OF_DONE.txt):
+  CONTRACT first (feedback/CONTRACT_notifications.txt), Mandla approves,
+  then build. Small commits.
+
+
+---------------------------------------------------------------------------
+0. WHAT EXISTS TODAY (checked in the code, 26 Sep)
+---------------------------------------------------------------------------
+
+  Backend
+    backend/src/shared/notifications/   a publisher only:
+      notification_types.py  NotificationCategory (STOCK_ORDER, INBOX) and
+                             NotificationEvent (recipient_user_id, title,
+                             body, related_entity_type/id)
+      notifications.py       register_listener / publish_notification,
+                             sent through shared.queue (never blocks the
+                             request, never raises) -- same shape as audit
+    NOBODY calls publish_notification and NOBODY listens: there is no
+    table, no route, no template. The docstrings still name TruConnect
+    folders that don't exist here (domains/platform/notifications,
+    domains/network/orders, "stock orders"): rewrite them for us.
+
+  App
+    features/dashboard/informal-business/notifications/
+      mock.ts                  4 sample notifications
+      lib/notificationStore.ts in memory: notify(), markRead(),
+                               markAllRead(), useUnreadCount()
+      screens/NotificationsScreen.tsx  one list, "Mark all read"
+    mockOrdersApi.ts calls notify() as orders move; HomeScreen shows the
+    bell's unread count from useUnreadCount(). All of it is sample data:
+    mark-as-read is lost when the app restarts.
+
+  Where real events already happen (the hooks go here)
+    Orders   commerce/orders/services/order_service.py
+               place()          cash: placed / digital: awaiting_payment
+               supplier_move()  accepted, rejected, out_for_delivery,
+                                ready_for_collection, delivered, collected
+               mark_paid()      paid -> accepted  (called by payments)
+               expire_unpaid()  expired (the scheduler)
+    Account  identity/auth/services/auth_service.py
+               _tokens(... reason="new_device")  a new phone signed in
+               change_password(), sign_out_other_phones()
+    Jobs     informal_trader/jobs/services/sign_off_service.py answer()
+               the client answered: confirmed / amounts don't match /
+               not yet
+
+  Suppliers have NO user accounts yet (Dashboard.SUPPLIER exists, but
+  suppliers get their orders by email: Supplier.orders_email). So the
+  supplier side of Orders ("a new order for you") is PHASE 2 -- design
+  for it now (the recipient is any user id), build it when suppliers
+  sign in.
+
+
+---------------------------------------------------------------------------
+1. DESIGN
+---------------------------------------------------------------------------
+
+  1a. Where the code lives
+    backend/src/domains/platform/notifications/{api, models,
+      repositories, schemas, services, templates.py}
+    (schema "platform" exists already.) It LISTENS to
+    shared.notifications; it never imports orders, auth or jobs, and they
+    never import it (tests/architecture/test_domain_boundaries.py).
+
+    Change shared/notifications/notification_types.py (Mandla's file --
+    say so in the PR) so an event carries a TEMPLATE KEY + PARAMS instead
+    of ready-made text:
+        NotificationEvent(recipient_user_id, template, params: dict,
+                          link: {"type": "order", "id": "..."} | None,
+                          dedupe_key: str | None)
+    Tabs become ORDERS and INBOX (rename STOCK_ORDER). The template decides
+    the tab, the icon and the words, so every caller stays one line:
+        publish_notification(NotificationEvent(user.id, "order.accepted",
+            {"reference": o.reference, "supplier": o.supplier_name},
+            link={"type": "order", "id": str(o.id)},
+            dedupe_key=f"order:{o.id}:accepted"))
+
+  1b. Templates  (services/templates.py -- one dict, reviewed like copy)
+    key -> tab, icon (Feather name), title, body, level (info | action |
+    security). Text written the way a trader speaks. Params are plain
+    values the SERVER fills (reference, supplier business name, rand
+    amount already formatted); never user-typed text.
+
+      ORDERS
+      order.sent             send          "Order sent to {supplier}"
+                                            "{reference} · {total}. Waiting for them to accept."
+      order.awaiting_payment credit-card   "Pay to send your order"
+                                            "{reference} · {total} to {supplier}. Pay within 24 hours."
+      order.paid             check-circle  "Paid. {supplier} has your order"
+                                            "{reference} · {total} paid in the app."
+      order.accepted         thumbs-up     "{supplier} accepted your order"
+      order.rejected         x-circle      "{supplier} can't do this order"
+                                            "{reference}. Your stock hold is released."
+      order.on_its_way       truck         "Your stock is on its way"
+                                            "{reference} from {supplier}.{cash_line}"
+      order.ready            package       "Ready to collect at {supplier}"
+      order.delivered        check         "Delivered: {reference}"
+      order.collected        check         "Collected: {reference}"
+      order.expired          clock         "Order {reference} lapsed"
+                                            "It wasn't paid in time. Nothing was charged."
+      INBOX
+      account.new_phone      shield        "A new phone signed in"
+                                            "If this wasn't you, change your password now."
+      account.password_changed  lock       "Your password was changed"
+      account.phones_signed_out log-out    "Other phones were signed out"
+      job.stage_confirmed    check-square  "{stage} confirmed by your client"
+      job.amounts_dont_match alert-triangle "Amounts don't match on {stage}"
+      job.not_yet            message-circle "Your client says {stage} isn't done yet"
+
+    {cash_line} = " Have {cash} cash ready." for cash orders, else "".
+    Security alerts NEVER include an IP address, a place, an email or
+    the device's name (no attacker hints, CLAUDE.md).
+    Job alerts NEVER include the client's name or phone (use the stage
+    and job title only).
+
+  1c. Table  platform.notifications   (migration 0023 -- check origin
+      first; rename if someone got there)
+      id uuid pk, user_id uuid not null (FK identity.users, on delete
+      cascade), tab CHECK (orders, inbox), template varchar(60),
+      params jsonb, link_type varchar(30) null, link_id uuid null,
+      dedupe_key varchar(120) null, created_at timestamptz, read_at
+      timestamptz null.
+      UNIQUE (user_id, dedupe_key) -- a retried request never makes two.
+      INDEX (user_id, tab, created_at desc); partial index where read_at
+      is null for the counts.
+      Store the template key + params, NOT the rendered text: the words
+      can be fixed later without touching rows. Render on read.
+      Keep 90 days (a scheduled clean-up job, like expire_unpaid).
+
+  1d. Settings  platform.notification_settings (same migration)
+      user_id pk, orders bool default true, jobs bool default true.
+      Security alerts (account.*) are ALWAYS on and can't be switched
+      off -- show them locked in the app with "Always on for your
+      safety". When a type is off, the listener simply doesn't write the
+      row.
+
+  1e. Real time -- honest version for this weekend
+      The app POLLS a tiny endpoint:
+        GET /me/notifications/unread   -> {orders: 2, inbox: 1, latest_id}
+      every 20 s while the app is open and in front (AppState "active"),
+      immediately when it comes back to the front, and when the
+      Notifications screen gets focus. When latest_id changes, refetch
+      the list. That is seconds-fresh, cheap (one indexed count) and
+      works through ngrok today.
+      NOT this weekend (list in "Not done"): phone push notifications
+      (expo-notifications = a new native build + Firebase keys) and
+      server-sent events / websockets (hold a server thread per phone).
+      The API above is what push will use later, unchanged.
+
+
+---------------------------------------------------------------------------
+2. ENDPOINTS  (all @auth_required, scoped to current_user(); not yours =
+   404; marshmallow unknown=RAISE; rate limits keyed on the user)
+---------------------------------------------------------------------------
+
+  GET  /me/notifications?tab=orders|inbox&before=<id>&limit=20   120/min
+       {notifications: [{id, tab, icon, title, body, level, link,
+        created_at, read}], next: <id>|null}   newest first
+  GET  /me/notifications/unread                                   240/min
+       {orders, inbox, latest_id}
+  POST /me/notifications/<uuid:id>/read                            120/min
+       -> {notification}. Idempotent (already read = 200, same row).
+       Someone else's id = 404.
+  POST /me/notifications/read-all   {tab: orders|inbox}             30/min
+       -> {marked: n}. Only that tab, only mine.
+  GET  /me/notification-settings                                   60/min
+       {orders: true, jobs: true, security: true (read-only)}
+  PUT  /me/notification-settings   {orders?: bool, jobs?: bool}     20/min
+       "security" in the body = 422 (unknown field).
+
+  No endpoint creates a notification. Only the server does, through
+  publish_notification. There is no delete (read is enough).
+
+
+---------------------------------------------------------------------------
+3. THE HOOKS (one line each, in Mandla's domains -- list them in the PR)
+---------------------------------------------------------------------------
+
+  order_service.place()          order.sent | order.awaiting_payment
+  order_service.supplier_move()  order.accepted / rejected / on_its_way /
+                                 ready / delivered / collected
+  order_service.mark_paid()      order.paid
+  order_service.expire_unpaid()  order.expired (one per order)
+  auth_service._tokens(new_device)   account.new_phone
+  auth_service.change_password()     account.password_changed
+  auth_service.sign_out_other_phones() account.phones_signed_out
+  sign_off_service.answer()      job.stage_confirmed / amounts_dont_match
+                                 / not_yet  (to the BUILDER)
+
+  Publish AFTER db.session.commit(), never before: a rolled-back order
+  must never leave an alert behind. dedupe_key on every one
+  (f"order:{id}:{status}", f"job:{stage_id}:{sign_off_id}", ...).
+  publish never raises, so the real action can't fail because of an alert.
+
+
+---------------------------------------------------------------------------
+4. THE APP
+---------------------------------------------------------------------------
+
+  features/dashboard/informal-business/notifications/
+    api/notificationsApi.ts       interface: list(tab, before), unread(),
+                                  markRead(id), markAllRead(tab),
+                                  settings(), saveSettings()
+    api/httpNotificationsApi.ts   the real one (api() client)
+    api/mockNotificationsApi.ts   the same rules on sample data
+                                  (EXPO_PUBLIC_USE_MOCK_API=true)
+    lib/notificationStore.ts      keep the hooks (useUnreadCount etc.)
+                                  but fed by the API + the 20 s poll
+                                  (AppState aware); remove the mock seed
+    screens/NotificationsScreen.tsx
+      - two tabs at the top: Orders (n) | Inbox (n)  (reuse the order
+        book's Tabs component, or move it to shared/ -- ask first)
+      - Today / Earlier groups (keep groupOf / ago)
+      - unread = marigold left border (keep)
+      - "Mark all read" marks the CURRENT tab only, on the server; the
+        badge updates from the server answer, not from a guess
+      - tap -> NotificationSheet (shared/components/Sheet.tsx): icon,
+        title, full body, time, and a button from the link
+        ("View order" -> /informal-business/orders/<id>,
+         "View job"   -> /informal-business/jobs/<id>);
+        opening the sheet calls markRead(id)
+      - loading, empty ("Nothing yet. Order updates show up here.") and
+        error states; pull to refresh
+    screens/NotificationSettingsScreen.tsx (from More -> Notifications,
+      the row exists already): Orders on/off, Jobs on/off, Security
+      "Always on for your safety" (locked)
+  mockOrdersApi.ts: stop calling notify(); the server makes alerts now
+  (the mock API makes the same ones, so mock mode still shows them).
+  HomeScreen bell: orders + inbox unread, from the poll.
+
+
+---------------------------------------------------------------------------
+5. TESTS (the PR is not done without these)
+---------------------------------------------------------------------------
+
+  Backend (tests/domains/platform/test_notifications.py + hostile file)
+  - each hook: the action -> exactly one row with the right template and
+    tab (publish goes through the background queue: in tests either
+    monkeypatch shared.queue.enqueue to run the job at once, or call
+    shared.queue.wait_until_idle() before asserting)
+  - the same action retried (same dedupe_key) -> still one row
+  - a rolled-back action -> no row
+  - orders switched off -> no order rows; security still written
+  - list: newest first, paging with before=, tab filter, rendered text
+  - unread counts per tab; latest_id changes when a new one arrives
+  - read: sets read_at once; again = 200, unchanged
+  - read-all: only my rows, only that tab
+  - IDOR: trader B reads / marks A's notification -> 404; B's list and
+    counts never include A's
+  - hostile input: bad uuid, tab=../x, limit=10000, unknown fields,
+    "security": false in settings, huge / nested JSON
+  - templates: every key renders with its params; no template text
+    contains an IP, email or phone placeholder (a test reads the dict)
+  - boundaries test still green
+  App (jest)
+  - store: poll updates counts; markRead / markAllRead update from the
+    server answer; AppState background stops the poll
+  - mock API follows the same rules (tab, dedupe, read)
+  tsc clean, full backend suite green.
+
+
+---------------------------------------------------------------------------
+6. SECURITY BY DESIGN (put in the PR)
+---------------------------------------------------------------------------
+
+  IDOR     every query WHERE user_id = current_user().id; 404 for others
+  Input    strict schemas; tab is an enum; limit capped at 50
+  Content  templates only, server-filled params; no user-typed text in
+           titles; no IP / place / email / device name in security
+           alerts; no client name or phone in job alerts
+  Abuse    rate limits above; dedupe_key unique; 90-day clean-up
+  Audit    notification.settings_changed (which switch, on/off). Reading
+           isn't audited (too noisy, not disputable).
+  Honest   an order alert is not proof of payment: the text says "paid in
+           the app" only after the provider-verified path (mark_paid)
+
+
+---------------------------------------------------------------------------
+7. ORDER OF WORK (small PRs, each one testable)
+---------------------------------------------------------------------------
+
+  1. CONTRACT_notifications.txt (endpoints, table, template list) ->
+     Mandla approves
+  2. Backend: shared event change, table + migration 0023, listener,
+     templates, routes, tests (no hooks yet)
+  3. Hooks: orders first (the demo flow), then account, then jobs
+  4. App: API + store + two tabs + pop-up sheet, then settings screen
+  5. Demo check with Mandla: place a cash order -> `flask orders move
+     <REF> accepted` -> the alert appears on the phone within 20 s ->
+     tap -> sheet -> View order -> back: it's read, the badge dropped
+
+  Not this weekend (write them in the PR's "Not done"): phone push
+  notifications, the supplier's own Orders tab (suppliers need
+  accounts first), "who pays today" reminders from the credit book
+  (a scheduled job), emails for each alert (orders already email).
+
+
+---------------------------------------------------------------------------
+8. QUESTIONS FOR MANDLA (answer before step 2)
+---------------------------------------------------------------------------
+
+  1. Migration 0023 for notifications: OK?
+  2. OK to change shared/notifications (template key + params instead of
+     title/body, tabs ORDERS/INBOX)?
+  3. Poll every 20 s now, push later: OK for the demo?
+  4. Move the order book's Tabs component to shared/components?
+  5. Do cancelled-by-me orders need an alert? (Suggest no: you did it.)
+
+DECISION:
