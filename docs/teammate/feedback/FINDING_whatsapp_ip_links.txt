@@ -41,4 +41,15 @@ ASK
     # For WhatsApp links, use the IP as a nip.io name:
     # http://10-181-176-8.nip.io:5000 (bare IPs aren't clickable in WhatsApp)
 
+TESTED ON RISUNA'S PHONES (Friday 25 September, evening)
+  Link: https://<random>.trycloudflare.com/sign-off?ticket=... (APP_BASE_URL
+  set to the tunnel, backend restarted, a NEW link sent after the restart).
+  Second phone on the SAME Wi-Fi as the PC; link tapped inside WhatsApp;
+  it opened in Chrome. The sign-off page loaded, the client typed the same
+  amount, and the builder's app showed "Confirmed by both".
+  Worth checking on Mandla's phone: a link sent AFTER the backend restart
+  (older links still carry the old address), the tunnel still running
+  (a quick tunnel's address changes every time it starts), and Chrome
+  rather than another browser. Mobile data not tried yet.
+
 DECISION:

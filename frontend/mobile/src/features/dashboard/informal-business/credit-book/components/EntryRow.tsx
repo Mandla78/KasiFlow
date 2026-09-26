@@ -11,19 +11,21 @@ import { CreditEntry } from '../types';
 export function EntryRow({ entry, today, onPress, last }: { entry: CreditEntry; today: string; onPress: () => void; last?: boolean }) {
   const name = entry.customer.name;
   const paid = entry.status === 'paid';
+  const cancelled = entry.status === 'cancelled';
+  const finished = paid || cancelled;
   const due = dueLabel(entry.dueOn, today);
 
   return (
     <Pressable
       accessibilityRole="button"
-      accessibilityLabel={`${name}, ${formatRand(paid ? entry.amountCents : entry.outstandingCents)}, ${paid ? 'paid back' : due.text}`}
+      accessibilityLabel={`${name}, ${formatRand(finished ? entry.amountCents : entry.outstandingCents)}, ${paid ? 'paid back' : cancelled ? 'cancelled' : due.text}`}
       onPress={onPress}
       style={({ pressed }) => [styles.row, !last && styles.rule, pressed && { opacity: 0.7 }]}>
-      <View style={[styles.avatar, paid && { opacity: 0.6 }]}>
+      <View style={[styles.avatar, finished && { opacity: 0.6 }]}>
         <Text style={styles.initial}>{name.trim()[0]?.toUpperCase() ?? '?'}</Text>
       </View>
       <View style={{ flex: 1, gap: 2 }}>
-        <Text style={[styles.name, paid && styles.faded]} numberOfLines={1}>
+        <Text style={[styles.name, finished && styles.faded]} numberOfLines={1}>
           {name}
         </Text>
         {entry.description ? (
@@ -33,9 +35,11 @@ export function EntryRow({ entry, today, onPress, last }: { entry: CreditEntry; 
         ) : null}
       </View>
       <View style={styles.right}>
-        <Text style={[styles.amount, paid && styles.faded]}>{formatRand(paid ? entry.amountCents : entry.outstandingCents)}</Text>
+        <Text style={[styles.amount, finished && styles.faded]}>{formatRand(finished ? entry.amountCents : entry.outstandingCents)}</Text>
         {paid ? (
           <Tag label="Paid back" tone="jade" />
+        ) : cancelled ? (
+          <Tag label="Cancelled" tone="muted" />
         ) : (
           <Tag label={due.text} tone={due.tone === 'late' || due.tone === 'today' ? 'marigold' : 'muted'} />
         )}

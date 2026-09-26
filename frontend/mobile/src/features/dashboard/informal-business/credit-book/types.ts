@@ -37,6 +37,8 @@ export type CreditEntry = {
   dueOn: string;
   status: EntryStatus;
   createdAt: string;
+  /** When the trader moved it to the bin (hidden from them, never deleted); null otherwise. */
+  binnedAt: string | null;
 };
 
 type Recorded = { id: string; on: string; recordedAt: string };
@@ -96,4 +98,17 @@ export interface CreditBookApi {
   /** Set (or clear, with null) a customer's cellphone, for WhatsApp. */
   setCustomerPhone(id: string, phone: string | null): Promise<Customer>;
   summary(): Promise<CreditSummary>;
+  /** Finished entries (paid back, cancelled), newest first; q searches the customer's name. */
+  history(query: string): Promise<CreditEntry[]>;
+  /**
+   * The bin: entries the trader deleted in the last 30 days. Deleting
+   * only HIDES an entry from the trader (lists, Home, Account, totals);
+   * it and its payments stay in the database and in their record.
+   */
+  bin(): Promise<CreditEntry[]>;
+  moveToBin(id: string): Promise<void>;
+  restore(id: string): Promise<CreditEntry>;
 }
+
+/** Items stay visible in the bin for this long; then only hidden from view, never removed. */
+export const BIN_DAYS = 30;

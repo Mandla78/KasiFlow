@@ -18,6 +18,7 @@ const entry = (id: string, name: string, dueOn: string, extra: Partial<CreditEnt
   dueOn,
   status: 'open',
   createdAt: `${T}T08:00:00Z`,
+  binnedAt: null,
   ...extra,
 });
 
@@ -44,6 +45,7 @@ const job = (stages: Stage[], extra: Partial<Job> = {}): Job => ({
   status: 'active',
   createdAt: `${T}T08:00:00Z`,
   stages,
+  binnedAt: null,
   ...extra,
 });
 

@@ -21,7 +21,12 @@ DONE
     order numbers stay marked "sample".
 
 IN PROGRESS
-  -
+  - History + bin, phase 1 (PR 6, risuna/tools-bin): History (search)
+    and Bin (restore, 30 days) for the credit book and jobs, delete with
+    a confirm sheet and a 5-second Undo, on the mocks. The contract is
+    CONTRACT_bin.txt (waiting for Mandla). On the real API, History uses
+    the existing endpoints and Delete/Bin stay hidden (BIN_READY) until
+    phase 2 (backend) is approved and built.
 
 BLOCKED (and on what)
   - The app sending Idempotency-Key: a header option in api()
@@ -35,7 +40,8 @@ FINDINGS / NEEDS FOR MANDLA
   - FINDING_whatsapp_ip_links.txt, QUESTION_bluetooth_sales.txt (roadmap)
 
 NEXT (round 2, see ../14_ROUND_2_BRIEF.txt -- replaces the line below)
-  - history + bin (credit book, jobs); order book end to end; jobs v2;
+  - history + bin phase 2 (backend) once CONTRACT_bin.txt is approved;
+    order book end to end; jobs v2;
     demand_signals() per tool
   - (was) My record screen (mock) + share
 

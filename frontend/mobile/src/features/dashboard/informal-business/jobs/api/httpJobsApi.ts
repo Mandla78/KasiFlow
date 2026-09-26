@@ -39,6 +39,8 @@ type WireJob = {
   status: Job['status'];
   created_at: string;
   stages: WireStage[];
+  /** From the bin endpoints (CONTRACT_bin.txt); absent elsewhere until they exist. */
+  binned_at?: string | null;
 };
 
 function stage(s: WireStage): Stage {
@@ -67,6 +69,7 @@ function job(j: WireJob): Job {
     status: j.status,
     createdAt: j.created_at,
     stages: j.stages.map(stage),
+    binnedAt: j.binned_at ?? null,
   };
 }
 
@@ -131,5 +134,24 @@ export const httpJobsApi: JobsApi = {
     const s = (await api<{ summary: { active_jobs: number; waiting_on_clients_cents: number; needs_sign_off: number } }>('GET', `${BASE}/summary`, undefined, { auth: true }))
       .summary;
     return { activeJobs: s.active_jobs, waitingOnClientsCents: s.waiting_on_clients_cents, needsSignOff: s.needs_sign_off };
+  },
+
+  async history(query) {
+    // Until GET /history exists (CONTRACT_bin.txt): the done jobs the server already lists.
+    const q = query.trim().toLowerCase();
+    const done = (await httpJobsApi.list()).filter((j) => j.status === 'done');
+    return done.filter((j) => !q || j.title.toLowerCase().includes(q) || j.clientName.toLowerCase().includes(q));
+  },
+
+  async bin() {
+    return (await api<{ jobs: WireJob[] }>('GET', `${BASE}/bin`, undefined, { auth: true })).jobs.map(job);
+  },
+
+  async moveToBin(id) {
+    await api('DELETE', path(id), undefined, { auth: true });
+  },
+
+  async restore(id) {
+    return job((await api<{ job: WireJob }>('POST', `${path(id)}/restore`, undefined, { auth: true })).job);
   },
 };
