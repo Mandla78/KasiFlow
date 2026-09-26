@@ -5,25 +5,35 @@ Updated Sat 26 Sep evening to match what is built. No product name.
 ===========================================================================
 
 
-THE PROBLEM STATEMENT  (no more than 2 paragraphs -- as submitted Fri)
+THE PROBLEM STATEMENT  (2 paragraphs -- exactly as in our submitted PDF)
 ---------------------------------------------------------------------------
 South Africa's informal traders -- spaza shops, builders and other
 informal businesses -- run their business on phone calls, WhatsApp
 messages, cash and a notebook. A spaza owner restocks from a wholesaler
-and pays a driver in cash; a builder buys materials and gets paid by a
-client in stages; none of it leaves a record that both sides accept. So
-suppliers can't reconcile cash, builders and clients argue over what was
-paid, and the trader can't prove the business is real.
+and pays the driver in cash. A builder is paid by a client in stages,
+buys cement and bricks with the deposit, and finds a plumber or
+electrician by word of mouth. None of it leaves a record that both sides
+accept: suppliers can't reconcile the cash, clients dispute which stage
+was paid, a builder has no proof of finished work to win the next job,
+and no trader can prove the business is real.
 
 The scale is large. The township economy is worth about R900 billion a
 year, R180 billion of it through spaza shops, yet about 80% of township
 businesses are unregistered, fewer than 9% can get a bank loan and 57%
 survive on personal savings (Standard Bank, 2025). Informal work is about
-a third of all jobs in South Africa. When government opened a R500
-million Spaza Shop Support Fund, only R179.6 million had reached 2,369
-shops by May 2026: 354 applications failed verification and only 58% of
+a third of all jobs in South Africa, and Stats SA now defines an informal
+business partly by whether it keeps records at all. When government
+opened a R500 million Spaza Shop Support Fund, only R179.6 million had
+reached 2,369 shops by May 2026: 354 applications failed verification
+(non-existent businesses, ownership mismatches) and only 58% of
 applicants held a valid licence (DSBD, 2026). Real traders can't prove
-themselves, and fake ones slip in.
+themselves, and fake ones slip in. Builders face the same gap on site:
+construction employs about 1.2 million people and 38% of them work
+informally, likely more (ILO, 2025); backyard dwellings, the
+fastest-growing kind of informal rental housing, already house at least
+13.4% of urban households (up from 8.9% in 2011); and late or non-payment
+is chronic even in formal construction, where builders at least have
+contracts.
 
 
 SOLUTION & FEATURES
