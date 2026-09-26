@@ -1,0 +1,211 @@
+===========================================================================
+CONTRACT -- JOBS v2: BUILDER PROFILES, PARTNERS ON JOBS, HELP POSTS
+===========================================================================
+
+TOOL:            The builder network (15_JOBS_BUILDER_NETWORK_PLAN.txt as
+                 changed by DECISION_jobs_partners.txt)
+AUTHOR / DATE:   Risuna, 25 September 2026
+STATUS:          built (branch risuna/jobs-network, PR 7): backend
+                 domains/informal_trader/builder_network + migration
+                 0019_builder_network, the app on it (httpNetworkApi).
+                 Field names are the snake_case twins of network/types.ts.
+                 Sample builders for development: flask builders seed
+                 [--me EMAIL] (refused outside development).
+
+
+0. RULES THE SERVER ENFORCES (the app only mirrors them)
+---------------------------------------------------------------------------
+  - Every route: @auth_required, scoped to current_user(), per-user rate
+    limits, marshmallow unknown=RAISE, CleanText on every string.
+  - You exist for other builders only when builder_profiles.visible is
+    true ("Show me to other builders", off by default). Inviting, posting
+    and "I'm interested" need it: 409 PROFILE_HIDDEN otherwise.
+  - Partners = two builders with an ACCEPTED job_partners row between them
+    (either direction). Only partners see each other's phone. Nobody ever
+    sees another builder's clients (names, phones, job money) or an
+    address: suburb only, and distances rounded to 0.1 km (never lat/lng).
+  - A block works both ways: the blocked builder disappears from every
+    list, profile (404), invite, post and candidate list for both.
+  - Pay is stated before anyone accepts (fixed or per day, and when it's
+    paid). Akayza never holds money; it records what both confirmed.
+  - Builds shown on a profile are the builder's DONE jobs whose stages
+    clients confirmed, with the stage photos already on Cloudinary (hashed
+    by the server, jobs v1). The builder chooses which builds are shown.
+
+
+1. ENDPOINTS (/api/v1)
+---------------------------------------------------------------------------
+  YOUR BUILDER PROFILE
+    GET  /me/builder-profile          -> {trades[], about, travel_km, visible,
+                                          builds:[build + shown]}
+    PUT  /me/builder-profile          {trades[1..3], about 0..80, travel_km
+                                       in 5|10|20|40, visible, shown_job_ids[]}
+                                       (first GET creates it from the sign-up
+                                       trade, visible=false)
+
+  BUILDERS
+    GET  /builders?trade=             -> {visible, travel_km, partners[card],
+                                          saved[card], nearby[card] (max 20,
+                                          ranked), help_wanted[post],
+                                          my_posts[post]}
+    GET  /builders/<id>               -> profile: card + about,
+                                          on_akayza_since, worked_with[first
+                                          names], partners_in_common[names],
+                                          reasons[], builds[build]
+                                          404 if hidden (unless you are
+                                          partners), blocked, or unknown
+    PUT    /builders/<id>/save        -> 204  (bookmark; they aren't told)
+    DELETE /builders/<id>/save        -> 204
+    POST   /builders/<id>/block       -> 204
+    POST   /builders/<id>/report      {reason: fake|not_their_work|scam|
+                                       rude|other, note 0..200 (required for
+                                       other)} -> 204
+
+  PARTNERS ON YOUR JOBS (job must be yours: 404 otherwise)
+    GET  /me/jobs/<job_id>/partners              -> [job_partner]
+    GET  /me/jobs/<job_id>/candidates?trade=     -> {partners[], saved[],
+                                                     nearby[]} (that trade,
+                                                     within THEIR travel km
+                                                     of the job, ranked)
+    POST /me/jobs/<job_id>/partners              {builder_id, stage_ids[],
+                                                  trade, starts_on, offer}
+                                                  -> 201 job_partner (invited)
+                                                  Idempotency-Key
+    POST /me/job-partners/<id>/payments          {amount_cents} -> job_partner
+                                                  (partner must have
+                                                  accepted) Idempotency-Key
+
+  INVITES TO YOU (your side as the partner)
+    GET  /me/partner-invites                     -> [invite] (not declined)
+    GET  /me/partner-invites/<id>                -> invite
+    POST /me/partner-invites/<id>/answer         {accept: bool} -> invite
+                                                  (409 if already answered)
+    POST /me/partner-invites/<id>/payments/<pid>/confirm
+                                                 {amount_cents} -> invite
+
+  HELP POSTS (an offer posted nearby)
+    POST /me/jobs/<job_id>/help-posts            {stage_ids[], trade,
+                                                  starts_on, offer, suburb}
+                                                  -> 201 post  Idempotency-Key
+    GET  /help-posts/<id>                        -> post (owner sees
+                                                  responses; others see
+                                                  my_response)
+    POST /help-posts/<id>/interested             -> post
+    POST /me/help-posts/<id>/pick                {builder_id} -> post
+                                                  (creates an ACCEPTED
+                                                  job_partner on the post's
+                                                  offer; post -> filled)
+    POST /me/help-posts/<id>/close               -> post
+
+  SHAPES
+    offer        {kind: fixed|per_day, amount_cents, days 1..60,
+                  paid_when: stage_confirmed|daily|end}
+                 fixed: amount = the whole pay (<= R200,000)
+                 per_day: amount = the day rate (<= R10,000), total =
+                 amount x days (<= R200,000)
+    card         {id, name, initials, color, photo_url, trades[], suburb,
+                  distance_km, builds_confirmed, confirmed_stages,
+                  cover_url, reason, relation: none|saved|partner,
+                  phone (partners only, else null)}
+    build        {id, title, suburb, finished_at, stages_confirmed,
+                  stages_total, photos:[{id, stage_name, url, confirmed_at}],
+                  built_with[first names]}
+                 url = Cloudinary delivery URL, width-limited, q_auto
+    job_partner  {id, job_id, builder: card, stage_names[], trade,
+                  starts_on, offer, status: invited|accepted|declined,
+                  invited_at, payments[]}
+    invite       {id, owner: card, job_title, suburb, stage_names[], trade,
+                  starts_on, offer, status, invited_at, payments[]}
+                 NEVER the client's name/phone or the stages' amounts
+    payment      {id, owner_amount_cents, partner_amount_cents|null,
+                  status: waiting|confirmed|amounts_dont_match, paid_at}
+    post         {id, job_id (owner only), job_title (owner only), owner:
+                  card|null, mine, trade, what, starts_on, suburb,
+                  distance_km, offer, created_at, expires_at, status:
+                  open|filled|closed, my_response, responses[]}
+
+  ERRORS  the usual envelope. 404 NOT_FOUND for anything not yours /
+  hidden / blocked (never 403: don't confirm it exists). 409:
+  PROFILE_HIDDEN, ALREADY_ON_JOB, TOO_MANY_PARTNERS, TOO_MANY_POSTS,
+  POST_CLOSED, ALREADY_ANSWERED, NOT_ACCEPTED. 422 VALIDATION_ERROR with
+  the specific message on top (the app shows it). 429 RATE_LIMITED.
+
+
+2. RULES AND LIMITS
+---------------------------------------------------------------------------
+  stage_ids      1..12, all of this job, none confirmed yet
+  starts_on      today .. today+60 (Africa/Johannesburg)
+  trade          the builder network list (below); the invited builder
+                 must have that trade
+  partners/job   5 (not declined); one row per builder per job
+  invites        30 a day per builder; interested 20 a day; open posts 5
+  posts          expire 7 days after posting; suburb 2..40, letters
+  payments       amount 1..R200,000; confirm: same amount -> confirmed,
+                 different -> amounts_dont_match (both kept, like sign-off)
+  ranking        lib/recommend.ts in Python: trade fit 30, closeness 20,
+                 partners in common 20, proof 20 (log), activity 10; top
+                 reason first; after the top 3, every third place to a
+                 builder who joined in the last 30 days
+
+
+3. DATA (migration 0019_builder_network, schema trader)
+---------------------------------------------------------------------------
+  builder_profiles   user_id (unique), trades (JSON list), about, travel_km,
+                     visible, visible_changed_at, hidden_job_ids (JSON)
+  builder_saves      user_id, builder_id, unique(user_id, builder_id)
+  builder_blocks     blocker_id, blocked_id, unique pair
+  builder_reports    reporter_id, reported_id, reason, note, created_at
+  job_partners       job_id -> jobs, owner_id, builder_id, stage_ids (JSON),
+                     trade, starts_on, pay_kind, pay_cents, days, paid_when,
+                     status, invited_at, answered_at,
+                     unique(job_id, builder_id) where status <> declined
+  partner_payments   job_partner_id, owner_cents, partner_cents (null),
+                     status, paid_at, answered_at
+  help_posts         job_id, owner_id, trade, stage_ids (JSON), what,
+                     starts_on, suburb, lat/lng rounded to 0.01 (about 1 km,
+                     for matching only, never returned), offer columns,
+                     status, expires_at, picked_builder_id
+  help_responses     post_id, builder_id, created_at, unique pair
+  Location comes from the business profile (suburb, lat/lng); jobs have no
+  coordinates, so a job's "site" is the owner's business location for now.
+
+
+4. TRADES
+---------------------------------------------------------------------------
+  The network validates against its OWN list (the 11 in QUESTION_trades.txt)
+  so the sign-up list can stay as it is until Mandla answers that file.
+  painter_tiler from sign-up becomes [painter, tiler] on first GET.
+
+
+5. AUDIT (no names, no phones, no amounts)
+---------------------------------------------------------------------------
+  builder.profile_visible_changed {visible}, builder.saved/unsaved,
+  builder.blocked, builder.reported {reason}, partner.invited,
+  partner.accepted/declined, partner.payment_recorded/confirmed/mismatch,
+  help_post.created/interested/picked/closed  (ids only)
+
+
+6. SECURITY TESTS (each one a pytest)
+---------------------------------------------------------------------------
+  - another builder's job: 404 on partners, candidates, invite, post
+  - another builder's invite / payment: 404 on get, answer, confirm
+  - hidden profile: 404 to others, not in any list; PROFILE_HIDDEN on
+    invite/post/interested
+  - blocked either way: 404 profile, gone from lists, can't be invited,
+    can't answer your post
+  - phone only between partners (invited is not enough)
+  - invite JSON never contains the client's name/phone or stage amounts
+  - distances only, never coordinates; suburb only
+  - limits: 31st invite -> 429; 6th post -> 409; 6th partner -> 409
+  - hostile input: NUL, 10k strings, negative/huge cents, unknown fields
+
+
+7. WHAT THE APP DOES TODAY
+---------------------------------------------------------------------------
+  Mock (EXPO_PUBLIC_USE_MOCK_API=true): all of the above, with sample
+  builders and "Test: answer as ..." playing the other builder. Real API
+  (false): httpNetworkApi, on these endpoints. To try it alone on the real
+  backend: flask builders seed --me <your builder email> (sample builders
+  around your pin; Sipho is your partner and invites you onto a job).
+
+DECISION:

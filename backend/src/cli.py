@@ -4,6 +4,9 @@
     flask seed                     load demo data (grows feature by feature;
                                    every seeded record goes through the real
                                    services, never raw SQL)
+    flask builders seed [--me EMAIL]  sample builders with client-confirmed
+                                   builds (development only; see
+                                   builder_network/seed.py)
     flask suppliers load [FOLDER]  load supplier feeds (supplier.json +
                                    products.csv per sub-folder) through the
                                    same checks a supplier's own system gets.
@@ -91,3 +94,7 @@ def register_cli(app: Flask) -> None:
         click.echo(f"  {order.reference}: now {status.replace('_', ' ')}")
 
     app.cli.add_command(orders)
+
+    from src.domains.informal_trader.builder_network.seed import register as register_builders
+
+    register_builders(app)

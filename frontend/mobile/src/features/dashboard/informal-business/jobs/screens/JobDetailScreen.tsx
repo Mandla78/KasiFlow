@@ -15,6 +15,8 @@ import { BinConfirmSheet } from '@/features/dashboard/informal-business/credit-b
 
 import { BIN_READY, jobsApi, PRACTICE_SIGN_OFF } from '../api/jobsApi';
 import { PaidProgress } from '../components/PaidProgress';
+import { NETWORK_READY } from '../network/api/networkApi';
+import { JobPartners } from '../network/components/JobPartners';
 import { SignOffSheet } from '../components/SignOffSheet';
 import { StageStep } from '../components/StageStep';
 import { confirmedCents, currentStage } from '../lib/stages';
@@ -145,6 +147,8 @@ export default function JobDetailScreen() {
           last
         />
       </Card>
+
+      {NETWORK_READY ? <JobPartners job={job} /> : null}
 
       {BIN_READY ? (
         <Pressable accessibilityRole="button" onPress={() => setBinning(true)} style={styles.practice}>

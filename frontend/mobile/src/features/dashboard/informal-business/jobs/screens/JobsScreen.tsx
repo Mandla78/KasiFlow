@@ -10,18 +10,39 @@ import { Title } from '@/shared/components/Text';
 import { colors, fonts } from '@/shared/theme/tokens';
 
 import { jobsApi } from '../api/jobsApi';
+import { NETWORK_READY } from '../network/api/networkApi';
+import { PartnerJobsList } from '../network/components/PartnerJobsList';
+import { SegmentedTabs } from '../network/components/SegmentedTabs';
+import { BuildersTab } from '../network/screens/BuildersTab';
+import { SuppliersTab } from '../network/screens/SuppliersTab';
 import { PaidProgress } from '../components/PaidProgress';
 import { confirmedCents, currentStage, statusLabel } from '../lib/stages';
 import { Job } from '../types';
 
+type Tab = 'jobs' | 'builders' | 'suppliers';
+
+const TABS: { key: Tab; label: string }[] = [
+  { key: 'jobs', label: 'My jobs' },
+  { key: 'builders', label: 'Builders' },
+  { key: 'suppliers', label: 'Suppliers' },
+];
+
 /**
- * Jobs (builders and trades): active jobs with what's paid and confirmed,
- * and the next stage. Done jobs live in History, deleted ones in the bin.
- * Each job is paid in stages, and each stage is a photo plus the client's
- * sign-off.
+ * Jobs (builders and trades), in three tabs (15_JOBS_BUILDER_NETWORK_PLAN.txt,
+ * DECISION_jobs_partners.txt):
+ *   My jobs    active jobs with what's paid and confirmed, and the next stage;
+ *              invites from other builders and jobs you're a partner on.
+ *              Done jobs live in History, deleted ones in the bin. Each job is
+ *              paid in stages; each stage is a photo plus the client's sign-off.
+ *   Builders   find partners by the builds their clients confirmed
+ *   Suppliers  suppliers for your jobs (coming soon)
+ * Until the network's backend exists, the real API shows My jobs only.
  */
 export default function JobsScreen() {
-  const params = useLocalSearchParams<{ binned?: string }>();
+  const params = useLocalSearchParams<{ binned?: string; tab?: Tab }>();
+  // Back from deleting a job: My jobs, where its Undo is.
+  const tab: Tab = !NETWORK_READY || params.binned ? 'jobs' : (params.tab ?? 'jobs');
+  const setTab = (t: Tab) => router.setParams({ tab: t });
   const [jobs, setJobs] = useState<Job[] | null>(null);
   const [failed, setFailed] = useState(false);
 
@@ -40,7 +61,7 @@ export default function JobsScreen() {
 
   const active = (jobs ?? []).filter((j) => j.status === 'active');
   const done = (jobs ?? []).filter((j) => j.status === 'done').length;
-  const forgetBinned = useCallback(() => router.setParams({ binned: '' }), []);
+  const forgetBinned = useCallback(() => router.setParams({ binned: '', tab: 'jobs' }), []);
   const undoBin = useCallback(async () => {
     if (params.binned) await jobsApi.restore(params.binned);
     load();
@@ -52,14 +73,21 @@ export default function JobsScreen() {
     <Screen
       back
       footer={
-        <>
-          {params.binned ? <UndoSnackbar message="Moved to the bin." onUndo={undoBin} onDone={forgetBinned} /> : null}
-          <Button title="New job" icon="plus" onPress={() => router.push('/informal-business/jobs/new')} />
-        </>
+        tab === 'jobs' ? (
+          <>
+            {params.binned ? <UndoSnackbar message="Moved to the bin." onUndo={undoBin} onDone={forgetBinned} /> : null}
+            <Button title="New job" icon="plus" onPress={() => router.push('/informal-business/jobs/new')} />
+          </>
+        ) : undefined
       }>
       <Title>Jobs</Title>
+      {NETWORK_READY ? <SegmentedTabs tabs={TABS} value={tab} onChange={setTab} /> : null}
 
-      {failed ? (
+      {tab === 'builders' ? (
+        <BuildersTab />
+      ) : tab === 'suppliers' ? (
+        <SuppliersTab />
+      ) : failed ? (
         <Card style={styles.center}>
           <IconTile name="wifi-off" size={44} />
           <Text style={styles.muted}>Couldn&apos;t open your jobs. Check your connection and try again.</Text>
@@ -71,6 +99,7 @@ export default function JobsScreen() {
         </View>
       ) : (
         <>
+          {NETWORK_READY ? <PartnerJobsList /> : null}
           {active.length === 0 ? (
             <Card style={styles.center}>
               <IconTile name="tool" size={44} />
