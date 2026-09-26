@@ -17,7 +17,7 @@ from src.domains.informal_trader.jobs.services.jobs_signals import _stage_catego
 from src.extensions import db
 
 PASSWORD = "Spaza2026!"
-CONSENT = {"privacy_version": "0.1-draft", "terms_version": "0.1-draft"}
+CONSENT = {"privacy_version": "0.2-draft", "terms_version": "0.2-draft"}
 
 
 def builder(client, outbox, email="bongani@example.com", trade="general_builder", pin=(-25.9964, 28.2268)):
