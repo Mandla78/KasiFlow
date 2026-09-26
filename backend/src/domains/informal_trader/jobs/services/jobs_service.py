@@ -5,6 +5,7 @@ jobs -- a builder's jobs, paid in stages.
   get_job(user, id)
   create_job(user, data)     with stages that add up to the total
   summary(user)              for Home and the Account tile
+  money_for_month(user, s, e) stages confirmed and amounts that don't match, for My record
   history(user, q)           done jobs (search)
   bin_jobs(user)             deleted in the last 30 days
   move_to_bin(user, id)      "delete": hidden from the builder; open sign-off links stop working
@@ -130,6 +131,18 @@ def restore(user, job_id: uuid.UUID) -> dict:
 def _bin_since() -> datetime:
     """Older than this, a deleted job is out of the bin's view (still in the database)."""
     return utcnow() - timedelta(days=BIN_DAYS)
+
+
+def money_for_month(user, start: datetime, end: datetime) -> dict:
+    """My record's jobs block for [start, end): what clients confirmed (the
+    cash both sides typed), how many stages, and how many answers still
+    don't match. The builder's own record, never proof."""
+    stages = repo.confirmed_between(user.id, start, end)
+    return {
+        "confirmed_cents": sum(s.client_amount_cents or 0 for s in stages),
+        "confirmed_stages": len(stages),
+        "amounts_dont_match": repo.mismatched_between(user.id, start, end),
+    }
 
 
 def mark_done_if_complete(job: Job) -> bool:

@@ -1,7 +1,8 @@
-import { router, useFocusEffect } from 'expo-router';
+import { router, useFocusEffect, useLocalSearchParams } from 'expo-router';
 import { useCallback, useState } from 'react';
-import { ActivityIndicator, StyleSheet, Text, View } from 'react-native';
+import { ActivityIndicator, Pressable, StyleSheet, Text, View } from 'react-native';
 
+import { inMonth, monthLabel } from '@/features/dashboard/informal-business/record/lib/months';
 import { Button } from '@/shared/components/Button';
 import { Card } from '@/shared/components/Parts';
 import { Screen } from '@/shared/components/Screen';
@@ -11,11 +12,30 @@ import { colors, fonts } from '@/shared/theme/tokens';
 
 import { ordersApi } from '../api/ordersApi';
 import { OrderRow } from '../components/OrderRow';
+import { evidenceOf } from '../lib/evidence';
 import { isActive } from '../lib/status';
-import type { MoneySummary, Order } from '../types';
+import type { Evidence, MoneySummary, Order } from '../types';
 
-/** My orders: active first, then the rest. */
+type Backed = Exclude<Evidence, 'none'>;
+
+/** My record's lines, each opening the orders behind it. */
+const BACKED: Record<Backed, string> = {
+  provider_verified: 'Paid in the app, verified by PayFast',
+  confirmed_by_both: 'Cash, confirmed by both',
+  not_confirmed: 'Cash, not confirmed',
+};
+
+/** ?evidence=&month= from My record, or null (anything odd shows every order). */
+function asFilter(p: { evidence?: string | string[]; month?: string | string[] }): { evidence: Backed; month: string } | null {
+  const { evidence, month } = p;
+  if (typeof evidence !== 'string' || typeof month !== 'string') return null;
+  if (!(Object.keys(BACKED) as string[]).includes(evidence) || !/^\d{4}-(0[1-9]|1[0-2])$/.test(month)) return null;
+  return { evidence: evidence as Backed, month };
+}
+
+/** My orders: active first, then the rest. From My record: only one month's orders, backed one way. */
 export default function OrdersScreen() {
+  const filter = asFilter(useLocalSearchParams<{ evidence?: string; month?: string }>());
   const [orders, setOrders] = useState<Order[] | null>(null);
   const [failed, setFailed] = useState(false);
   const [money, setMoney] = useState<MoneySummary | null>(null);
@@ -33,13 +53,24 @@ export default function OrdersScreen() {
     }, []),
   );
 
-  const active = (orders ?? []).filter(isActive);
-  const past = (orders ?? []).filter((o) => !isActive(o));
+  const shown = filter ? (orders ?? []).filter((o) => evidenceOf(o) === filter.evidence && inMonth(o.placedAt, filter.month)) : (orders ?? []);
+  const active = shown.filter(isActive);
+  const past = shown.filter((o) => !isActive(o));
   const open = (o: Order) => router.push(`/informal-business/orders/${o.id}`);
 
   return (
     <Screen back>
       <Title>My orders</Title>
+      {filter ? (
+        <View style={styles.filter}>
+          <Text style={styles.filterText}>
+            {BACKED[filter.evidence]} · {monthLabel(filter.month)}
+          </Text>
+          <Pressable accessibilityRole="button" onPress={() => router.replace('/informal-business/orders')} hitSlop={8}>
+            <Text style={styles.filterAll}>Show all</Text>
+          </Pressable>
+        </View>
+      ) : null}
       {failed ? <Text style={styles.muted}>Couldn&apos;t load your orders. Check your connection and try again.</Text> : null}
       {!orders && !failed ? <ActivityIndicator color={colors.accent} /> : null}
       {orders && orders.length === 0 ? (
@@ -48,7 +79,8 @@ export default function OrdersScreen() {
           <Button title="Find suppliers" variant="secondary" onPress={() => router.push('/informal-business/suppliers')} />
         </View>
       ) : null}
-      {money && orders && orders.length ? (
+      {filter && orders?.length && !shown.length ? <Text style={styles.muted}>None in {monthLabel(filter.month)}.</Text> : null}
+      {!filter && money && orders && orders.length ? (
         // Kept apart on purpose: only digital payments are verified by a
         // payment provider. Cash is what both sides said. Never one total.
         <Card style={{ gap: 10 }}>
@@ -103,4 +135,7 @@ const styles = StyleSheet.create({
   moneyLabel: { fontFamily: fonts.semibold, fontSize: 14, color: colors.text },
   moneyValue: { fontFamily: fonts.bold, fontSize: 15, color: colors.ink },
   small: { fontFamily: fonts.body, fontSize: 12, color: colors.textMuted },
+  filter: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', gap: 10 },
+  filterText: { flex: 1, fontFamily: fonts.semibold, fontSize: 13.5, color: colors.text },
+  filterAll: { fontFamily: fonts.semibold, fontSize: 13.5, color: colors.accent },
 });
