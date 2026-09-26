@@ -20,6 +20,11 @@ THE PLANS (do them in this order; each is one small PR)
                                    records (stock bought, credit given,
                                    paid back) move to a real My record
                                    screen, kept apart by what backs them
+  04_MORE_TAB_PROFILE_ADDRESSES_TOOLS.txt
+                                   profile edits and tools really save
+                                   (with messages), stored delivery
+                                   addresses, no dead rows on More
+                                   (found while testing; do before 02)
 
 HOW WE WORK (same as docs/HANDOFF.txt section 4)
   - Branch per plan from the latest main (the cloud session pushes to its

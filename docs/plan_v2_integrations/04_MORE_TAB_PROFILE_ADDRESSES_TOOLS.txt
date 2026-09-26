@@ -1,0 +1,156 @@
+===========================================================================
+PLAN 04 -- THE MORE TAB: BUSINESS PROFILE, DELIVERY ADDRESSES, TOOLS
+Found by Mandla while testing plan 01 (Sat 26 Sep). App + backend.
+===========================================================================
+
+WHAT MANDLA SAW
+  "I can't edit my business profile details. I can't switch on the tools.
+   Delivery addresses and Tools don't do anything."
+
+
+---------------------------------------------------------------------------
+0. WHAT THE CODE DOES TODAY (checked)
+---------------------------------------------------------------------------
+
+  Backend -- mostly there already
+    GET/PATCH /me/business-profile  (business_profile/api/routes.py)
+      PATCH takes business, registration, location, buying and TOOLS;
+      unknown tools refused (422); myRecord always stays on. Tested
+      (tests/domains/informal_trader/test_business_profile*.py).
+    Delivery addresses: NOT stored anywhere. An order goes to the
+      business pin (profile location) or to a one-off address + pin sent
+      with the order (order_service._where).
+
+  App
+    more/screens/MoreScreen.tsx
+      "Business profile" -> /business (works: Your business, Where you
+        are, What you buy, CIPC -- the sign-up screens in edit mode)
+      "Delivery addresses"  subtitle "Shop · Home" is HARD-CODED; no
+        onPress (does nothing)
+      "Tools"               no onPress (does nothing)
+      "Notifications", "Language", "Data saver", "Help and WhatsApp
+        support": no onPress either
+    Saving: onboarding/sync/useBusinessProfileSync.ts saves the WHOLE
+      profile 0.7 s after any change, silently. On failure it only
+      `.catch(() => {})`: no message, no retry until the next edit. So a
+      refused save (e.g. a 422 on one field) looks like "nothing saved",
+      and the next app start reads the old server copy back.
+    MOCK MODE (EXPO_PUBLIC_USE_MOCK_API=true, the default): the sync is
+      OFF, so nothing is ever saved; a restart loses every edit.
+      -> First check on Mandla's phone: which mode was it? (Question 1)
+
+
+---------------------------------------------------------------------------
+4a. EDITING THE PROFILE SAVES FOR REAL, AND SAYS SO
+---------------------------------------------------------------------------
+  - Each edit screen (Your business, Where you are, What you buy,
+    Registration) in EDIT mode saves on "Save" with a direct call:
+      businessProfileApi.save(only that section) -> wait for the answer
+      -> success: update the session from the SERVER's answer, show
+         "Saved" (a short toast), go back
+      -> 422: show the server's message under the field, stay
+      -> offline / 5xx: "Couldn't save. Check your connection and try
+         again." with the button enabled; nothing lost on screen
+    Onboarding keeps the quiet background save (it already works there).
+  - Send only the changed section, not the whole profile (smaller, and
+    one bad field in another section can't block this save).
+  - The quiet sync gets a visible state: if the last save failed, the
+    Business profile screen shows one line "Some changes aren't saved
+    yet. Tap to try again."
+  Backend: no change needed (PATCH already takes sections). Add tests:
+    a PATCH of one section leaves the others unchanged; 422 names the
+    field.
+
+
+---------------------------------------------------------------------------
+4b. TOOLS: A REAL SCREEN FROM MORE
+---------------------------------------------------------------------------
+  - More -> Tools opens /informal-business/tools (new route): the same
+    switches as Account's "Add a tool" sheet (move the list into one
+    shared component, used by both).
+  - Each switch saves AT ONCE: PATCH {tools: {...}} -> the server's answer
+    sets the session (so Home, Account and the tabs follow) ->
+    on failure the switch flips back with "Couldn't switch on <tool>.
+    Try again."
+  - My record: shown on, locked ("Always on").  Daily tally: "Coming
+    soon", disabled.
+  - The More row's subtitle "<n> on" comes from the saved profile.
+  Backend: PATCH /me/business-profile is limited to "30 per minute" today
+  (SAVE_LIMIT); enough for quick toggling. Add a test that switching a
+  tool on and off a few times in a row is accepted.
+
+
+---------------------------------------------------------------------------
+4c. DELIVERY ADDRESSES: STORED, CHOSEN AT CHECKOUT
+---------------------------------------------------------------------------
+  Backend (new, informal_trader/business_profile or its own feature
+  informal_trader/delivery_addresses -- Question 2)
+    table trader.delivery_addresses  (migration: next free number after
+      the notifications 0023 and "I paid the cash" 0024 -> 0025; check
+      origin first)
+      id uuid, user_id (FK, cascade), label CleanText 1..30 ("Shop",
+      "Home", "Site on Main Rd"), address_text 5..300, latitude,
+      longitude (numeric, SA bounds check), is_default bool,
+      created_at, updated_at, deleted_at (soft delete).
+      Max 5 per trader. One default per trader (partial unique index).
+    GET    /me/delivery-addresses              60/min
+    POST   /me/delivery-addresses              20/min, Idempotency-Key
+             {label, address_text, latitude, longitude, is_default?}
+    PATCH  /me/delivery-addresses/<id>         20/min
+    DELETE /me/delivery-addresses/<id>         20/min (soft)
+    POST   /me/delivery-addresses/<id>/default 20/min
+    All scoped to current_user(); someone else's id = 404; strict
+    schemas (unknown fields 422); the 6th address = 409 "You can keep 5
+    addresses. Remove one first."
+    The business's own location stays the "Business address" (from the
+    profile); saved addresses are extra places.
+    Orders: POST /me/orders may send delivery_address_id instead of a
+    one-off address+pin; the server looks it up FOR THIS USER (404 if
+    not theirs) and still checks the supplier's delivery radius. The
+    one-off address stays allowed.
+    Audit: delivery_address.added / removed (ids only, no address text).
+  App
+    More -> Delivery addresses -> list (Business address first, then
+    saved ones, default marked) -> Add (the existing AddressPickerField:
+    search + map pin) -> label -> Save. Edit, remove (confirm), make
+    default. Subtitle on More: "Business + <n> saved".
+    Checkout: "Deliver to" offers Business address, the saved ones, or
+    "Somewhere else" (as now; with "Save this address" ticked it's added
+    to the list).
+  Tests: IDOR on every route, the 5-limit, one default, soft-deleted
+  ones never listed or usable, bad coordinates (outside SA, NaN, huge),
+  hostile labels, an order with someone else's address id = 404, an
+  address outside the radius refused.
+
+
+---------------------------------------------------------------------------
+4d. THE OTHER DEAD ROWS ON MORE
+---------------------------------------------------------------------------
+  No row may look tappable and do nothing:
+    Notifications -> the notification settings (teammate plan 17); until
+      then the row goes to the Notifications screen.
+    Language      -> "English" only: show it without a chevron, subtitle
+                     "More languages coming".
+    Data saver    -> hide the row until it does something.
+    Help and WhatsApp support -> opens WhatsApp to the team support
+                     number (from config, not hard-coded), or hide it.
+                     Question 3.
+
+
+---------------------------------------------------------------------------
+ORDER OF WORK (each is its own push; Mandla tests after each)
+---------------------------------------------------------------------------
+  1. 4a + 4b (app, small backend tests): editing and tools really save,
+     with messages. Fixes what Mandla hit.
+  2. 4d: no dead rows.
+  3. 4c: delivery addresses (backend + migration + app + checkout).
+  Then back to plan 02 (the Home card).
+
+QUESTIONS FOR MANDLA
+  1. When edits didn't save, was the app on the real backend
+     (EXPO_PUBLIC_USE_MOCK_API=false) or on sample data?
+  2. Delivery addresses: inside business_profile, or their own feature
+     informal_trader/delivery_addresses (suggested: own feature)?
+  3. A WhatsApp support number to use, or hide the Help row for now?
+
+DECISION:
