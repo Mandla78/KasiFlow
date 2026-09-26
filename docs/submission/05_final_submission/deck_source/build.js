@@ -497,7 +497,7 @@ async function icon(Comp, color, px = 256) {
     const road = [
       ["Next 3 months", ["Google sign-in, phone push alerts", "Two-phone cash confirmation", "Cloudflare protection on our own domain"], C.em],
       ["Next 12 months", ["Direct links to suppliers' stock systems", "Split payouts straight to suppliers", "Share your record with a lender, by consent"], C.amL],
-      ["Post-quantum", ["Sign records and invoices with ML-DSA (NIST FIPS 204)", "So a record signed today still proves itself in 20 years", "Planned, not built yet"], C.emL],
+      ["Quantum-safe", ["Built: the owner seals their record with ML-DSA-65 (NIST FIPS 204) plus Ed25519", "A check shows any record changed or deleted", "Next: invoices and receipts too"], C.emL],
     ];
     for (let i = 0; i < 3; i++) {
       const x = 0.6 + i * 4.1;
@@ -506,7 +506,7 @@ async function icon(Comp, color, px = 256) {
       s.addText(road[i][1].map((q, j) => ({ text: q, options: { bullet: true, breakLine: j < 2 } })),
         { x: x + 0.35, y: 2.95, w: 3.2, h: 3.2, fontFace: BODY, fontSize: 15.5, color: C.white, paraSpaceAfter: 11, margin: 0, valign: "top", isTextBox: true });
     }
-    s.addNotes("Post-quantum outline (bonus points for outlining it): 'Records and invoices are meant to prove things for years. Quantum computers will break today's signatures, so we'll sign with ML-DSA, the NIST post-quantum standard.' Say clearly it's planned, not built.");
+    s.addNotes("Post-quantum (built): 'Records are meant to prove things for years, and quantum computers will break today\'s signatures. So the owner can seal their whole record with two signatures: ML-DSA-65, the NIST post-quantum standard, and Ed25519. A check shows exactly which records changed or were deleted, even straight in the database. We keep no copy of the seal, and our public keys are published so anyone can check without us.' Built and tested; invoices and receipts are next.");
   }
 
   await pres.writeFile({ fileName: OUT });
