@@ -1,0 +1,4 @@
+# gitleaks false positives, checked 26 Sep 2026 (Risuna):
+# the testing config placeholder JWT key, and a made-up idempotency key in a test.
+341cd830f4f9908724874ac6fa1a3cfcf037e61f:frontend/mobile/src/features/dashboard/informal-business/order-book/api/__tests__/httpOrderBookApi.test.ts:generic-api-key:24
+18aef5f9e90d2d2109a69599d4e3ee9731e23b5a:backend/src/config.py:generic-api-key:83

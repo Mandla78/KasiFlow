@@ -345,6 +345,14 @@ H. SECURITY, PRIVACY AND ETHICS
      Suppliers never see customers' names or the business's books, and
      can't pay to rank higher. The core tools stay free.
 
+  Q: How do you know your dependencies and your repo are safe?
+  A: We scanned tonight. pip-audit found 7 advisories in our crypto
+     library, including its bundled OpenSSL -- we upgraded it and the
+     backend now has no known vulnerabilities. The app has no critical
+     or high ones; 14 moderate sit inside Expo's own build tools and
+     router. And gitleaks over every commit found no secret ever
+     committed. The three scans go into the release checklist.
+
   Q: How much of this did AI write? Can you trust it?
   A: We used AI assistance and say so. Every change goes through a
      branch, a review by a team member and the full test suite before

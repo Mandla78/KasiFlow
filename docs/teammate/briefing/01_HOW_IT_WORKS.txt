@@ -634,6 +634,12 @@ Companion: 02_QA_PREP.txt (the questions judges may ask).
   - IDOR, rate-limit, lockout, two-factor, refresh-token reuse, password
     reset, account closure, data export, audit immutability and
     architecture-boundary tests; every PayFast check refused on its own.
+  - Supply chain (26 Sep, FINDING_dependency_audit.txt): pip-audit on the
+    backend -- "no known vulnerabilities" after upgrading cryptography to
+    50.0.1 (7 advisories fixed, one of them its bundled OpenSSL); npm
+    audit on what ships in the app -- 0 critical, 0 high, 14 moderate,
+    all inside Expo's own tooling and router; gitleaks over all 184
+    commits -- no secrets ever committed (2 false positives recorded).
   - Process: a branch per piece of work, a pull request, Mandla reviews
     and merges; all AI-assisted code is reviewed by a team member before
     merge; migrations reviewed against the models.

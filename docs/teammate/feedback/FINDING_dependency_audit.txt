@@ -1,0 +1,47 @@
+FINDING: dependency and secret scans (the supply-chain check)
+BY / DATE: Risuna, Saturday 26 September 2026, 23:50
+FOR TOOL: the whole project; one pin changed in your requirements.txt
+
+WHAT I RAN
+  - pip-audit on backend/requirements.txt (PyPI advisory database + OSV)
+  - npm audit --omit=dev on frontend/mobile (what ships in the app)
+  - gitleaks 8.30.1 over every commit on every branch (184 commits),
+    redacted: secrets are never printed
+
+WHAT I FOUND
+  Backend: cryptography 46.0.3 had 7 advisories:
+    - its wheels bundle an OpenSSL with known flaws (GHSA-537c-gmf6-5ccf,
+      fixed in 48.0.1);
+    - a buffer overflow when Hash.update() gets a non-contiguous buffer
+      (PYSEC-2026-36, fixed in 46.0.7);
+    - five in X.509 / PKCS#7 handling we don't use (EC public keys,
+      name constraints, wildcard SANs, duplicate certs, PKCS#7 decrypt).
+    FIXED: cryptography==50.0.1. Every test that touches it passes
+    (identity, sessions, devices, Google token check, seals, payments:
+    392), then the full suite. pip-audit now: "No known vulnerabilities
+    found". Nothing else in requirements.txt had an advisory.
+  App (what ships): 0 critical, 0 high, 14 moderate -- all inside Expo's
+    own tooling and router: `uuid` via the Xcode project tool (build
+    time only), and `decode-uri-component` via expo-router's query-string
+    (a slow parse of a malformed deep link). npm's "fix" is a downgrade
+    to Expo 46, which isn't one. Accepted for now; they go away when
+    Expo updates those packages. Re-check on every Expo upgrade.
+  Secrets: 2 hits, both false positives -- the testing config's
+    placeholder JWT key and a made-up idempotency key in a test.
+    Recorded in .gitleaksignore; the scan now says "no leaks found".
+    No real secret has ever been committed.
+
+RISKS
+  None new. The upgrade is a major version jump (46 -> 50); our use is
+  Ed25519, HKDF, hashes and serialization, all unchanged, and covered by
+  tests.
+
+MY RECOMMENDATION
+  Keep the three scans in the release checklist (and in CI when we add
+  it): pip-audit, npm audit --omit=dev, gitleaks.
+
+WHAT I NEED FROM MANDLA
+  Merge the pin (risuna/security-sweep), and `pip install -r
+  requirements.txt` on the demo machine.
+
+DECISION:
