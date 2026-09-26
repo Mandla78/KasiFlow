@@ -33,6 +33,7 @@ from src.domains.informal_trader.jobs.api import routes as _jobs_routes  # noqa:
 from src.domains.informal_trader.builder_network.api import routes as _builder_network_routes  # noqa: E402,F401
 from src.domains.informal_trader.order_book.api import routes as _order_book_routes  # noqa: E402,F401
 from src.domains.commerce.orders.api import routes as _orders_routes  # noqa: E402,F401
+from src.domains.platform.notifications.api import routes as _notifications_routes  # noqa: E402,F401
 from src.domains.commerce.payments.api import routes as _payments_routes  # noqa: E402,F401
 from src.domains.commerce.documents.api import routes as _documents_routes  # noqa: E402,F401
 from src.domains.supplier.catalogue.api import routes as _catalogue_routes  # noqa: E402,F401
