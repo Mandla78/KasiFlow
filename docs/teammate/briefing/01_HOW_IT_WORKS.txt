@@ -1,0 +1,689 @@
+===========================================================================
+BRIEFING 1 -- HOW AKAYZA WORKS: the technical picture and how we secure it
+For Mandla and Risuna, before the presentations (Sun 27 Sep 2026).
+State: main at 2cf38b0 (Sat 26 Sep, 22:00). The code is the truth; this
+is a map of it. Anything not built is marked NOT BUILT.
+Companion: 02_QA_PREP.txt (the questions judges may ask).
+===========================================================================
+
+  1. The product in one minute
+  2. The pieces (the stack)
+  3. How the backend is organised
+  4. What happens to every request
+  5. The journeys, step by step
+       5.1 Sign-up, sign-in and sessions
+       5.2 The business profile and the tools
+       5.3 Suppliers: the recommendation engine
+       5.4 Ordering: catalogue, cart, checkout, orders
+       5.5 Paying: PayFast and cash
+       5.6 Invoices, receipts and the QR check page
+       5.7 The business tools
+       5.8 My record and Home
+       5.9 Notifications
+       5.10 Sealed records (post-quantum signed)
+  6. Honest proof: the three kinds of money
+  7. Security, layer by layer
+  8. Privacy and POPIA
+  9. Testing and how we work
+ 10. Running the demo, and hosting
+ 11. What is NOT built yet
+
+
+---------------------------------------------------------------------------
+1. THE PRODUCT IN ONE MINUTE
+---------------------------------------------------------------------------
+
+  A mobile app for small businesses and informal traders -- spaza shops,
+  builders and other informal businesses -- to run their business and to
+  order from the suppliers they already work with.
+
+  - Business tools help them run the business: a credit book (who owes
+    me), an order book for counter orders (food sellers), jobs paid in
+    stages that the client signs off (builders), a builder network
+    (bring in partners), My record (the month's money, kept apart).
+  - The tools privately tell our SUPPLIER RECOMMENDATION ENGINE what the
+    business needs now, so the right suppliers rise, with the reason on
+    screen ("Your open jobs need plumbing").
+  - Ordering: from connected suppliers, priced by the server, paid
+    digitally through PayFast or in cash (capped), with an invoice and a
+    receipt that anyone can check with a QR code.
+  - Who pays: the businesses use it free; SUPPLIERS are the paying
+    customers. NOT a marketplace: we recommend suppliers, never products,
+    and every supplier is ranked -- none hidden, no paying to rank higher.
+
+
+---------------------------------------------------------------------------
+2. THE PIECES (THE STACK)
+---------------------------------------------------------------------------
+
+  App (frontend/mobile)
+    Expo SDK 57, React Native 0.86, TypeScript, expo-router (typed
+    routes). Android first. Screens in src/app/(dashboard)/..., code in
+    src/features/... . One API client (src/shared/api). The phone's
+    secure storage (expo-secure-store) holds the tokens, the "hide
+    balances" choice and the order book's unsent orders.
+    EXPO_PUBLIC_USE_MOCK_API=true runs the whole app on sample data (no
+    server): the same screens, mock APIs that follow the server's rules.
+
+  Backend (backend)
+    Python 3.12, Flask 3.1, SQLAlchemy 2 with Alembic migrations
+    (0001 ... 0025; 0024 is reserved for Mandla's "I paid the cash"),
+    PostgreSQL 16 split into schemas (identity, trader, supplier,
+    commerce, platform, audit). marshmallow 4 for request schemas,
+    Flask-JWT-Extended (tokens), Flask-Bcrypt (passwords), Flask-Limiter
+    (rate limits), cryptography (Ed25519, HMAC), dilithium-py (ML-DSA-65,
+    the NIST post-quantum signature), fpdf2 + segno (PDFs and QR codes).
+    One versioned API: /api/v1.
+
+  Outside services (each behind one module; tests use fakes)
+    PayFast        payments (sandbox today)
+    Cloudinary     images: signed uploads, checked with Cloudinary itself
+    Mapbox         address search for the business pin
+    Email (SMTP)   sign-up and sign-in codes, resets; "fake" in tests,
+                   refused in production
+    CIPC check     company verification -- a SANDBOX provider in this
+                   build; production has it switched off ("Get verified"
+                   shows as coming soon)
+    Google         sign-in token check, built on the server, switched off
+                   until our Google Cloud client ids exist
+
+  Background work (in the same server process)
+    shared/queue       after a database commit, side effects run on a
+                       small queue: audit rows, notifications. A failure
+                       there never undoes the user's action.
+    scheduler          regular jobs (src/master_scheduler registers
+                       them): "due to pay you back today" alerts and
+                       clean-ups -- sign-ups never confirmed (after 7
+                       days), notifications (after 90 days), expired
+                       idempotency keys.
+
+
+---------------------------------------------------------------------------
+3. HOW THE BACKEND IS ORGANISED
+---------------------------------------------------------------------------
+
+  backend/src/domains/<area>/<feature>/{api, schemas, services,
+  repositories, models}
+
+    identity         accounts, auth (sign-up, sign-in, codes, trusted
+                     phones, sessions, Google), devices (phone signing
+                     keys)
+    informal_trader  business_profile, credit_book, jobs, builder_network,
+                     order_book, delivery_addresses
+    supplier         supplier_profile, catalogue, connections,
+                     recommendation, integration (feed import)
+    commerce         orders, payments, documents
+    platform         notifications
+    proof            ledger (My record), integrity (sealed records).
+                     handshake, reputation and share are empty folders:
+                     planned, NOT BUILT.
+    security         audit
+
+  backend/src/shared/  cross-cutting helpers that know no feature: audit
+                       events, email, geocoding, idempotency, logging,
+                       media, net (client address), notification events,
+                       queue, rate limits, scheduling, validation.
+
+  The layers: api (routes: who may call, rate limit, parse) -> schemas
+  (strict input) -> services (the rules) -> repositories (the only code
+  that queries the database) -> models.
+
+  Rules, enforced by tests/architecture/test_domain_boundaries.py (the
+  build fails if one is broken):
+    - no feature reads another feature's repositories or tables: it
+      calls that feature's SERVICE (e.g. My record calls the orders,
+      credit book and jobs services);
+    - identity is sealed: only its accounts service is public;
+    - shared/ never imports a domain;
+    - only the wiring files (the app factory, the API registry, the
+      scheduler registry) may import everything.
+
+
+---------------------------------------------------------------------------
+4. WHAT HAPPENS TO EVERY REQUEST
+---------------------------------------------------------------------------
+
+  Phone --HTTPS--> Flask:
+    1. Body larger than 1 MB: refused.
+    2. A NUL character anywhere in the request: refused (400) before any
+       code runs.
+    3. JSON nested deeper than 32 levels: refused before any route runs.
+    4. The route's rate limit (per signed-in user, or per client address
+       for public routes).
+    5. @auth_required: a valid access token, a session that is still
+       live, and the right kind of account (e.g. dashboard =
+       "informal_business"). Public pages instead need a one-time ticket.
+    6. The request schema: unknown fields refused (so nobody can set a
+       field like "verified"), text normalised and trimmed, control and
+       invisible characters refused, money as whole cents, numbers
+       strictly typed.
+    7. The service applies the rules, with the user taken from the token
+       -- never from the request. Every query is scoped to that user.
+    8. Repositories use SQLAlchemy with bound parameters: no SQL is ever
+       built from user input.
+    9. Commit; after-commit events go to the queue (audit, notifications).
+   10. The response: an explicit shape per route (private fields never
+       leave the server) plus security headers on every response
+       (no content sniffing, no framing, no referrer, no caching).
+  Errors come back as one JSON shape with a plain message and the field.
+  "Not yours" answers exactly like "doesn't exist" (404).
+
+
+---------------------------------------------------------------------------
+5. THE JOURNEYS, STEP BY STEP
+---------------------------------------------------------------------------
+
+5.1 SIGN-UP, SIGN-IN AND SESSIONS                  (identity/auth)
+
+  Sign-up: email, password, consent to the privacy policy and terms
+  (the versions are recorded). Password rules are checked on the server:
+  8-64 characters, at most 72 bytes, upper, lower, digit and symbol. A
+  6-digit code goes by email; it expires after 15 minutes, only its HMAC
+  is stored, and too many wrong tries burn it. Sign-ups never confirmed
+  are deleted after 7 days.
+
+  Sign-in: the password is checked with bcrypt. For an unknown email a
+  dummy check runs, so the answer and the timing are the same (nobody
+  can fish for which emails have accounts). 5 wrong passwords lock the
+  account for 15 minutes, revealed only to someone who then gives the
+  right password.
+  On a phone we haven't seen before, the right password only earns a
+  code by email, bound to a random challenge that phone holds. After the
+  code, the phone is TRUSTED: it gets a random token (we keep only its
+  HMAC), so next time the password is enough. Trusted phones are listed
+  in Security and can be removed.
+
+  Sessions: a 15-minute access token and a 30-day refresh token that
+  ROTATES on every use; reusing an old refresh token ends the session
+  (that's how a stolen token is caught). Every request checks the
+  session is still live, so "sign out everywhere" and a password change
+  cut access off at once. Tokens live in the phone's secure storage.
+
+  Password reset: a one-use, expiring ticket; the reset page is served
+  with no-referrer and no-store.
+
+  Google sign-in (switched off): the server checks Google's signed token
+  itself -- signature against Google's keys, issuer, expiry, audience =
+  our own client ids, and that Google verified the email. Needs our
+  Google Cloud client ids and a development build of the app.
+
+  Phone signing keys (identity/devices): the server accepts a phone's
+  Ed25519 public key only with a valid signature from it. The phone side
+  that makes and uses the key is NOT BUILT yet.
+
+5.2 THE BUSINESS PROFILE AND THE TOOLS        (informal_trader/business_profile)
+
+  Onboarding in 4 steps: the business (type: builder with its trade --
+  11 trades -- spaza, food, other), where it is (address search, a map
+  pin), what it buys (categories, how often, usual spend, cash or
+  digital, delivery or collect), and which tools to switch on. The CIPC
+  number is optional; its check uses the sandbox provider in this build.
+  Tools switch on and off at any time (Account -> Add a tool): credit
+  book, order stock (materials for builders), jobs, order book, My
+  record. A tool that's off is never read by anything else.
+
+5.3 SUPPLIERS: THE RECOMMENDATION ENGINE      (supplier/recommendation)
+
+  Every active supplier is returned, best fit first, each with plain
+  reasons ("9.7 km away · delivers to you", "Sells Plumbing, Electrical,
+  Building Materials", "Accepts digital payment"). It never hides one;
+  honest reasons stay ("outside their delivery area").
+
+    score = what you buy (fit x 40)
+          + reach (35 delivers to you / 25 you can collect / 0 too far)
+          + closeness (up to 10, by distance)
+          + how you pay (10 if they take your way of paying)
+          + minimum order within your usual spend (5)
+
+  "Fit" starts as the share of your sign-up categories the supplier
+  sells. Then the tools you switched on add what you need NOW, read
+  through their services:
+    - jobs: the categories your OPEN job stages need ("Bathroom pipes"
+      -> plumbing), weighted by the money still to spend on them;
+    - order book: what your counter sold in the last 7 days, turned into
+      categories through the menu's ingredients (quarter loaf -> bakery).
+  demand = the signal's shares of the supplier's categories (0 to 1)
+  fit    = max(sign-up fit, 0.5 x sign-up fit + 0.5 x demand)
+  Demand can only lift a supplier, never push one down, and a lift
+  always comes with its reason: "Your open jobs need plumbing" / "Your
+  sales need bakery" (short enough for one line on a small phone).
+  A tool that's off, has nothing real to go on, or fails -> exactly the
+  ranking without it; the failure is logged with the tool's name only.
+  The signals are the business's own aggregates (shares of categories):
+  no names, amounts, job titles or items, never shown to a supplier.
+  In the tests: a builder signed up for paint and tools who opens a job
+  with plumbing stages sees Midrand Build & Plumb go from 6th to 2nd of
+  11; a food seller who sold 12 quarter loaves sees Kasi Bakers go from
+  6th to 2nd.
+  Distance is computed in Python (haversine): a few hundred suppliers
+  need no geo database.
+
+5.4 ORDERING: CATALOGUE, CART, CHECKOUT, ORDERS   (supplier/catalogue,
+                                                  commerce/orders)
+
+  - Suppliers' catalogues are loaded from their own files (supplier.json
+    + products.csv), checked row by row (section 7). The demo has 11
+    suppliers and about 1,670 products. Buyers see prices, sale prices
+    and "in stock / low / out" -- never exact stock, product codes or
+    barcodes.
+  - A business must CONNECT to a supplier before ordering.
+  - The cart lives on the phone. Checkout, 3 steps:
+      how you get it  delivery to one of your saved places, or collect.
+                      The server says which places the supplier delivers
+                      to (distance, in range); out-of-range ones are
+                      greyed out with the reason.
+      how you pay     digital (PayFast) or cash, within the limits below
+      check + place   the summary, then "Place order"
+  - Placing an order sends only product ids and quantities. The server
+    prices every line from its own catalogue (a request carrying a price
+    or a total is refused), keeps a snapshot of each line's price, holds
+    the stock with one atomic update (the last item can't be sold twice),
+    checks the supplier's minimum order and works out delivery.
+  - An Idempotency-Key header makes a retried "Place order" return the
+    first order instead of creating a second; the same key for a
+    different order is refused.
+  - Order numbers: AKZ-2026-000101. Statuses: awaiting payment (digital,
+    unpaid) -> placed -> accepted -> out for delivery / ready for
+    collection -> delivered / collected; or rejected, cancelled, expired.
+    Every step is kept in an append-only history with who made it.
+  - Limits: cash up to R1,000 per order and 2 cash orders waiting at a
+    time (a cash order costs nothing up front, so this caps fake
+    orders); a digital order can't be cancelled by the buyer and lapses
+    after 24 hours unpaid, giving its stock back.
+  - The supplier's side: in production, suppliers would move orders from
+    their own systems. NOT BUILT (the supplier API is designed in
+    docs/supplier/05_ERP_INTEGRATION.txt). In the demo, the developer
+    command `flask orders move AKZ-... accepted` plays the supplier; it
+    refuses to run outside development.
+
+5.5 PAYING: PAYFAST AND CASH                    (commerce/payments)
+
+  Digital: the buyer pays on PAYFAST'S OWN PAGE (card or instant EFT,
+  3-D Secure). We never see a card. Our server builds the payment
+  request and signs it (MD5 over the fields in PayFast's documented
+  order, with our secret passphrase).
+  The order becomes PAID only when PayFast's server-to-server
+  notification (ITN) passes all four checks:
+    1. the signature matches (with our passphrase);
+    2. it came from one of PayFast's own servers;
+    3. the amount equals the order to the cent;
+    4. PayFast answers VALID when we post it back to them.
+  The buyer's phone returning from the payment page proves nothing. From
+  the notification we keep the amount, the status and PayFast's
+  reference -- not the payer's name, email or card.
+  The notification needs a public https address, so in the demo the
+  laptop is reached through a tunnel (PAYFAST_TRUST_PROXY then reads
+  PayFast's address from the tunnel's header).
+  Split payments straight to each supplier's own PayFast account are
+  built behind a switch (they need each supplier's merchant id);
+  refunds are done by us by hand for now.
+
+  Cash: paid on delivery or collection, capped (above). It's "cash, not
+  confirmed" until both sides confirm it, then "cash, confirmed by
+  both" -- never proof that money changed hands (section 6). The labels
+  run everywhere already (documents, My orders, My record); the
+  two-sided confirmation for orders, "I paid the cash", is Mandla's work
+  in progress (migration 0024), so today order cash stays "not
+  confirmed".
+
+5.6 INVOICES, RECEIPTS AND THE QR CHECK PAGE     (commerce/documents)
+
+  An invoice once the order is confirmed; a receipt once it's paid. The
+  PDFs are made on the server (fpdf2); the QR code is drawn as vector
+  squares (segno). Downloads use links signed with a server key, valid
+  for 10 minutes and for that one document. Every document's QR opens a
+  signed public check page, so a forged or altered invoice is caught;
+  that page shows no personal details. Every document says what backs
+  its money (section 6).
+
+5.7 THE BUSINESS TOOLS                             (informal_trader/*)
+
+  Credit book (who owes me)
+    Customers (a name, optionally a cellphone), credit sales (amount,
+    given on, due on), repayments, and corrections with a reason. The
+    history is append-only: a correction adds a line, nothing is edited
+    away. Paid and cancelled entries go to History; "delete" moves an
+    entry to a bin for 30 days (hidden from the owner, never erased).
+    A WhatsApp reminder opens WhatsApp on the owner's own phone with the
+    message ready -- we send nothing. A daily alert says how many
+    customers are due today and the total, never names. Customer names
+    stay private to the business: suppliers never see them.
+
+  Jobs (builders)
+    A job has a client (name + cellphone), a total and stages that must
+    add up to it. Stage photos are camera-only (never the gallery); the
+    server records its own time and a SHA-256 fingerprint of the stored
+    file, so a swapped or back-dated photo is detectable. "Send sign-off
+    link" makes a one-time link for the client (sent from the builder's
+    WhatsApp): a 256-bit ticket, only its HMAC stored, short-lived, one
+    use, replaced by a newer link and revoked if the job is binned. The
+    client's page shows only that stage; they answer "done, I paid R..."
+    or "not yet". If the amounts differ, the stage says "Amounts don't
+    match". The house record keeps each stage with its photos and
+    sign-off, to show new clients.
+
+  Builder network
+    A builder can show a profile to other builders (off by default: name,
+    trades, suburb and the builds they choose -- never their clients).
+    "Bring in a partner" on a job: which stages, which trade, start date,
+    how long, their pay (one amount or per day) and when it's paid in
+    cash (when the client confirms the stage, every day, or at the end).
+    The partner sees the offer and their pay before saying yes -- never
+    the client's name, number or price. Invite a partner, or post it
+    nearby (builders of that trade near the job see it for 7 days).
+    Akayza doesn't hold the money: payments are confirmed by both.
+
+  Order book (food sellers)
+    A menu (items, prices, ingredients) with price history: an order is
+    priced with the price valid at the time it was taken. Counter orders
+    get a queue number and move through steps. It WORKS OFFLINE: unsent
+    orders wait in the phone's secure storage and go when the signal
+    returns; each carries the phone's own id, kept unique per business,
+    so a retry lands once and two phones never collide. The day's money
+    is "money you recorded", never "verified". Customers: at most an
+    optional first name -- phone numbers are refused.
+
+  Delivery addresses
+    The business's saved places (the shop, a site, home), used by
+    checkout for delivery and the in-range check.
+
+5.8 MY RECORD AND HOME                  (proof/ledger, commerce/orders)
+
+  My record: GET /me/record/summary?month=YYYY-MM -- one month in three
+  blocks, NEVER added together, no total field anywhere:
+    stock you bought   by order date, split by what backs the payment
+                       (paid in the app and verified by PayFast / cash
+                       confirmed by both / cash not confirmed)
+    your credit book   credit given, paid back ("your own record")
+    your jobs          stages confirmed by clients, amounts that don't
+                       match ("your own record")
+  Built only from each tool's service. Months run midnight to midnight
+  in South Africa; strict YYYY-MM; not in the future, not before
+  sign-up. A tool that's off answers null ("Switch on Jobs in Account").
+  Each stock line opens My orders filtered to those orders.
+
+  Home: live numbers from each tool plus GET /me/home/summary ("You owe
+  suppliers" = cash orders a supplier accepted that haven't arrived;
+  orders on their way). An eye hides every amount, HIDDEN BY DEFAULT
+  (a balance isn't on show when the app opens in front of a customer),
+  remembered on that phone only; Home and My record share the one
+  switch.
+
+5.9 NOTIFICATIONS                                (platform/notifications)
+
+  Events (a new order step, a sign-off answered, an invite, a new-phone
+  sign-in, credit due today) are published after the commit. Each alert
+  is stored ONCE (a dedupe key) from a template key and parameters --
+  no names or phone numbers in any alert. Two tabs, Orders and Inbox;
+  switches for orders, jobs and credit reminders (security alerts are
+  always on); the app checks every 20 seconds, only while it's open; the
+  bell shows the unread count (99+). Alerts are kept 90 days; every
+  alert belongs to its owner (anyone else gets "not found").
+
+5.10 SEALED RECORDS (POST-QUANTUM SIGNED)             (proof/integrity)
+
+  "Seal my record" (POST /me/record/seal) fingerprints every record in
+  the business's tools and signs the lot; the OWNER keeps the seal on
+  their phone -- we keep no copy. "Check my record" (POST
+  /me/record/check) later shows whether anything sealed has changed.
+    - What's sealed: the facts that never change once recorded -- credit
+      as first given, repayments, corrections, stages the client
+      confirmed (with the photo's SHA-256), sign-off answers, counter
+      orders as taken, menu price history. Status and the bin are left
+      out, so paying off, binning or correcting is never "tampering".
+      Each tool hands over its own records through its SERVICE.
+    - How: each record is canonical JSON -> a SHA-256 leaf; the leaves
+      form an RFC 6962 Merkle tree; the root, the time, the count and the
+      account are signed with Ed25519 AND ML-DSA-65 (NIST FIPS 204, the
+      post-quantum standard). Both keys come from one server secret
+      (HKDF, SEAL_SECRET or SECRET_KEY). GET /proof/keys publishes the
+      public keys, so anyone can check a seal without us.
+    - The check refuses a seal that was altered (a leaf, the root, the
+      time, the count, a missing or swapped signature) or belongs to
+      another account; then it compares every sealed record with today's
+      and names what changed or disappeared, and how many were added.
+    - Why the owner holds it: if a record changes later -- even straight
+      in our database -- the owner's seal shows it, and we can't re-sign
+      an old seal they already have.
+    - What it is NOT: proof a record is true. It proves nothing changed
+      since sealing; payments are proof only when PayFast verified them.
+    - Numbers: ML-DSA-65 signs in about 85 ms and checks in about 13 ms
+      in pure Python; a seal holds only kinds, ids and fingerprints (no
+      names, amounts or text). No migration: nothing is stored on our side.
+    - Demo: seal, then `flask tools tamper --me EMAIL` (development only)
+      changes one repayment straight in the database; "Check my record"
+      answers "1 record changed since you sealed: Repayment".
+
+
+---------------------------------------------------------------------------
+6. HONEST PROOF: THE THREE KINDS OF MONEY
+---------------------------------------------------------------------------
+
+  Only a DIGITAL payment verified by the payment provider is proof.
+    provider_verified   paid in the app, PayFast confirmed it (the four
+                        checks) -- independent proof
+    confirmed_by_both   cash both sides confirmed in the app -- proves
+                        they agreed, not that money changed hands
+    not_confirmed       cash still to be confirmed -- proof of nothing
+  Tool records (credit book, order book, jobs) are the business's OWN
+  records. The three kinds are stored apart and shown apart (My orders,
+  receipts, the document check page, My record) and never added into one
+  total, so a cash claim can't pass for provider-verified money.
+  Wording: never "proof" next to tool numbers; the order book says
+  "money you recorded"; My record says "your own record".
+
+
+---------------------------------------------------------------------------
+7. SECURITY, LAYER BY LAYER
+---------------------------------------------------------------------------
+
+  (The full write-up, mapped to STRIDE and the OWASP API Top 10, is
+  docs/submission/03_ssdlc/SSDLC_DRAFT.txt. This is the working list.)
+
+  Identity and sessions
+    - bcrypt passwords with a server-checked policy; no account
+      enumeration (same answer and timing); lockout after 5 tries.
+    - A code by email on every new phone; trusted phones by random token
+      (HMAC stored), visible and removable.
+    - 15-minute access tokens; rotating refresh tokens with reuse
+      detection; every request checks the session is live.
+
+  Who can see what (authorization)
+    - Every route pins its caller: a signed-in business, a supplier, or
+      a public page holding a one-time ticket.
+    - Every query is scoped to the user from the token; ids are random
+      UUIDs; another business's record answers 404, exactly like one that
+      doesn't exist. IDOR tests per feature (orders, credit book, jobs,
+      connections, documents, order book, bin, partner network, record,
+      notifications).
+    - Responses have explicit shapes: a supplier's orders email, payout
+      account, VAT and legal details, product codes, barcodes and exact
+      stock never reach the app.
+
+  Input
+    - Strict schemas refuse unknown fields (no mass assignment).
+    - Text normalised; control, invisible and right-to-left-override
+      characters refused; NUL refused before any code runs; names must
+      be real names; money is whole cents; coordinates must be real
+      numbers in range (NaN and Infinity refused).
+    - 1 MB request cap; JSON depth capped at 32 (our own hostile tests
+      found that deep nesting crashed every route; fixed).
+    - Email templates escape user text; addresses validated so header
+      injection (CR/LF) can't pass.
+
+  Money and business flows
+    - The server prices everything; price snapshots per order line.
+    - Atomic stock holds; idempotent order placing.
+    - Paid only by PayFast's notification after four checks.
+    - Cash limits; digital orders lapse unpaid after 24 hours.
+
+  Links, files and documents
+    - Payment links and client sign-off links: 256-bit tickets, stored
+      as HMAC-SHA256 hashes, short-lived, one use, revoked by a newer
+      link (and sign-off links by binning the job).
+    - Invoice and receipt links: signed, 10 minutes, one document; QR to
+      a signed check page with no personal details.
+    - Uploads are checked with Cloudinary itself (real size and address,
+      started by the same user for the same purpose); Cloudinary's
+      callbacks are verified by signature and refused after 2 hours
+      (replay). Storage folders are HMAC keys, never database ids.
+    - Stage photos: camera only, server time, SHA-256 fingerprint.
+
+  Supplier data feeds
+    - Checked row by row: unknown columns refused; money parsed exactly;
+      barcodes' GS1 check digits verified; cells starting with = + - @
+      refused (spreadsheet-formula injection); image links only from our
+      own Cloudinary (no tracking pixels or foreign content); 5 MB and
+      5,000-row caps; bad rows reported by row number, never dropped
+      silently. A feed can't mark its supplier verified: only we can.
+
+  Abuse limits
+    - A rate limit on every route, per user or per client address:
+      sign-in 5 a minute per address + email, sign-up 5 an hour, codes,
+      resets, address search, uploads, catalogue and search, orders,
+      payments, invoice links and the public check page, the business
+      tools (sized for a lunch-time rush from two phones), the partner
+      network, My record (30 a minute). Plus a daily upload quota and a
+      daily cap on company checks.
+    - The client address comes from one trusted helper
+      (shared/net/client_ip): forwarding headers are ignored unless a
+      switch (BEHIND_CLOUDFLARE) says the server is reachable only
+      through Cloudflare -- so nobody can fake an address to dodge a limit
+      or pollute the audit trail (19 tests).
+
+  Audit and logs
+    - Every identity action is audited (who, which session, which phone,
+      success or failure and why -- never passwords, codes or tokens);
+      orders, payments, feed imports, connections and the credit book
+      too, with ids, never names or phone numbers.
+    - The audit trail is append-only, enforced by database triggers:
+      rows can't be updated or deleted, not even by the app.
+    - No secrets or personal data in logs, even in development.
+
+  Configuration and secrets
+    - Secrets only from environment variables (backend/.env, never
+      committed); provider keys (PayFast, Cloudinary, Mapbox) never leave
+      the server.
+    - Production refuses to start with secrets shorter than 32
+      characters, the fake email sender, missing media keys, or a public
+      address that isn't https. Developer tools refuse to run outside
+      development.
+
+  Tamper evidence
+    - Sealed records (5.10): a change or deletion made after sealing is
+      caught, even one made straight in our database; seals are signed
+      twice, classically and post-quantum.
+
+  Architecture
+    - Domain boundaries enforced by tests (section 3), so a feature can't
+      quietly reach into another's data -- identity above all.
+
+
+---------------------------------------------------------------------------
+8. PRIVACY AND POPIA
+---------------------------------------------------------------------------
+
+  Collect only what a feature needs or what can be officially checked.
+  Who we hold data about, and how it's protected:
+    the business      email, password (bcrypt hash only), names,
+                      cellphone, address and pin, optional CIPC number,
+                      what it buys, consents
+    its customers     a name and maybe a cellphone, in the credit book --
+                      the business's own data, used only to open WhatsApp
+                      on its own phone; never shown to anyone else, never
+                      used by us; deleting a customer anonymises them
+    its clients       a name and cellphone, for the sign-off link; the
+                      client's page shows only that stage
+    counter customers at most a first name; phone numbers refused
+    suppliers         business details, catalogue, prices, stock, orders
+                      email, payout account, VAT number -- private fields
+                      never sent to the app
+    card payers       NOTHING about the card: amount, status and PayFast's
+                      reference only
+
+  - Consent versions recorded at sign-up (currently "0.2-draft").
+  - The engine's signals are aggregates, never shared with suppliers.
+  - Alerts and logs carry no names or phone numbers.
+  - Data export and account closure are built and tested on the server
+    (GET /me/export, closing the account); in this app build "Delete my
+    account and data" shows as coming soon.
+  - Records kept 5 years (tax law), then deleted -- the policy; sign-ups
+    never confirmed are deleted after 7 days (built).
+  - Hosting in South Africa (Cape Town region) at launch, TLS in transit.
+  - Incident plan: revoke sessions, rotate keys, switch the feature off;
+    tell the people affected and the Information Regulator as soon as
+    reasonably possible (POPIA section 22).
+
+
+---------------------------------------------------------------------------
+9. TESTING AND HOW WE WORK
+---------------------------------------------------------------------------
+
+  - About 1,280 automated backend tests and 204 app tests (main plus the
+    sealed-records pull request), run before every merge (the backend suite takes 12-14
+    minutes).
+  - Hostile-input suites for identity and every tool: SQL and header
+    injection, script and template injection, emoji, control and
+    invisible characters, wrong JSON types, broken bodies, NaN/Infinity,
+    very long values. The rule: refuse, never crash, never accept junk,
+    never leak whether an account exists.
+  - Real bugs these tests found and we fixed: passwords over 72 bytes
+    crashing bcrypt, a NUL character crashing a database write, invisible
+    characters accepted as a name, deeply nested JSON crashing every
+    route, a forgeable client address in the audit trail.
+  - IDOR, rate-limit, lockout, two-factor, refresh-token reuse, password
+    reset, account closure, data export, audit immutability and
+    architecture-boundary tests; every PayFast check refused on its own.
+  - Process: a branch per piece of work, a pull request, Mandla reviews
+    and merges; all AI-assisted code is reviewed by a team member before
+    merge; migrations reviewed against the models.
+
+
+---------------------------------------------------------------------------
+10. RUNNING THE DEMO, AND HOSTING
+---------------------------------------------------------------------------
+
+  Demo today: the backend and PostgreSQL run on the laptop; the app runs
+  on the phone through Expo. Data: `flask suppliers load` (the seed
+  suppliers), `flask builders seed --me EMAIL` (builder network),
+  `flask tools seed --me EMAIL` (credit book, jobs and order book for one
+  account). PayFast's notification needs a public https address, so the
+  laptop is reached through a tunnel -- check it's up and that the
+  backend's public address matches it BEFORE demoing a payment (the
+  quick tunnel we used expired on Saturday night). The supplier side is
+  moved with `flask orders move`.
+
+  At launch: a managed PostgreSQL and app hosting in South Africa;
+  Cloudflare in front (a named tunnel so the server has no open port,
+  Always HTTPS, TLS 1.2+, HSTS, the managed WAF plus our own rules,
+  Turnstile on the pages opened from links). Running costs: about R460 a
+  month for the pilot, R4,000-R4,700 a month at growth.
+
+
+---------------------------------------------------------------------------
+11. WHAT IS NOT BUILT YET (say so if asked)
+---------------------------------------------------------------------------
+
+  - The supplier's side: an API (per-supplier keys, orders into their own
+    system, status updates, signed order alerts) -- designed, not built;
+    the demo moves orders with a developer command. Today suppliers'
+    catalogues come in as files.
+  - Split payouts to suppliers (built behind a switch, needs merchant
+    ids); automated refunds.
+  - The two-phone cash handshake ("I paid the cash", Mandla, in
+    progress).
+  - Sharing a record with a funder, owner-approved and revocable
+    (proof/share is an empty folder).
+  - The phone side of the Ed25519 signing keys (records signed on the
+    phone), and recording money phone to phone with no signal -- QR first,
+    then Bluetooth and a BitChat-style mesh
+    (docs/teammate/feedback/PLAN_offline_mesh.txt).
+  - The live CIPC company check (sandbox only; "Get verified" is coming
+    soon) and Google sign-in (built on the server, switched off).
+  - Account deletion and data export IN THE APP (built on the server).
+  - Malware scanning of uploads (the approval path is built, switched
+    off); Cloudflare WAF; a shared rate-limit store (Redis) for more than
+    one server.
+  - Full offline for every tool (the order book already works offline);
+    other South African languages; the daily tally ("Soon").
+  - An external penetration test and a POPIA legal review (in the ask).

@@ -8,9 +8,11 @@ import { Button } from '@/shared/components/Button';
 import { Card } from '@/shared/components/Parts';
 import { Screen } from '@/shared/components/Screen';
 import { Overline, Title } from '@/shared/components/Text';
+import { useHideBalances } from '@/shared/lib/useHideBalances';
 import { colors, fonts } from '@/shared/theme/tokens';
 
 import { recordApi } from '../api/recordApi';
+import { SealCard } from '../components/SealCard';
 import { addMonths, monthLabel, thisMonth } from '../lib/months';
 import { HIDDEN, RecordBlock, RecordLine, recordView } from '../lib/view';
 import type { RecordSummary } from '../types';
@@ -24,7 +26,8 @@ const OPENS: Record<RecordBlock['key'], Href | null> = {
 /**
  * My record (plan v2 03): one month of your money in three blocks that are
  * never added together, each opening where its numbers come from. The eye
- * hides the amounts (someone looking over your shoulder).
+ * is Home's: one switch, amounts hidden until it's tapped, remembered on
+ * this phone (shared/lib/useHideBalances).
  */
 export default function MyRecordScreen() {
   const { profile } = useSession();
@@ -32,7 +35,7 @@ export default function MyRecordScreen() {
   const [record, setRecord] = useState<RecordSummary | null>(null);
   const [failed, setFailed] = useState(false);
   const [attempt, setAttempt] = useState(0);
-  const [hidden, setHidden] = useState(false);
+  const { hidden, toggle } = useHideBalances();
 
   useEffect(() => {
     let live = true;
@@ -62,8 +65,8 @@ export default function MyRecordScreen() {
         <Title>My record</Title>
         <Pressable
           accessibilityRole="button"
-          accessibilityLabel={hidden ? 'Show amounts' : 'Hide amounts'}
-          onPress={() => setHidden((h) => !h)}
+          accessibilityLabel={hidden ? 'Show balances' : 'Hide balances'}
+          onPress={toggle}
           style={styles.eye}
           hitSlop={8}>
           <Feather name={hidden ? 'eye-off' : 'eye'} size={18} color={colors.ink} />
@@ -128,6 +131,7 @@ export default function MyRecordScreen() {
               </View>
             );
           })}
+          <SealCard />
         </>
       )}
     </Screen>

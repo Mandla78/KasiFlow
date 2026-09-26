@@ -182,3 +182,13 @@ def binned_entry(user_id: uuid.UUID, entry_id: uuid.UUID, since: datetime) -> Op
         .with_for_update(of=CreditEntry)
         .first()
     )
+
+
+def all_for_seal(user_id: uuid.UUID) -> tuple[list[CreditEntry], list[CreditPayment], list[CreditCorrection]]:
+    """Every entry, repayment and correction the business ever recorded,
+    binned ones included (the bin hides, never erases): for a record seal."""
+    return (
+        CreditEntry.query.filter_by(user_id=user_id).all(),
+        CreditPayment.query.filter_by(user_id=user_id).all(),
+        CreditCorrection.query.filter_by(user_id=user_id).order_by(CreditCorrection.created_at).all(),
+    )

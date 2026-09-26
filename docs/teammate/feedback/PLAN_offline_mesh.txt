@@ -1,0 +1,105 @@
+===========================================================================
+PLAN -- recording money offline, phone to phone (the BitChat idea, done
+our way)
+===========================================================================
+
+BY / DATE:   Risuna, Saturday 26 September 2026 (night)
+FOR:         Mandla -- a design for after the hackathon, and an honest
+             answer if judges ask "what about places with no signal?"
+STATUS:      designed, NOT BUILT. Step 0 below (sealed records) is built.
+
+
+THE QUESTION
+  Much of the informal economy runs on patchy or no signal. Can two
+  phones record a sale, a repayment or a cash hand-over with no internet
+  at all -- the way BitChat passes messages over Bluetooth -- and still
+  end up with a record both sides and our server can trust?
+
+
+WHAT BITCHAT DOES (checked 26 Sep 2026, github.com/permissionlesstech/bitchat)
+  - A Bluetooth Low Energy mesh: phones relay each other's messages, at
+    most 7 hops; messages wait in a queue ("store and forward") until a
+    route or the internet appears.
+  - Encryption with the Noise Protocol Framework, forward secrecy for live
+    sessions; a persistent per-device identifier derived from an identity
+    key; no accounts or phone numbers.
+  - Battery-aware duty cycling; an internet fallback over Nostr relays.
+  - Public domain (Unlicense); iOS and Android apps.
+  We would borrow the ideas (mesh, store-and-forward, Noise, device keys),
+  not the code or the chat product.
+
+
+WHY IT'S NOT IN THE BUILD TONIGHT (and the rule it would break)
+  - Expo can't do Bluetooth in the app we ship today: it needs a native
+    BLE module and a development build (EAS or `expo run:android`), and
+    CLAUDE.md says we ask before adding native modules.
+  - A mesh needs each phone to ADVERTISE and SERVE (BLE peripheral) as
+    well as scan; react-native-ble-plx, the usual library, only scans and
+    connects (central). Peripheral mode means a small native module of
+    our own or another library -- days, not hours.
+  - Android 12+ needs BLUETOOTH_SCAN / ADVERTISE / CONNECT permissions and
+    limits background scanning; it has to be tested on several real
+    phones at once. We have one test phone tonight.
+  - A flaky radio demo on stage costs more than it earns. The judges are
+    engineers: a design with a working foundation beats a demo that drops.
+
+
+THE DESIGN, IN STEPS (each step is useful on its own)
+
+  Step 0 -- sealed records                                    BUILT
+    POST /me/record/seal: the server fingerprints every record in the
+    tools (RFC 6962 Merkle tree) and signs the root with Ed25519 and
+    ML-DSA-65 (NIST FIPS 204, post-quantum). The owner keeps the seal;
+    "check" shows any sealed record changed or deleted since, even in our
+    own database. This is the integrity layer every later step reuses:
+    a batch of records carried offline is sealed the same way.
+
+  Step 1 -- a signing key on each phone
+    The phone makes an Ed25519 key pair and keeps the private key in its
+    secure storage; the server already checks and stores the public key
+    (identity/devices, BUILT). Every record made on the phone is signed
+    there, so it can't be changed in transit by anyone, including a relay.
+
+  Step 2 -- a handshake by QR code, no radio at all
+    The cash hand-over ("I paid the cash") between two phones, offline:
+      a) the buyer's phone shows a QR: {order, amount, time, nonce},
+         signed with the buyer's device key;
+      b) the seller scans it, checks the signature, adds its own
+         signature, and shows a QR back;
+      c) both phones now hold the same doubly signed record and queue it.
+    When either phone gets signal it uploads; the server checks both
+    signatures against the registered device keys, the nonce (no replays)
+    and the amounts, then records "cash, confirmed by both". Needs only
+    the camera (already used for stage photos) and a QR library -- no
+    native Bluetooth.
+
+  Step 3 -- the same handshake over Bluetooth, two phones side by side
+    A development build with a BLE module: the two phones find each other
+    (short range, both apps open), run a Noise XX handshake over their
+    device keys, and exchange the same signed record as step 2. Nothing
+    else changes: same record, same upload, same server checks.
+
+  Step 4 -- the mesh: carrying records to whoever has signal
+    A phone with queued, signed records passes them to nearby phones
+    running the app; each relays (at most 7 hops, like BitChat) until one
+    has signal and uploads. Relays see only sealed, signed blobs
+    (encrypted to our server's key); they can't read, change or forge
+    them, and a relayed copy that arrives twice lands once (the record's
+    id, as the order book does today).
+
+
+RULES THAT DON'T CHANGE
+  - The server stays the authority: every offline record is re-checked,
+    priced and scoped to the signed-in business when it arrives.
+  - Offline records are labelled as what they are: "cash, confirmed by
+    both" at best -- never proof of payment (CLAUDE.md, honest proof).
+  - No personal data travels through other people's phones in the clear.
+  - Every step gets the same tests we use now: forged signatures, replays,
+    wrong amounts, another business's records (IDOR).
+
+
+WHAT I NEED FROM MANDLA
+  A yes to the direction; then the order of steps 1-2 against "I paid the
+  cash" (migration 0024), and a yes before any native module (step 3).
+
+DECISION:

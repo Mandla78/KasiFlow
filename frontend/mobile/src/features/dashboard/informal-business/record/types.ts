@@ -21,7 +21,48 @@ export type RecordSummary = {
   jobs: { confirmedCents: Cents; confirmedStages: number; amountsDontMatch: number } | null;
 };
 
+/**
+ * A record seal exactly as the server made it (proof/integrity): the
+ * fingerprints of every record in the tools, signed with Ed25519 and
+ * ML-DSA-65. The app keeps it and sends it back untouched; it holds only
+ * kinds, ids and fingerprints -- no names, amounts or text.
+ */
+export type RecordSeal = {
+  v: number;
+  alg: string[];
+  business: string;
+  sealed_at: string;
+  count: number;
+  root: string;
+  leaves: [string, string, string][];
+  sig: { ed25519: string; ml_dsa_65: string | null };
+  key_ids: { ed25519: string; ml_dsa_65: string | null };
+  /** Made by the mock API: nothing was signed. */
+  mock?: boolean;
+};
+
+/** A sealed record that changed or went missing: what it is and its day. */
+export type SealItem = { kind: string; id: string; on: string | null };
+
+/** "valid", "invalid", "absent" (not in the seal) or "unavailable" (not checkable here). */
+export type SignatureState = string;
+
+export type SealCheck = {
+  intact: boolean;
+  signatures: { ed25519: SignatureState; mlDsa65: SignatureState };
+  sealedAt: string;
+  sealed: number;
+  unchanged: number;
+  changed: SealItem[];
+  missing: SealItem[];
+  addedSince: number;
+};
+
 export interface RecordApi {
   /** month "YYYY-MM"; none = this month. */
   summary(month?: string): Promise<RecordSummary>;
+  /** Seal every record in my tools now; the seal is mine to keep. */
+  seal(): Promise<RecordSeal>;
+  /** Has anything I sealed changed since? Throws if the seal was altered. */
+  check(seal: RecordSeal): Promise<SealCheck>;
 }

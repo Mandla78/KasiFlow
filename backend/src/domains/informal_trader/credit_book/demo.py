@@ -43,3 +43,25 @@ def seed(user) -> str:
     bongani = sale("Bongani Mahlangu", None, 2_500, "Bread", 1, 6)
     service.move_to_bin(user, bongani)
     return "credit book: 6 customers (1 due today, 1 overdue, 1 paid back, 1 cancelled, 1 in the bin)"
+
+
+def tamper(user) -> str:
+    """DEVELOPMENT ONLY: change one number straight in the database, the way
+    an intruder (or a careless edit) would -- no history line, no audit --
+    so "Check my record" can be shown catching it. Adds R10 to the latest
+    repayment, or to the latest credit if there are no repayments."""
+    from src.extensions import db
+
+    from .models import CreditEntry, CreditPayment
+
+    payment = CreditPayment.query.filter_by(user_id=user.id).order_by(CreditPayment.created_at.desc()).first()
+    if payment is not None:
+        payment.amount_cents += 1_000
+        db.session.commit()
+        return f"repayment on {payment.paid_on.isoformat()} now R{payment.amount_cents / 100:,.2f}"
+    entry = CreditEntry.query.filter_by(user_id=user.id).order_by(CreditEntry.created_at.desc()).first()
+    if entry is None:
+        return "nothing to change: the credit book is empty"
+    entry.amount_cents += 1_000
+    db.session.commit()
+    return f"credit given on {entry.given_on.isoformat()} now R{entry.amount_cents / 100:,.2f}"

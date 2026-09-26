@@ -6,6 +6,7 @@ jobs -- a builder's jobs, paid in stages.
   create_job(user, data)     with stages that add up to the total
   summary(user)              for Home and the Account tile
   money_for_month(user, s, e) stages confirmed and amounts that don't match, for My record
+  seal_records(user)         confirmed stages and sign-off answers, for a record seal
   history(user, q)           done jobs (search)
   bin_jobs(user)             deleted in the last 30 days
   move_to_bin(user, id)      "delete": hidden from the builder; open sign-off links stop working
@@ -32,6 +33,7 @@ from ..models import Job, JobStage
 from ..repositories import jobs_repository as repo
 from . import jobs_audit
 from .jobs_signals import demand_signals  # noqa: F401 -- the supplier engine reads it here
+from .jobs_seal import seal_records  # noqa: F401 -- proof/integrity reads it here
 
 
 def job_or_404(user, job_id: uuid.UUID) -> Job:

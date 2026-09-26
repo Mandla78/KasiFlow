@@ -130,3 +130,11 @@ def binned(user_id: uuid.UUID, since: datetime) -> list[Job]:
 
 def binned_job(user_id: uuid.UUID, job_id: uuid.UUID, since: datetime) -> Optional[Job]:
     return Job.query.filter_by(id=job_id, user_id=user_id, is_deleted=True).filter(Job.deleted_at >= since).with_for_update(of=Job).first()
+
+
+def all_for_seal(user_id: uuid.UUID) -> tuple[list[JobStage], list[JobSignOff]]:
+    """Stages the client confirmed and the sign-off answers they gave, on
+    every job (binned ones included): for a record seal."""
+    stages = JobStage.query.join(Job).filter(Job.user_id == user_id, JobStage.status == "confirmed").all()
+    answers = JobSignOff.query.filter(JobSignOff.user_id == user_id, JobSignOff.used_at.isnot(None)).all()
+    return stages, answers

@@ -94,6 +94,13 @@ FINDINGS / NEEDS / QUESTIONS FOR MANDLA
   - FINDING_whatsapp_ip_links.txt, QUESTION_bluetooth_sales.txt (roadmap)
   - Demo data: flask tools seed --me EMAIL (risuna/tools-demo) fills one
     account's credit book, jobs (real photos + sign-offs) and order book
+  - Presentations: docs/teammate/briefing/ (how it works; Q&A prep).
+    Section B of 02_QA_PREP.txt lists what the pitch must NOT claim yet.
+  - Sealed records (risuna/sealed-records, no migration): the owner seals
+    every record in the tools; the seal is signed with Ed25519 and
+    ML-DSA-65 (NIST FIPS 204, post-quantum); "Check my record" names any
+    sealed record changed or deleted since, even straight in the database.
+    PLAN_offline_mesh.txt: the BitChat idea in steps (not built).
 
 NEXT (all approved 26 Sep; see the DECISION lines)
   - after Sunday: crew on a job, short videos, "ask for more" (counter-offer)

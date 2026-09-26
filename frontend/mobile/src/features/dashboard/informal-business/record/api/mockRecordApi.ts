@@ -13,7 +13,7 @@ import { ordersApi } from '@/features/dashboard/informal-business/orders/api/ord
 import { evidenceOf } from '@/features/dashboard/informal-business/orders/lib/evidence';
 
 import { addMonths, inMonth, thisMonth } from '../lib/months';
-import type { RecordApi, RecordSummary } from '../types';
+import type { RecordApi, RecordSeal, RecordSummary } from '../types';
 
 /** The sample account is a few months old. */
 const MONTHS_BACK = 5;
@@ -56,10 +56,54 @@ export async function summarise(month: string): Promise<RecordSummary> {
   };
 }
 
+/** How many records the sample tools hold (credit given, repayments, confirmed stages): what a seal would cover. */
+async function sampleRecords(): Promise<number> {
+  const [open, closed, jobs] = await Promise.all([
+    creditBookApi.list().catch(() => []),
+    creditBookApi.history('').catch(() => []),
+    jobsApi.list().catch(() => []),
+  ]);
+  const entries = [...new Map([...open, ...closed].map((e) => [e.id, e])).values()];
+  const details = await Promise.all(entries.map((e) => creditBookApi.get(e.id).catch(() => null)));
+  const repayments = details.reduce((n, d) => n + (d?.history ?? []).filter((h) => h.type === 'repayment').length, 0);
+  const confirmed = jobs.flatMap((j) => j.stages).filter((s) => s.status === 'confirmed').length;
+  return entries.length + repayments + confirmed;
+}
+
 export const mockRecordApi: RecordApi = {
   async summary(month) {
     const m = month ?? thisMonth();
     if (m > thisMonth() || m < addMonths(thisMonth(), -MONTHS_BACK)) throw new Error("That month can't be shown.");
     return summarise(m);
+  },
+  // Sample data: nothing is signed or fingerprinted here, and the seal says so (mock: true).
+  async seal() {
+    const count = await sampleRecords();
+    const seal: RecordSeal = {
+      v: 1,
+      alg: ['Ed25519', 'ML-DSA-65'],
+      business: 'sample',
+      sealed_at: new Date().toISOString().slice(0, 19) + '+00:00',
+      count,
+      root: '0'.repeat(64),
+      leaves: [],
+      sig: { ed25519: 'sample', ml_dsa_65: 'sample' },
+      key_ids: { ed25519: '0'.repeat(16), ml_dsa_65: '0'.repeat(16) },
+      mock: true,
+    };
+    return seal;
+  },
+  async check(seal) {
+    const now = await sampleRecords();
+    return {
+      intact: true,
+      signatures: { ed25519: 'valid', mlDsa65: 'valid' },
+      sealedAt: seal.sealed_at,
+      sealed: seal.count,
+      unchanged: seal.count,
+      changed: [],
+      missing: [],
+      addedSince: Math.max(0, now - seal.count),
+    };
   },
 };

@@ -1,0 +1,529 @@
+===========================================================================
+BRIEFING 2 -- QUESTIONS WE MAY GET, AND HOW TO ANSWER
+For Mandla and Risuna: the 3-minute pitch, the top-12 demo (5 minutes +
+3 minutes of Q&A), mentors and judges in the room.
+Every answer matches what is built on main (2cf38b0, Sat 26 Sep 22:00).
+Where something isn't built, the answer says so. The technical detail
+behind each answer is in 01_HOW_IT_WORKS.txt (section numbers in [ ]).
+===========================================================================
+
+  A. Ground rules for answering
+  B. Do NOT claim these (older drafts say them; they're not built)
+  C. Numbers to know
+  D. Problem and users                      (business + presentation 15)
+  E. Innovation                                          (innovation 15)
+  F. How it's built                                       (technical 15)
+  G. Ease of use and design                    (usability + design 10)
+  H. Security, privacy and ethics                 (security + ethics 10)
+  I. Money: who pays, costs, the ask        (business + presentation 15)
+  J. Quantum                                                  (bonus 5)
+  K. The mentor's three questions (Pratish Neerputh, Tevo, on Sonke)
+  L. Hard questions
+  M. If the demo breaks
+
+
+---------------------------------------------------------------------------
+A. GROUND RULES FOR ANSWERING
+---------------------------------------------------------------------------
+
+  - One or two sentences first, then stop. Offer more: "Want the detail?"
+  - Never claim what isn't built. "Designed, and it's next" is a strong
+    answer; a claim a judge can check and break is not.
+  - Always say "spaza shops and builders" (and other informal
+    businesses). Never "street vendors".
+  - Not a marketplace: we recommend SUPPLIERS, never products.
+  - Only a digital payment verified by the payment provider is proof.
+    Cash is at most "confirmed by both". The tools are the business's own
+    record. Never add them together; never say "proof" about tool data.
+  - "Where": nationwide, all nine provinces. The demo places (Tembisa,
+    Isekelo, Polokwane) are test data.
+  - Don't know? "I don't have that number with me; what I can tell you
+    is ..." -- then something true.
+  - Split the room: Mandla takes the business, the supplier side and
+    payments; Risuna takes the tools, the engine signals and security
+    details. Hand over by name ("Risuna built that part").
+
+
+---------------------------------------------------------------------------
+B. DO NOT CLAIM THESE (older drafts say them; they're not built)
+---------------------------------------------------------------------------
+
+  "Suppliers get orders straight into their own systems"
+    NOT BUILT. Say: "Suppliers load their catalogues from a file today;
+    the API for their own systems is designed and it's next. In the demo
+    we play the supplier." [5.4, 11]
+  "Share your record with a funder, and revoke it"
+    NOT BUILT (proof/share is empty). Say it as the roadmap.
+  "Post-quantum secure" / "quantum-proof"
+    Too broad. What's true (sealed-records PR): record SEALS are signed
+    with ML-DSA-65 (NIST FIPS 204) as well as Ed25519. Say "post-quantum
+    signed seals". See section J.
+  "Bluetooth mesh" / "works with no signal" (beyond the order book)
+    NOT BUILT. Designed in PLAN_offline_mesh.txt; the order book already
+    works offline. See section D.
+  "Verified company (CIPC check)" as live
+    It's a sandbox check; "Get verified" shows as coming soon. [5.2]
+  "One trusted phone per account"
+    Not how it works: every NEW phone needs a code by email; trusted
+    phones are listed and can be removed. [5.1]
+  "Both sides confirm the cash" on ORDERS
+    Not yet: that's "I paid the cash" (Mandla, in progress). Today an
+    order's cash shows "not confirmed". It IS built for jobs (the client
+    types what they paid) and for partner pay (both confirm). [5.5]
+  "Download my data / delete my account" in the app
+    Built and tested on the server; the app shows "coming soon". [8]
+  "Records can't be changed" (in general)
+    Say exactly what: after the owner SEALS their record, any change or
+    deletion of a sealed record is caught -- even one made straight in
+    our database [5.10]; corrections add a line and keep the old one; the
+    audit trail can't be edited (database triggers); every invoice has a
+    QR check; stage photos carry the server's time and fingerprint. [7]
+  Split payouts to suppliers, automated refunds, full offline, other
+  languages, Google sign-in, malware scanning -- all "next", not live.
+
+
+---------------------------------------------------------------------------
+C. NUMBERS TO KNOW
+---------------------------------------------------------------------------
+
+  The problem (Lean Canvas sources)
+    township economy about R900 billion a year, R180 billion through
+    spaza shops; about 80% of township businesses unregistered; fewer
+    than 9% can get a bank loan; 57% survive on personal savings
+    (Standard Bank, 2025). Spaza Shop Support Fund: R500 million, only
+    R179.6 million reached shops by May 2026; 354 applications failed
+    verification (DSBD, 2026).
+  The money
+    businesses: free, always, for the core tools
+    suppliers: Starter R299/month, Pro R1,499/month, ERP integration
+      R4,999/month + R15,000 setup (later); about 1% on digital orders,
+      none on cash
+    running costs: about R460/month in the pilot; R4,000-R4,700/month at
+      growth; Google Play R415 once
+    break-even (est.): 2 suppliers on Starter in the pilot; about 4 on
+      Pro at growth
+    the ask: R300,000 for a 6-month pilot (field agent, stipends for
+      pilot businesses, data bundles, running costs, POPIA legal review,
+      external security test, test devices, contingency)
+    pilot targets (est.): 2 suppliers and the 50-100 businesses they
+      serve; 60% active weekly; 30% of their orders in the app; 50% of
+      in-app orders digital; under 1% disputed. Year 1: 1,000 active
+      businesses, 15 paying suppliers, about R55,000 a month
+  The build
+    about 1,280 backend tests and 204 app tests, run before every merge
+    11 demo suppliers, about 1,670 products; 11 builder trades
+    engine score: fit 40 + reach 35/25 + closeness 10 + pay 10 +
+      minimum 5; tools' demand = half of fit, only ever lifts
+    cash: R1,000 per order, 2 waiting; digital lapses unpaid after 24 h
+    sessions: 15-minute access, 30-day rotating refresh
+    lockout: 5 wrong passwords, 15 minutes; codes expire in 15 minutes
+
+
+---------------------------------------------------------------------------
+D. PROBLEM AND USERS
+---------------------------------------------------------------------------
+
+  Q: Who exactly is this for?
+  A: Spaza shops and builders first -- and other informal businesses --
+     on Android, mostly cash, buying from 2-5 regular suppliers, in all
+     nine provinces. The businesses use it free; the suppliers who serve
+     them pay.
+
+  Q: Why would a spaza owner use this instead of a notebook and WhatsApp?
+  A: It does the notebook's job faster -- who owes me, with a reminder
+     that opens their own WhatsApp -- and they can order from the
+     suppliers they already use, with an invoice and a receipt. It's
+     free, and the history builds itself as they work.
+     If they push: the order book works with no signal; balances are
+     hidden when the app opens, so it's safe at the counter.
+
+  Q: And a builder?
+  A: Jobs in stages the client signs off from a link -- no app, no
+     account -- with camera-only stage photos. It ends "you said you'd
+     pay, I say you didn't" arguments, and they can bring in a partner
+     with the pay agreed up front.
+
+  Q: Have you spoken to real users?
+  A: Say only what really happened: who, how many, what they said. If
+     not yet at scale: "Not at scale. The pilot starts with two suppliers
+     and the 50-100 businesses they already serve -- that's our first
+     real test."
+
+  Q: Data costs? Bad signal?
+  A: Light by design: small requests, images resized before they reach
+     the phone, alerts checked only while the app is open. The order
+     book works offline and sends once the signal is back, without
+     double orders.
+     If they push: full offline for every tool (an encrypted store on
+     the phone) is next.
+
+  Q: What about places with no signal at all? Something like BitChat's
+     Bluetooth mesh?
+  A: The order book already works with no signal and sends later without
+     double orders. Phone to phone, we've designed it in steps: records
+     signed on the phone, a cash hand-over done by scanning QR codes with
+     no network, then Bluetooth between two phones, then a BitChat-style
+     mesh that carries sealed, signed records to whoever has signal. The
+     server re-checks everything when it arrives.
+     If they push "why not tonight?": Bluetooth needs a native module and
+     a custom build, and a mesh has to be tested on several phones -- a
+     radio demo that drops on stage helps nobody. The integrity layer it
+     needs, sealed records, is built.
+
+  Q: Languages? People who don't read English well?
+  A: English only today, written the way traders speak, with icons and
+     big buttons. Other South African languages are on the roadmap.
+
+
+---------------------------------------------------------------------------
+E. INNOVATION
+---------------------------------------------------------------------------
+
+  Q: Isn't this just another marketplace or point-of-sale app?
+  A: No. We never sell or push products; we help a business work with
+     the suppliers it already trusts. What's new: the everyday tools
+     privately tell the supplier engine what the business needs NOW.
+     A builder with plumbing stages open sees plumbing suppliers rise,
+     with "Your open jobs need plumbing" on screen.
+
+  Q: How does the recommendation work? Is it AI?
+  A: It's a clear formula, not a black box: what you buy, whether they
+     reach you, how close, how you pay, whether their minimum fits your
+     spend -- plus what your tools say you need now. Every supplier is
+     ranked with its reasons; nobody is hidden and nobody pays to rank
+     higher. [5.3]
+     If they push "why not machine learning?": we have no data yet, and
+     traders trust what they can read. When there's data, the model can
+     learn the weights -- and still show its reasons.
+
+  Q: Competitors?
+  A: Each does one slice: Spazapp (bulk buying), Kasi App (point of
+     sale), iKhokha (card payments), Kazang and Flash (airtime and
+     electricity float), Kasi Money (banking), HustleCheck (reviews). We
+     join the everyday tools to the business's own suppliers, and we're
+     honest about what each rand is backed by.
+
+  Q: What stops a big player copying you?
+  A: The data only exists because the tools are used every day, and it
+     stays private to the business; the trust that comes from honest
+     labels; the suppliers we onboard; and building for cash-first,
+     low-signal businesses from day one.
+
+
+---------------------------------------------------------------------------
+F. HOW IT'S BUILT
+---------------------------------------------------------------------------
+
+  Q: Walk us through the architecture.
+  A: A React Native app (Expo, TypeScript) talks over HTTPS to our own
+     API (Python, Flask) and a PostgreSQL database. The backend is split
+     into areas -- identity, the business tools, suppliers, commerce,
+     notifications -- and a test fails the build if one area reaches into
+     another's data. PayFast, Cloudinary, Mapbox and email sit behind
+     one module each. [2, 3]
+
+  Q: How do you know it works?
+  A: About 1,240 backend and 196 app tests, run before every merge --
+     including attacks: injection, broken input, one business trying to
+     read another's data, forged payment notices. They found real bugs,
+     which we fixed. [9]
+
+  Q: How does it scale?
+  A: The API is stateless, so it runs behind a load balancer on more
+     servers; the database is a managed PostgreSQL. What changes at
+     scale: rate limits move to a shared store (Redis), background work
+     to a proper worker queue, and the engine caches its results. The
+     pilot costs about R460 a month to run.
+
+  Q: Why your own backend and not Firebase or a no-code tool?
+  A: Money, stock and proof rules have to live on a server we control:
+     the phone never sets a price or a "paid", and the audit trail can't
+     be edited. A relational database gives us constraints, atomic stock
+     and triggers, and we can host in South Africa for POPIA.
+
+  Q: How do suppliers get on?
+  A: Their catalogue comes in as a file (a profile plus a product
+     spreadsheet), checked row by row: prices, barcodes, no spreadsheet
+     formulas, images only from our own image service. 11 suppliers and
+     about 1,670 products in the demo. [5.4, 7]
+
+  Q: How does a supplier receive and accept an order?
+  A: Honest answer: in production, from their own system through our
+     supplier API -- which is designed, not built. In the demo we move
+     the order as the supplier would. The buyer's side, payment and
+     documents are real. [5.4]
+
+  Q: What if two phones use one account? What if the signal drops mid-order?
+  A: Each phone has its own session. "Place order" carries a key, so a
+     retry returns the first order instead of making a second one. Order
+     book orders made offline carry the phone's own id, kept unique per
+     business, so a resend lands once.
+
+
+---------------------------------------------------------------------------
+G. EASE OF USE AND DESIGN
+---------------------------------------------------------------------------
+
+  Q: Won't all this security confuse non-technical users?
+  A: Most of it is invisible. On a phone they've used before, the
+     password is enough -- the email code only comes on a new phone. A
+     client confirms a stage from a WhatsApp link with no account and no
+     app. Plain words, no jargon.
+
+  Q: Why are the balances hidden?
+  A: A shop owner opens the app at the counter, in front of customers.
+     Amounts stay hidden until they tap the eye, and the choice is
+     remembered on that phone only.
+
+  Q: Why tools you switch on?
+  A: A spaza doesn't need jobs; a builder doesn't need an order book.
+     They switch on what their business uses, and can change it any time.
+
+  Q: Accessibility?
+  A: Buttons carry screen-reader labels and the tap targets are big
+     (44 points). A full accessibility review is on the list.
+
+
+---------------------------------------------------------------------------
+H. SECURITY, PRIVACY AND ETHICS
+---------------------------------------------------------------------------
+
+  Q: How do you protect accounts?
+  A: Passwords hashed with bcrypt, lockout after 5 tries, a code by email
+     on any new phone, 15-minute sessions that renew with one-time
+     tokens -- reuse one and the session ends. Nobody can find out which
+     emails have accounts. [5.1]
+
+  Q: What if a phone is stolen?
+  A: The thief still needs the password; amounts are hidden by default.
+     From another phone the owner removes the trusted phone or changes
+     the password, which ends every session at once.
+
+  Q: Can one business see another's data?
+  A: No. Every query is limited to the signed-in business, ids are
+     random, and someone else's record answers "not found", exactly like
+     one that doesn't exist. Tested for every feature. [7]
+
+  Q: Can someone fake a payment?
+  A: An order is marked paid only when PayFast's own server tells us --
+     and that message must pass four checks: our signature, PayFast's
+     servers, the exact amount, and PayFast confirming it when we ask
+     back. The phone can't send a price or a "paid". [5.5]
+
+  Q: Do you store card details?
+  A: Never. The buyer pays on PayFast's own page; we keep the amount,
+     the status and PayFast's reference -- the smallest card-security
+     scope a merchant can have.
+
+  Q: The business can type anything into its books. Isn't the record
+     worthless?
+  A: That's exactly why we never call it proof. Only a digital payment
+     PayFast verified is proof; cash is "confirmed by both" at best; the
+     credit book and jobs say "your own record". They're shown apart and
+     never added together. [6]
+
+  Q: POPIA?
+  A: We collect only what a feature needs or what can be checked;
+     consent is recorded at sign-up; customers' names never leave the
+     business's own books; the engine uses totals, not people; no names
+     or numbers in alerts or logs; export and account closure are built
+     on the server; South African hosting at launch; a POPIA legal
+     review is in our ask. [8]
+
+  Q: What if your database leaks?
+  A: No card data at all; passwords only as bcrypt hashes; codes and
+     link tickets only as hashes. What would leak is business details
+     and names in the books -- so access is tight, the audit trail can't
+     be edited, and the incident plan is: revoke sessions, rotate keys,
+     tell the people affected and the Information Regulator (POPIA
+     section 22).
+
+  Q: Couldn't this be used against traders -- lenders, tax, suppliers
+     squeezing them?
+  A: The owner owns the record. Nothing is shared without them -- when
+     sharing comes, it's their choice and they can take it back.
+     Suppliers never see customers' names or the business's books, and
+     can't pay to rank higher. The core tools stay free.
+
+  Q: How much of this did AI write? Can you trust it?
+  A: We used AI assistance and say so. Every change goes through a
+     branch, a review by a team member and the full test suite before
+     merge, under written security rules. We can explain any part of it.
+
+  Q: Can you show that a business's records weren't changed later --
+     even by you?
+  A: Yes. The owner taps "Seal my record": we fingerprint every record
+     in their tools, build a Merkle tree and sign the root twice -- Ed25519
+     and ML-DSA-65, the NIST post-quantum standard. The owner keeps the
+     seal; we keep no copy. "Check my record" names any record changed or
+     deleted since -- even if the change was made straight in our
+     database -- and our public keys are published so anyone can check a
+     seal without us. [5.10]
+     If they push: a seal proves nothing changed since sealing, not that
+     the records are true. Proof of payment is still only PayFast's.
+
+  Q: What was your best security catch?
+  A: Behind a proxy, every caller looks like one address -- one attacker
+     could use up everyone's sign-in attempts, and the audit trail
+     trusted a header anyone can fake. We fixed it with one trusted
+     client-address helper and 19 tests. Also: deeply nested JSON
+     crashed every route, found by our own hostile tests, fixed.
+
+
+---------------------------------------------------------------------------
+I. MONEY: WHO PAYS, COSTS, THE ASK
+---------------------------------------------------------------------------
+
+  Q: Who pays, and how much?
+  A: Businesses never pay for the core tools. Suppliers pay R299 or
+     R1,499 a month, plus about 1% on digital orders through the app --
+     nothing on cash. Integration with a supplier's own system comes
+     later at R4,999 a month plus setup.
+
+  Q: Why would a supplier pay?
+  A: More orders from the shops and builders they already serve, placed
+     properly: priced from their catalogue, with invoices and receipts
+     done for them, cash orders capped (a fake order can't cost them
+     much), and digital payments confirmed by PayFast. Nearby businesses that buy
+     what they sell see them ranked honestly -- they can't buy a better
+     spot.
+
+  Q: How will you get users?
+  A: Through the suppliers: each one brings the businesses it already
+     serves -- at the counter, on the driver's route, on its invoices. A
+     business can also invite the suppliers it buys from, and builders
+     bring partners onto jobs.
+
+  Q: Costs and break-even?
+  A: About R460 a month to run the pilot; two suppliers on Starter
+     cover it. At growth about R4,000-R4,700 a month, about four on Pro.
+
+  Q: What's the R300,000 for?
+  A: A 6-month pilot: a field agent, small stipends and data bundles for
+     the pilot businesses, running costs, a POPIA legal review, an
+     external security test, test phones, and a contingency.
+
+  Q: How will you know the pilot worked?
+  A: 60% of the pilot businesses active every week, 30% of their orders
+     to the pilot suppliers placed in the app, half of those paid
+     digitally, and under 1% disputed.
+
+  Q: Who pays PayFast's fees?
+  A: PayFast charges its own fee on digital payments; our 1% is
+     separate, and cash carries no fee from us. (If pressed on the exact
+     split, say it's being set with the pilot suppliers.)
+
+
+---------------------------------------------------------------------------
+J. QUANTUM
+---------------------------------------------------------------------------
+
+  Q: Where's the quantum in this?
+  A: Record seals are signed with ML-DSA-65, the NIST post-quantum
+     signature standard (FIPS 204), alongside Ed25519. A business's
+     records must stay checkable for years -- tax law keeps them five --
+     and a quantum computer that could forge Ed25519 couldn't forge
+     ML-DSA. Signing with both means a seal stays checkable if either
+     scheme ever falls. Show it: seal, change one number in the database,
+     check -- it names the record. [5.10]
+     (Only if the sealed-records pull request is merged. If it isn't,
+     say: "outlined, and built on a branch".)
+     If they push on speed: pure Python, about 85 ms to sign and 13 ms to
+     check; keys are derived from one server secret with HKDF.
+     If they push on transport: Cloudflare's tunnel already prefers the
+     hybrid post-quantum key exchange X25519MLKEM768 -- we saw it in our
+     tunnel logs -- and our launch plan puts the API behind Cloudflare.
+     Don't say: "post-quantum secure", "quantum-proof", or that we use
+     quantum computing.
+
+
+---------------------------------------------------------------------------
+K. THE MENTOR'S THREE QUESTIONS (Pratish Neerputh, Tevo, on Sonke)
+---------------------------------------------------------------------------
+
+  Q: Is the payment integration fully working and tested?
+  A: Yes, in the PayFast sandbox: PayFast's own payment page; paid only
+     after PayFast's notice passes four checks; the order confirms itself;
+     invoice and receipt with a QR check. Automated tests cover every
+     forged case. The demo payment runs through a tunnel to the laptop --
+     check it's up before the demo. Paying suppliers directly (split
+     payments) is built behind a switch and comes after the hackathon.
+
+  Q: The supplier integration API is incomplete -- how will you finish it?
+  A: True, and we say so. Catalogues come in as files today (what older
+     systems can export). The API is designed -- a key per supplier,
+     orders pulled into their system, status updates, signed order alerts
+     -- and it's the first thing after the hackathon, starting with the
+     pilot suppliers' own systems.
+
+  Q: Does the security make it hard for non-technical users?
+  A: See G: the code only on a new phone, client sign-off with no
+     account, the order book offline, plain words, hidden balances.
+     Google sign-in (built on the server) comes next, so there's no
+     password to remember.
+
+
+---------------------------------------------------------------------------
+L. HARD QUESTIONS
+---------------------------------------------------------------------------
+
+  Q: Your demo shows a sandbox. What's actually live?
+  A: The whole buyer side runs on our real server: sign-up, suppliers,
+     ordering, PayFast's sandbox payment with the real checks, invoices,
+     receipts, and every business tool. Simulated: the supplier moving
+     the order, and the company check. Not built: the supplier API and
+     record sharing.
+
+  Q: Why should a funder trust a record from your app?
+  A: They should trust exactly what we label: PayFast-verified payments
+     are independent proof; cash confirmed by both shows both sides
+     agreed; the rest is the owner's own record. We never mix them --
+     that honesty is the product.
+
+  Q: What happens when a supplier and a business disagree about cash?
+  A: Until both sides confirm, cash stays "not confirmed" and never
+     counts as proof. For orders, the two-sided confirmation ("I paid the
+     cash") is being finished now. For jobs it's built: the client types
+     what they paid, and if it differs the stage says "Amounts don't
+     match".
+
+  Q: What's your biggest risk?
+  A: Getting suppliers to pay. That's why onboarding runs through them,
+     the pilot starts with two, and they break even for us early.
+     Second: trust in cash records -- which is why we label them
+     honestly.
+
+  Q: What would you build next with more time?
+  A: The supplier API, split payouts to suppliers, sharing a sealed
+     record with a funder (owner-approved, revocable), the offline
+     hand-over (QR, then Bluetooth), and South African languages.
+
+  Q: Who are you, and why you?
+  A: Two developers who built and tested all of this in the hackathon,
+     with a security-first process; the team won LP Dev DataQuest 2026.
+
+
+---------------------------------------------------------------------------
+M. IF THE DEMO BREAKS
+---------------------------------------------------------------------------
+
+  Before going on stage
+    - Backend running; the tunnel up; the backend's public address
+      matches the tunnel (a quick tunnel changes its address when it
+      restarts -- ours expired on Saturday night).
+    - Sign in on the demo phone beforehand, so no email code is needed
+      on stage (a trusted phone skips it).
+    - Seed data loaded (suppliers, builders, the tools demo).
+    - A terminal ready with `flask orders move AKZ-2026-... accepted`.
+    - For the tamper moment: seal on the phone first; then
+      `flask tools tamper --me EMAIL`, then "Check my record".
+    - The recorded demo clips on the laptop as a backup.
+
+  During
+    - Payment page won't open: "The payment runs on PayFast's page; here
+      is the confirmed result" -- switch to the recorded clip.
+    - No signal: the order book works offline -- show it; or run the app
+      in mock mode (EXPO_PUBLIC_USE_MOCK_API=true), which shows every
+      screen on sample data (no real payment).
+    - Something odd: say what it should do and move on. Never pretend
+      it worked.
