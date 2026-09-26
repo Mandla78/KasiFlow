@@ -103,10 +103,20 @@ class BaseConfig:
     # Development: the PC's Wi-Fi address (like the app's API URL). Production: https.
     APP_BASE_URL = os.environ.get("APP_BASE_URL", "http://localhost:5000").rstrip("/")
 
+    # PayFast (docs/supplier/07). sandbox or live; the key and passphrase
+    # never leave the server. PAYFAST_TRUST_PROXY: behind a tunnel or load
+    # balancer, take PayFast's address from the last X-Forwarded-For entry
+    # (the one our own proxy added) instead of the direct connection.
+    PAYFAST_MODE = os.environ.get("PAYFAST_MODE", "sandbox")
+    PAYFAST_MERCHANT_ID = os.environ.get("PAYFAST_MERCHANT_ID", "").strip()
+    PAYFAST_MERCHANT_KEY = os.environ.get("PAYFAST_MERCHANT_KEY", "").strip()
+    PAYFAST_PASSPHRASE = os.environ.get("PAYFAST_PASSPHRASE", "").strip()
+    PAYFAST_TRUST_PROXY = _bool("PAYFAST_TRUST_PROXY", "false")
+
     # The legal document versions a new account must accept. Must match the
     # app's content/legal files; bump both when a document changes.
-    PRIVACY_POLICY_VERSION = os.environ.get("PRIVACY_POLICY_VERSION", "0.1-draft")
-    TERMS_VERSION = os.environ.get("TERMS_VERSION", "0.1-draft")
+    PRIVACY_POLICY_VERSION = os.environ.get("PRIVACY_POLICY_VERSION", "0.2-draft")
+    TERMS_VERSION = os.environ.get("TERMS_VERSION", "0.2-draft")
 
     # Continue with Google: the OAuth client IDs our app uses (Android and
     # web), comma-separated. A Google token is only accepted if it was

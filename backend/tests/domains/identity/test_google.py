@@ -7,7 +7,7 @@ import pytest
 from src.domains.identity.auth.services import google_verifier
 from src.domains.identity.auth.services.google_verifier import GoogleClaims, InvalidGoogleToken
 
-CONSENT = {"privacy_version": "0.1-draft", "terms_version": "0.1-draft"}
+CONSENT = {"privacy_version": "0.2-draft", "terms_version": "0.2-draft"}
 NOMSA = "google-token-for-nomsa-xxxxxxxxxxxx"
 PASSWORD = "Spaza2026!"
 
@@ -83,5 +83,5 @@ def test_bad_google_token_is_rejected(client, fake_google):
 
 
 def test_outdated_consent_rejected_on_google_path(client, fake_google):
-    r = google(client, consent={"privacy_version": "0.0-old", "terms_version": "0.1-draft"})
+    r = google(client, consent={"privacy_version": "0.0-old", "terms_version": "0.2-draft"})
     assert r.status_code == 422 and r.get_json()["code"] == "CONSENT_OUTDATED"

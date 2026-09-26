@@ -282,7 +282,8 @@ SATURDAY = {"days": "sat", "open": "08:00", "close": "13:00"}
 #   Mankweng / Polokwane (Limpopo): near the University of Limpopo (Turfloop)
 #   Ga-Rankuwa / Soshanguve (Pretoria): near Sefako Makgatho University
 NEAR_TEAM = [
-    dict(slug="mokgalaka-wholesale", external_id="MOKGALAKA-001", trading_name="Mokgalaka Wholesale", color="#1F4E3D",
+    # Registered for VAT (fictional number): its invoices are TAX invoices.
+    dict(slug="mokgalaka-wholesale", external_id="MOKGALAKA-001", trading_name="Mokgalaka Wholesale", color="#1F4E3D", vat="4999000012",
          about="Groceries, drinks and cleaning stock for spaza shops around Mankweng and Turfloop.",
          street="Unit 4, Mankweng Main Road", suburb="Mankweng", city="Polokwane", postal="0727", province="Limpopo",
          lat=-23.8712, lng=29.7154, hours=[WEEKDAYS, SATURDAY], radius=20, fee=4000, free_over=150000, collect=True,
@@ -406,7 +407,7 @@ def supplier_json(s: dict, images: dict[str, str]) -> dict:
         "trading_name": s["trading_name"],
         "legal_name": f"{s['trading_name']} (Pty) Ltd",
         "about": s["about"],
-        "vat_number": None,
+        "vat_number": s.get("vat"),
         "orders_email": f"orders@{s['slug']}.example.com",
         "phone": None,
         "brand_color": s["color"],

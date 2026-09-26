@@ -1,0 +1,15 @@
+Payment received
+
+Thank you{% if business %}, {{ business }}{% endif %}. Your payment is confirmed and your order is on its way to {{ supplier }}.
+
+Order:  {{ reference }}
+Paid:   {{ total }}
+Method: Digital payment (PayFast){% if provider_reference %}, ref {{ provider_reference }}{% endif %}
+{{ fulfilment_label }}: {{ address }}
+
+{% for line in lines %}{{ line.qty }} x {{ line.name }} ({{ line.pack }})  {{ line.total }}
+{% endfor %}{% if delivery %}Delivery  {{ delivery }}
+{% endif %}
+Your invoice and payment receipt are in the app under My orders -> {{ reference }}.
+
+-- Akayza. We will never ask for your password or card details.

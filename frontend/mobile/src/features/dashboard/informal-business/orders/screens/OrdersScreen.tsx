@@ -6,17 +6,19 @@ import { Button } from '@/shared/components/Button';
 import { Card } from '@/shared/components/Parts';
 import { Screen } from '@/shared/components/Screen';
 import { Overline, Title } from '@/shared/components/Text';
+import { formatRand } from '@/shared/lib/money';
 import { colors, fonts } from '@/shared/theme/tokens';
 
 import { ordersApi } from '../api/ordersApi';
 import { OrderRow } from '../components/OrderRow';
 import { isActive } from '../lib/status';
-import type { Order } from '../types';
+import type { MoneySummary, Order } from '../types';
 
 /** My orders: active first, then the rest. */
 export default function OrdersScreen() {
   const [orders, setOrders] = useState<Order[] | null>(null);
   const [failed, setFailed] = useState(false);
+  const [money, setMoney] = useState<MoneySummary | null>(null);
 
   useFocusEffect(
     useCallback(() => {
@@ -24,6 +26,10 @@ export default function OrdersScreen() {
         .list()
         .then(setOrders)
         .catch(() => setFailed(true));
+      ordersApi
+        .summary()
+        .then(setMoney)
+        .catch(() => setMoney(null));
     }, []),
   );
 
@@ -41,6 +47,15 @@ export default function OrdersScreen() {
           <Text style={styles.muted}>No orders yet. Find a supplier and order your stock.</Text>
           <Button title="Find suppliers" variant="secondary" onPress={() => router.push('/informal-business/suppliers')} />
         </View>
+      ) : null}
+      {money && orders && orders.length ? (
+        // Kept apart on purpose: only digital payments are verified by a
+        // payment provider. Cash is what both sides said. Never one total.
+        <Card style={{ gap: 10 }}>
+          <MoneyRow label="Paid digitally" note="Verified by PayFast" cents={money.providerVerifiedCents} count={money.providerVerifiedOrders} tone={colors.jade} />
+          <MoneyRow label="Cash, confirmed by both" note="You and the supplier both confirmed it" cents={money.confirmedByBothCents} count={money.confirmedByBothOrders} tone={colors.accentDeep} />
+          <MoneyRow label="Cash, not confirmed yet" note="Not proof of payment until you both confirm" cents={money.notConfirmedCents} count={money.notConfirmedOrders} tone={colors.marigoldDeep} />
+        </Card>
       ) : null}
       {active.length ? (
         <>
@@ -66,6 +81,26 @@ export default function OrdersScreen() {
   );
 }
 
+function MoneyRow({ label, note, cents, count, tone }: { label: string; note: string; cents: number; count: number; tone: string }) {
+  return (
+    <View style={styles.moneyRow}>
+      <View style={[styles.dot, { backgroundColor: tone }]} />
+      <View style={{ flex: 1 }}>
+        <Text style={styles.moneyLabel}>{label}</Text>
+        <Text style={styles.small}>
+          {note} · {count} {count === 1 ? 'order' : 'orders'}
+        </Text>
+      </View>
+      <Text style={styles.moneyValue}>{formatRand(cents)}</Text>
+    </View>
+  );
+}
+
 const styles = StyleSheet.create({
   muted: { fontFamily: fonts.body, fontSize: 13.5, lineHeight: 19, color: colors.textMuted },
+  moneyRow: { flexDirection: 'row', alignItems: 'center', gap: 10 },
+  dot: { width: 10, height: 10, borderRadius: 5 },
+  moneyLabel: { fontFamily: fonts.semibold, fontSize: 14, color: colors.text },
+  moneyValue: { fontFamily: fonts.bold, fontSize: 15, color: colors.ink },
+  small: { fontFamily: fonts.body, fontSize: 12, color: colors.textMuted },
 });

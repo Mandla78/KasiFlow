@@ -219,6 +219,54 @@ def supplier_move(order_id: uuid.UUID, to_status: str, *, note: Optional[str] = 
     return order
 
 
+def payable(user, order_id: uuid.UUID) -> Order:
+    """The trader's own order, if it can be paid now (awaiting payment, in time)."""
+    order = repo.for_user(user.id, order_id)
+    if order is None:
+        raise NotFoundError("We couldn't find that order.")
+    if order.status != "awaiting_payment" or (order.pay_by and order.pay_by <= utcnow()):
+        raise ConflictError("This order can't be paid any more.", code="NOT_PAYABLE")
+    return order
+
+
+def owned_order(user, order_id: uuid.UUID) -> Order:
+    """The trader's own order (for documents); not theirs = not found."""
+    order = repo.for_user(user.id, order_id)
+    if order is None:
+        raise NotFoundError("We couldn't find that order.")
+    return order
+
+
+def get_order(order_id: uuid.UUID) -> Optional[Order]:
+    """For documents opened from a signed link (no trader in the request)."""
+    return repo.by_id(order_id)
+
+
+def get_by_reference(reference: str) -> Optional[Order]:
+    """For the public "is this document genuine?" check."""
+    return repo.by_reference(reference)
+
+
+def get_for_payment(order_id: uuid.UUID) -> Optional[Order]:
+    """For the payments feature (no trader in the request): the order, locked."""
+    return repo.by_id(order_id, lock=True)
+
+
+def mark_paid(order: Order, provider_reference: str) -> bool:
+    """A verified payment arrived. A paid order is CONFIRMED at once: the
+    money is in, so there's nothing for the supplier to accept -- it goes
+    straight to their delivery (or collection) steps. Returns False if the
+    order is no longer waiting (paid already, or it lapsed: then the
+    payment is recorded and must be refunded). The caller commits."""
+    if order.status != "awaiting_payment":
+        return False
+    order.status = "accepted"
+    order.payment_status = "paid"
+    order.events.append(OrderEvent(status="accepted", actor="system", at=utcnow(), note="Paid"))
+    order_audit.record(E.ORDER_STATUS_CHANGED, order_id=order.id, reference=order.reference, status="accepted", actor="system", paid_with=provider_reference)
+    return True
+
+
 def expire_unpaid(now: Optional[datetime] = None) -> int:
     """Unpaid digital orders past their pay-by time lapse; their stock goes back."""
     now = now or utcnow()
@@ -241,6 +289,54 @@ def _close(order: Order, status: str, actor: str, note: Optional[str] = None) ->
 
 
 # --------------------------------------------------------------------- view
+
+#: The sale is firm from here: the invoice can be issued.
+_INVOICE_AFTER = ("accepted", "out_for_delivery", "ready_for_collection", "delivered", "collected")
+
+
+#: What stands behind an order's payment, strongest first. Never add them up
+#: together: only a provider-verified payment is independent proof; a cash
+#: record is what both sides said, and unconfirmed cash proves nothing yet.
+EVIDENCE = ("provider_verified", "confirmed_by_both", "not_confirmed", "none")
+
+
+def payment_evidence(o: Order) -> str:
+    if o.payment_method == "in_app":
+        # Refunded: the money went back, so it proves no sale.
+        return "provider_verified" if o.payment_status == "paid" else "none"
+    if o.payment_status == "confirmed_by_both":
+        return "confirmed_by_both"
+    return "none" if o.status in CLOSED_WITHOUT_SALE else "not_confirmed"
+
+
+def money_summary(user) -> dict:
+    """The trader's order money, kept apart by what backs it (never one total)."""
+    totals = {k: 0 for k in EVIDENCE if k != "none"}
+    counts = {k: 0 for k in totals}
+    for o in repo.all_for_user(user.id):
+        e = payment_evidence(o)
+        if e in totals:
+            totals[e] += o.total_cents
+            counts[e] += 1
+    return {
+        "provider_verified_cents": totals["provider_verified"],
+        "provider_verified_orders": counts["provider_verified"],
+        "confirmed_by_both_cents": totals["confirmed_by_both"],
+        "confirmed_by_both_orders": counts["confirmed_by_both"],
+        "not_confirmed_cents": totals["not_confirmed"],
+        "not_confirmed_orders": counts["not_confirmed"],
+    }
+
+
+def documents_ready(o: Order) -> dict[str, bool]:
+    """Invoice: once the order is confirmed (the supplier accepted a cash
+    order, or a digital order was paid -- which confirms it at once).
+    Receipt: once the money is confirmed (paid digitally, or cash confirmed by both)."""
+    return {
+        "invoice": o.status in _INVOICE_AFTER,
+        "receipt": o.payment_status in ("paid", "confirmed_by_both"),
+    }
+
 
 
 def view(o: Order) -> dict:
@@ -268,4 +364,6 @@ def view(o: Order) -> dict:
         "placed_at": o.placed_at.isoformat(),
         "pay_by": o.pay_by.isoformat() if o.pay_by else None,
         "events": [{"status": e.status, "at": e.at.isoformat()} for e in o.events],
+        "documents": documents_ready(o),
+        "evidence": payment_evidence(o),
     }

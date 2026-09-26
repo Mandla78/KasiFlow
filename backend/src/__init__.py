@@ -86,6 +86,7 @@ def _register_models() -> None:
     from src.domains.supplier.connections import models as _connections  # noqa: F401
     # commerce schema: orders between traders and suppliers
     from src.domains.commerce.orders import models as _orders  # noqa: F401
+    from src.domains.commerce.payments import models as _payments  # noqa: F401
     # platform schema: every media upload, start to finish
     from src.shared.media import models as _media  # noqa: F401
     # audit schema: the append-only audit trail
@@ -125,6 +126,14 @@ def _register_blueprints(app: Flask) -> None:
     from src.domains.informal_trader.jobs.web.sign_off_page import sign_off_page_bp
 
     app.register_blueprint(sign_off_page_bp)
+    # The pay pages (outside /api/v1: they match the pay links we hand out).
+    from src.domains.commerce.payments.web.pay_pages import pay_pages_bp
+
+    app.register_blueprint(pay_pages_bp)
+    # Order documents opened from a signed 10-minute link.
+    from src.domains.commerce.documents.web.document_pages import document_pages_bp
+
+    app.register_blueprint(document_pages_bp)
 
 
 def _register_error_handlers(app: Flask) -> None:

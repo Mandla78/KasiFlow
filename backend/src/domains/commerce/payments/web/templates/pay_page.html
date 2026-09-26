@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex">
+  <title>Secure payment · Akayza</title>
+  <style>
+    body { margin:0; background:linear-gradient(#E3EDF5,#F7FAFC); min-height:100vh; font-family:-apple-system,'Segoe UI',Roboto,Helvetica,Arial,sans-serif; color:#0F172A; }
+    .card { max-width:420px; margin:28px auto; padding:24px; background:#fff; border:1px solid #E2E8F0; border-radius:14px; }
+    .brand { font-size:22px; font-weight:800; letter-spacing:-0.5px; } .brand span { color:#2563EB; }
+    h1 { font-size:21px; margin:14px 0 8px; } p { font-size:15px; line-height:1.5; color:#334155; }
+    .amount { font-size:30px; font-weight:800; margin:6px 0 14px; }
+    button, .btn { display:block; width:100%; box-sizing:border-box; text-align:center; padding:15px; border-radius:12px; font-size:15.5px; font-weight:700; border:0; background:#2563EB; color:#fff; text-decoration:none; cursor:pointer; }
+    .muted { font-size:12.5px; color:#64748B; margin-top:14px; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div class="brand">akay<span>za</span></div>
+    {% if state == "redirect" %}
+      <h1>Pay for order {{ form.reference }}</h1>
+      <div class="amount">R{{ form.amount }}</div>
+      <p>You're going to PayFast's secure page to pay by card or instant EFT.</p>
+      <form id="pf" action="{{ form.action }}" method="post">
+        {% for name, value in form.fields.items() %}<input type="hidden" name="{{ name }}" value="{{ value }}">{% endfor %}
+        <button type="submit">Continue to secure payment</button>
+      </form>
+      <p class="muted">Akayza never sees your card details.</p>
+      <script>document.getElementById("pf").submit();</script>
+    {% elif state == "done" %}
+      <h1>Thank you</h1>
+      <p>We're confirming your payment{% if reference %} for order {{ reference }}{% endif %} with PayFast. Your order goes to the supplier as soon as it's confirmed, usually within a minute.</p>
+      <a class="btn" href="{{ app_link }}">Back to Akayza</a>
+    {% elif state == "cancelled" %}
+      <h1>Payment cancelled</h1>
+      <p>Nothing was paid{% if reference %} for order {{ reference }}{% endif %}. You can pay from the order in the app, within 24 hours of placing it.</p>
+      <a class="btn" href="{{ app_link }}">Back to Akayza</a>
+    {% else %}
+      <h1>This payment link doesn't work any more</h1>
+      <p>It was used, it expired, or the order can't be paid now. Open the order in the app to pay again.</p>
+      <a class="btn" href="{{ app_link }}">Back to Akayza</a>
+    {% endif %}
+  </div>
+</body>
+</html>

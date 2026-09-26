@@ -54,7 +54,27 @@ export type Order = {
   /** Digital orders: pay before this or the order lapses. */
   payBy?: string | null;
   events: OrderEvent[];
+  /** Which PDFs the server can issue now (the server decides). */
+  documents?: { invoice: boolean; receipt: boolean };
+  /** What backs the payment (see lib/evidence.ts). */
+  evidence?: Evidence;
 };
+
+/** Strongest first. Never added together: only a provider-verified payment
+ *  is independent proof; cash is what both sides said. */
+export type Evidence = 'provider_verified' | 'confirmed_by_both' | 'not_confirmed' | 'none';
+
+/** The trader's order money, kept apart by what backs it. */
+export type MoneySummary = {
+  providerVerifiedCents: Cents;
+  providerVerifiedOrders: number;
+  confirmedByBothCents: Cents;
+  confirmedByBothOrders: number;
+  notConfirmedCents: Cents;
+  notConfirmedOrders: number;
+};
+
+export type DocumentKind = 'invoice' | 'receipt';
 
 export type PlaceOrderInput = {
   supplierId: string;
@@ -85,4 +105,10 @@ export interface OrdersApi {
   list(): Promise<Order[]>;
   get(id: string): Promise<Order>;
   cancel(id: string): Promise<Order>;
+  /** A secure pay link for an unpaid digital order; null where there's no
+   *  payment provider (the mock). */
+  startPayment(id: string): Promise<string | null>;
+  /** A 10-minute link to the order's PDF; null where there are no documents (the mock). */
+  documentLink(id: string, kind: DocumentKind): Promise<string | null>;
+  summary(): Promise<MoneySummary>;
 }
