@@ -43,6 +43,64 @@ SECURITY REQUIREMENTS (RISK ASSESSMENT)
     says which products and how many.
 
 
+WHO WE PROTECT, AND ARE WE SECURING WHAT WE COLLECT? (data inventory)
+
+  We collect only what a feature needs or what can be officially checked,
+  and each item has an owner, a reason and a protection:
+
+  1. Our users: small businesses and informal traders
+     Collect: email, password, owner and business name, cellphone, address
+       and map point, CIPC number (optional), what they buy, consents.
+     Why: sign-in, delivery, supplier recommendations, company check.
+     Protect: password as a bcrypt hash only; every query limited to the
+       signed-in business; data export and account closure in the app;
+       sessions and trusted phones they can see and revoke.
+  2. Their customers (credit book)
+     Collect: a name and, optionally, a cellphone -- the business's own
+       data, used only to open WhatsApp on the business's own phone.
+     Protect: never shown to anyone else, never used by us for marketing
+       or recommendations; deleting a customer anonymises them.
+  3. Their clients (jobs)
+     Collect: a name and cellphone, to send a one-time sign-off link.
+     Protect: the client's page shows only that job's stage; the link is a
+       hashed, one-use, expiring ticket; revoked if the job is binned.
+  4. Counter customers (order book)
+     Collect: at most an optional first name for the queue; phone numbers
+       are refused by the server.
+  5. Suppliers (our paying customers)
+     Collect: business details, catalogue, prices, stock, orders email,
+       payout account, VAT number.
+     Protect: private fields never sent to the app (only what a buyer
+       needs); feeds checked row by row; only we can mark one verified.
+  6. People who pay by card
+     Collect: NOTHING about the card. We keep the amount, the status and
+       the payment provider's reference only.
+
+  Everywhere: TLS in transit; secrets hashed (bcrypt, HMAC-SHA256);
+  tokens in the phone's secure storage; no personal data, codes or links
+  in logs; audit events carry ids, never names or phone numbers;
+  unconfirmed sign-ups deleted after 7 days; records kept 5 years (tax
+  law), then deleted.
+
+
+CARD PAYMENTS (PCI DSS)
+
+  - We never see, send or store card numbers, expiry dates or CVV. The
+    buyer pays on the payment provider's own hosted page (PayFast, which
+    handles 3-D Secure and holds PCI DSS certification). This keeps card
+    data out of our systems entirely -- the smallest PCI DSS scope a
+    merchant can have.
+  - We never hold money: payments settle with the licensed provider.
+  - An order is marked paid only by the provider's verified notification
+    (four checks, see Spoofing); the buyer's phone returning from the
+    payment page proves nothing.
+  - Money with no independent point of reference is never presented as
+    real money: only a digital payment confirmed by the provider is
+    proof; cash is "confirmed by both" at best; entries in the business
+    tools are the business's own records. Every order, invoice, receipt
+    and total says which one it is.
+
+
 THREAT MODELLING & DESIGN REVIEW (STRIDE -- what is built)
 
   Spoofing
@@ -169,6 +227,33 @@ THREAT MODELLING & DESIGN REVIEW (STRIDE -- what is built)
     any other part of the system reaches into its internals.
 
 
+OWASP API SECURITY TOP 10 -- HOW EACH IS COVERED
+
+  API1 Broken object level authorization (IDOR): every query scoped to
+       the signed-in user; random UUIDs; "not yours" = 404; tested per
+       feature.
+  API2 Broken authentication: bcrypt, lockout, email code on a new phone,
+       15-minute tokens, rotating refresh tokens with reuse detection.
+  API3 Excessive data exposure / property-level authorization: explicit
+       response shapes per route; supplier private fields, product codes
+       and exact stock never leave the server.
+  API4 Unrestricted resource consumption: rate limits on every route,
+       1 MB bodies, JSON depth cap, upload quotas, 5 MB feed cap.
+  API5 Broken function level authorization: every route pins its caller
+       (business, supplier, public ticket); developer tools refuse to run
+       outside development.
+  API6 Sensitive business flows: server pricing, atomic stock, idempotent
+       orders, cash limits, payment confirmed only by the provider.
+  API7 Server-side request forgery: the server fetches no user-supplied
+       URL; image links accepted only from our own image service.
+  API8 Security misconfiguration: production refuses to start with weak
+       or missing secrets; security headers; no debug in production.
+  API9 Improper inventory management: one versioned API (/api/v1), every
+       route registered in one place; public pages listed and reviewed.
+  API10 Unsafe consumption of APIs: provider callbacks verified by
+       signature, sender, amount and time before we act on them.
+
+
 DEVELOPMENT (SECURE CODING PRACTICES)
 
   - SQL injection: all database access goes through SQLAlchemy with
@@ -195,7 +280,7 @@ DEVELOPMENT (SECURE CODING PRACTICES)
 
 SECURITY TESTING (automated, run before every merge)
 
-  - 1,052 backend tests and 147 app tests, including hostile-input suites
+  - 1,071 backend tests and 147 app tests, including hostile-input suites
     for identity, the credit book, jobs, the order book and the partner
     network: malformed and
     injected emails (SQL, CR/LF header injection, script), emoji,
@@ -209,10 +294,12 @@ SECURITY TESTING (automated, run before every merge)
   - Design review found: behind a reverse proxy (Cloudflare) every caller
     would look like 127.0.0.1, so one attacker could use up the sign-in and
     code limits for everyone; and the audit trail took the first
-    X-Forwarded-For entry, which a caller can fake. Fix in progress before
-    any proxy goes live: one trusted client-address helper, switched on
-    only where the server is reachable solely through Cloudflare, with
-    tests that a forged header is ignored.
+    X-Forwarded-For entry, which a caller can fake. FIXED: one trusted
+    client-address helper used by rate limits, sessions, consents and the
+    audit trail; forwarding headers are ignored unless a switch says the
+    server is reachable only through Cloudflare; 19 tests prove a forged
+    header never reaches a session, consent or audit row and buys no
+    extra sign-in attempts.
   - Commerce: the phone can't send prices; out-of-stock holds nothing;
     a retried order lands once; cash limits; cancel rules; unpaid orders
     lapse and give stock back; every PayFast check refuses a forged
@@ -226,6 +313,21 @@ SECURITY TESTING (automated, run before every merge)
   - End-to-end: a script checks the real media provider (signed upload,
     verification, forged callback refused, genuine one accepted,
     clean-up); browser runs of sign-up, two-factor, profile and restore.
+
+
+INCIDENT RESPONSE AND RECOVERY
+
+  Built: an append-only audit trail to investigate; the ability to end
+  every session of an account at once (sign out everywhere, password
+  change); secrets held in server settings so they can be rotated without
+  a code change; features behind switches that can be turned off.
+  Plan: (1) identify and isolate -- revoke sessions, rotate the affected
+  keys, switch the feature off; (2) communicate -- tell affected users and
+  the Information Regulator as soon as reasonably possible (POPIA
+  section 22), and the payment provider if payments are involved;
+  (3) recover -- daily encrypted database backups with point-in-time
+  restore on the managed host, restore tested; (4) review -- fix the
+  cause, add a test, update this document.
 
 
 ASSESSMENT & SECURE INTEGRATION -- PLANNED (not built yet)
