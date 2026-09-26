@@ -68,3 +68,8 @@ NEXT (round 2, see ../14_ROUND_2_BRIEF.txt and ../15_JOBS_BUILDER_NETWORK_PLAN.t
   - history + bin phase 2 (backend) once CONTRACT_bin.txt is approved
   - after Sunday: crew on a job, short videos, the order book,
     demand_signals() per tool
+
+FROM MANDLA'S SIDE (26 Sep, night)
+  - test_jobs.py::test_send_a_sign_off_link was flaky (~1 run in 10): the
+    random ticket in the link can contain "R5", which the "no amount in the
+    message" check caught. Fixed by checking the message without the link.

@@ -24,7 +24,7 @@ from src.domains.supplier.supplier_profile.models import Supplier
 from src.extensions import db
 
 PASSWORD = "Spaza2026!"
-CONSENT = {"privacy_version": "0.1-draft", "terms_version": "0.1-draft"}
+CONSENT = {"privacy_version": "0.2-draft", "terms_version": "0.2-draft"}
 SEED = Path(__file__).resolve().parents[3] / "seed" / "suppliers"
 PROFILE = {
     "business": {"business_name": "Nomsa's Spaza", "business_type": "spaza", "trade": None, "owner_name": "Nomsa Dlamini", "years_trading": "3_plus", "cellphone": "082 123 4567"},

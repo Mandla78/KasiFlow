@@ -13,7 +13,7 @@ import re
 import pytest
 
 PASSWORD = "Spaza2026!"
-CONSENT = {"privacy_version": "0.1-draft", "terms_version": "0.1-draft"}
+CONSENT = {"privacy_version": "0.2-draft", "terms_version": "0.2-draft"}
 REFUSED = {400, 401, 403, 404, 409, 413, 415, 422, 423, 429}
 
 BAD_EMAILS = [

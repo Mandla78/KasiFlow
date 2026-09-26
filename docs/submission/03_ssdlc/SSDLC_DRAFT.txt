@@ -34,6 +34,10 @@ SECURITY REQUIREMENTS (RISK ASSESSMENT)
     account; unconfirmed sign-ups deleted after 7 days.
   - We never hold money: payments go through a licensed provider
     (PayFast); card details never touch our systems.
+  - Honest proof of payment: every order says what backs its money --
+    verified by PayFast, cash confirmed by both sides, or cash not
+    confirmed -- and totals are never mixed, so a cash claim can't pass
+    for provider-verified money.
   - The server prices every order from its own catalogue; the phone only
     says which products and how many.
 

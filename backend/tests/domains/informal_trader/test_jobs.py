@@ -17,7 +17,7 @@ from src.domains.security.audit.models import AuditEventRecord
 from src.shared.media.provider import get_provider
 
 PASSWORD = "Spaza2026!"
-CONSENT = {"privacy_version": "0.1-draft", "terms_version": "0.1-draft"}
+CONSENT = {"privacy_version": "0.2-draft", "terms_version": "0.2-draft"}
 BASE = "/api/v1/me/jobs"
 PHOTO_BYTES = b"\xff\xd8 a stage photo \xff\xd9"
 
@@ -220,7 +220,8 @@ def test_send_a_sign_off_link(client, me, app):
     assert data["link"].startswith(f"{app.config['APP_BASE_URL']}/sign-off?ticket=")
     assert data["job"]["stages"][1]["status"] == "waiting" and data["job"]["stages"][1]["builder_amount_cents"] == 1_200_000
     assert data["message"].startswith("Hi Mokoena family, Bongani Builds asks you to sign off the Walls stage of the room extension.")
-    assert data["link"] in data["message"] and not re.search(r"R\d", data["message"])
+    # No amount in the message (the random link itself can contain "R5", so leave it out of the check).
+    assert data["link"] in data["message"] and not re.search(r"R\d", data["message"].replace(data["link"], ""))
 
 
 def test_sign_off_amount_limits(client, me):

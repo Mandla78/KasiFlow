@@ -52,7 +52,7 @@ def test_codes_never_reach_the_logs(client, outbox, caplog):
     client.post(
         "/api/v1/auth/register",
         json={"email": "logs@example.com", "password": "Spaza2026!",
-              "consent": {"privacy_version": "0.1-draft", "terms_version": "0.1-draft"}},
+              "consent": {"privacy_version": "0.2-draft", "terms_version": "0.2-draft"}},
     )
     code = re.search(r">(\d{6})<", outbox[-1]["html_body"]).group(1)
     assert code not in caplog.text

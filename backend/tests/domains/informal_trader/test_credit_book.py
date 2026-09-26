@@ -17,7 +17,7 @@ from src.domains.security.audit.models import AuditEventRecord
 from src.shared.rate_limit.limiter import limiter
 
 PASSWORD = "Spaza2026!"
-CONSENT = {"privacy_version": "0.1-draft", "terms_version": "0.1-draft"}
+CONSENT = {"privacy_version": "0.2-draft", "terms_version": "0.2-draft"}
 BASE = "/api/v1/me/credit-book"
 NAME = "Thandi Mokoena"
 PHONE = "082 123 4567"

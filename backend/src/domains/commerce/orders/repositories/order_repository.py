@@ -50,6 +50,11 @@ def list_for_user(user_id: uuid.UUID) -> list[Order]:
     return Order.query.filter_by(user_id=user_id, is_deleted=False).order_by(Order.placed_at.desc()).limit(LIST_LIMIT).all()
 
 
+def all_for_user(user_id: uuid.UUID) -> list[Order]:
+    """Every order of this trader (for money totals; no limit)."""
+    return Order.query.filter_by(user_id=user_id, is_deleted=False).all()
+
+
 def open_cash_count(user_id: uuid.UUID) -> int:
     return (
         db.session.query(func.count(Order.id))

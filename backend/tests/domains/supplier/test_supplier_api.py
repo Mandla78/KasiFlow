@@ -18,7 +18,7 @@ from src.extensions import db
 from src.shared.constants.categories import CATEGORIES
 
 PASSWORD = "Spaza2026!"
-CONSENT = {"privacy_version": "0.1-draft", "terms_version": "0.1-draft"}
+CONSENT = {"privacy_version": "0.2-draft", "terms_version": "0.2-draft"}
 SEED = Path(__file__).resolve().parents[3] / "seed" / "suppliers"
 
 # A spaza in Tembisa that buys groceries and drinks, delivered.
