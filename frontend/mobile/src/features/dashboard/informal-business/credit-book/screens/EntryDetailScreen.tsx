@@ -167,6 +167,10 @@ export default function EntryDetailScreen() {
           onSaved={(next) =>
             saved(next, next.status === 'paid' ? 'All paid back. This entry is settled.' : `Saved. ${formatRand(next.outstandingCents)} still to go.`)
           }
+          onKept={() => {
+            setSheet(null);
+            setNote({ text: "No signal: saved on this phone. It goes when you're back online.", ok: true });
+          }}
         />
       ) : null}
       {sheet === 'correct' ? (

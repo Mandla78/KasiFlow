@@ -89,8 +89,9 @@ export interface CreditBookApi {
   /** Open and paid entries (cancelled ones only show in history). */
   list(): Promise<CreditEntry[]>;
   get(id: string): Promise<CreditEntryDetail>;
-  addSale(input: NewCreditSale): Promise<CreditEntryDetail>;
-  recordRepayment(id: string, input: NewRepayment): Promise<CreditEntryDetail>;
+  /** key: an Idempotency-Key, so a retry (even days later, from the phone's queue) lands once. */
+  addSale(input: NewCreditSale, key?: string): Promise<CreditEntryDetail>;
+  recordRepayment(id: string, input: NewRepayment, key?: string): Promise<CreditEntryDetail>;
   correct(id: string, input: Correction): Promise<CreditEntryDetail>;
   cancel(id: string, reason: string): Promise<CreditEntryDetail>;
   /** The trader's customers, best match first; empty query = everyone. */
