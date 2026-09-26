@@ -78,6 +78,7 @@ def test_open_stages_weighted_by_what_is_left(app, client, outbox):
     confirm(app, job["id"], {0})  # the deposit is in: only walls and pipes are still to buy for
     s = signals(app)
     assert s["categories"] == {"building_materials": 0.6, "plumbing": 0.4}
+    assert s["based_on"] == "open_stages"
     assert s["next_stages"] == ["walls"]
     assert s["active_sites"] == [{"lat": -26.0, "lng": 28.23}]
 
@@ -93,10 +94,12 @@ def test_trade_fallback_and_nothing_open(app, client, outbox):
     h = builder(client, outbox, trade="electrician")
     # No jobs: the trade alone, no site, no next stages.
     s = signals(app)
-    assert s == {"categories": {"electrical": 0.5, "tools_hardware": 0.5}, "active_sites": [], "next_stages": []}
+    assert s == {"categories": {"electrical": 0.5, "tools_hardware": 0.5}, "active_sites": [], "next_stages": [], "based_on": "trade"}
     add_job(client, h, [("Stage one", 200_000)])
     s = signals(app)
     assert s["categories"] == {"electrical": 0.5, "tools_hardware": 0.5} and s["next_stages"] == ["stage one"] and len(s["active_sites"]) == 1
+    # Open work whose name says nothing still counts as open work (the trade picks its categories).
+    assert s["based_on"] == "open_stages"
 
 
 def test_next_stages_one_per_job_newest_first_max_five(app, client, outbox):

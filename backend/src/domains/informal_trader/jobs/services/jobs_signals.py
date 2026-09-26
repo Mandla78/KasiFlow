@@ -7,6 +7,7 @@ feedback/SIGNALS_jobs.txt). Read-only.
       "categories": {"building_materials": 0.6, "plumbing": 0.4},  # shares of the work still to do
       "active_sites": [{"lat": -26.0, "lng": 28.23}],               # where to deliver, ~1 km
       "next_stages": ["walls", "roof"],                             # what's coming up
+      "based_on": "open_stages",   # or "trade": no open work, so the trade alone
   }
 
 PRIVACY (non-negotiable): the builder's own data, for the builder's own
@@ -18,7 +19,9 @@ How categories are worked out: each stage NOT yet confirmed counts with
 its amount (the work still to buy for). Its name picks the categories
 ("Bathroom pipes" -> plumbing, "Roof" -> building materials and tools);
 a name we don't recognise falls back to the builder's trade. With no open
-stages at all, the trade alone decides.
+stages at all, the trade alone decides, and "based_on" says so: the
+supplier engine only lets OPEN WORK move a ranking ("Your open jobs need
+plumbing" must be true).
 """
 from __future__ import annotations
 
@@ -88,6 +91,7 @@ def demand_signals(user) -> dict:
             cats = _stage_categories(s.name) or trade_cats
             for c in cats:
                 weights[c] += s.amount_cents / len(cats)
+    based_on = "open_stages" if weights else "trade"
     if not weights:
         for c in trade_cats:
             weights[c] += 1.0
@@ -99,4 +103,4 @@ def demand_signals(user) -> dict:
     if active and profile is not None and profile.latitude is not None:
         sites.append({"lat": round(float(profile.latitude), 2), "lng": round(float(profile.longitude), 2)})
 
-    return {"categories": shares, "active_sites": sites, "next_stages": next_stages[:MAX_NEXT_STAGES]}
+    return {"categories": shares, "active_sites": sites, "next_stages": next_stages[:MAX_NEXT_STAGES], "based_on": based_on}
