@@ -47,10 +47,16 @@ DATA MIGRATION (after your yes, in my backend PR)
   tools_hardware; tiler/painter -> paint_finishes + building_materials).
 
 
-WHERE IT IS NOW
-  The app's builder network uses this list from
-  features/dashboard/informal-business/jobs/network/lib/trades.ts (mock
-  only). After your yes it moves to constants/businessTypes.ts.
+WHERE IT IS NOW (built after your yes: risuna/trades, migration 0022_trades)
+  One list, in one go: constants/businessTypes.ts TradeKey + TRADES (with
+  the categories above; the network's lib/trades.ts reads it),
+  business_profile/constants.py TRADES, jobs_signals TRADE_CATEGORIES,
+  and 0022_trades: the check allows the 11, and painter_tiler becomes
+  painter (on the dev database: 2 profiles). A builder profile already
+  made from painter_tiler keeps its own [painter, tiler]. Downgrade maps
+  back (painter/tiler -> painter_tiler, the four new -> other_trade).
+  Tests: test_trades.py (one list everywhere, sign-up takes the 11 and
+  refuses painter_tiler, handyman, paver).
 
 
 QUESTIONS

@@ -47,8 +47,6 @@ WORKS_WITH = {
     "glazier": ("general_builder", "carpenter", "painter", "welder"),
     "other_trade": (),
 }
-#: The sign-up trade (business profile) as network trades.
-FROM_SIGN_UP = {"painter_tiler": ("painter", "tiler")}
 
 MAX_TRADES = 3
 TRAVEL_CHOICES = (5, 10, 20, 40)

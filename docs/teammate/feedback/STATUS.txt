@@ -46,18 +46,20 @@ IN PROGRESS
     Home show "orders today" live, Today says "money you recorded", order
     keys are real UUIDs on every phone. 95 new tests. As built:
     CONTRACT_order_book.txt section 10.
+  - Trades (risuna/trades, on top of the order book, migration 0022_trades)
+    per QUESTION_trades.txt: the 11 trades in one list for sign-up, the
+    builder network and the jobs signals; painter_tiler became painter.
 
 BLOCKED (and on what)
   - (none; the Idempotency-Key header and the deep-JSON crash are fixed on main)
 
 FINDINGS / NEEDS / QUESTIONS FOR MANDLA
-  - QUESTION_trades.txt: answered YES (the 11 trades); built in risuna/trades
+  - QUESTION_trades.txt: answered YES (the 11 trades); built (risuna/trades)
   - FINDING_stage_photos.txt: camera-only and hashing on the server
   - NEEDS_camera_permission_text.txt, NEEDS_shared_components.txt
   - FINDING_whatsapp_ip_links.txt, QUESTION_bluetooth_sales.txt (roadmap)
 
 NEXT (all approved 26 Sep; see the DECISION lines)
-  - trades (11, painter_tiler split): risuna/trades on top of the order book, 0022_trades
   - after Sunday: crew on a job, short videos, "ask for more" (counter-offer)
 
 FROM MANDLA'S SIDE (26 Sep, night)

@@ -54,7 +54,7 @@ BUILDERS = [
      [("Two-room extension", "Tembisa", 20, [("Foundation", None), ("Walls", "brick-wall"), ("Roof", None), ("Plaster and paint", None), ("Final", None)], ["palesa"])]),
     ("palesa", "Palesa Mahlangu", "electrician", ["electrician"], "Kempton Park", (-0.0946, 0.0042), 40, "House wiring, plugs and DB boards. Certificate of compliance.", "0721234503",
      [("Room extension wiring", "Birch Acres", 18, [("Conduits", None), ("Plug points", "plug-boxes"), ("DB board", None)], [])]),
-    ("kagiso", "Kagiso Molefe", "painter_tiler", ["tiler"], "Rabie Ridge", (-0.0046, -0.0568), 20, "Floor and wall tiles, straight lines.", "0791234504",
+    ("kagiso", "Kagiso Molefe", "tiler", ["tiler"], "Rabie Ridge", (-0.0046, -0.0568), 20, "Floor and wall tiles, straight lines.", "0791234504",
      [("Lounge floor", "Rabie Ridge", 9, [("Screed", None), ("Floor tiles", "floor-tiles")], []),
       ("Kitchen floor", "Tembisa", 38, [("Kitchen floor", "tile-levelling"), ("Splashback", None)], [])]),
     ("musa", "Musa Zulu", "carpenter", ["roofer", "carpenter"], "Olifantsfontein", (0.0324, 0.0082), 40, "Roof trusses, sheeting and tiles.", "0741234505",
@@ -63,7 +63,7 @@ BUILDERS = [
      [("Carport", "Midrand", 25, [("Posts", None), ("Steel frame and roof", "steel-roof")], [])]),
     ("neo", "Neo Sithole", "general_builder", ["bricklayer"], "Ebony Park", (-0.0126, -0.0438), 20, "Brick paving and walls.", "0711234507",
      [("Driveway", "Ebony Park", 6, [("Levelling", None), ("Paving", "paving")], [])]),
-    ("zanele", "Zanele Khumalo", "painter_tiler", ["painter"], "Clayville", (0.0164, 0.0152), 20, "Inside and outside painting.", "0631234508", []),
+    ("zanele", "Zanele Khumalo", "painter", ["painter"], "Clayville", (0.0164, 0.0152), 20, "Inside and outside painting.", "0631234508", []),
     ("refilwe", "Refilwe Mthembu", "general_builder", ["general_builder"], "Kempton Park", (-0.0986, -0.0018), 40, "Houses from foundation to roof.", "0821234509", []),
     ("andile", "Andile Khoza", "electrician", ["electrician"], "Tembisa", (0.0064, -0.0058), 20, "Wiring for new rooms and repairs.", "0601234511", []),
 ]

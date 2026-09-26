@@ -60,9 +60,9 @@ def test_every_route_needs_a_token(client, method, path):
 
 
 def test_profile_starts_hidden_from_the_sign_up_trade(client, outbox):
-    b = builder(client, outbox, "kagiso@example.com", "Kagiso Molefe", trade="painter_tiler", visible=False)
+    b = builder(client, outbox, "kagiso@example.com", "Kagiso Molefe", trade="tiler", visible=False)
     p = data(client.get(f"{API}/me/builder-profile", headers=b.headers), "profile")
-    assert p == {"trades": ["painter", "tiler"], "about": "", "travel_km": 20, "visible": False, "builds": []}
+    assert p == {"trades": ["tiler"], "about": "", "travel_km": 20, "visible": False, "builds": []}
 
 
 def test_save_profile_and_choose_builds(client, app, nomsa):

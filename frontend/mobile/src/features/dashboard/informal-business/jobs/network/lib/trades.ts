@@ -1,37 +1,14 @@
 /**
  * The trades in the builder network, and which ones work together. The
- * list is the proposal in docs/teammate/feedback/QUESTION_trades.txt
- * (painter and tiler split; bricklayer, roofer, welder, glazier added). It
- * lives here until Mandla says yes; then it moves to constants/businessTypes.
+ * list is the app's one list of trades (constants/businessTypes.ts, from
+ * QUESTION_trades.txt, approved): sign-up picks one, the builder profile
+ * up to three.
  */
-import type { TradeKey } from '@/constants/businessTypes';
+import { TRADES as ALL_TRADES, TradeKey } from '@/constants/businessTypes';
 
-export type Trade =
-  | 'general_builder'
-  | 'bricklayer'
-  | 'plumber'
-  | 'electrician'
-  | 'carpenter'
-  | 'roofer'
-  | 'tiler'
-  | 'painter'
-  | 'welder'
-  | 'glazier'
-  | 'other_trade';
+export type Trade = TradeKey;
 
-export const TRADES: { key: Trade; label: string }[] = [
-  { key: 'general_builder', label: 'General builder' },
-  { key: 'bricklayer', label: 'Bricklayer' },
-  { key: 'plumber', label: 'Plumber' },
-  { key: 'electrician', label: 'Electrician' },
-  { key: 'carpenter', label: 'Carpenter' },
-  { key: 'roofer', label: 'Roofer' },
-  { key: 'tiler', label: 'Tiler' },
-  { key: 'painter', label: 'Painter' },
-  { key: 'welder', label: 'Welder' },
-  { key: 'glazier', label: 'Glazier' },
-  { key: 'other_trade', label: 'Other trade' },
-];
+export const TRADES: { key: Trade; label: string }[] = ALL_TRADES.map(({ key, label }) => ({ key, label }));
 
 export function tradeLabel(trade: Trade): string {
   return TRADES.find((t) => t.key === trade)?.label ?? 'Builder';
@@ -81,9 +58,7 @@ export function tradeFit(mine: Trade[], theirs: Trade[]): number {
   return best;
 }
 
-/** The sign-up trade (today's list) as network trades. */
+/** The sign-up trade as the builder profile's first trade. */
 export function fromSignUpTrade(trade: TradeKey | null | undefined): Trade[] {
-  if (!trade) return ['general_builder'];
-  if (trade === 'painter_tiler') return ['painter', 'tiler'];
-  return [trade];
+  return [trade ?? 'general_builder'];
 }

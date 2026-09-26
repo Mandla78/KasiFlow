@@ -6,7 +6,12 @@ option lists on the onboarding screens: the server rejects anything else.
 from __future__ import annotations
 
 BUSINESS_TYPES = ("builder", "spaza", "food", "other")
-TRADES = ("general_builder", "plumber", "electrician", "carpenter", "painter_tiler", "other_trade")
+#: The 11 trades (QUESTION_trades.txt, approved). painter_tiler became painter
+#: and tiler in migration 0022_trades.
+TRADES = (
+    "general_builder", "bricklayer", "plumber", "electrician", "carpenter", "roofer",
+    "tiler", "painter", "welder", "glazier", "other_trade",
+)  # fmt: skip
 YEARS_TRADING = ("under_1", "1_3", "3_plus")
 
 #: One list for the whole backend (the supplier side sells from the same codes).
