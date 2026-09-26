@@ -6,12 +6,12 @@ right, one live default per trader (partial unique index), pins inside
 South Africa (check constraints). Nothing existing changes.
 (docs/plan_v2_integrations/04, section 4c.)
 
-Numbered 0025: 0023 (notifications) and 0024 ("I paid the cash") are
-planned. Whichever lands first, point this file's down_revision at the
-latest head before merging, so there's one line of migrations.
+Numbered 0025: 0024 ("I paid the cash", plan v2 02) is planned but not
+built yet, so this follows 0023 (notifications). If 0024 lands first,
+point this file's down_revision at it, so there's one line of migrations.
 
 Revision ID: 0025_delivery_addresses
-Revises: 0022_trades
+Revises: 0023_notifications
 Create Date: 2026-09-26 11:59:39.774876
 
 """
@@ -21,7 +21,7 @@ import sqlalchemy as sa
 
 # revision identifiers, used by Alembic.
 revision = '0025_delivery_addresses'
-down_revision = '0022_trades'
+down_revision = '0023_notifications'
 branch_labels = None
 depends_on = None
 
