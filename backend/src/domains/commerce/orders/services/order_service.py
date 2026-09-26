@@ -170,6 +170,70 @@ def _where(user, s, data) -> tuple[str, Optional[tuple[Decimal, Decimal]]]:
     return address, (Decimal(f"{lat:.6f}"), Decimal(f"{lng:.6f}"))
 
 
+def delivery_options(user, supplier_id: uuid.UUID) -> dict:
+    """Checkout, step 1: can this supplier deliver to each of the trader's
+    places? The business address first, then the saved ones, each with its
+    distance -- so the app can disable the ones out of range BEFORE the
+    trader reaches "Place order" (placing still checks again, in _where)."""
+    s = supplier_service.get_active(supplier_id)
+    if s is None:
+        raise NotFoundError("We couldn't find that supplier.")
+
+    def option(kind: str, ident: Optional[str], label: str, address: str, lat: float, lng: float, default: bool = False) -> dict:
+        km = distance_km(lat, lng, float(s.latitude), float(s.longitude))
+        return {"kind": kind, "id": ident, "label": label, "address": address, "is_default": default,
+                "km": round(km, 1), "in_range": bool(s.delivers) and km <= s.delivery_radius_km}
+
+    places = []
+    profile = business_profile_service.get(user)
+    if profile is not None and profile.latitude is not None:
+        text = ", ".join(x for x in (profile.building, profile.street, profile.suburb, profile.city, profile.postal_code) if x)
+        places.append(option("business", None, "My business", text, float(profile.latitude), float(profile.longitude)))
+    for a in delivery_address_service.list_mine(user):
+        places.append(option("saved", a["id"], a["label"], a["address_text"], a["latitude"], a["longitude"], a["is_default"]))
+    return {"delivers": bool(s.delivers), "radius_km": s.delivery_radius_km, "collect": bool(s.collect), "places": places}
+
+
+#: Cash the trader still has to hand over: the supplier accepted it and it
+#: hasn't reached them yet (cash on delivery / when collecting). Once it's
+#: delivered or collected, the cash changed hands at the door.
+_CASH_STILL_DUE = ("accepted", "out_for_delivery", "ready_for_collection")
+#: Orders on their way to the trader, for Home's "Today".
+_ON_THE_WAY = ("accepted", "out_for_delivery", "ready_for_collection")
+
+
+def home_summary(user) -> dict:
+    """Home's card and Today list, from the trader's own orders only.
+    "You owe suppliers" is CASH only: digital orders are paid up front."""
+    owe_cents = owe_orders = waiting = 0
+    moving = []
+    for o in repo.all_for_user(user.id):
+        cash = o.payment_method == "cash"
+        if cash and o.payment_status == "cash_due" and o.status in _CASH_STILL_DUE:
+            owe_cents += o.total_cents
+            owe_orders += 1
+        if cash and o.status == "placed":
+            waiting += 1
+        if o.status in _ON_THE_WAY:
+            moving.append(o)
+    moving.sort(key=lambda o: o.placed_at, reverse=True)
+    return {
+        "owe_suppliers": {"cents": owe_cents, "orders": owe_orders, "waiting_for_supplier": waiting},
+        "on_the_way": [
+            {
+                "id": str(o.id),
+                "reference": o.reference,
+                "supplier": o.supplier_name,
+                "status": o.status,
+                "fulfilment": o.fulfilment,
+                "total_cents": o.total_cents,
+                "cash_due": o.payment_method == "cash" and o.payment_status == "cash_due",
+            }
+            for o in moving[:5]
+        ],
+    }
+
+
 # ------------------------------------------------------------------ reading
 
 

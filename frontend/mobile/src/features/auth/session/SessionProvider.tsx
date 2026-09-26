@@ -158,8 +158,7 @@ export function SessionProvider({ children }: { children: ReactNode }) {
       setTool: (tool, on) =>
         setState((s) => ({
           ...s,
-          // My record is always on: it's the proof everything else writes to.
-          profile: { ...s.profile, tools: { ...s.profile.tools, [tool]: tool === 'myRecord' ? true : on } },
+          profile: { ...s.profile, tools: { ...s.profile.tools, [tool]: on } },
         })),
       setCipcResult: (number, result) =>
         setState((s) => {

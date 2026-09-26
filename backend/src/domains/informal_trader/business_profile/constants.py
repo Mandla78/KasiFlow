@@ -23,8 +23,9 @@ PAYMENT = ("payfast", "cash", "both")
 FULFILMENT = ("delivery", "collect", "either")
 
 TOOLS = ("creditBook", "orderStock", "myRecord", "jobs", "orderBook")
-#: "My record" is the proof everything else writes to: it can't be switched off.
-ALWAYS_ON_TOOLS = ("myRecord",)
+#: Tools that can't be switched off. None since 26 Sep: My record (the
+#: trading history) is switched on and off like every other tool.
+ALWAYS_ON_TOOLS: tuple[str, ...] = ()
 
 CIPC_STATUSES = ("pending", "verified", "owner_unconfirmed", "deregistered", "not_found", "unavailable")
 CIPC_NUMBER_PATTERN = r"^\d{4}/\d{6}/\d{2}$"

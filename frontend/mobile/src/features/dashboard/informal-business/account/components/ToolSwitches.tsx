@@ -15,7 +15,7 @@ const TOOLS: { key: ToolKey; icon: 'book' | 'package' | 'tool' | 'clipboard' | '
   { key: 'jobs', icon: 'tool', title: 'Jobs', subtitle: 'Stages, photos and the client’s sign-off' },
   { key: 'orderBook', icon: 'clipboard', title: 'Order book', subtitle: 'Counter orders fast: the queue and today’s money' },
   // Not "proof": what a trader records in the tools is theirs, not verified.
-  { key: 'myRecord', icon: 'shield', title: 'My record', subtitle: 'Always on: your trading history in one place' },
+  { key: 'myRecord', icon: 'shield', title: 'My record', subtitle: 'Your trading history, month by month' },
 ];
 
 const TITLES = Object.fromEntries(TOOLS.map((t) => [t.key, t.title])) as Record<ToolKey, string>;
@@ -24,7 +24,7 @@ const TITLES = Object.fromEntries(TOOLS.map((t) => [t.key, t.title])) as Record<
  * A switch per tool. Each switch is saved to the server AT ONCE (not with
  * the quiet background save), so Home, Account and the tabs follow the
  * server's answer; if the server doesn't take it, the switch goes back
- * and says why. My record can't be switched off; the daily tally is coming.
+ * and says why. The daily tally is coming.
  */
 export function ToolSwitches() {
   const { profile, setTool, updateProfile } = useSession();
@@ -32,7 +32,7 @@ export function ToolSwitches() {
   const [error, setError] = useState('');
 
   async function toggle(key: ToolKey, on: boolean) {
-    if (key === 'myRecord' || saving) return;
+    if (saving) return;
     setError('');
     setTool(key, on); // shown at once; undone below if the server says no
     if (USE_MOCK_AUTH) return;
@@ -57,8 +57,7 @@ export function ToolSwitches() {
           icon={t.icon}
           title={t.title}
           subtitle={saving === t.key ? 'Saving…' : t.subtitle}
-          value={t.key === 'myRecord' ? true : Boolean(profile.tools[t.key])}
-          locked={t.key === 'myRecord'}
+          value={Boolean(profile.tools[t.key])}
           onChange={(on) => toggle(t.key, on)}
         />
       ))}

@@ -102,6 +102,16 @@ export class OrderError extends Error {
   }
 }
 
+/** Home's card and Today list (the server's own sums; cash only is ever "owed"). */
+export type HomeSummary = {
+  oweSuppliers: { cents: Cents; orders: number; waitingForSupplier: number };
+  onTheWay: { id: string; reference: string; supplier: string; status: OrderStatus; fulfilment: Fulfilment; totalCents: Cents; cashDue: boolean }[];
+};
+
+/** Checkout, step 1: which of the trader's places this supplier delivers to. */
+export type DeliveryPlace = { kind: 'business' | 'saved'; id: string | null; label: string; address: string; isDefault: boolean; km: number; inRange: boolean };
+export type DeliveryOptions = { delivers: boolean; radiusKm: number; collect: boolean; places: DeliveryPlace[] };
+
 export interface OrdersApi {
   place(input: PlaceOrderInput): Promise<Order>;
   list(): Promise<Order[]>;
@@ -113,4 +123,6 @@ export interface OrdersApi {
   /** A 10-minute link to the order's PDF; null where there are no documents (the mock). */
   documentLink(id: string, kind: DocumentKind): Promise<string | null>;
   summary(): Promise<MoneySummary>;
+  homeSummary(): Promise<HomeSummary>;
+  deliveryOptions(supplierId: string): Promise<DeliveryOptions>;
 }

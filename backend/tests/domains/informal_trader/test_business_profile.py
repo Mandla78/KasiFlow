@@ -75,16 +75,18 @@ def test_not_onboarded_until_complete(client, me):
     assert p["onboarded"] is False and p["location"] is None
 
 
-def test_my_record_cannot_be_switched_off(client, me):
+def test_my_record_switches_on_and_off_like_the_other_tools(client, me):
     p = patch(client, me, {"tools": {"myRecord": False, "creditBook": True}}).get_json()["data"]["profile"]
-    assert p["tools"]["myRecord"] is True and p["tools"]["jobs"] is False
+    assert p["tools"]["myRecord"] is False and p["tools"]["creditBook"] is True and p["tools"]["jobs"] is False
+    p = patch(client, me, {"tools": {"myRecord": True, "creditBook": True}}).get_json()["data"]["profile"]
+    assert p["tools"]["myRecord"] is True
 
 
 def test_a_food_seller_with_the_order_book(client, me):
     body = {"business": {**BUSINESS, "business_type": "food"}, "tools": {"orderBook": True, "jobs": False}}
     p = patch(client, me, body).get_json()["data"]["profile"]
     assert p["business"]["business_type"] == "food"
-    assert p["tools"]["orderBook"] is True and p["tools"]["myRecord"] is True
+    assert p["tools"]["orderBook"] is True and p["tools"]["myRecord"] is False
 
 
 def test_unknown_types_and_tools_are_refused(client, me):

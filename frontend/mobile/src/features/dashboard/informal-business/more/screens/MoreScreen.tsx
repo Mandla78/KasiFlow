@@ -83,7 +83,7 @@ export default function More() {
       <Card style={styles.group}>
         <ListRow icon="log-out" title="Sign out" danger onPress={signOut} last />
       </Card>
-      <Text style={styles.version}>Akayza 0.1.0 · preview build</Text>
+      <Text style={styles.version}>Akayza 1.0.0</Text>
     </Screen>
   );
 }

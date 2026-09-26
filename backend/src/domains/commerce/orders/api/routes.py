@@ -7,6 +7,8 @@
   GET  /me/orders/summary      money kept apart by what backs it
   GET  /me/orders/<id>
   POST /me/orders/<id>/cancel  cash orders, until the supplier accepts
+  GET  /me/home/summary        Home: cash owed to suppliers + orders on their way
+  GET  /me/suppliers/<id>/delivery-options   checkout: which of my places they deliver to
 """
 from __future__ import annotations
 
@@ -52,6 +54,22 @@ def my_order_money():
     """Money by what backs it: verified digital, cash confirmed by both,
     cash not yet confirmed. Kept apart, never one total."""
     return success_response({"summary": order_service.money_summary(current_user())})
+
+
+@api_bp.get("/me/home/summary")
+@limiter.limit(READ_LIMIT)
+@auth_required(dashboard="informal_business")
+def my_home_summary():
+    """Home: cash still owed to suppliers (never digital), and orders on their way."""
+    return success_response({"summary": order_service.home_summary(current_user())})
+
+
+@api_bp.get("/me/suppliers/<uuid:supplier_id>/delivery-options")
+@limiter.limit(READ_LIMIT)
+@auth_required(dashboard="informal_business")
+def my_delivery_options(supplier_id: uuid.UUID):
+    """Checkout: which of my places this supplier delivers to, with distances."""
+    return success_response({"options": order_service.delivery_options(current_user(), supplier_id)})
 
 
 @api_bp.get("/me/orders/<uuid:order_id>")

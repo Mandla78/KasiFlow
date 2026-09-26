@@ -68,7 +68,7 @@ export default function Account() {
       ? [{ icon: 'clipboard', title: 'Order book', href: '/informal-business/order-book', ...line(orders, (d) => (d.ordersToday === 1 ? '1 order today' : `${d.ordersToday} orders today`)) } as Tile]
       : []),
     { icon: 'file-text', title: 'My orders', href: '/informal-business/orders', ...line(mine, (d) => `${d.thisMonth} this month`) },
-    { icon: 'shield', title: 'My record', line: 'Your money, kept apart', href: '/informal-business/record' },
+    ...(t.myRecord ? [{ icon: 'shield', title: 'My record', line: 'Your money, kept apart', href: '/informal-business/record' } as Tile] : []),
   ];
 
   return (

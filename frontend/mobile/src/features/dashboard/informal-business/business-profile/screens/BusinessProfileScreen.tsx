@@ -83,11 +83,13 @@ export default function BusinessProfileScreen() {
       <Overline>Registration</Overline>
       {cipc ? <CipcStatusCard cipc={cipc} businessName={profile.businessName} /> : null}
       <Card style={styles.group}>
+        {/* Verification is coming: a trader who already added a CIPC number during
+            sign-up still sees it and can open it; nobody starts it from here yet. */}
         <ListRow
           icon="award"
           title={cipc ? 'CIPC registration' : 'Get verified'}
-          subtitle={cipc ? registrationLine(profile) : 'Registered company? Add your CIPC number for a verified badge'}
-          onPress={() => router.push('/informal-business/business/registration')}
+          subtitle={cipc ? registrationLine(profile) : 'Coming soon'}
+          onPress={cipc ? () => router.push('/informal-business/business/registration') : undefined}
           last
         />
       </Card>

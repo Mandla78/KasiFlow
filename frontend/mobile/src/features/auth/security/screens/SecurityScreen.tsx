@@ -1,7 +1,7 @@
 import { Feather } from '@expo/vector-icons';
 import { router, useFocusEffect } from 'expo-router';
 import { useCallback, useState } from 'react';
-import { ActivityIndicator, Share, StyleSheet, Text, View } from 'react-native';
+import { ActivityIndicator, StyleSheet, Text, View } from 'react-native';
 
 import { AuthError } from '@/features/auth/types';
 import { Button } from '@/shared/components/Button';
@@ -46,15 +46,6 @@ export default function SecurityScreen() {
     }
   }
 
-  async function downloadData() {
-    try {
-      const data = await securityApi.exportData();
-      await Share.share({ title: 'My Akayza data', message: JSON.stringify(data, null, 2) });
-    } catch (e) {
-      setMessage(e instanceof AuthError ? e.message : "Couldn't get your data. Try again.");
-    }
-  }
-
   return (
     <Screen back>
       <Title>Security</Title>
@@ -88,7 +79,7 @@ export default function SecurityScreen() {
       <Overline>Password and data</Overline>
       <Card style={{ paddingVertical: 4 }}>
         <ListRow icon="key" title="Change password" subtitle="Your other phones will be signed out" onPress={() => router.push('/informal-business/security/change-password')} />
-        <ListRow icon="download" title="Download my data" subtitle="Everything Akayza holds about your account" onPress={downloadData} />
+        <ListRow icon="user-x" title="Delete my account and data" subtitle="Coming soon" />
         <ListRow icon="trash-2" title="Close my account" subtitle="Ends every session on every phone" danger onPress={() => router.push('/informal-business/security/close-account')} last />
       </Card>
     </Screen>

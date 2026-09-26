@@ -10,6 +10,7 @@ import { ComponentProps } from 'react';
 import { daysBetween } from '@/features/dashboard/informal-business/credit-book/lib/dueDates';
 import { CreditEntry } from '@/features/dashboard/informal-business/credit-book/types';
 import { Job } from '@/features/dashboard/informal-business/jobs/types';
+import type { HomeSummary } from '@/features/dashboard/informal-business/orders/types';
 import { Cents } from '@/shared/lib/money';
 
 export type TodayItem = {
@@ -21,8 +22,6 @@ export type TodayItem = {
   amount?: Cents;
   tag?: { label: string; tone: 'marigold' | 'jade' | 'info' };
   href?: Href;
-  /** Not the trader's own data yet (orders are Mandla's): shown with a "Sample" mark. */
-  sample?: boolean;
 };
 
 export const TODAY_LIMIT = 3;
@@ -72,4 +71,28 @@ export function jobsToday(jobs: Job[]): TodayItem[] {
       }
       return { ...base, tint: 'info' as const, subtitle: `${stage.name} · waiting for client`, amount: stage.amountCents };
     });
+}
+
+const ON_THE_WAY: Record<string, { title: string; icon: TodayItem['icon'] }> = {
+  out_for_delivery: { title: 'Delivery on its way', icon: 'truck' },
+  ready_for_collection: { title: 'Ready to collect', icon: 'package' },
+  accepted: { title: 'Order accepted', icon: 'check-circle' },
+};
+
+/** Orders the supplier accepted and that haven't reached the trader yet (from the server's Home summary). */
+export function ordersToday(onTheWay: HomeSummary['onTheWay']): TodayItem[] {
+  return onTheWay.slice(0, TODAY_LIMIT).map((o) => {
+    const look = ON_THE_WAY[o.status] ?? ON_THE_WAY.accepted;
+    const cashTag = o.fulfilment === 'collect' ? 'Pay cash when you collect' : 'Pay cash on delivery';
+    return {
+      id: `order-${o.id}`,
+      icon: look.icon,
+      tint: o.cashDue ? 'marigold' : 'jade',
+      title: look.title,
+      subtitle: `${o.supplier} · ${o.reference}`,
+      amount: o.totalCents,
+      tag: o.cashDue ? { label: cashTag, tone: 'marigold' } : { label: 'Paid in the app', tone: 'jade' },
+      href: { pathname: '/informal-business/orders/[id]', params: { id: o.id } },
+    };
+  });
 }

@@ -325,3 +325,64 @@ def test_a_saved_address_with_a_typed_one_or_a_collection_is_refused(client, me,
     both = body(mahlangu, 5, delivery_address_id=saved, delivery_address="12 Somewhere Street, Tembisa", delivery_point={"latitude": -26.0, "longitude": 28.2})
     assert place(client, me, both).status_code == 422
     assert place(client, me, body(mahlangu, 5, fulfilment="collect", delivery_address_id=saved)).status_code == 422
+
+
+# ------------------------------------------------ Home summary + checkout's delivery check
+
+HOME = "/api/v1/me/home/summary"
+
+
+def home(client, me):
+    return client.get(HOME, headers=me).get_json()["data"]["summary"]
+
+
+def order_id(r):
+    return uuid.UUID(r.get_json()["data"]["order"]["id"])
+
+
+def test_home_owes_only_accepted_cash_not_yet_delivered(app, client, me, mahlangu):
+    assert home(client, me)["owe_suppliers"] == {"cents": 0, "orders": 0, "waiting_for_supplier": 0}
+    cash = place(client, me, body(mahlangu, qty_for(mahlangu, mahlangu["min"])))
+    digital = place(client, me, body(mahlangu, qty_for(mahlangu, mahlangu["min"]), payment="in_app"))
+    assert cash.status_code == 201 and digital.status_code == 201
+    # Placed, not yet accepted: waiting, not owed.
+    h = home(client, me)
+    assert h["owe_suppliers"]["cents"] == 0 and h["owe_suppliers"]["waiting_for_supplier"] == 1
+    total = cash.get_json()["data"]["order"]["total_cents"]
+    with app.app_context():
+        order_service.supplier_move(order_id(cash), "accepted")
+    h = home(client, me)
+    assert h["owe_suppliers"] == {"cents": total, "orders": 1, "waiting_for_supplier": 0}
+    assert [o["cash_due"] for o in h["on_the_way"]] == [True]
+    with app.app_context():
+        order_service.supplier_move(order_id(cash), "out_for_delivery")
+    assert home(client, me)["on_the_way"][0]["status"] == "out_for_delivery"
+    # Delivered: the cash changed hands at the door.
+    with app.app_context():
+        order_service.supplier_move(order_id(cash), "delivered")
+    h = home(client, me)
+    assert h["owe_suppliers"]["cents"] == 0 and h["on_the_way"] == []
+
+
+def test_home_never_counts_someone_elses_orders(client, outbox, me, mahlangu):
+    place(client, me, body(mahlangu, qty_for(mahlangu, mahlangu["min"])))
+    thabo = signed_in(client, outbox, "thabo@example.com")
+    assert home(client, thabo) == {"owe_suppliers": {"cents": 0, "orders": 0, "waiting_for_supplier": 0}, "on_the_way": []}
+    assert client.get(HOME).status_code == 401
+
+
+def test_delivery_options_say_which_places_are_in_range(client, me, mahlangu):
+    far = {"label": "Polokwane shop", "address_text": "18 Grobler Street, Polokwane", "latitude": -23.90, "longitude": 29.45}
+    client.post("/api/v1/me/delivery-addresses", headers=me, json=far)
+    r = client.get(f"/api/v1/me/suppliers/{mahlangu['id']}/delivery-options", headers=me)
+    assert r.status_code == 200
+    o = r.get_json()["data"]["options"]
+    by_label = {p["label"]: p for p in o["places"]}
+    assert by_label["My business"]["in_range"] is True
+    assert by_label["Polokwane shop"]["in_range"] is False and by_label["Polokwane shop"]["km"] > o["radius_km"]
+    assert by_label["Polokwane shop"]["kind"] == "saved" and by_label["My business"]["id"] is None
+
+
+def test_delivery_options_bad_supplier_is_not_found(client, me):
+    assert client.get(f"/api/v1/me/suppliers/{uuid.uuid4()}/delivery-options", headers=me).status_code == 404
+    assert client.get("/api/v1/me/suppliers/not-a-uuid/delivery-options", headers=me).status_code == 404

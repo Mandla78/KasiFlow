@@ -3,7 +3,9 @@ import { describe, expect, it } from '@jest/globals';
 import { CreditEntry } from '@/features/dashboard/informal-business/credit-book/types';
 import { Job, Stage } from '@/features/dashboard/informal-business/jobs/types';
 
-import { creditToday, jobsToday } from '../today';
+import type { Cents } from '@/shared/lib/money';
+
+import { creditToday, jobsToday, ordersToday } from '../today';
 
 const T = '2026-09-25';
 
@@ -82,5 +84,22 @@ describe('jobs: which stages need the builder', () => {
 
   it('ignores done jobs and untouched stages', () => {
     expect(jobsToday([job([stage('s1', 'Walls', 'waiting')], { status: 'done' }), job([stage('s2', 'Roof', 'not_started')])])).toEqual([]);
+  });
+});
+
+
+describe('ordersToday', () => {
+  const o = (id: string, status: 'accepted' | 'out_for_delivery' | 'ready_for_collection', cashDue: boolean, fulfilment: 'delivery' | 'collect' = 'delivery') => ({
+    id, reference: `AKZ-${id}`, supplier: 'Mahlangu Wholesale', status, fulfilment, totalCents: 234000 as Cents, cashDue,
+  });
+
+  it('says what is on its way and whether cash is due', () => {
+    const [a, b] = ordersToday([o('1', 'out_for_delivery', true), o('2', 'ready_for_collection', false, 'collect')]);
+    expect(a).toMatchObject({ title: 'Delivery on its way', subtitle: 'Mahlangu Wholesale · AKZ-1', amount: 234000, tag: { label: 'Pay cash on delivery' } });
+    expect(b).toMatchObject({ title: 'Ready to collect', tag: { label: 'Paid in the app' } });
+  });
+
+  it('shows a few at a time', () => {
+    expect(ordersToday([o('1', 'accepted', true), o('2', 'accepted', true), o('3', 'accepted', true), o('4', 'accepted', true)])).toHaveLength(3);
   });
 });

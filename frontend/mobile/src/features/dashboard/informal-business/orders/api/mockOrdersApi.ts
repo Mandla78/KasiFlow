@@ -13,11 +13,12 @@
  * without a backend: accepted after 20 s -> on its way / ready after 60 s
  * -> delivered / collected after 120 s, each with an in-app notification.
  */
-import { formatRand } from '@/shared/lib/money';
+import { type Cents, formatRand } from '@/shared/lib/money';
 
 import { mockAlert } from '../../notifications/api/mockNotificationsApi';
 import { catalogueApi } from '../../catalogue/api/catalogueApi';
 import type { Product } from '../../catalogue/types';
+import { deliveryAddressesApi } from '../../delivery-addresses/api/deliveryAddressesApi';
 import { supplierApi } from '../../suppliers/api/supplierApi';
 import type { Supplier } from '../../suppliers/types';
 import { cashLimitFor, MAX_OPEN_CASH_ORDERS } from '../lib/cashPolicy';
@@ -179,6 +180,44 @@ export const mockOrdersApi: OrdersApi = {
       confirmedByBothOrders: sum('confirmed_by_both').length,
       notConfirmedCents: total(sum('not_confirmed')),
       notConfirmedOrders: sum('not_confirmed').length,
+    };
+  },
+
+  async homeSummary() {
+    // Same rule as the server: only cash the supplier accepted and that hasn't
+    // reached the trader yet is owed; digital orders are paid up front.
+    const all = orders.map(advanced);
+    const due = all.filter((o) => o.payment === 'cash' && o.paymentStatus === 'cash_due' && ['accepted', 'out_for_delivery', 'ready_for_collection'].includes(o.status));
+    const moving = all.filter((o) => ['accepted', 'out_for_delivery', 'ready_for_collection'].includes(o.status)).slice(0, 5);
+    return {
+      oweSuppliers: {
+        cents: due.reduce((s, o) => s + o.totalCents, 0) as Cents,
+        orders: due.length,
+        waitingForSupplier: all.filter((o) => o.payment === 'cash' && o.status === 'placed').length,
+      },
+      onTheWay: moving.map((o) => ({
+        id: o.id,
+        reference: o.reference,
+        supplier: o.supplierName,
+        status: o.status,
+        fulfilment: o.fulfilment,
+        totalCents: o.totalCents,
+        cashDue: o.payment === 'cash' && o.paymentStatus === 'cash_due',
+      })),
+    };
+  },
+
+  async deliveryOptions() {
+    // Sample data has no supplier pins: every place counts as in range.
+    const saved = await deliveryAddressesApi.list();
+    return {
+      delivers: true,
+      radiusKm: 30,
+      collect: true,
+      places: [
+        { kind: 'business' as const, id: null, label: 'My business', address: 'Your business address', isDefault: false, km: 0, inRange: true },
+        ...saved.map((a) => ({ kind: 'saved' as const, id: a.id, label: a.label, address: a.addressText, isDefault: a.isDefault, km: 0, inRange: true })),
+      ],
     };
   },
 

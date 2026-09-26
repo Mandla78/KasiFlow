@@ -5,6 +5,7 @@
  * connected...) come back as OrderError with its own message.
  */
 import { api, ApiError } from '@/shared/api/client';
+import type { Cents } from '@/shared/lib/money';
 
 import { Evidence, MoneySummary, Order, OrderError, OrdersApi, OrderStatus, PaymentMethod, PaymentStatus } from '../types';
 
@@ -91,6 +92,29 @@ export const httpOrdersApi: OrdersApi = {
       ),
     );
     return orderFromWire(data.order);
+  },
+  async homeSummary() {
+    const { summary: s } = await api<{
+      summary: {
+        owe_suppliers: { cents: number; orders: number; waiting_for_supplier: number };
+        on_the_way: { id: string; reference: string; supplier: string; status: Order['status']; fulfilment: Order['fulfilment']; total_cents: number; cash_due: boolean }[];
+      };
+    }>('GET', '/me/home/summary', undefined, { auth: true });
+    return {
+      oweSuppliers: { cents: s.owe_suppliers.cents as Cents, orders: s.owe_suppliers.orders, waitingForSupplier: s.owe_suppliers.waiting_for_supplier },
+      onTheWay: s.on_the_way.map((o) => ({ id: o.id, reference: o.reference, supplier: o.supplier, status: o.status, fulfilment: o.fulfilment, totalCents: o.total_cents as Cents, cashDue: o.cash_due })),
+    };
+  },
+  async deliveryOptions(supplierId) {
+    const { options: o } = await api<{
+      options: { delivers: boolean; radius_km: number; collect: boolean; places: { kind: 'business' | 'saved'; id: string | null; label: string; address: string; is_default: boolean; km: number; in_range: boolean }[] };
+    }>('GET', `/me/suppliers/${encodeURIComponent(supplierId)}/delivery-options`, undefined, { auth: true });
+    return {
+      delivers: o.delivers,
+      radiusKm: o.radius_km,
+      collect: o.collect,
+      places: o.places.map((p) => ({ kind: p.kind, id: p.id, label: p.label, address: p.address, isDefault: p.is_default, km: p.km, inRange: p.in_range })),
+    };
   },
   async list() {
     const data = await api<{ orders: WireOrder[] }>('GET', '/me/orders', undefined, { auth: true });

@@ -14,13 +14,14 @@ import { Card, IconTile, Tag } from '@/shared/components/Parts';
 import { Screen } from '@/shared/components/Screen';
 import { Overline } from '@/shared/components/Text';
 import { TopBar } from '@/shared/components/TopBar';
-import { formatRand } from '@/shared/lib/money';
+import { useHideBalances } from '@/shared/lib/useHideBalances';
 import { colors, fonts, radius } from '@/shared/theme/tokens';
 
 import { AddToolSheet } from '../../account/components/AddToolSheet';
 import { usePoll, useUnread } from '../../notifications/lib/notificationStore';
-import { creditToday, jobsToday, TodayItem } from '../lib/today';
-import { builderSample, builderSampleToday, spazaSample, spazaSampleToday } from '../mock';
+import { ordersApi } from '../../orders/api/ordersApi';
+import type { HomeSummary } from '../../orders/types';
+import { creditToday, jobsToday, ordersToday, TodayItem } from '../lib/today';
 import { Loaded, useToolSummaries } from '../useToolSummaries';
 
 const TINTS = {
@@ -38,8 +39,10 @@ function shown<T>(loaded: Loaded<T>, pick: (d: T) => string): string {
 /**
  * The number that matters most, two quick actions, then only what needs
  * attention today. Spaza: what customers owe (credit book). Builder: what's
- * waiting on clients (jobs). Numbers that come from orders stay marked
- * "Sample" until the orders side exists.
+ * waiting on clients (jobs). "You owe suppliers" is the server's sum of
+ * CASH orders the supplier accepted that haven't reached the trader yet
+ * (digital orders are paid up front). Every number is real; each opens the
+ * tool it comes from. Amounts are hidden until the eye is tapped.
  */
 export default function Home() {
   const { profile } = useSession();
@@ -50,6 +53,9 @@ export default function Home() {
   const [today, setToday] = useState<TodayItem[] | null>(null);
   const [todayFailed, setTodayFailed] = useState(false);
   const [addingTool, setAddingTool] = useState(false);
+  const [home, setHome] = useState<HomeSummary | null>(null);
+  const [homeFailed, setHomeFailed] = useState(false);
+  const { hidden, toggle, money } = useHideBalances();
   const kind = builder ? 'Builder · ' : '';
   const creditOn = profile.tools.creditBook;
   const jobsOn = profile.tools.jobs;
@@ -65,14 +71,21 @@ export default function Home() {
         ? creditBookApi.list().then((entries) => creditToday(entries, todayIso()))
         : Promise.resolve([]);
     mine.then((items) => live && setToday(items)).catch(() => live && setTodayFailed(true));
+    setHomeFailed(false);
+    ordersApi
+      .homeSummary()
+      .then((h) => live && setHome(h))
+      .catch(() => live && setHomeFailed(true));
     return () => {
       live = false;
     };
   }, [builder, creditOn, jobsOn]);
   useFocusEffect(loadToday);
 
-  const failed = (builder ? jobs : credit).state === 'failed';
-  const samples = builder ? builderSampleToday : spazaSampleToday;
+  const failed = (builder ? jobs : credit).state === 'failed' || homeFailed;
+  const owe = homeFailed ? '—' : home ? money(home.oweSuppliers.cents) : '…';
+  const oweNote = home && home.oweSuppliers.waitingForSupplier > 0 ? `${home.oweSuppliers.waitingForSupplier} waiting` : 'Cash orders';
+  const orderItems = home ? ordersToday(home.onTheWay) : [];
 
   return (
     <Screen tab>
@@ -87,10 +100,20 @@ export default function Home() {
       />
 
       <LinearGradient colors={['#1E293B', colors.ink]} style={styles.hero}>
+        <Pressable
+          accessibilityRole="button"
+          accessibilityLabel={hidden ? 'Show balances' : 'Hide balances'}
+          onPress={toggle}
+          hitSlop={8}
+          style={styles.eye}>
+          <Feather name={hidden ? 'eye-off' : 'eye'} size={19} color="rgba(255,255,255,0.85)" />
+        </Pressable>
         {builder ? (
           <>
-            <Text style={styles.heroLabel}>Waiting on clients</Text>
-            <Text style={styles.heroMoney}>{jobsOn ? shown(jobs, (d) => formatRand(d.waitingOnClientsCents)) : '—'}</Text>
+            <Pressable accessibilityRole="button" onPress={() => router.push('/informal-business/jobs')}>
+              <Text style={styles.heroLabel}>Waiting on clients · from your jobs</Text>
+              <Text style={styles.heroMoney}>{jobsOn ? shown(jobs, (d) => money(d.waitingOnClientsCents)) : '—'}</Text>
+            </Pressable>
             <Text style={styles.heroNote}>
               {!jobsOn ? (
                 'Switch on Jobs in Account'
@@ -105,14 +128,16 @@ export default function Home() {
               )}
             </Text>
             <View style={styles.heroRow}>
-              <Mini label="Active jobs" value={jobsOn ? shown(jobs, (d) => String(d.activeJobs)) : '—'} />
-              <Mini label="You owe hardware" value={formatRand(builderSample.youOweHardware)} sample />
+              <Mini label="Active jobs" value={jobsOn ? shown(jobs, (d) => String(d.activeJobs)) : '—'} onPress={() => router.push('/informal-business/jobs')} />
+              <Mini label={`You owe suppliers · ${oweNote}`} value={owe} onPress={() => router.push('/informal-business/orders')} />
             </View>
           </>
         ) : (
           <>
-            <Text style={styles.heroLabel}>Customers owe you</Text>
-            <Text style={styles.heroMoney}>{creditOn ? shown(credit, (d) => formatRand(d.customersOweCents)) : '—'}</Text>
+            <Pressable accessibilityRole="button" onPress={() => router.push('/informal-business/credit-book')}>
+              <Text style={styles.heroLabel}>Customers owe you · from your credit book</Text>
+              <Text style={styles.heroMoney}>{creditOn ? shown(credit, (d) => money(d.customersOweCents)) : '—'}</Text>
+            </Pressable>
             <Text style={styles.heroNote}>
               {!creditOn ? (
                 'Switch on the credit book in Account'
@@ -120,7 +145,7 @@ export default function Home() {
                 <>
                   {credit.data.customersOwing === 1 ? '1 customer' : `${credit.data.customersOwing} customers`} ·{' '}
                   <Text style={styles.heroNoteHot}>
-                    {credit.data.dueTodayCount ? `${formatRand(credit.data.dueTodayCents)} due today` : 'nothing due today'}
+                    {credit.data.dueTodayCount ? `${money(credit.data.dueTodayCents)} due today` : 'nothing due today'}
                   </Text>
                 </>
               ) : (
@@ -128,12 +153,10 @@ export default function Home() {
               )}
             </Text>
             <View style={styles.heroRow}>
-              <Mini label="You owe suppliers" value={formatRand(spazaSample.youOweSuppliers)} sample />
+              <Mini label={`You owe suppliers · ${oweNote}`} value={owe} onPress={() => router.push('/informal-business/orders')} />
               {profile.tools.orderBook ? (
-                <Mini label="Orders today" value={shown(orders, (d) => String(d.ordersToday))} />
-              ) : (
-                <Mini label="Cash in today" value={formatRand(spazaSample.cashInToday)} sample />
-              )}
+                <Mini label="Orders today" value={shown(orders, (d) => String(d.ordersToday))} onPress={() => router.push('/informal-business/order-book')} />
+              ) : null}
             </View>
           </>
         )}
@@ -170,33 +193,29 @@ export default function Home() {
             <Text style={styles.muted}>{builder ? 'No stages need you today.' : 'Nobody is due to pay today.'}</Text>
           </Card>
         ) : null}
-        {(today ?? []).map((item) => (
-          <TodayCard key={item.id} item={item} />
+        {orderItems.map((item) => (
+          <TodayCard key={item.id} item={item} money={money} />
         ))}
-        {samples.map((item) => (
-          <TodayCard key={item.id} item={item} />
+        {(today ?? []).map((item) => (
+          <TodayCard key={item.id} item={item} money={money} />
         ))}
       </View>
-      <Text style={styles.sample}>&ldquo;Sample&rdquo; numbers come from orders, which are still being built.</Text>
 
       {addingTool ? <AddToolSheet onClose={() => setAddingTool(false)} /> : null}
     </Screen>
   );
 }
 
-function Mini({ label, value, sample }: { label: string; value: string; sample?: boolean }) {
+function Mini({ label, value, onPress }: { label: string; value: string; onPress?: () => void }) {
   return (
-    <View style={styles.mini}>
-      <Text style={styles.miniLabel}>
-        {label}
-        {sample ? <Text style={styles.miniSample}> · sample</Text> : null}
-      </Text>
+    <Pressable accessibilityRole={onPress ? 'button' : undefined} disabled={!onPress} onPress={onPress} style={styles.mini}>
+      <Text style={styles.miniLabel}>{label}</Text>
       <Text style={styles.miniValue}>{value}</Text>
-    </View>
+    </Pressable>
   );
 }
 
-function TodayCard({ item }: { item: TodayItem }) {
+function TodayCard({ item, money }: { item: TodayItem; money: (cents: number) => string }) {
   const tint = TINTS[item.tint];
   return (
     <Card onPress={item.href ? () => router.push(item.href!) : undefined}>
@@ -206,18 +225,13 @@ function TodayCard({ item }: { item: TodayItem }) {
           <Text style={styles.itemTitle}>{item.title}</Text>
           <Text style={styles.itemSub}>{item.subtitle}</Text>
         </View>
-        {item.amount !== undefined ? <Text style={styles.itemAmount}>{formatRand(item.amount)}</Text> : null}
+        {item.amount !== undefined ? <Text style={styles.itemAmount}>{money(item.amount)}</Text> : null}
         {item.tag && item.amount === undefined ? <Tag label={item.tag.label} tone={item.tag.tone} /> : null}
         {item.href ? <Feather name="chevron-right" size={17} color={colors.textFaint} /> : null}
       </View>
       {item.tag && item.amount !== undefined ? (
         <View style={styles.itemFoot}>
           <Tag label={item.tag.label} tone={item.tag.tone} />
-          {item.sample ? <Tag label="Sample" tone="muted" /> : null}
-        </View>
-      ) : item.sample ? (
-        <View style={styles.itemFoot}>
-          <Tag label="Sample" tone="muted" />
         </View>
       ) : null}
     </Card>
@@ -226,6 +240,7 @@ function TodayCard({ item }: { item: TodayItem }) {
 
 const styles = StyleSheet.create({
   hero: { borderRadius: radius.lg, padding: 18, gap: 2 },
+  eye: { position: 'absolute', top: 12, right: 12, width: 44, height: 44, alignItems: 'center', justifyContent: 'center', zIndex: 1 },
   heroLabel: { fontFamily: fonts.medium, fontSize: 13, color: 'rgba(255,255,255,0.75)' },
   heroMoney: { fontFamily: fonts.display, fontSize: 44, lineHeight: 52, color: colors.white },
   heroNote: { fontFamily: fonts.medium, fontSize: 13, color: 'rgba(255,255,255,0.8)' },
@@ -233,7 +248,6 @@ const styles = StyleSheet.create({
   heroRow: { flexDirection: 'row', gap: 10, marginTop: 14 },
   mini: { flex: 1, backgroundColor: 'rgba(255,255,255,0.09)', borderRadius: radius.sm, padding: 10 },
   miniLabel: { fontFamily: fonts.medium, fontSize: 12, color: 'rgba(255,255,255,0.75)' },
-  miniSample: { fontFamily: fonts.medium, fontSize: 11, color: 'rgba(255,255,255,0.5)' },
   miniValue: { fontFamily: fonts.display, fontSize: 18, color: colors.white, marginTop: 2 },
   retry: { marginTop: 10, minHeight: 44, justifyContent: 'center' },
   retryText: { fontFamily: fonts.bold, fontSize: 13, color: colors.marigold },
@@ -253,5 +267,4 @@ const styles = StyleSheet.create({
     borderStyle: 'dashed',
   },
   muted: { fontFamily: fonts.body, fontSize: 13.5, color: colors.textMuted },
-  sample: { fontFamily: fonts.body, fontSize: 11.5, color: colors.textFaint, textAlign: 'center' },
 });

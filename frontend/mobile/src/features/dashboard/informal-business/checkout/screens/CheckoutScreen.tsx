@@ -18,9 +18,7 @@ import { clearCart, estimatedTotal, useCart } from '../../cart/lib/cartStore';
 import { ordersApi } from '../../orders/api/ordersApi';
 import { CASH_RULES, cashLimitFor, MAX_OPEN_CASH_ORDERS } from '../../orders/lib/cashPolicy';
 import { isActive } from '../../orders/lib/status';
-import { Fulfilment, OrderError, PaymentMethod } from '../../orders/types';
-import { deliveryAddressesApi } from '../../delivery-addresses/api/deliveryAddressesApi';
-import type { DeliveryAddress } from '../../delivery-addresses/types';
+import { DeliveryOptions, DeliveryPlace, Fulfilment, OrderError, PaymentMethod } from '../../orders/types';
 import { supplierApi } from '../../suppliers/api/supplierApi';
 import type { Supplier } from '../../suppliers/types';
 import { OptionCard } from '../components/OptionCard';
@@ -55,19 +53,10 @@ export default function CheckoutScreen() {
   const orderKey = useRef<string | null>(null);
   const [openCash, setOpenCash] = useState(0);
   const [cashHelp, setCashHelp] = useState(false);
-  const [saved, setSaved] = useState<DeliveryAddress[]>([]);
-
-  useEffect(() => {
-    // The trader's saved places; the default one is picked first.
-    deliveryAddressesApi
-      .list()
-      .then((list) => {
-        setSaved(list);
-        const d = list.find((a) => a.isDefault);
-        if (d) setWhere({ saved: d.id });
-      })
-      .catch(() => setSaved([]));
-  }, []);
+  // Which of the trader's places this supplier delivers to, with distances
+  // (the server works it out), so an address out of range is never offered
+  // as if it would work -- and the order isn't refused at the last step.
+  const [options, setOptions] = useState<DeliveryOptions | null>(null);
 
   useEffect(() => {
     // Cash orders still waiting (placed, not yet delivered or collected).
@@ -79,10 +68,18 @@ export default function CheckoutScreen() {
 
   useEffect(() => {
     if (!supplierId) return;
-    supplierApi.get(supplierId).then((s) => {
+    Promise.all([supplierApi.get(supplierId), ordersApi.deliveryOptions(supplierId).catch(() => null)]).then(([s, o]) => {
       setSupplier(s);
-      // Defaults from what the trader told us at sign-up.
-      setFulfilment(s.delivers && profile.buying.fulfilment !== 'collect' ? 'delivery' : s.collect ? 'collect' : 'delivery');
+      setOptions(o);
+      // First choice: the default saved place, else the business, else any
+      // saved place -- but only one this supplier actually delivers to.
+      const places = o?.places ?? [];
+      const ranked = [...places.filter((p) => p.isDefault), ...places.filter((p) => p.kind === 'business'), ...places.filter((p) => p.kind === 'saved' && !p.isDefault)];
+      const pick = ranked.find((p) => p.inRange);
+      if (pick) setWhere(pick.kind === 'business' ? 'business' : { saved: pick.id! });
+      const canDeliver = s.delivers && (!o || !!pick);
+      // Defaults from what the trader told us at sign-up; collection if none of their places is in range.
+      setFulfilment(canDeliver && profile.buying.fulfilment !== 'collect' ? 'delivery' : s.collect ? 'collect' : 'delivery');
       // Digital is the default: it's tracked and safest for both sides.
       setPayment(s.payfast ? 'in_app' : 'cash');
     });
@@ -113,13 +110,20 @@ export default function CheckoutScreen() {
           : '';
   const cashTitle = fulfilment === 'collect' ? 'Cash when you collect' : 'Cash on delivery';
   const businessAddress = profile.location ? formatPlace(profile.location) : '';
+  const saved = (options?.places ?? []).filter((p) => p.kind === 'saved');
+  const businessOption = options?.places.find((p) => p.kind === 'business') ?? null;
   const savedPlace = typeof where === 'object' ? (saved.find((a) => a.id === where.saved) ?? null) : null;
-  const deliveryAddress = savedPlace ? savedPlace.addressText : where === 'other' && otherPlace ? formatPlace(otherPlace) : businessAddress;
+  const chosen: DeliveryPlace | null = savedPlace ?? (where === 'business' ? businessOption : null);
+  const deliveryAddress = savedPlace ? savedPlace.address : where === 'other' && otherPlace ? formatPlace(otherPlace) : businessAddress;
+  const placeLine = (p: DeliveryPlace | null, fallback: string) =>
+    !p ? fallback : p.inRange ? `${p.address} · ${p.km} km` : `${p.km} km away · ${supplier.name} delivers within ${options?.radiusKm ?? supplier.deliveryRadiusKm} km`;
   const hours = supplier.hours.map((h) => `${h.days} ${h.open}-${h.close}`).join(', ');
 
   const stepError =
     step === 1 && fulfilment === 'delivery' && where === 'other' && !otherPlace
       ? 'Set the delivery address, or choose your business address.'
+      : step === 1 && fulfilment === 'delivery' && chosen && !chosen.inRange
+        ? `${supplier.name} doesn't deliver that far. Choose a place in range, or collect.`
       : step === 2 && payment === 'cash' && cashProblem
         ? cashProblem
         : '';
@@ -199,18 +203,20 @@ export default function CheckoutScreen() {
               <OptionCard
                 icon="home"
                 title="My business"
-                line={businessAddress || 'Your business address'}
+                line={placeLine(businessOption, businessAddress || 'Your business address')}
                 selected={where === 'business'}
+                disabled={!!businessOption && !businessOption.inRange}
                 onPress={() => setWhere('business')}
               />
               {saved.map((a) => (
                 <OptionCard
-                  key={a.id}
+                  key={a.id!}
                   icon="map-pin"
                   title={a.label}
-                  line={a.addressText}
+                  line={placeLine(a, a.address)}
                   selected={savedPlace?.id === a.id}
-                  onPress={() => setWhere({ saved: a.id })}
+                  disabled={!a.inRange}
+                  onPress={() => setWhere({ saved: a.id! })}
                 />
               ))}
               <OptionCard icon="navigation" title="Somewhere else" line="A site, a second shop, a home" selected={where === 'other'} onPress={() => setWhere('other')} />
