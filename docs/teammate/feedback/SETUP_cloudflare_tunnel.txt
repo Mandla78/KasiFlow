@@ -1,0 +1,96 @@
+===========================================================================
+SETUP -- a public https address for your local backend (Cloudflare quick tunnel)
+===========================================================================
+
+FROM / DATE:   Risuna, Saturday 26 September 2026
+FOR:           Mandla (and anyone running the backend on a laptop)
+STATUS:        what I use; tested today with the PayFast settings
+
+
+WHY
+  Some things must reach the backend from OUTSIDE your laptop, over https:
+    - the client's sign-off link (WhatsApp won't make a bare IP clickable;
+      phones force https -- see FINDING_whatsapp_ip_links.txt)
+    - the password reset link in emails
+    - PayFast: the pay page, its return/cancel pages and, most important,
+      the ITN "payment received" call (notify_url)
+    - Cloudinary's upload callbacks (only if you set
+      CLOUDINARY_WEBHOOK_BASE_URL)
+  All of these are built from APP_BASE_URL in backend/.env. The app's own
+  API calls do NOT use it: they still go to EXPO_PUBLIC_API_URL (your
+  laptop's Wi-Fi IP).
+
+  Cloudflare's quick tunnel gives a free https address with no account and
+  no sign-up. (ngrok's free static domain, in .env.example, is the other
+  option; it needs an ngrok account.)
+
+
+ONE-TIME INSTALL (Windows)
+    winget install --id Cloudflare.cloudflared
+  It lands in C:\Program Files (x86)\cloudflared\cloudflared.exe. Open a
+  new terminal afterwards so `cloudflared` is on the PATH.
+
+
+EVERY TIME YOU START WORKING
+  1. Start the backend as usual (port 5000).
+  2. In another terminal, start the tunnel and leave it running:
+        cloudflared tunnel --no-autoupdate --url http://localhost:5000
+     After a few seconds it prints a box with your address:
+        https://<four-random-words>.trycloudflare.com
+     (Ignore https://api.trycloudflare.com in any error line: that's
+     Cloudflare's own service, not your address.)
+  3. Put that address in backend/.env (no slash at the end):
+        APP_BASE_URL=https://<four-random-words>.trycloudflare.com
+     Optional, for Cloudinary callbacks, the same address:
+        CLOUDINARY_WEBHOOK_BASE_URL=https://<four-random-words>.trycloudflare.com
+  4. Restart the backend (it reads .env only when it starts).
+
+  Check it: open https://<your-address>/api/v1/health in a browser.
+    200            all good
+    502            the tunnel works but nothing answers on port 5000:
+                   start the backend
+    a Cloudflare error page / no answer
+                   the tunnel isn't running (or the address is old): step 2
+    links in WhatsApp/emails still show the old address: step 4
+
+
+PAYFAST (sandbox) BEHIND THE TUNNEL
+  backend/.env:
+        PAYFAST_MODE=sandbox
+        PAYFAST_MERCHANT_ID=...     (sandbox.payfast.co.za -> Account Information)
+        PAYFAST_MERCHANT_KEY=...
+        PAYFAST_PASSPHRASE=...
+        PAYFAST_TRUST_PROXY=true
+  PAYFAST_TRUST_PROXY=true works with Cloudflare, not only ngrok. Tested
+  today: through the tunnel the backend sees X-Forwarded-For = the real
+  caller's address (one entry, the same as Cf-Connecting-Ip), and
+  payments/api/routes.py takes the LAST X-Forwarded-For entry, so the
+  "is this really PayFast's server?" check sees PayFast's address.
+  Without the tunnel it must be false (anyone could type the header).
+
+  Don't restart the tunnel in the middle of a payment: the address
+  changes, PayFast's ITN for that payment goes to the old address and
+  never arrives, so the order keeps waiting for payment (and lapses after
+  24 h) although the customer paid.
+
+
+THINGS TO KNOW
+  - A NEW ADDRESS EVERY TIME the tunnel starts. Links already sent (sign-
+    off links, reset emails, pay links) stop working, and APP_BASE_URL has
+    to be updated + the backend restarted.
+  - While it runs, your local backend is reachable from the internet (that
+    is the point). Stop it with Ctrl+C when you're done.
+  - Quick tunnels have no uptime promise; very rarely starting one fails
+    with "failed to request quick Tunnel ... context deadline exceeded":
+    just run the command again.
+  - Never commit backend/.env (it's git-ignored): it holds the PayFast,
+    Cloudinary and email secrets.
+
+
+FOR A FIXED ADDRESS LATER (demo day, production)
+  - A named Cloudflare Tunnel on a domain in your Cloudflare account
+    (cloudflared tunnel login / create / route dns): free, fixed, and the
+    same PAYFAST_TRUST_PROXY rule applies.
+  - Or ngrok's free static domain (see backend/.env.example):
+        ngrok http 5000 --url=https://<your-domain>.ngrok-free.dev
+  - Production: the backend's real https address, no tunnel.
