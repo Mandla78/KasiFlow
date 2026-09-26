@@ -1,0 +1,38 @@
+===========================================================================
+PLAN 01 -- "NEW JOB" LIVES IN THE JOBS TOOL, NOT ON HOME
+Small. App only. Do first.
+===========================================================================
+
+TODAY (checked in the code)
+  home/screens/HomeScreen.tsx, the two quick actions under the card:
+    builder: [New job]  [Materials]       -> /informal-business/jobs/new
+    spaza:   [Credit sale] [Order stock]  -> /informal-business/credit-book/new
+  jobs/screens/JobsScreen.tsx already has its own "New job" button in the
+  footer (Jobs tab), so the same action exists in two places.
+
+WHAT CHANGES
+  1. Home (builder): the "New job" button goes. In its place:
+       [My jobs]  -> /informal-business/jobs   (icon "tool")
+     so a builder still reaches jobs in one tap, and a job is created
+     ONLY from inside the Jobs tool.
+     If the Jobs tool is switched off: the button reads "Add Jobs" and
+     opens the Add-a-tool sheet (AddToolSheet) instead.
+  2. Jobs tool: title "My jobs" (matches the Home button); the footer
+     "New job" stays the one way to start a job. Empty state keeps a
+     "Start your first job" button (same route).
+  3. Spaza side: unchanged in this plan ([Credit sale] [Order stock]).
+     Question 1 below.
+  4. Any other link to /jobs/new from outside the jobs folder: remove
+     (grep "jobs/new").
+
+TESTS / CHECKS
+  - tsc, jest (none of the jobs tests should change)
+  - phone: builder Home -> My jobs -> New job -> save -> back in My jobs
+  - builder with Jobs off -> "Add Jobs" opens the sheet
+
+QUESTIONS FOR MANDLA
+  1. Should "Credit sale" on the spaza Home move into the credit book the
+     same way (Home shows [Credit book] instead)? Suggest: yes, same rule
+     -- tools own their actions, Home only opens tools.
+
+DECISION:

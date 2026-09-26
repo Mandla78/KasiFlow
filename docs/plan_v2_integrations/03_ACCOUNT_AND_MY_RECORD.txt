@@ -1,0 +1,85 @@
+===========================================================================
+PLAN 03 -- ACCOUNT = YOUR TOOLS; THE MONEY RECORDS MOVE TO "MY RECORD"
+App + a small read-only backend summary. After plan 02.
+===========================================================================
+
+TODAY (checked in the code)
+  account/screens/AccountScreen.tsx
+    "Your tools" tiles: Credit book (LIVE), Order stock ("1 on its way",
+    SAMPLE), Jobs (LIVE), Order book (LIVE), My orders ("12 this month",
+    SAMPLE), My record ("38 of 41 confirmed", SAMPLE, goes nowhere)
+    "This month": Stock bought (SAMPLE), Credit given (LIVE), Paid back
+    (LIVE), and a footnote about sample numbers.
+  My record isn't built: backend/src/domains/proof/* are empty folders.
+
+WHAT CHANGES
+  3a. Account shows TOOLS ONLY, every line live
+    - Credit book  "<R> owed to you"                      (as now)
+    - Order stock / Materials  "<n> on the way" from GET /me/home/summary
+      (plan 02) -- live, or the tile's line is just "Order from your
+      suppliers" until then. Never a sample number.
+    - Jobs, Order book                                     (as now)
+    - My orders    "<n> open" from the orders list (live)
+    - My record    "Your money, kept apart"  -> /informal-business/record
+    - Add a tool
+    The "This month" row (Stock bought, Credit given, Paid back) and the
+    sample footnote LEAVE Account: they're records, so they live in My
+    record.
+
+  3b. My record (new screen, informal-business/record)
+    One screen, one month at a time (arrows: previous / next month,
+    never the future), with the hide-balances eye from plan 02.
+    Three blocks, NEVER added together (CLAUDE.md "honest proof"):
+
+      STOCK YOU BOUGHT (orders)                 source: commerce/orders
+        Paid in the app, verified by PayFast    R . . .  (n orders)
+        Cash, confirmed by both                 R . . .  (n)
+        Cash, not confirmed                     R . . .  (n)
+        -> each line opens My orders filtered
+
+      YOUR CREDIT BOOK (your own record)        source: credit book
+        Credit given                            R . . .
+        Paid back                               R . . .
+        -> opens the credit book
+
+      YOUR JOBS (builders; your own record)     source: jobs
+        Stages confirmed by clients             R . . .  (n)
+        Amounts that don't match                n
+        -> opens My jobs
+
+    Wording under the screen title: "Only payments verified by the
+    payment provider are proof. The rest is your own record." Never the
+    word "proof" next to tool numbers.
+    Later (not now): share the record with a supplier (proof/share).
+
+  3c. Backend: GET /me/record/summary?month=YYYY-MM
+    @auth_required(dashboard="informal_business"), 30/min per user.
+    month: strict YYYY-MM, not in the future, not before the account
+    was created; default this month; anything else 422.
+    Built by calling each tool's SERVICE (orders.money_summary for the
+    month, credit_book_service summary for the month, jobs_service for
+    the month) -- never their repositories (boundary test). Lives in
+    domains/proof/ledger (first real use of the proof area) or, if
+    Mandla prefers, informal_trader/business_profile. Question 1.
+    Returns the three blocks separately; no grand total field exists.
+    Audit: none (read-only, own data); rate limit + IDOR tests.
+
+TESTS
+  backend: month parsing (2026-13, 2026-9, ../, future, before sign-up),
+  each block counts only that month and only mine (IDOR), digital /
+  cash-confirmed / cash-unconfirmed kept apart, no "total" key, boundary
+  test green, full suite.
+  app: Account has no sample marks; My record renders hidden/shown,
+  empty month ("Nothing recorded in September"), a tool switched off
+  (its block says "Switch on <tool> in Account"). tsc, jest.
+  phone (Mandla): Account -> My record -> this month matches the credit
+  book and the orders you made; previous month; hide balances.
+
+QUESTIONS FOR MANDLA
+  1. Where does the record summary live: proof/ledger (suggested) or
+     business_profile?
+  2. "Stock bought" per month by order date, or by delivery date?
+     (Suggest order date: it's what the invoice says.)
+  3. Keep "My orders" as an Account tile, or only inside Order stock?
+
+DECISION:
