@@ -7,9 +7,9 @@ import { LegalDocument } from './types';
  * changes first and the version goes up.
  */
 export const PRIVACY_POLICY: LegalDocument = {
-  version: '0.1-draft',
+  version: '0.2-draft',
   title: 'Privacy Policy',
-  effectiveDate: '24 September 2026',
+  effectiveDate: '26 September 2026',
   draftNotice: 'Draft for review. This policy must be checked by a legal professional before Akayza launches to the public.',
   sections: [
     {
@@ -27,7 +27,9 @@ export const PRIVACY_POLICY: LegalDocument = {
         'Registration (optional): whether you are a sole trader or a registered company, and a CIPC registration number. Why: to check the company on the official CIPC register and show suppliers a verified badge. You can skip this.',
         'Location: the address you enter, and the pin you place on the map. Why: to find suppliers who deliver to you and to get deliveries to the right place. We only use your phone\'s location when you tap "Use my location".',
         'Buying preferences: the product categories you buy, whether you want delivery or collection, and how often you restock. Why: to recommend suppliers who fit what you need.',
-        'Activity: orders, payments, credit you record, and confirmations you make. Why: this is the record the app keeps for you.',
+        'Orders and payments: the suppliers you connect with, what you order, the delivery address, amounts and each order\'s history. For digital payments we keep the amount, the result and PayFast\'s reference, never your card details or what PayFast knows about you. Why: to place and track your orders, issue invoices and receipts, and keep your record.',
+        'Your tools: credit you record, jobs and stages (with photos, their time and a fingerprint our server records), and confirmations you make. For a job, the client\'s name and phone number that you enter, so you can send them a sign-off link. Why: this is the record the app keeps for you.',
+        'How we use your tools\' activity: to tailor supplier suggestions to what your business uses. This stays private to your account; suppliers never see it.',
         'Device: a security key created on your phone (we only receive its public part), and basic device and log information. Why: to prove that confirmations came from your phone and to keep your account safe.',
       ],
     },
@@ -41,8 +43,10 @@ export const PRIVACY_POLICY: LegalDocument = {
     {
       heading: '4. Who we share it with',
       paragraphs: [
-        'Suppliers: your business name, area, delivery address and the details of orders you place with them. Suppliers never see your credit book or your customers.',
-        'Service providers who process information for us under contract: PayFast (payments), Mapbox (maps and address search), Cloudinary (document and photo storage, with malware scanning), our email provider, and our hosting provider.',
+        'Suppliers you order from: your business name, area, delivery address and the details of your orders. The invoice issued in their name also shows your name, business address, email, phone and CIPC number (if you gave one), as a proper invoice needs. Suppliers never see your credit book, your jobs, your customers or your clients.',
+        'Anyone holding one of your invoices or receipts can check it is genuine with its QR code; that check page shows the document number, supplier, date and total, and no personal details.',
+        'Your clients (builders): a sign-off link shows your business name, the job, the stage, its price and its photo; never the amount you recorded or anyone else\'s details.',
+        'Service providers who process information for us under contract: PayFast (payments), Mapbox (maps and address search), Cloudinary (photo and document storage), our email provider, and our hosting provider.',
         'CIPC: if you give a CIPC registration number, we check it against the CIPC register.',
         'The law: when we are legally required to.',
         'Some of these providers store information outside South Africa. We only use providers bound by laws or agreements that protect your information to a standard similar to POPIA (section 72).',
@@ -57,13 +61,13 @@ export const PRIVACY_POLICY: LegalDocument = {
     {
       heading: '6. How long we keep it',
       paragraphs: [
-        'We keep your information while your account is open. When you delete your account, we delete or anonymise your personal information, except records we must keep by law (for example payment records for tax purposes, generally five years).',
+        'We keep your information while your account is open. When you delete your account, we delete or anonymise your personal information, except records we must keep by law: orders, invoices and payment records are kept for five years (tax law).',
       ],
     },
     {
       heading: '7. How we protect it',
       paragraphs: [
-        'Passwords are hashed, connections are encrypted, and every request is checked so that you can only see your own business\'s information. Uploaded documents are scanned for malware. Access by our staff is limited and logged.',
+        'Passwords are hashed, connections are encrypted, and every request is checked so that you can only see your own business\'s information. Uploads are checked for size and ownership, and malware scanning of uploads is switched on before launch. Links to invoices, receipts and payments are signed and expire. Security events are kept in an audit trail that never contains passwords, codes or card details. Access by our staff is limited and logged.',
         'If a breach puts your information at risk, we will tell you and the Information Regulator as POPIA requires.',
       ],
     },

@@ -6,7 +6,7 @@
  */
 import { api, ApiError } from '@/shared/api/client';
 
-import { Order, OrderError, OrdersApi, OrderStatus, PaymentMethod, PaymentStatus } from '../types';
+import { Evidence, MoneySummary, Order, OrderError, OrdersApi, OrderStatus, PaymentMethod, PaymentStatus } from '../types';
 
 type WireOrder = {
   id: string;
@@ -26,6 +26,7 @@ type WireOrder = {
   pay_by: string | null;
   events: { status: OrderStatus; at: string }[];
   documents: { invoice: boolean; receipt: boolean };
+  evidence: Evidence;
 };
 
 export function orderFromWire(o: WireOrder): Order {
@@ -55,6 +56,7 @@ export function orderFromWire(o: WireOrder): Order {
     payBy: o.pay_by,
     events: o.events,
     documents: o.documents,
+    evidence: o.evidence,
   };
 }
 
@@ -96,6 +98,26 @@ export const httpOrdersApi: OrdersApi = {
   async get(id) {
     const data = await orCallError(api<{ order: WireOrder }>('GET', `/me/orders/${encodeURIComponent(id)}`, undefined, { auth: true }));
     return orderFromWire(data.order);
+  },
+  async summary(): Promise<MoneySummary> {
+    const { summary: s } = await api<{
+      summary: {
+        provider_verified_cents: number;
+        provider_verified_orders: number;
+        confirmed_by_both_cents: number;
+        confirmed_by_both_orders: number;
+        not_confirmed_cents: number;
+        not_confirmed_orders: number;
+      };
+    }>('GET', '/me/orders/summary', undefined, { auth: true });
+    return {
+      providerVerifiedCents: s.provider_verified_cents,
+      providerVerifiedOrders: s.provider_verified_orders,
+      confirmedByBothCents: s.confirmed_by_both_cents,
+      confirmedByBothOrders: s.confirmed_by_both_orders,
+      notConfirmedCents: s.not_confirmed_cents,
+      notConfirmedOrders: s.not_confirmed_orders,
+    };
   },
   async documentLink(id, kind) {
     const data = await orCallError(api<{ url: string }>('POST', `/me/orders/${encodeURIComponent(id)}/documents/${kind}`, undefined, { auth: true }));

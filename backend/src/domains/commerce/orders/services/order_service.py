@@ -294,6 +294,40 @@ def _close(order: Order, status: str, actor: str, note: Optional[str] = None) ->
 _INVOICE_AFTER = ("accepted", "out_for_delivery", "ready_for_collection", "delivered", "collected")
 
 
+#: What stands behind an order's payment, strongest first. Never add them up
+#: together: only a provider-verified payment is independent proof; a cash
+#: record is what both sides said, and unconfirmed cash proves nothing yet.
+EVIDENCE = ("provider_verified", "confirmed_by_both", "not_confirmed", "none")
+
+
+def payment_evidence(o: Order) -> str:
+    if o.payment_method == "in_app":
+        # Refunded: the money went back, so it proves no sale.
+        return "provider_verified" if o.payment_status == "paid" else "none"
+    if o.payment_status == "confirmed_by_both":
+        return "confirmed_by_both"
+    return "none" if o.status in CLOSED_WITHOUT_SALE else "not_confirmed"
+
+
+def money_summary(user) -> dict:
+    """The trader's order money, kept apart by what backs it (never one total)."""
+    totals = {k: 0 for k in EVIDENCE if k != "none"}
+    counts = {k: 0 for k in totals}
+    for o in repo.all_for_user(user.id):
+        e = payment_evidence(o)
+        if e in totals:
+            totals[e] += o.total_cents
+            counts[e] += 1
+    return {
+        "provider_verified_cents": totals["provider_verified"],
+        "provider_verified_orders": counts["provider_verified"],
+        "confirmed_by_both_cents": totals["confirmed_by_both"],
+        "confirmed_by_both_orders": counts["confirmed_by_both"],
+        "not_confirmed_cents": totals["not_confirmed"],
+        "not_confirmed_orders": counts["not_confirmed"],
+    }
+
+
 def documents_ready(o: Order) -> dict[str, bool]:
     """Invoice: once the order is confirmed (the supplier accepted a cash
     order, or a digital order was paid -- which confirms it at once).
@@ -331,4 +365,5 @@ def view(o: Order) -> dict:
         "pay_by": o.pay_by.isoformat() if o.pay_by else None,
         "events": [{"status": e.status, "at": e.at.isoformat()} for e in o.events],
         "documents": documents_ready(o),
+        "evidence": payment_evidence(o),
     }

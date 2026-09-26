@@ -96,6 +96,29 @@ reviewed before launch. Numbers live in ONE place in code:
     documents).
 
 
+4b. WHAT BACKS THE MONEY (proof levels)  [BUILT 26 Sep 2026]
+---------------------------------------------------------------------------
+  Only a DIGITAL payment is independent proof: PayFast, a regulated
+  payment provider, confirmed the money moved, and anyone (SARS, a bank, a
+  funder) can check its reference with PayFast. Cash can never be proven
+  that way. Every order carries one label, and totals are NEVER added
+  across labels:
+    provider_verified   paid digitally, confirmed by PayFast
+    confirmed_by_both   cash both sides confirmed in the app (what they
+                        said; no bank or provider checked it)
+    not_confirmed       cash still to pay: proof of nothing yet
+    none                unpaid, cancelled, lapsed or refunded
+  Stored apart: digital payments in commerce.payments (with PayFast's
+  reference and the verified notification); cash confirmations get their
+  own table with the cash handshake (each side's amount, time, phone).
+  Shown apart: My orders, receipts ("Proof: ..."), the document check
+  page, and anything shared with a funder or regulator.
+  Regulators: Akayza never holds or moves money. Digital money moves
+  inside PayFast (which carries FICA / SARB duties); cash never touches us,
+  so for cash we are a record-keeper, not a payment service -- and the
+  labels say exactly what each record is worth.
+
+
 5b. INVOICES AND RECEIPTS  [BUILT 26 Sep 2026]
 ---------------------------------------------------------------------------
   - The INVOICE is the supplier's: they sold the goods. Akayza issues it

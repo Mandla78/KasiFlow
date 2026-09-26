@@ -13,7 +13,8 @@ import { colors, fonts, radius } from '@/shared/theme/tokens';
 
 import { ordersApi } from '../api/ordersApi';
 import { StatusTimeline } from '../components/StatusTimeline';
-import { canCancel, isStopped, PAYMENT_LABEL, STATUS_LABEL, when } from '../lib/status';
+import { EVIDENCE_LABEL, EVIDENCE_TONE, evidenceOf } from '../lib/evidence';
+import { canCancel, isStopped, STATUS_LABEL, when } from '../lib/status';
 import { DocumentKind, Order, OrderError } from '../types';
 
 const REFRESH_MS = 10_000;
@@ -90,7 +91,8 @@ export default function OrderScreen() {
       </View>
       <View style={styles.tags}>
         <Tag label={STATUS_LABEL[order.status]} tone={isStopped(order) ? 'garnet' : 'info'} />
-        <Tag label={PAYMENT_LABEL[order.paymentStatus]} tone={order.paymentStatus === 'paid' || order.paymentStatus === 'confirmed_by_both' ? 'jade' : 'marigold'} />
+        {/* What backs the payment: only a PayFast payment is independent proof. */}
+        <Tag label={EVIDENCE_LABEL[evidenceOf(order)]} tone={EVIDENCE_TONE[evidenceOf(order)]} />
       </View>
 
       {unpaid ? (

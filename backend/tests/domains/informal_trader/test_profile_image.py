@@ -11,7 +11,7 @@ import re
 from src.shared.media.provider import get_provider
 
 PASSWORD = "Spaza2026!"
-CONSENT = {"privacy_version": "0.1-draft", "terms_version": "0.1-draft"}
+CONSENT = {"privacy_version": "0.2-draft", "terms_version": "0.2-draft"}
 SIGN = "/api/v1/me/business-profile/image/upload-signature"
 IMAGE = "/api/v1/me/business-profile/image"
 WEBHOOK = "/api/v1/media/webhooks/cloudinary-notifications"

@@ -16,7 +16,7 @@ import pytest
 from src.domains.informal_trader.credit_book.services.credit_book_service import today
 
 PASSWORD = "Spaza2026!"
-CONSENT = {"privacy_version": "0.1-draft", "terms_version": "0.1-draft"}
+CONSENT = {"privacy_version": "0.2-draft", "terms_version": "0.2-draft"}
 BASE = "/api/v1/me/credit-book"
 REFUSED = {400, 404, 409, 413, 415, 422}
 

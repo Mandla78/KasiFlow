@@ -20,7 +20,7 @@ from src.domains.supplier.integration.services.feed_loader import load_directory
 from src.domains.supplier.supplier_profile.models import Supplier
 
 PASSWORD = "Spaza2026!"
-CONSENT = {"privacy_version": "0.1-draft", "terms_version": "0.1-draft"}
+CONSENT = {"privacy_version": "0.2-draft", "terms_version": "0.2-draft"}
 SEED = Path(__file__).resolve().parents[3] / "seed" / "suppliers"
 
 
