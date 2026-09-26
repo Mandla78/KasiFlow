@@ -15,3 +15,5 @@ class PlatformAuditEvent(str, enum.Enum):
     # Media (shared/media/sweep.py): uploads started but never finished
     # (app closed mid-upload); their files were deleted.
     MEDIA_ABANDONED_UPLOADS_DELETED = "platform.media_abandoned_uploads_deleted"
+    # Notifications (domains/platform/notifications): which switch, on or off.
+    NOTIFICATION_SETTINGS_CHANGED = "notification.settings_changed"

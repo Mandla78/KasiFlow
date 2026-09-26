@@ -65,6 +65,6 @@ def publish_notification(event: NotificationEvent) -> None:
             try:
                 listener(event)
             except Exception:  # noqa: BLE001 -- see docstring: a failed notification must never break the triggering action
-                logger.exception("notification listener failed for category=%s", event.category.value)
+                logger.exception("notification listener failed for template=%s", event.template)
 
     enqueue(_deliver)

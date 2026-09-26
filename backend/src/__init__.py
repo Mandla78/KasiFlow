@@ -92,6 +92,8 @@ def _register_models() -> None:
     from src.domains.commerce.payments import models as _payments  # noqa: F401
     # platform schema: every media upload, start to finish
     from src.shared.media import models as _media  # noqa: F401
+    # platform schema: every user's alerts and their switches
+    from src.domains.platform.notifications import models as _notifications  # noqa: F401
     # audit schema: the append-only audit trail
     from src.domains.security.audit import models as _audit  # noqa: F401
 
@@ -103,6 +105,10 @@ def _register_listeners(app: Flask) -> None:
     from src.domains.identity.auth.rate_limit.policies import RATE_LIMIT_AUDIT_EVENTS
 
     audit_service.register(app)
+    # Alerts published anywhere are kept by the notifications feature.
+    from src.domains.platform.notifications.services import notification_service
+
+    notification_service.register(app)
     rate_limit_responses.register_audit_events(RATE_LIMIT_AUDIT_EVENTS)
 
     # Cloudinary scan verdicts, routed to the feature that owns the folder.
