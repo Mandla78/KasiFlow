@@ -19,55 +19,37 @@ DONE
     from the credit book and jobs summaries, a real Today list, buttons
     straight to the new-sale / new-job forms, a working Add-a-tool sheet;
     order numbers stay marked "sample".
+  - History + bin, phase 1 (PR 6): History and Bin on the mocks, merged.
+  - Jobs v2, the builder network, app + backend (PR 7, migration
+    0019_builder_network): partners on jobs with the pay stated first,
+    payments confirmed by both, builds portfolio, help posts, merged.
+  - Signals (PR 8): jobs_service.demand_signals(user) for the engine, merged.
+  - Order book, app on the mocks (PR 9) + CONTRACT_order_book, merged;
+    approved with two changes (server primary key + client_key; "Money
+    you recorded").
 
 IN PROGRESS
-  - History + bin, phase 1 (PR 6, risuna/tools-bin): History (search)
-    and Bin (restore, 30 days) for the credit book and jobs, delete with
-    a confirm sheet and a 5-second Undo, on the mocks. The contract is
-    CONTRACT_bin.txt (waiting for Mandla). On the real API, History uses
-    the existing endpoints and Delete/Bin stay hidden (BIN_READY) until
-    phase 2 (backend) is approved and built.
-  - Jobs v2, the builder network, app + backend (PR 7,
-    risuna/jobs-network, on top of PR 6; 15_JOBS_BUILDER_NETWORK_PLAN.txt
-    as changed by DECISION_jobs_partners.txt -- approved by Mandla):
-    Tabs My jobs / Builders / Suppliers. On a job, "Bring in a partner":
-    stages, trade, when, and their pay (fixed or per day, and when it's
-    paid) with a private "you keep" line; then invite a partner, a saved
-    builder or a builder near the job of that trade, or post it nearby.
-    The partner sees the offer (pay first) and accepts or declines;
-    partners get each other's number. Payments to a partner are
-    confirmed by both ("I paid" / "I got"; different amounts both kept).
-    Invites and partner jobs on My jobs. Builders tab: your partners
-    (WhatsApp/Call), saved, builders near you by trade (cover photo of
-    their best build), help wanted with pay. Builder profile = portfolio
-    of client-confirmed builds (slideshow per build), Invite to a job,
-    Save, Report, Block. No "connect". Explainable ranking and the pay
-    rules are tested (lib/recommend.ts, lib/pay.ts). "Test: answer as
-    Thabo" plays the other builder on the mock. Backend per
-    CONTRACT_jobs_v2.txt: domains/informal_trader/builder_network,
-    migration 0019_builder_network (8 tables, pay rules as CHECKs too),
-    92 tests (flows, ranking = the app's cases, security, hostile
-    input); the app on it via httpNetworkApi. flask builders seed
-    [--me EMAIL] makes sample builders for development (photos to
-    <root>/dev-seed/builders on Cloudinary). Sample photos: free Pexels,
-    no faces (assets/sample-work). Not yet: "ask for more"
-    (counter-offer), videos (need expo-video, a native module -> a new
-    app build).
+  - History + bin, phase 2: the backend (risuna/bin-api, no migration),
+    per CONTRACT_bin.txt with Mandla's change: binning a job turns off the
+    sign-off links the client hasn't answered (they answer like expired
+    ones; restore never brings them back); a binned job's help posts and
+    unanswered invites go with it. The app's Delete / Bin now work on the
+    real API too (BIN_READY true). 36 new tests. As built: CONTRACT_bin.txt
+    section 6.
 
 BLOCKED (and on what)
   - (none; the Idempotency-Key header and the deep-JSON crash are fixed on main)
 
 FINDINGS / NEEDS / QUESTIONS FOR MANDLA
-  - QUESTION_trades.txt: the new trades list (painter/tiler split; bricklayer,
-    roofer, welder, glazier)
+  - QUESTION_trades.txt: answered YES (the 11 trades); built in risuna/trades
   - FINDING_stage_photos.txt: camera-only and hashing on the server
   - NEEDS_camera_permission_text.txt, NEEDS_shared_components.txt
   - FINDING_whatsapp_ip_links.txt, QUESTION_bluetooth_sales.txt (roadmap)
 
-NEXT (round 2, see ../14_ROUND_2_BRIEF.txt and ../15_JOBS_BUILDER_NETWORK_PLAN.txt)
-  - history + bin phase 2 (backend) once CONTRACT_bin.txt is approved
-  - after Sunday: crew on a job, short videos, the order book,
-    demand_signals() per tool
+NEXT (all approved 26 Sep; see the DECISION lines)
+  - order book backend: risuna/order-book-api, migration 0021_order_book
+  - trades (11, painter_tiler split): risuna/trades on top of it, 0022_trades
+  - after Sunday: crew on a job, short videos, "ask for more" (counter-offer)
 
 FROM MANDLA'S SIDE (26 Sep, night)
   - test_jobs.py::test_send_a_sign_off_link was flaky (~1 run in 10): the

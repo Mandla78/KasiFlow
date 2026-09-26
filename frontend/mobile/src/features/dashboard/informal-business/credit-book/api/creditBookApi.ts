@@ -9,8 +9,5 @@ import { mockCreditBookApi } from './mockCreditBookApi';
 
 export const creditBookApi = USE_MOCK_AUTH ? mockCreditBookApi : httpCreditBookApi;
 
-/**
- * The bin (delete, undo, restore) needs the backend in CONTRACT_bin.txt.
- * Until it's built, only the mock offers it; then this becomes true.
- */
-export const BIN_READY = USE_MOCK_AUTH;
+/** The bin (delete, undo, restore): on the mock and the backend alike (CONTRACT_bin.txt). */
+export const BIN_READY = true;

@@ -5,8 +5,9 @@ CONTRACT -- HISTORY + BIN (credit book and jobs)
 TOOL:            History and bin for the credit book and jobs
                  (docs/teammate/14_ROUND_2_BRIEF.txt, section 1)
 AUTHOR / DATE:   Risuna, Friday 25 September 2026
-STATUS:          proposed (the app side is built on the mocks: branch
-                 risuna/tools-bin)
+STATUS:          approved (DECISION below) and BUILT: app on the mocks in
+                 PR 6 (risuna/tools-bin); backend + the app on it in
+                 risuna/bin-api (section 6)
 
 
 0. THE RULE
@@ -84,19 +85,58 @@ STATUS:          proposed (the app side is built on the mocks: branch
   Privacy: history search stays on the trader's own data.
 
 
-5. WHAT THE APP DOES TODAY
+5. WHAT THE APP DOES
 ---------------------------------------------------------------------------
 
-  Mock (EXPO_PUBLIC_USE_MOCK_API=true): all of the above -- History
-  (search), Delete from an entry or job with the confirm sheet, "Moved to
-  the bin. Undo" for 5 s, Bin with Restore and the 30-day note.
-  Real backend (false): History works now from the existing list
-  endpoints (paid entries / done jobs; cancelled entries come with GET
-  /history); the Delete and Bin controls stay hidden until these
-  endpoints exist (BIN_READY in creditBookApi.ts / jobsApi.ts).
+  On the mock and the real backend alike: History (search), Delete from
+  an entry or job with the confirm sheet, "Moved to the bin. Undo" for
+  5 s, Bin with Restore and the 30-day note. The job's confirm sheet adds
+  "The sign-off link you sent <client> stops working. If you restore the
+  job, send a new one." when a stage is waiting on the client.
 
 
-6. QUESTIONS FOR MANDLA
+6. AS BUILT (risuna/bin-api, after the DECISION)
+---------------------------------------------------------------------------
+
+  Endpoints exactly as section 1 (history/bin 120/min, delete/restore
+  30/min per trader; history q is CleanText 0..60, unknown query fields
+  422). Every entry and job carries "binned_at". No migration.
+
+  Credit book: a binned entry is out of the list, get/pay/correct/cancel
+  (404), the customer's owes_cents, and every summary number, including
+  "paid back this month". History = paid + cancelled, the latest activity
+  first (a payment, a correction or the entry), name search with % and _
+  as plain letters, max 200.
+
+  Jobs (your change 2): DELETE turns off every sign-off link the client
+  hasn't answered (revoked_at, in the same transaction; links are locked
+  first, in the order the client's answer locks them, so an answer and a
+  delete at the same moment queue: whichever lands first wins, and an
+  answer that landed first stays in the record). A stage that was
+  "waiting" on such a link goes back to photo_taken (or not_started):
+  nothing waits on a dead link, and Home's "waiting on clients" doesn't
+  count it. Restore brings the job back, never the links. The public page
+  also refuses any link to a binned job (a second lock on the same door).
+  History = done jobs, latest confirmed stage first, title or client
+  name search, max 200.
+
+  Builder network: a binned job takes its open help posts and the invites
+  nobody has answered with it (404 for other builders, back on restore).
+  A partner who ACCEPTED keeps the invite and its payments: their record,
+  and they can still confirm cash they got; the owner can't record new
+  payments on a binned job.
+
+  Audit: credit.entry_binned / entry_restored {entry_id};
+  job.binned {job_id, links_turned_off} / job.restored {job_id}. No
+  names, phones or amounts.
+
+  Tests: tests/domains/informal_trader/test_credit_book_bin.py and
+  test_jobs_bin.py (36): flows, totals, 30 days, IDOR (another trader
+  gets 404 and sees nothing), an open link answers like an expired one
+  after the bin and stays dead after restore, hostile queries, audit.
+
+
+7. QUESTIONS FOR MANDLA (answered in the DECISION below)
 ---------------------------------------------------------------------------
 
   1. OK that history moves paid-back entries off the credit book's main
