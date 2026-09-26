@@ -21,6 +21,7 @@ from src import create_app  # noqa: E402
 from src.extensions import db  # noqa: E402
 from src.shared.cache import cache as cache_module  # noqa: E402
 from src.shared.email.email import get_fake_provider  # noqa: E402
+from src.shared.queue.queue import wait_until_idle  # noqa: E402
 from src.shared.rate_limit.limiter import limiter  # noqa: E402
 
 TRADER_TABLES = ["trader.job_sign_offs", "trader.job_stages", "trader.jobs", "trader.credit_corrections", "trader.credit_payments", "trader.credit_entries", "trader.credit_customers", "trader.business_profile_images", "trader.business_profiles", "platform.media_uploads"]
@@ -40,6 +41,9 @@ def app():
 
 @pytest.fixture(autouse=True)
 def clean(app):
+    # Alerts are written by the background queue: let the last test's finish
+    # before its tables are emptied (a TRUNCATE waiting on a half-done job hangs).
+    wait_until_idle(timeout=30)
     with app.app_context():
         db.session.execute(text("TRUNCATE " + ", ".join([f"identity.{t}" for t in IDENTITY_TABLES] + TRADER_TABLES + SUPPLIER_TABLES) + " CASCADE"))
         db.session.commit()

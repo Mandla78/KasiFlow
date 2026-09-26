@@ -15,7 +15,7 @@
  */
 import { formatRand } from '@/shared/lib/money';
 
-import { notify } from '../../notifications/lib/notificationStore';
+import { mockAlert } from '../../notifications/api/mockNotificationsApi';
 import { catalogueApi } from '../../catalogue/api/catalogueApi';
 import type { Product } from '../../catalogue/types';
 import { supplierApi } from '../../suppliers/api/supplierApi';
@@ -57,27 +57,37 @@ function advanced(o: Order): Order {
   return { ...o, status, events, paymentStatus };
 }
 
-/** In-app notifications as the order moves (the backend also emails them). */
+/**
+ * The alerts the server makes as an order moves (order_alerts.py), made by
+ * the mock notifications API with the same templates and keys.
+ */
 function announce(o: Order) {
-  const href = `/informal-business/orders/${o.id}`;
-  const total = formatRand(o.totalCents);
+  const link = { type: 'order' as const, id: o.id };
+  const params = { ref: o.reference, supplier: o.supplierName, total_cents: o.totalCents };
+  const alert = (status: OrderStatus) => {
+    const kind =
+      status === 'placed' ? 'order.sent'
+      : status === 'out_for_delivery' ? (o.payment === 'cash' ? 'order.on_its_way_cash' : 'order.on_its_way')
+      : status === 'ready_for_collection' ? 'order.ready'
+      : `order.${status}`;
+    mockAlert(kind, params, link, `order:${o.id}:${status}`);
+  };
   if (o.status === 'awaiting_payment') {
-    notify({ icon: 'credit-card', title: 'Your order is waiting for payment', body: `${o.reference} · ${total} to ${o.supplierName}. Pay to send it to them.`, href });
+    alert('awaiting_payment');
     return;
   }
-  notify({ icon: 'send', title: `Order sent to ${o.supplierName}`, body: `${o.reference} · ${total}. Waiting for them to accept.`, href });
+  alert('placed');
   const collect = o.fulfilment === 'collect';
-  const later: [number, OrderStatus, string, string][] = [
-    [STEPS_SECONDS.accepted, 'accepted', 'check-circle', `${o.supplierName} accepted your order`],
-    [STEPS_SECONDS.moving, collect ? 'ready_for_collection' : 'out_for_delivery', collect ? 'package' : 'truck', collect ? 'Your order is ready to collect' : 'Your order is on its way'],
-    [STEPS_SECONDS.done, collect ? 'collected' : 'delivered', 'check', collect ? 'Order collected' : 'Order delivered'],
+  const later: [number, OrderStatus][] = [
+    [STEPS_SECONDS.accepted, 'accepted'],
+    [STEPS_SECONDS.moving, collect ? 'ready_for_collection' : 'out_for_delivery'],
+    [STEPS_SECONDS.done, collect ? 'collected' : 'delivered'],
   ];
-  for (const [seconds, status, icon, title] of later) {
+  for (const [seconds, status] of later) {
     setTimeout(() => {
       const now = orders.find((x) => x.id === o.id);
       if (!now || advanced(now).status !== status) return; // cancelled meanwhile
-      const cash = o.payment !== 'cash' ? '' : status === 'out_for_delivery' ? ` Have ${total} cash ready.` : status === 'ready_for_collection' ? ` Bring ${total} cash.` : '';
-      notify({ icon, title, body: `${o.reference} · ${o.supplierName}.${cash}`, href });
+      alert(status);
     }, seconds * 1000 + 50);
   }
 }

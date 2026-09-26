@@ -38,7 +38,7 @@ from src.shared.constants.commerce_policy import MAX_OPEN_CASH_ORDERS, cash_limi
 from ..constants import CLOSED_WITHOUT_SALE, SUPPLIER_MOVES, UNPAID_HOURS
 from ..models import Order, OrderEvent, OrderLine
 from ..repositories import order_repository as repo
-from . import order_audit
+from . import order_alerts, order_audit
 
 
 class OrderRefused(AppError):
@@ -143,6 +143,7 @@ def place(user, data: dict) -> dict:
         E.ORDER_PLACED, user_id=user.id, order_id=order.id, reference=order.reference, supplier_id=s.id,
         total_cents=total, payment=payment, fulfilment=fulfilment, lines=len(products),
     )
+    order_alerts.alert(order, status)
     return view(order)
 
 
@@ -216,6 +217,7 @@ def supplier_move(order_id: uuid.UUID, to_status: str, *, note: Optional[str] = 
         order.events.append(OrderEvent(status=to_status, actor="supplier", at=utcnow(), note=note))
     db.session.commit()
     order_audit.record(E.ORDER_STATUS_CHANGED, order_id=order.id, reference=order.reference, status=to_status, actor="supplier")
+    order_alerts.alert(order, to_status)
     return order
 
 
@@ -276,6 +278,7 @@ def expire_unpaid(now: Optional[datetime] = None) -> int:
     db.session.commit()
     for order in expired:
         order_audit.record(E.ORDER_EXPIRED, order_id=order.id, reference=order.reference)
+        order_alerts.alert(order, "expired")
     return len(expired)
 
 

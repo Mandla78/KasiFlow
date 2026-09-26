@@ -18,10 +18,12 @@ from src.core.base_model import utcnow
 from src.domains.commerce.orders.models import Order
 from src.domains.commerce.payments.models import Payment
 from src.domains.commerce.payments.services import payfast
+from src.domains.platform.notifications.models import Notification
 from src.domains.supplier.catalogue.models import Product
 from src.domains.supplier.integration.services.feed_loader import load_directory
 from src.domains.supplier.supplier_profile.models import Supplier
 from src.extensions import db
+from src.shared.queue.queue import wait_until_idle
 
 PASSWORD = "Spaza2026!"
 CONSENT = {"privacy_version": "0.2-draft", "terms_version": "0.2-draft"}
@@ -176,6 +178,25 @@ def test_a_verified_notification_pays_the_order_once(app, client, order, outbox)
         p = Payment.query.one()
         assert p.status == "complete" and p.provider_reference == "1089250"
         assert "nomsa@example.com" not in str(p.itn_payload) and "Nomsa" not in str(p.itn_payload)
+
+
+def paid_alerts(app, o) -> list[str]:
+    """The trader's order alerts for this order (notifications, step 3)."""
+    wait_until_idle(timeout=10)
+    with app.app_context():
+        return sorted(n.kind for n in Notification.query.filter_by(link_id=o["id"]))
+
+
+def test_only_a_verified_payment_sends_the_paid_alert_and_only_once(app, client, order, payfast_on):
+    me, o = order
+    pay_link(client, me, o)
+    bad = itn(app, o, tamper=True)
+    notify(client, bad)
+    assert paid_alerts(app, o) == ["order.awaiting_payment"]
+    posted = itn(app, o)
+    notify(client, posted)
+    notify(client, posted)  # PayFast repeats itself
+    assert paid_alerts(app, o) == ["order.awaiting_payment", "order.paid"]
 
 
 @pytest.mark.parametrize("case", ["bad_signature", "wrong_passphrase", "not_from_payfast", "wrong_amount", "not_confirmed"])
