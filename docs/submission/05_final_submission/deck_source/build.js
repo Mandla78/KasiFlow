@@ -415,6 +415,43 @@ async function icon(Comp, color, px = 256) {
       "Use of funds: stipends R96k, field agent R60k, data R60k, running costs R24k, POPIA review + external security test R30k, devices + contingency R30k.");
   }
 
+  // ================================================================ 15b. COSTS: START AND GROW
+  {
+    const s = pres.addSlide(); base(s);
+    kicker(s, "What it costs");
+    title(s, "Small to start. Profitable by year 3.");
+    const steps = [
+      ["Start", "R300k", "One-off: the 6-month pilot (the ask)", C.amL],
+      ["Grow", "~R1.5m", "Raised after the pilot, to hire ahead of revenue", C.emL],
+      ["Break even", "Year 2", "Suppliers' fees cover all costs", C.em],
+    ];
+    for (let i = 0; i < 3; i++) {
+      const y = 2.0 + i * 1.5;
+      card(s, 0.6, y, 5.3, 1.3);
+      t(s, steps[i][0].toUpperCase(), { x: 0.85, y: y + 0.12, w: 2.2, h: 0.35, fontSize: 12, bold: true, color: C.muted, charSpacing: 2 });
+      t(s, steps[i][1], { x: 0.85, y: y + 0.45, w: 2.2, h: 0.65, fontFace: TITLE, fontSize: 30, bold: true, color: steps[i][3] });
+      t(s, steps[i][2], { x: 3.0, y: y + 0.2, w: 2.75, h: 0.95, fontSize: 13.5, valign: "middle" });
+    }
+    card(s, 6.3, 1.9, 6.4, 4.4);
+    s.addChart(pres.charts.BAR, [
+      { name: "Running costs", labels: ["Year 1", "Year 2", "Year 3"], values: [75, 270, 650] },
+      { name: "Revenue", labels: ["Year 1", "Year 2", "Year 3"], values: [56, 283, 1100] },
+    ], {
+      x: 6.4, y: 2.0, w: 6.2, h: 4.2, barDir: "col", barGrouping: "clustered",
+      showTitle: true, title: "A month at year end (R thousand, estimate)", titleColor: C.white, titleFontFace: BODY, titleFontSize: 13,
+      chartColors: [C.red, C.em], showValue: true, dataLabelPosition: "outEnd", dataLabelColor: C.white, dataLabelFontSize: 12, dataLabelFontBold: true,
+      catAxisLabelColor: C.white, catAxisLabelFontSize: 13, valAxisHidden: true, valGridLine: { style: "none" }, catGridLine: { style: "none" },
+      showLegend: true, legendPos: "b", legendColor: C.white, legendFontSize: 12, barGapWidthPct: 60,
+    });
+    t(s, "Most of the cost is people: the team and field agents.", { x: 6.3, y: 6.4, w: 6.4, h: 0.4, fontSize: 12.5, italic: true, color: C.amL });
+    foot(s, 16, "Estimates. Costs: team, field agents, sales, hosting and messaging, security and POPIA.");
+    s.addNotes(
+      "SAY (20 s): 'To start, R300,000 for the pilot. After the pilot we raise about R1.5 million to hire ahead of revenue. Costs grow with us, but suppliers' fees grow faster: we break even in year two, and by year three we make about R1.1 million a month against R650,000 in costs.'\n\n" +
+      "IF ASKED for the breakdown (a month at year end, R thousand, estimates): team 40 / 150 / 350 (2, 5, 10 people); field agents 16 / 50 / 120 (2, 6, 15); sales and marketing 10 / 40 / 100; hosting, SMS, email, maps 5 / 15 / 40; security, POPIA, audits 4 / 15 / 40. Totals 75 / 270 / 650.\n" +
+      "Why R1.5m: year 1 runs at a loss of about R20-40k a month while suppliers sign up, plus hiring the year-2 team before their revenue arrives, plus six months of safety.\n" +
+      "Running costs stay low because we don't hold stock, cash or delivery vans: suppliers deliver, the payment provider holds the money.");
+  }
+
   // ================================================================ 16. TEAM
   {
     const s = pres.addSlide(); base(s);
@@ -431,7 +468,7 @@ async function icon(Comp, color, px = 256) {
     }
     card(s, 0.6, 5.45, 12.1, 1.1, C.panel2);
     t(s, "Built this weekend, end to end: the app, the system behind it and real payments, with over 1,400 automated tests.", { x: 0.95, y: 5.72, w: 11.4, h: 0.6, fontSize: 16, valign: "middle" });
-    foot(s, 16);
+    foot(s, 17);
     s.addNotes("TEAM (10 s): who we are in one line each. Edit the roles to how you want to be introduced; add the DataQuest 2026 win here if you want it.");
   }
 
@@ -451,7 +488,7 @@ async function icon(Comp, color, px = 256) {
   const appendix = (s, n, head) => { kicker(s, "Appendix"); title(s, head); foot(s, n); };
 
   { // A1 architecture
-    const s = pres.addSlide(); base(s); appendix(s, 18, "How it's built");
+    const s = pres.addSlide(); base(s); appendix(s, 19, "How it's built");
     const box = async (x, y, w, h, Comp, head, body, color) => {
       card(s, x, y, w, h);
       await disc(s, Comp, x + 0.25, y + 0.28, 0.7, color);
@@ -474,7 +511,7 @@ async function icon(Comp, color, px = 256) {
     s.addNotes("Only if asked. App -> API -> database; payments, photos, maps and email behind the API. Each feature is its own module, and an automated test stops one reaching into another's data.");
   }
   { // A2 security + privacy
-    const s = pres.addSlide(); base(s); appendix(s, 19, "Security and data privacy");
+    const s = pres.addSlide(); base(s); appendix(s, 20, "Security and data privacy");
     const items = [
       [Fi.FiLock, "Your data is yours", "Every request is limited to the owner. Anyone else's record answers 'not found'."],
       [Fi.FiSmartphone, "Simple, still safe", "Email and password; one code only on a new phone. The rest runs on our side."],
@@ -493,7 +530,7 @@ async function icon(Comp, color, px = 256) {
     s.addNotes("Answer to 'won't security make it hard to use?': 'Security is invisible to the owner: email, password, and a code only on a new phone. Everything else happens on our server.'");
   }
   { // A3 roadmap + post-quantum
-    const s = pres.addSlide(); base(s); appendix(s, 20, "What's next");
+    const s = pres.addSlide(); base(s); appendix(s, 21, "What's next");
     const road = [
       ["Next 3 months", ["Google sign-in, phone push alerts", "Two-phone cash confirmation", "Cloudflare protection on our own domain"], C.em],
       ["Next 12 months", ["Direct links to suppliers' stock systems", "Split payouts straight to suppliers", "Share your record with a lender, by consent"], C.amL],
