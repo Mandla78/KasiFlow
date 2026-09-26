@@ -136,7 +136,19 @@ THREAT MODELLING & DESIGN REVIEW (STRIDE -- what is built)
     public page holding a one-time ticket).
   - Every query is scoped to the signed-in user from the token; a user id
     from the request is never trusted (IDOR tests prove another trader
-    gets nothing: orders, credit book, jobs, connections, documents).
+    gets nothing: orders, credit book, jobs, connections, documents, the
+    order book, the bin, builder profiles and help posts). Ids are random
+    UUIDs, and "not yours" answers exactly like "doesn't exist" (404), so
+    nobody can even learn that someone else's record exists.
+  - Order book orders made offline: the phone's id is kept as a separate
+    key, unique per trader, and always looked up together with the
+    signed-in trader, so two traders' phones can never collide and a clash
+    can't reveal another trader's order. The server prices every line from
+    the menu price valid at the time of the order -- never the phone's.
+  - Deleting moves an item to a bin (restorable for 30 days, never
+    erased); payments already recorded and stages a client confirmed stay.
+    Binning a job revokes the client sign-off links not yet answered, so a
+    job binned by mistake can't be confirmed.
   - A trader can only order from a supplier they've connected to; cash is
     limited to R1,000 per order and 2 waiting orders (a cash order costs
     nothing up front, so this caps the damage of fake orders); digital
@@ -177,8 +189,9 @@ DEVELOPMENT (SECURE CODING PRACTICES)
 
 SECURITY TESTING (automated, run before every merge)
 
-  - 790 backend tests and 95 app tests, including hostile-input suites
-    for identity, the credit book and jobs: malformed and
+  - 1,052 backend tests and 147 app tests, including hostile-input suites
+    for identity, the credit book, jobs, the order book and the builder
+    network: malformed and
     injected emails (SQL, CR/LF header injection, script), emoji,
     control and invisible characters, template injection, wrong JSON
     types, broken bodies, NaN/Infinity, very long values. Rule: refuse,
@@ -187,6 +200,13 @@ SECURITY TESTING (automated, run before every merge)
     crashing bcrypt (over 72 bytes), a NUL character crashing the
     database write, invisible characters accepted as a name, and deeply
     nested JSON crashing every route.
+  - Design review found: behind a reverse proxy (Cloudflare) every caller
+    would look like 127.0.0.1, so one attacker could use up the sign-in and
+    code limits for everyone; and the audit trail took the first
+    X-Forwarded-For entry, which a caller can fake. Fix in progress before
+    any proxy goes live: one trusted client-address helper, switched on
+    only where the server is reachable solely through Cloudflare, with
+    tests that a forged header is ignored.
   - Commerce: the phone can't send prices; out-of-stock holds nothing;
     a retried order lands once; cash limits; cancel rules; unpaid orders
     lapse and give stock back; every PayFast check refuses a forged
@@ -204,8 +224,18 @@ SECURITY TESTING (automated, run before every merge)
 
 ASSESSMENT & SECURE INTEGRATION -- PLANNED (not built yet)
 
-  - Cloudflare in front of the API: TLS, WAF, DDoS protection, bot rules;
-    the origin accepts traffic only from Cloudflare. HSTS.
+  - Cloudflare in front of the API (free plan; settings written down):
+    a named Cloudflare Tunnel so the server has no open port (it listens
+    on 127.0.0.1 only); Always HTTPS, TLS 1.2+ and HSTS; the managed WAF
+    ruleset plus custom rules (skip only our signed PayFast and Cloudinary
+    callbacks; block scanner paths such as /.env and /.git; block unusual
+    methods; allow only our own paths); a flood cap on sign-in; Turnstile
+    on the pages opened from links (sign-off, password reset, invoice
+    check); Access in front of staff-only tools. Bot Fight Mode stays off
+    on the API because it would block our app and payment notifications.
+    Cloudflare will be named as an operator in the privacy policy (POPIA).
+    Today a fixed https tunnel (ngrok) is used for payment notifications
+    and links.
   - Shared rate-limit store (Redis) so limits hold across servers.
   - Malware scanning of every upload (Cloudinary + Perception Point) with
     files hidden until approved -- the approval path is built and tested;
