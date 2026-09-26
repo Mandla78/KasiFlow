@@ -38,6 +38,14 @@ from src.domains.informal_trader.business_profile.services import business_profi
 from src.domains.supplier.supplier_profile.services import supplier_service
 
 KINDS = ("invoice", "receipt")
+#: How each kind of proof is worded on documents and the check page.
+EVIDENCE_TEXT = {
+    "provider_verified": "Verified by PayFast (a regulated payment provider)",
+    "confirmed_by_both": "Cash: confirmed by both parties in the app; not verified by a payment provider",
+    "not_confirmed": "Cash: not confirmed yet",
+    "none": "No payment",
+}
+
 LINK_SECONDS = 600
 FULL_INVOICE_OVER_CENTS = 500_000
 VAT_PERCENT = 15
@@ -126,6 +134,7 @@ def _people(order) -> tuple[dict, dict, object]:
 
 def _order_facts(order) -> dict:
     return {
+        "evidence": EVIDENCE_TEXT[order_service.payment_evidence(order)],
         "reference": order.reference,
         "placed": order.placed_at.strftime("%Y-%m-%d %H:%M"),
         "fulfilment": ("Delivery to " if order.fulfilment == "delivery" else "Collection at ") + order.address,
@@ -233,6 +242,7 @@ def verify(number: str, sig: str) -> Optional[dict]:
         "date": (firm.at if firm else order.placed_at).date().isoformat(),
         "total": f"R{order.total_cents / 100:,.2f}",
         "paid": order.payment_status in ("paid", "confirmed_by_both"),
+        "evidence": EVIDENCE_TEXT[order_service.payment_evidence(order)],
     }
 
 

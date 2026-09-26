@@ -162,7 +162,12 @@ def invoice_pdf(d: dict) -> bytes:
     pdf.header_block(d["title"], d["number"], d["date"], d["verify_url"], badge="PAID" if d.get("paid") else None)
     pdf.two_columns("From (supplier)", _seller_rows(d["supplier"]), "To (buyer)", _buyer_rows(d["buyer"]))
     o = d["order"]
-    pdf.facts([("Order", f"{o['reference']} (placed {o['placed']})"), ("Fulfilment", o["fulfilment"]), ("Payment", o["payment"])])
+    pdf.facts([
+        ("Order", f"{o['reference']} (placed {o['placed']})"),
+        ("Fulfilment", o["fulfilment"]),
+        ("Payment", o["payment"]),
+        ("Proof of payment", o["evidence"]),
+    ])
 
     widths = (96, 14, 32, 36)
     pdf.set_font("Helvetica", "B", 9)
@@ -213,6 +218,7 @@ def receipt_pdf(d: dict) -> bytes:
         ("Paid with", d["method"]),
         ("PayFast ref.", d.get("provider_reference") or ""),
         ("Paid on", d["date"]),
+        ("Proof", o["evidence"]),
     ])
     pdf.set_font("Helvetica", "B", 16)
     pdf.set_text_color(*INK)

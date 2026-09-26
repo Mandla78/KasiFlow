@@ -22,7 +22,8 @@ import { supplierApi } from '../../suppliers/api/supplierApi';
 import type { Supplier } from '../../suppliers/types';
 import { cashLimitFor, MAX_OPEN_CASH_ORDERS } from '../lib/cashPolicy';
 import { isActive } from '../lib/status';
-import { Order, OrderError, OrderEvent, OrderLine, OrdersApi, OrderStatus } from '../types';
+import { evidenceOf } from '../lib/evidence';
+import { Evidence, Order, OrderError, OrderEvent, OrderLine, OrdersApi, OrderStatus } from '../types';
 
 const wait = (ms = 500) => new Promise((r) => setTimeout(r, ms));
 
@@ -155,6 +156,20 @@ export const mockOrdersApi: OrdersApi = {
     const cancelled: Order = { ...o, status: 'cancelled', events: [...o.events, { status: 'cancelled', at: new Date().toISOString() }] };
     orders = orders.map((x) => (x.id === id ? cancelled : x));
     return cancelled;
+  },
+
+  async summary() {
+    const all = orders.map(advanced);
+    const sum = (e: Evidence) => all.filter((o) => evidenceOf(o) === e);
+    const total = (list: Order[]) => list.reduce((s, o) => s + o.totalCents, 0);
+    return {
+      providerVerifiedCents: total(sum('provider_verified')),
+      providerVerifiedOrders: sum('provider_verified').length,
+      confirmedByBothCents: total(sum('confirmed_by_both')),
+      confirmedByBothOrders: sum('confirmed_by_both').length,
+      notConfirmedCents: total(sum('not_confirmed')),
+      notConfirmedOrders: sum('not_confirmed').length,
+    };
   },
 
   async documentLink() {

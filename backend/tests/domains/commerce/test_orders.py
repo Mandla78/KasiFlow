@@ -251,3 +251,38 @@ def test_orders_are_private(client, outbox, me, mahlangu):
     assert client.post(f"{URL}/{o['id']}/cancel", headers=other).status_code == 404
     assert client.get(URL, headers=other).get_json()["data"]["orders"] == []
     assert [x["id"] for x in client.get(URL, headers=me).get_json()["data"]["orders"]] == [o["id"]]
+
+
+# ------------------------------------------------------------ what backs the money
+
+
+def test_what_backs_each_payment_and_totals_never_mix(app, client, me, mahlangu):
+    qty = qty_for(mahlangu, mahlangu["min"])
+    cash = place(client, me, body(mahlangu, qty)).get_json()["data"]["order"]
+    digital = place(client, me, body(mahlangu, qty, payment="in_app")).get_json()["data"]["order"]
+    assert cash["evidence"] == "not_confirmed"  # cash to pay proves nothing yet
+    assert digital["evidence"] == "none"  # not paid
+
+    with app.app_context():
+        o = db.session.get(Order, uuid.UUID(digital["id"]))
+        order_service.mark_paid(o, "1089250")
+        db.session.commit()
+    assert client.get(f"{URL}/{digital['id']}", headers=me).get_json()["data"]["order"]["evidence"] == "provider_verified"
+
+    summary = client.get(f"{URL}/summary", headers=me).get_json()["data"]["summary"]
+    assert summary["provider_verified_cents"] == digital["total_cents"] and summary["provider_verified_orders"] == 1
+    assert summary["not_confirmed_cents"] == cash["total_cents"] and summary["confirmed_by_both_cents"] == 0
+
+    with app.app_context():
+        db.session.get(Order, uuid.UUID(cash["id"])).payment_status = "confirmed_by_both"  # the cash handshake (Phase 5)
+        db.session.commit()
+    summary = client.get(f"{URL}/summary", headers=me).get_json()["data"]["summary"]
+    assert summary["confirmed_by_both_cents"] == cash["total_cents"] and summary["not_confirmed_cents"] == 0
+    assert summary["provider_verified_cents"] == digital["total_cents"]  # still apart, never added together
+
+
+def test_the_money_summary_is_private(client, outbox, me, mahlangu):
+    place(client, me, body(mahlangu, qty_for(mahlangu, mahlangu["min"])))
+    other = signed_in(client, outbox, "thabo@example.com")
+    s = client.get(f"{URL}/summary", headers=other).get_json()["data"]["summary"]
+    assert s["not_confirmed_cents"] == s["provider_verified_cents"] == s["confirmed_by_both_cents"] == 0

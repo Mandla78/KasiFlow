@@ -30,6 +30,7 @@
         <tr><td class="k">Date</td><td class="v">{{ doc.date }}</td></tr>
         <tr><td class="k">Total</td><td class="v">{{ doc.total }}</td></tr>
         <tr><td class="k">Paid</td><td class="v">{{ "Yes" if doc.paid else "Not yet" }}</td></tr>
+        <tr><td class="k">Proof</td><td class="v">{{ doc.evidence }}</td></tr>
       </table>
       <p class="muted">If the document in your hands shows different details, it has been changed.</p>
     {% else %}

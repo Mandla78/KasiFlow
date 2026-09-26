@@ -220,7 +220,8 @@ def test_send_a_sign_off_link(client, me, app):
     assert data["link"].startswith(f"{app.config['APP_BASE_URL']}/sign-off?ticket=")
     assert data["job"]["stages"][1]["status"] == "waiting" and data["job"]["stages"][1]["builder_amount_cents"] == 1_200_000
     assert data["message"].startswith("Hi Mokoena family, Bongani Builds asks you to sign off the Walls stage of the room extension.")
-    assert data["link"] in data["message"] and not re.search(r"R\d", data["message"])
+    # No amount in the message (the random link itself can contain "R5", so leave it out of the check).
+    assert data["link"] in data["message"] and not re.search(r"R\d", data["message"].replace(data["link"], ""))
 
 
 def test_sign_off_amount_limits(client, me):
