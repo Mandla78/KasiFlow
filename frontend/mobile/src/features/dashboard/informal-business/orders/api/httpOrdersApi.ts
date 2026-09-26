@@ -25,6 +25,7 @@ type WireOrder = {
   placed_at: string;
   pay_by: string | null;
   events: { status: OrderStatus; at: string }[];
+  documents: { invoice: boolean; receipt: boolean };
 };
 
 export function orderFromWire(o: WireOrder): Order {
@@ -53,6 +54,7 @@ export function orderFromWire(o: WireOrder): Order {
     placedAt: o.placed_at,
     payBy: o.pay_by,
     events: o.events,
+    documents: o.documents,
   };
 }
 
@@ -61,7 +63,9 @@ async function orCallError<T>(call: Promise<T>): Promise<T> {
   try {
     return await call;
   } catch (e) {
-    if (e instanceof ApiError && e.status >= 400 && e.status < 500 && e.status !== 401) throw new OrderError(e.code, e.message);
+    // A reason from our server (4xx, or a 503 like "payments not ready"): show it.
+    // Network failures and sign-in expiry keep their own handling.
+    if (e instanceof ApiError && e.status >= 400 && e.status !== 401 && e.code !== 'NETWORK' && e.code !== 'BAD_RESPONSE') throw new OrderError(e.code, e.message);
     throw e;
   }
 }
@@ -92,6 +96,14 @@ export const httpOrdersApi: OrdersApi = {
   async get(id) {
     const data = await orCallError(api<{ order: WireOrder }>('GET', `/me/orders/${encodeURIComponent(id)}`, undefined, { auth: true }));
     return orderFromWire(data.order);
+  },
+  async documentLink(id, kind) {
+    const data = await orCallError(api<{ url: string }>('POST', `/me/orders/${encodeURIComponent(id)}/documents/${kind}`, undefined, { auth: true }));
+    return data.url;
+  },
+  async startPayment(id) {
+    const data = await orCallError(api<{ pay_url: string }>('POST', `/me/orders/${encodeURIComponent(id)}/pay`, undefined, { auth: true }));
+    return data.pay_url;
   },
   async cancel(id) {
     const data = await orCallError(api<{ order: WireOrder }>('POST', `/me/orders/${encodeURIComponent(id)}/cancel`, undefined, { auth: true }));

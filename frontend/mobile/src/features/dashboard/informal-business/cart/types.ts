@@ -13,6 +13,8 @@ export type CartLine = {
   category: CategoryCode;
   image: string | null;
   seenPriceCents: Cents;
+  /** Items inside one pack (24 for a case of 24): the price per item for resellers. */
+  unitsPerPack?: number;
   qty: number;
   maxQty: number;
 };
