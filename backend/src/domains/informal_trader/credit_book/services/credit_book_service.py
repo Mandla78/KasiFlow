@@ -11,6 +11,7 @@ credit_book -- the rules of the trader's book of customers who owe them.
   set_customer_phone(user, id, phone)
   delete_customer(user, id)           anonymise; the amounts stay
   summary(user)                       totals for Home and the Account tile
+  money_for_month(user, start, end)   credit given and paid back, for My record
   history(user, q)                    paid and cancelled entries (search)
   bin_entries(user)                   deleted in the last 30 days
   move_to_bin(user, id)               "delete": hidden from the trader only
@@ -98,6 +99,13 @@ def summary(user) -> dict:
         "given_this_month_cents": sum(e.amount_cents for e in rows if e.given_on >= month_start),
         "paid_back_this_month_cents": repo.payments_since(user.id, month_start),
     }
+
+
+def money_for_month(user, start: date, end: date) -> dict:
+    """My record's credit block for the days [start, end): credit given (by
+    the day it was given) and money paid back (by the day it was paid). The
+    trader's own record; binned and cancelled entries don't count."""
+    return {"given_cents": repo.given_between(user.id, start, end), "paid_back_cents": repo.payments_between(user.id, start, end)}
 
 
 # ------------------------------------------------------------------- writes

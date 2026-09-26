@@ -335,6 +335,21 @@ def money_summary(user) -> dict:
     }
 
 
+def money_summary_for(user, start: datetime, end: datetime) -> dict:
+    """The same money, for orders PLACED in [start, end) (My record's month:
+    by order date, what the invoice says). Kept apart by what backs it;
+    cancelled, rejected and expired orders never count (evidence "none")."""
+    out = {k: {"cents": 0, "orders": 0} for k in EVIDENCE if k != "none"}
+    for o in repo.all_for_user(user.id):
+        if not (start <= o.placed_at < end):
+            continue
+        e = payment_evidence(o)
+        if e in out:
+            out[e]["cents"] += o.total_cents
+            out[e]["orders"] += 1
+    return out
+
+
 def documents_ready(o: Order) -> dict[str, bool]:
     """Invoice: once the order is confirmed (the supplier accepted a cash
     order, or a digital order was paid -- which confirms it at once).

@@ -100,6 +100,31 @@ def corrections(user_id: uuid.UUID, entry_id: uuid.UUID) -> list[CreditCorrectio
     return CreditCorrection.query.filter_by(user_id=user_id, entry_id=entry_id).order_by(CreditCorrection.created_at).all()
 
 
+def given_between(user_id: uuid.UUID, start, end) -> int:
+    """Credit given (the entries' current amounts) with given_on in [start, end):
+    open and paid entries, not cancelled, not binned."""
+    total = (
+        db.session.query(func.coalesce(func.sum(CreditEntry.amount_cents), 0))
+        .filter(
+            CreditEntry.user_id == user_id, CreditEntry.is_deleted.is_(False), CreditEntry.status.in_(("open", "paid")),
+            CreditEntry.given_on >= start, CreditEntry.given_on < end,
+        )
+        .scalar()
+    )  # fmt: skip
+    return int(total)
+
+
+def payments_between(user_id: uuid.UUID, start, end) -> int:
+    """Money paid back with paid_on in [start, end) (binned entries left out)."""
+    total = (
+        db.session.query(func.coalesce(func.sum(CreditPayment.amount_cents), 0))
+        .join(CreditEntry, CreditEntry.id == CreditPayment.entry_id)
+        .filter(CreditPayment.user_id == user_id, CreditPayment.paid_on >= start, CreditPayment.paid_on < end, CreditEntry.is_deleted.is_(False))
+        .scalar()
+    )
+    return int(total)
+
+
 def payments_since(user_id: uuid.UUID, since) -> int:
     """Money paid back from `since` (a date) on, across the book (binned entries left out)."""
     total = (

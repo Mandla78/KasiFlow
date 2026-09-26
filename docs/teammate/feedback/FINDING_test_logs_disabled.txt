@@ -1,0 +1,36 @@
+FINDING: the app's loggers are switched off during the backend tests
+BY / DATE: Risuna, Saturday 26 September 2026 (found while building TEAMMATE 20)
+FOR TOOL: tests (shared); your files, so nothing changed
+
+QUESTION WE HAD
+  Why does a test that checks the log (caplog) see nothing at all, not
+  even app.logger.warning("probe") written from the test itself?
+
+WHAT I FOUND
+  - backend/migrations/env.py calls fileConfig(config.config_file_name).
+    Python's fileConfig switches off every logger that already exists
+    (disable_existing_loggers defaults to True). The test session migrates
+    the test database in-process, so from then on app.logger ("src") and
+    module loggers such as "akayza.email" have disabled = True. Checked in
+    a test: both print True.
+  - So a check like tests/shared/test_email.py::test_codes_never_reach_the_logs
+    ("the sign-up code is not in caplog.text") passes without seeing
+    anything the email code logs. It proves nothing today.
+  - Production is fine: flask run never loads env.py; only `flask db ...`
+    does, in its own process.
+
+RISKS
+  None to users. The risk is a privacy test that can't fail.
+
+MY RECOMMENDATION
+  One line in migrations/env.py:
+      fileConfig(config.config_file_name, disable_existing_loggers=False)
+  then the log checks look at real logs again (run the full suite after:
+  a check that starts to see logs could start to fail, which is the point).
+  My TEAMMATE 20 test switches app.logger back on for its own check
+  (monkeypatch app.logger.disabled = False) until then.
+
+WHAT I NEED FROM MANDLA
+  A yes, and whether you'll change env.py or want me to.
+
+DECISION:

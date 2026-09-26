@@ -54,6 +54,11 @@ DONE
     stop); the limiter, login key, sessions, consents, the 429 audit and
     audit_context use it. Fixes the forgeable IP in the audit trail. One
     question in the FINDING: an ngrok mode for the demo.
+  - The tools feed the supplier engine (TEAMMATE 20, risuna/engine-signals,
+    no migration): open job stages and this week's sales lift the
+    suppliers that sell what they need ("Your open jobs need plumbing",
+    "Your sales need bakery"); off, empty or failing = today's ranking.
+    FINDING_test_logs_disabled.txt: the app's loggers are off in tests.
 
 IN PROGRESS
   - Notifications (Mandla's task, CONTRACT_notifications.txt, his answers
@@ -70,6 +75,12 @@ IN PROGRESS
     pop-up sheet with "View order / job / invite / post", mark all read
     per tab, pull to refresh, settings (security locked on); the Tabs
     bar moved to shared/components (Mandla, Q4).
+  - My record (TEAMMATE 19, plan v2 03; risuna/my-record, no migration):
+    GET /me/record/summary?month=YYYY-MM in proof/ledger, built from each
+    tool's service (orders: ONE new function, money_summary_for); three
+    blocks kept apart, no total. Account shows tools only, every line live
+    (account/mock.ts deleted). The My record screen: month arrows, the
+    eye, empty month, tool off; each stock line opens My orders filtered.
 
 BLOCKED (and on what)
   - (none; the Idempotency-Key header and the deep-JSON crash are fixed on main)
@@ -81,6 +92,8 @@ FINDINGS / NEEDS / QUESTIONS FOR MANDLA
   - FINDING_stage_photos.txt: camera-only and hashing on the server
   - NEEDS_camera_permission_text.txt, NEEDS_shared_components.txt
   - FINDING_whatsapp_ip_links.txt, QUESTION_bluetooth_sales.txt (roadmap)
+  - Demo data: flask tools seed --me EMAIL (risuna/tools-demo) fills one
+    account's credit book, jobs (real photos + sign-offs) and order book
 
 NEXT (all approved 26 Sep; see the DECISION lines)
   - after Sunday: crew on a job, short videos, "ask for more" (counter-offer)
