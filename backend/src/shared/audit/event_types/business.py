@@ -61,6 +61,11 @@ class BusinessAuditEvent(str, enum.Enum):
     JOB_DONE = "job.done"
     JOB_BINNED = "job.binned"
     JOB_RESTORED = "job.restored"
+    # Delivery addresses (informal_trader/delivery_addresses): ids only, never the address or pin
+    DELIVERY_ADDRESS_ADDED = "delivery_address.added"
+    DELIVERY_ADDRESS_CHANGED = "delivery_address.changed"
+    DELIVERY_ADDRESS_REMOVED = "delivery_address.removed"
+    DELIVERY_ADDRESS_DEFAULT_SET = "delivery_address.default_set"
 
     BUILDER_PROFILE_SAVED = "builder.profile_saved"
     BUILDER_VISIBILITY_CHANGED = "builder.visibility_changed"

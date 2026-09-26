@@ -72,3 +72,11 @@ test("the server's refusal becomes an OrderError with its message", async () => 
   expect(err).toBeInstanceOf(OrderError);
   expect(err).toMatchObject({ code: 'BELOW_MINIMUM', message: "Mahlangu Wholesale's minimum order is R500." });
 });
+
+test('a saved place sends only its id: the server looks up the address and pin', async () => {
+  await httpOrdersApi.place({
+    supplierId: 's1', lines: [{ productId: 'p1', qty: 6 }], fulfilment: 'delivery', payment: 'cash',
+    deliveryAddress: '7 Khumalo Street, Tembisa', deliveryPoint: null, deliveryAddressId: 'addr-1', idempotencyKey: 'k-3',
+  });
+  expect(mockCalls[0].body).toMatchObject({ delivery_address: null, delivery_point: null, delivery_address_id: 'addr-1' });
+});

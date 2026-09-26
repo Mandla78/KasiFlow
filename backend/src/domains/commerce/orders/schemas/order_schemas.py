@@ -37,16 +37,20 @@ class PlaceOrderSchema(_Strict):
     #: Delivery only. Leave both out to deliver to the trader's own business address.
     delivery_address = CleanText(min_len=5, max_len=300, load_default=None, allow_none=True)
     delivery_point = fields.Nested(PointSchema, load_default=None, allow_none=True)
+    #: Or one of the trader's saved delivery places (More -> Delivery addresses).
+    delivery_address_id = fields.UUID(load_default=None, allow_none=True)
 
     @validates_schema
     def _consistent(self, data, **kwargs):
         ids = [str(l["product_id"]) for l in data.get("lines", [])]
         if len(set(ids)) != len(ids):
             raise ValidationError("A product is listed twice; send one line per product.", "lines")
-        if data.get("fulfilment") == "collect" and (data.get("delivery_address") or data.get("delivery_point")):
+        if data.get("fulfilment") == "collect" and (data.get("delivery_address") or data.get("delivery_point") or data.get("delivery_address_id")):
             raise ValidationError("A collection has no delivery address.", "delivery_address")
         if bool(data.get("delivery_address")) != bool(data.get("delivery_point")):
             raise ValidationError("Send the delivery address and its map pin together.", "delivery_point")
+        if data.get("delivery_address_id") and data.get("delivery_address"):
+            raise ValidationError("Choose a saved address or type one, not both.", "delivery_address_id")
 
 
 def load_place(data) -> dict:

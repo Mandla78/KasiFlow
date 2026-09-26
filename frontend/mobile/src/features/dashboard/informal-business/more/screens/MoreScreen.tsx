@@ -62,7 +62,12 @@ export default function More() {
           subtitle={profile.businessType ? `${BUSINESS_TYPES[profile.businessType].label} · edit your sign-up answers` : 'Not set'}
           onPress={() => router.push('/informal-business/business')}
         />
-        <ListRow icon="map-pin" title="Delivery addresses" subtitle="Your business address · more places coming" />
+        <ListRow
+          icon="map-pin"
+          title="Delivery addresses"
+          subtitle="Your business, and places you save"
+          onPress={() => router.push('/informal-business/delivery-addresses')}
+        />
         <ListRow icon="grid" title="Tools" subtitle={`${toolsOn} on`} onPress={() => router.push('/informal-business/tools')} last />
       </Card>
 

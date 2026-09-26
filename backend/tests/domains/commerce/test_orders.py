@@ -286,3 +286,42 @@ def test_the_money_summary_is_private(client, outbox, me, mahlangu):
     other = signed_in(client, outbox, "thabo@example.com")
     s = client.get(f"{URL}/summary", headers=other).get_json()["data"]["summary"]
     assert s["not_confirmed_cents"] == s["provider_verified_cents"] == s["confirmed_by_both_cents"] == 0
+
+
+# ------------------------------------------------ saved delivery addresses
+
+ADDRESSES = "/api/v1/me/delivery-addresses"
+NEAR = {"label": "Mama's house", "address_text": "7 Khumalo Street, Tembisa", "latitude": -26.01, "longitude": 28.21}
+
+
+def test_an_order_can_go_to_a_saved_address(client, me, mahlangu):
+    saved = client.post(ADDRESSES, headers=me, json=NEAR).get_json()["data"]["address"]
+    r = place(client, me, body(mahlangu, qty_for(mahlangu, mahlangu["min"]), delivery_address_id=saved["id"]))
+    assert r.status_code == 201
+    assert r.get_json()["data"]["order"]["address"] == "7 Khumalo Street, Tembisa"
+
+
+def test_a_saved_address_still_has_to_be_in_the_delivery_area(client, me, mahlangu):
+    far = {**NEAR, "address_text": "Stand 12, Mankweng, Polokwane", "latitude": -23.88, "longitude": 29.73}
+    saved = client.post(ADDRESSES, headers=me, json=far).get_json()["data"]["address"]
+    r = place(client, me, body(mahlangu, qty_for(mahlangu, mahlangu["min"]), delivery_address_id=saved["id"]))
+    assert r.status_code == 409 and r.get_json()["code"] == "OUTSIDE_DELIVERY_AREA"
+
+
+def test_someone_elses_or_a_removed_address_is_not_found(client, outbox, me, mahlangu):
+    thabo = signed_in(client, outbox, "thabo@example.com")
+    theirs = client.post(ADDRESSES, headers=thabo, json=NEAR).get_json()["data"]["address"]["id"]
+    r = place(client, me, body(mahlangu, qty_for(mahlangu, mahlangu["min"]), delivery_address_id=theirs))
+    assert r.status_code == 404
+
+    gone = client.post(ADDRESSES, headers=me, json=NEAR).get_json()["data"]["address"]["id"]
+    client.delete(f"{ADDRESSES}/{gone}", headers=me)
+    r = place(client, me, body(mahlangu, qty_for(mahlangu, mahlangu["min"]), delivery_address_id=gone))
+    assert r.status_code == 404
+
+
+def test_a_saved_address_with_a_typed_one_or_a_collection_is_refused(client, me, mahlangu):
+    saved = client.post(ADDRESSES, headers=me, json=NEAR).get_json()["data"]["address"]["id"]
+    both = body(mahlangu, 5, delivery_address_id=saved, delivery_address="12 Somewhere Street, Tembisa", delivery_point={"latitude": -26.0, "longitude": 28.2})
+    assert place(client, me, both).status_code == 422
+    assert place(client, me, body(mahlangu, 5, fulfilment="collect", delivery_address_id=saved)).status_code == 422
