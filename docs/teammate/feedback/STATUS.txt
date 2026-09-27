@@ -101,6 +101,12 @@ FINDINGS / NEEDS / QUESTIONS FOR MANDLA
     ML-DSA-65 (NIST FIPS 204, post-quantum); "Check my record" names any
     sealed record changed or deleted since, even straight in the database.
     PLAN_offline_mesh.txt: the BitChat idea in steps (not built).
+  - Security sweep (risuna/security-sweep): cryptography 46.0.3 -> 50.0.1
+    (7 advisories); npm audit 0 high/critical; gitleaks: no secrets in
+    history. FINDING_dependency_audit.txt. CI on every PR, green.
+  - Offline credit book (risuna/offline-credit): sales and repayments
+    made with no signal wait on the phone and go once, later. Fixed: the
+    order book dropped queued orders when there was no signal.
 
 NEXT (all approved 26 Sep; see the DECISION lines)
   - after Sunday: crew on a job, short videos, "ask for more" (counter-offer)

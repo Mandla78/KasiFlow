@@ -54,6 +54,12 @@ THE DESIGN, IN STEPS (each step is useful on its own)
     own database. This is the integrity layer every later step reuses:
     a batch of records carried offline is sealed the same way.
 
+  Step 0b -- recording offline on one phone                       BUILT
+    The order book and the credit book keep what's recorded with no
+    signal on the phone and send it later, each entry once
+    (Idempotency-Key). Fixed tonight: the order book used to drop queued
+    orders when our API client reported "no signal".
+
   Step 1 -- a signing key on each phone
     The phone makes an Ed25519 key pair and keeps the private key in its
     secure storage; the server already checks and stores the public key

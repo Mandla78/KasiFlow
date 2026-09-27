@@ -8,6 +8,7 @@
  *   refused (4xx)               drop that one entry and say why
  */
 import { ApiError } from '@/shared/api/client';
+import { isRetryable } from '@/shared/api/retryable';
 
 import type { NewOrder, Order, OrderStatus } from '../types';
 
@@ -29,10 +30,9 @@ export type FlushResult = {
   refused: { entry: Entry; message: string }[];
 };
 
-/** A dropped signal (fetch throws) or a server hiccup: worth trying again. */
-export function isRetryable(err: unknown): boolean {
-  return !(err instanceof ApiError) || err.status >= 500 || err.status === 429;
-}
+// No signal (the client's ApiError(0, 'NETWORK')), a server hiccup or an
+// ended session: keep the entry and try again (shared/api/retryable.ts).
+export { isRetryable };
 
 export async function flush(entries: Entry[], send: Sender): Promise<FlushResult> {
   const out: FlushResult = { sent: [], left: [], offline: false, refused: [] };

@@ -14,13 +14,15 @@ function served(n: NewOrder, number: number, status: OrderStatus = 'new'): Order
 }
 
 /** A fake server: numbers orders, remembers them; fails when told to. */
-function server(opts: { downAfter?: number; refuse?: string } = {}) {
+function server(opts: { downAfter?: number; refuse?: string; realClient?: boolean } = {}) {
   const orders = new Map<string, Order>();
   let calls = 0;
+  // What fetch throws, or -- realClient -- what our API client turns it into.
+  const down = () => (opts.realClient ? new ApiError(0, 'NETWORK', "Can't reach Akayza.") : new TypeError('Network request failed'));
   return {
     orders,
     async create(o: NewOrder) {
-      if (opts.downAfter !== undefined && calls++ >= opts.downAfter) throw new TypeError('Network request failed');
+      if (opts.downAfter !== undefined && calls++ >= opts.downAfter) throw down();
       if (opts.refuse === o.id) throw new ApiError(422, 'VALIDATION_ERROR', "That item isn't on the menu any more.");
       const existing = orders.get(o.id);
       if (existing) return existing;
@@ -29,7 +31,7 @@ function server(opts: { downAfter?: number; refuse?: string } = {}) {
       return made;
     },
     async setStatus(id: string, status: OrderStatus) {
-      if (opts.downAfter !== undefined && calls++ >= opts.downAfter) throw new TypeError('Network request failed');
+      if (opts.downAfter !== undefined && calls++ >= opts.downAfter) throw down();
       const o = orders.get(id);
       if (!o) throw new ApiError(404, 'NOT_FOUND', 'Not found.');
       const next = { ...o, status };
@@ -47,6 +49,14 @@ describe('the outbox', () => {
     expect(r.left).toEqual([]);
     expect(r.offline).toBe(false);
     expect(r.sent.map((o) => [o.id, o.number, o.status])).toEqual([['1', 1, 'new'], ['2', 2, 'new'], ['1', 1, 'preparing']]);
+  });
+
+  it("keeps orders when the API client says there's no signal (never drops them as refused)", async () => {
+    const entries: Entry[] = [{ kind: 'create', order: newOrder('1') }, { kind: 'create', order: newOrder('2') }];
+    const r = await flush(entries, server({ downAfter: 0, realClient: true }));
+    expect(r.offline).toBe(true);
+    expect(r.refused).toEqual([]);
+    expect(r.left).toEqual(entries);
   });
 
   it('stops at a dropped signal and keeps the rest, in order', async () => {
@@ -76,6 +86,9 @@ describe('the outbox', () => {
 
   it('knows what to try again', () => {
     expect(isRetryable(new TypeError('Network request failed'))).toBe(true);
+    // What the API client really throws with no signal or on a timeout: keep it, never drop it.
+    expect(isRetryable(new ApiError(0, 'NETWORK', "Can't reach Akayza."))).toBe(true);
+    expect(isRetryable(new ApiError(401, 'TOKEN_EXPIRED', 'Sign in again.'))).toBe(true);
     expect(isRetryable(new ApiError(503, 'X', 'down'))).toBe(true);
     expect(isRetryable(new ApiError(429, 'RATE_LIMITED', 'slow down'))).toBe(true);
     expect(isRetryable(new ApiError(422, 'VALIDATION_ERROR', 'no'))).toBe(false);

@@ -152,15 +152,16 @@ D. PROBLEM AND USERS
   Q: Data costs? Bad signal?
   A: Light by design: small requests, images resized before they reach
      the phone, alerts checked only while the app is open. The order
-     book works offline and sends once the signal is back, without
-     double orders.
+     book and the credit book work offline: what you record waits on the
+     phone and goes once the signal is back, each entry exactly once.
      If they push: full offline for every tool (an encrypted store on
      the phone) is next.
 
   Q: What about places with no signal at all? Something like BitChat's
      Bluetooth mesh?
-  A: The order book already works with no signal and sends later without
-     double orders. Phone to phone, we've designed it in steps: records
+  A: The order book and the credit book already work with no signal and
+     send later, each entry exactly once -- try it: airplane mode, record
+     a repayment, switch back. Phone to phone, we've designed it in steps: records
      signed on the phone, a cash hand-over done by scanning QR codes with
      no network, then Bluetooth between two phones, then a BitChat-style
      mesh that carries sealed, signed records to whoever has signal. The
@@ -223,10 +224,11 @@ F. HOW IT'S BUILT
      one module each. [2, 3]
 
   Q: How do you know it works?
-  A: About 1,240 backend and 196 app tests, run before every merge --
-     including attacks: injection, broken input, one business trying to
-     read another's data, forged payment notices. They found real bugs,
-     which we fixed. [9]
+  A: About 1,280 backend and 214 app tests, run before every merge and
+     in CI on every pull request, next to a dependency audit and a
+     secrets scan -- including attacks: injection, broken input, one
+     business trying to read another's data, forged payment notices. They
+     found real bugs, which we fixed. [9]
 
   Q: How does it scale?
   A: The API is stateless, so it runs behind a load balancer on more
@@ -344,6 +346,14 @@ H. SECURITY, PRIVACY AND ETHICS
      sharing comes, it's their choice and they can take it back.
      Suppliers never see customers' names or the business's books, and
      can't pay to rank higher. The core tools stay free.
+
+  Q: How do you know your dependencies and your repo are safe?
+  A: We scanned tonight. pip-audit found 7 advisories in our crypto
+     library, including its bundled OpenSSL -- we upgraded it and the
+     backend now has no known vulnerabilities. The app has no critical
+     or high ones; 14 moderate sit inside Expo's own build tools and
+     router. And gitleaks over every commit found no secret ever
+     committed. The three scans go into the release checklist.
 
   Q: How much of this did AI write? Can you trust it?
   A: We used AI assistance and say so. Every change goes through a

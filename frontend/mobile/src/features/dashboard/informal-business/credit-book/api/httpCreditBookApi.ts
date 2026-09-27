@@ -92,8 +92,8 @@ function summary(s: WireSummary): CreditSummary {
   };
 }
 
-const one = async (method: 'GET' | 'POST', path: string, body?: unknown) =>
-  detail((await api<{ entry: WireDetail }>(method, `${BASE}${path}`, body, { auth: true })).entry);
+const one = async (method: 'GET' | 'POST', path: string, body?: unknown, key?: string) =>
+  detail((await api<{ entry: WireDetail }>(method, `${BASE}${path}`, body, { auth: true, headers: key ? { 'Idempotency-Key': key } : undefined })).entry);
 
 export const httpCreditBookApi: CreditBookApi = {
   async list() {
@@ -102,16 +102,21 @@ export const httpCreditBookApi: CreditBookApi = {
 
   get: (id) => one('GET', `/entries/${encodeURIComponent(id)}`),
 
-  addSale: (input) =>
-    one('POST', '/entries', {
-      ...('id' in input.customer ? { customer_id: input.customer.id } : { customer: input.customer }),
-      amount_cents: input.amountCents,
-      description: input.description,
-      ...(input.givenOn ? { given_on: input.givenOn } : {}),
-      due_on: input.dueOn,
-    }),
+  addSale: (input, key) =>
+    one(
+      'POST',
+      '/entries',
+      {
+        ...('id' in input.customer ? { customer_id: input.customer.id } : { customer: input.customer }),
+        amount_cents: input.amountCents,
+        description: input.description,
+        ...(input.givenOn ? { given_on: input.givenOn } : {}),
+        due_on: input.dueOn,
+      },
+      key,
+    ),
 
-  recordRepayment: (id, input) => one('POST', `/entries/${encodeURIComponent(id)}/payments`, { amount_cents: input.amountCents, paid_on: input.paidOn }),
+  recordRepayment: (id, input, key) => one('POST', `/entries/${encodeURIComponent(id)}/payments`, { amount_cents: input.amountCents, paid_on: input.paidOn }, key),
 
   correct: (id, input) =>
     one('POST', `/entries/${encodeURIComponent(id)}/corrections`, {
