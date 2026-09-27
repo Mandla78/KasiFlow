@@ -59,7 +59,7 @@ async function icon(Comp, color, px = 256) {
     wordmark(s, 0.72, 2.9, 72);
     t(s, "Keep it in the kasi.", { x: 0.8, y: 4.3, w: 8, h: 0.7, fontFace: TITLE, fontSize: 30, italic: true, color: C.amL });
     t(s, "Making South Africa's informal and small businesses visible, and ready for tomorrow.", { x: 0.8, y: 5.05, w: 7.4, h: 0.8, fontSize: 18, color: C.muted });
-    t(s, "Prepared by Team PR: Mandla and Risuna  ·  GKHack26  ·  27 September 2026", { x: 0.8, y: 6.35, w: 9, h: 0.4, fontSize: 13, color: C.faint });
+    t(s, "Prepared by Team PR  ·  GKHack26  ·  27 September 2026", { x: 0.8, y: 6.35, w: 9, h: 0.4, fontSize: 13, color: C.faint });
     s.addShape(pres.shapes.OVAL, { x: 9.2, y: 0.9, w: 3.6, h: 3.6, fill: { color: C.bg }, line: { color: C.panel2, width: 2 } });
     s.addShape(pres.shapes.OVAL, { x: 10.1, y: 2.5, w: 2.9, h: 2.9, fill: { color: C.bg, transparency: 100 }, line: { color: C.em, width: 1.5, transparency: 40 } });
     s.addShape(pres.shapes.OVAL, { x: 9.0, y: 3.5, w: 2.5, h: 2.5, fill: { color: C.bg, transparency: 100 }, line: { color: C.am, width: 1.5, transparency: 40 } });
@@ -301,17 +301,17 @@ async function icon(Comp, color, px = 256) {
       t(s, head, { x: x + 1.05, y: y + 0.28, w: w - 1.25, h: 0.4, fontSize: 17, bold: true, color });
       t(s, body, { x: x + 1.05, y: y + 0.7, w: w - 1.25, h: h - 0.8, fontSize: 13, color: C.muted });
     };
-    await box(0.6, 1.9, 3.6, 1.85, Fi.FiSmartphone, "Mobile app", "React Native + Expo (TypeScript). Android first; secure storage for sign-in.", C.em);
-    await box(4.85, 1.9, 3.6, 1.85, Fi.FiServer, "API", "Python + Flask. Strict input checks, rate limits; the server prices every order.", C.amL);
+    await box(0.6, 1.9, 3.6, 1.85, Fi.FiSmartphone, "Mobile app", "Frontend: React Native + Expo (TypeScript). Android first; secure storage for sign-in.", C.em);
+    await box(4.85, 1.9, 3.6, 1.85, Fi.FiServer, "API", "Backend: Python + Flask. Strict input checks, rate limits; the server prices every order.", C.amL);
     await box(9.1, 1.9, 3.6, 1.85, Fi.FiDatabase, "Database", "PostgreSQL, one schema per area, versioned migrations, append-only audit.", C.emL);
     s.addShape(pres.shapes.LINE, { x: 4.25, y: 2.82, w: 0.55, h: 0, line: { color: C.em, width: 2, beginArrowType: "triangle", endArrowType: "triangle" } });
     s.addShape(pres.shapes.LINE, { x: 8.5, y: 2.82, w: 0.55, h: 0, line: { color: C.em, width: 2, beginArrowType: "triangle", endArrowType: "triangle" } });
-    const svc = [[Fi.FiCreditCard, "PayFast", "payments, confirmed by 4 checks"], [Fi.FiImage, "Cloudinary", "signed photo uploads"], [Fi.FiMap, "Mapbox", "addresses and distance"], [Fi.FiCpu, "Supplier engine", "rule-based, with reasons"]];
+    const svc = [[Fi.FiCreditCard, "Digital payments", "PayFast, confirmed by 4 checks"], [Fi.FiImage, "Media", "Cloudinary: private photos stay private, public ones signed"], [Fi.FiMap, "Mapbox", "addresses and distance"], [Fi.FiCpu, "Supplier engine", "rule-based, with reasons"]];
     for (let i = 0; i < 4; i++) {
       const x = 0.6 + i * 3.08;
       card(s, x, 3.95, 2.85, 1.3, C.panel2);
       await disc(s, svc[i][0], x + 0.2, 4.12, 0.56, C.em);
-      t(s, svc[i][1], { x: x + 0.9, y: 4.15, w: 1.9, h: 0.4, fontSize: 14.5, bold: true });
+      t(s, svc[i][1], { x: x + 0.9, y: 4.15, w: 1.9, h: 0.4, fontSize: 13, bold: true });
       t(s, svc[i][2], { x: x + 0.9, y: 4.55, w: 1.9, h: 0.6, fontSize: 12, color: C.muted });
     }
     const nums = [["1,281", "system tests"], ["204", "app tests"], ["TRL 4", "today; pilot → TRL 6"], ["ML-DSA-65", "post-quantum sealed records"]];
@@ -330,7 +330,8 @@ async function icon(Comp, color, px = 256) {
   {
     const s = pres.addSlide(); base(s);
     kicker(s, "Data privacy");
-    title(s, "POPIA by design: their data stays theirs");
+    title(s, "Complying with the law, by design");
+    t(s, "For example POPIA, South Africa's privacy law, and PCI DSS for card payments. Their data stays theirs.", { x: 0.6, y: 1.42, w: 12.1, h: 0.4, fontSize: 15, color: C.muted });
     const items = [
       [Fi.FiFilter, "Collect only what's needed", "Only what a feature needs or what can be officially checked. Consent recorded at sign-up."],
       [Fi.FiLock, "Only the owner sees it", "Every request is scoped to the signed-in owner. Anyone else's record answers 'not found'."],
@@ -347,11 +348,11 @@ async function icon(Comp, color, px = 256) {
       t(s, items[i][2], { x: x + 0.3, y: y + 1.05, w: 3.25, h: 0.8, fontSize: 12.5, color: C.muted });
     }
     card(s, 0.6, 6.15, 12.1, 0.62, C.panel2);
-    t(s, [{ text: "Honest proof  ", options: { bold: true, color: C.amL } }, { text: "Only a payment verified by the provider is proof. Cash is at most 'confirmed by both'; tool records are the owner's own. Never added together.", options: { color: C.white } }],
+    t(s, [{ text: "Honest proof  ", options: { bold: true, color: C.amL } }, { text: "Only digital payments verified by the payment provider count as proof. Everything else is the owner's own record, and is never added to it.", options: { color: C.white } }],
       { x: 0.85, y: 6.2, w: 11.6, h: 0.52, fontSize: 13, valign: "middle" });
     foot(s, 9);
     s.addNotes(
-      "SAY (only if asked, 15 s): 'Privacy is built in, not added on. We collect only what we need or can verify. Only the owner sees their data. We never touch card numbers or hold money. Nothing personal goes into logs. Nothing is shared without consent. And we're honest about proof: only a provider-verified payment counts as proof.'\n\n" +
+      "SAY (only if asked, 15 s): 'We comply with the law by design, POPIA for example, not as an afterthought. We collect only what we need or can verify. Only the owner sees their data. We never touch card numbers or hold money. Nothing personal goes into logs. Nothing is shared without consent. And we're honest about proof: only digital payments verified by the provider count as proof.'\n\n" +
       "Q&A: security is invisible to the owner (email, password, a code only on a new phone). Breach plan: revoke sessions, rotate keys, tell users and the Information Regulator (POPIA s22). Data export and account closure are built on the server; the buttons come to the app next.");
   }
 
@@ -368,8 +369,8 @@ async function icon(Comp, color, px = 256) {
     t(s, "Thank you", { x: 7.7, y: 2.3, w: 5.2, h: 1.0, fontFace: TITLE, fontSize: 50, bold: true });
     t(s, "Keep it in the kasi.", { x: 7.75, y: 3.35, w: 5.2, h: 0.6, fontFace: TITLE, fontSize: 24, italic: true, color: C.amL });
     t(s, "R300,000  ·  6-month pilot", { x: 7.75, y: 4.2, w: 5.2, h: 0.45, fontSize: 18, bold: true, color: C.emL });
-    t(s, "Making informal and small businesses visible.", { x: 7.75, y: 4.7, w: 5.2, h: 0.45, fontSize: 15, color: C.muted });
-    t(s, "Team PR  ·  Mandla (lead)  ·  Risuna", { x: 7.75, y: 5.9, w: 5.2, h: 0.4, fontSize: 14, color: C.white });
+    t(s, "Making informal and small businesses visible, and ready for tomorrow.", { x: 7.75, y: 4.7, w: 5.2, h: 0.45, fontSize: 15, color: C.muted });
+    t(s, "Team PR", { x: 7.75, y: 5.9, w: 5.2, h: 0.4, fontSize: 14, color: C.white });
     foot(s, 10);
     s.addNotes(
       "DEMO (50 s): play the video, or do it live. Let it speak; don't narrate every tap. Before going on: phone charged, backend + ngrok running.\n" +
