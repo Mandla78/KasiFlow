@@ -14,8 +14,9 @@ WHAT WE UPLOAD
                  charts and photos, solution with real app screens,
                  user journey, architecture, security, data privacy
                  policy, competitive analysis, business model, costs
-                 and the ask, go-to-market, traction. Demo video link
-                 on slide 6.
+                 and the ask, go-to-market, traction. The demo plays
+                 inside slide 6 (49 s, starts by itself, no Wi-Fi
+                 needed); the full 81-second video is linked there.
   FILE 2  Name:  Akayza - UX Design
           Notes: the designed screens of the full journey; the demo
                  shows the built part.

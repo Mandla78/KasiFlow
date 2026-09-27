@@ -216,15 +216,18 @@ async function icon(Comp, color, px = 256) {
     const s = newSlide();
     kicker(s, "Demo");
     title(s, "Meet Sipho and Thabo");
-    card(s, 0.6, 1.95, 8.0, 4.55, C.panel2);
-    await disc(s, Fi.FiPlay, 3.85, 3.2, 1.5, C.amL);
-    t(s, "On a real phone, against our real system (the full video: 81 seconds)", { x: 0.6, y: 4.95, w: 8.0, h: 0.45, fontSize: 16, bold: true, align: "center" });
-    if (DEMO_URL) t(s, [{ text: DEMO_URL, options: { hyperlink: { url: DEMO_URL, tooltip: "Watch the demo" } } }], { x: 0.6, y: 5.45, w: 8.0, h: 0.4, fontSize: 14, bold: true, color: C.emL, align: "center" });
-    else t(s, "Video link: [paste here]", { x: 0.6, y: 5.45, w: 8.0, h: 0.4, fontSize: 13, color: C.muted, align: "center" });
-    t(s, "Watch for", { x: 9.0, y: 2.0, w: 3.7, h: 0.45, fontSize: 18, bold: true, color: C.em });
+    // The 49-second room cut is inside the deck, so the pitch never leaves PowerPoint for a
+    // browser or the Wi-Fi. It's silent: the speech narrates it. autoplay_video.ps1 then sets it
+    // to start by itself when the slide opens. The full 81-second version stays on Drive.
+    card(s, 0.52, 1.67, 9.16, 5.2225, C.panel2); // a thin frame, so the video reads as a screen
+    s.addMedia({ type: "video", path: __dirname + "/demo_room.mp4", cover: "data:" + img("demo_poster.png"),
+      x: 0.6, y: 1.75, w: 9.0, h: 5.0625, objectName: "Demo video" });
+    t(s, "Watch for", { x: 9.95, y: 1.8, w: 2.78, h: 0.4, fontSize: 16, bold: true, color: C.em });
     const shows = ["Sipho picks Food and drops a pin where he trades", "Suppliers who deliver to him", "Bread from a bakery that delivers, paid, confirmed by the provider", "Every kota he sells, in his order book", "Thabo's job: stage photos, signed off by the client"];
     s.addText(shows.map((q, j) => ({ text: q, options: { bullet: true, breakLine: j < shows.length - 1 } })),
-      { x: 9.0, y: 2.55, w: 3.7, h: 3.9, fontFace: BODY, fontSize: 15.5, color: C.white, paraSpaceAfter: 11, margin: 0, valign: "top", isTextBox: true });
+      { x: 9.95, y: 2.3, w: 2.78, h: 3.15, fontFace: BODY, fontSize: 12.5, color: C.white, paraSpaceAfter: 6, margin: 0, valign: "top", isTextBox: true });
+    t(s, "Full video, 81 seconds:", { x: 9.95, y: 5.55, w: 2.78, h: 0.3, fontSize: 11.5, bold: true, color: C.muted });
+    if (DEMO_URL) t(s, [{ text: DEMO_URL, options: { hyperlink: { url: DEMO_URL, tooltip: "Watch the full demo" } } }], { x: 9.95, y: 5.85, w: 2.78, h: 0.85, fontSize: 9.5, color: C.emL });
     foot(s);
     s.addNotes(
       "SAY over the video (0:55-1:45), one line per scene; let the screens breathe:\n" +
@@ -235,7 +238,8 @@ async function icon(Comp, color, px = 256) {
       "[Order book] 'At the counter, every kota he sells goes in his order book.'\n" +
       "[My record] 'It all adds up in his record, with the confirmed payments marked.'\n" +
       "[Builder job] 'Now meet Thabo, a builder. Every job, stage by stage, is photographed, and the client signs off each stage from a link: confirmed by both. That's his track record.'\n\n" +
-      "Before going on: phone charged, backend and the tunnel running (backend/scripts/demo_tunnel.ps1), the health link green. For the link: rebuild with DEMO_URL=<link> node build.js, or replace '[paste here]' by hand (Insert > Link).");
+      "The 49-second video is in the deck and starts by itself when this slide opens. It's silent, so speak over it. If it doesn't start, click it (or press Alt+P). No Wi-Fi needed.\n" +
+      "The full 81-second version with music is on Google Drive (the link on the slide), for the assessors and Sonke.");
   }
 
   // ================================================================ 7. MONEY
