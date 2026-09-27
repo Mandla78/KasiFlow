@@ -108,32 +108,39 @@ async function icon(Comp, color, px = 256) {
   {
     const s = pres.addSlide(); base(s);
     kicker(s, "What we offer");
-    title(s, "One free app that makes the business visible");
-    t(s, "It works the way they already do (cash, credit on trust, the same suppliers), and turns every sale, order and payment into a record the owner holds.",
-      { x: 0.6, y: 1.75, w: 12.1, h: 0.75, fontSize: 17, color: C.muted });
+    t(s, "One free app that makes the business visible, and ready for tomorrow", { x: 0.6, y: 0.8, w: 12.1, h: 1.1, fontFace: TITLE, fontSize: 30, bold: true });
+    t(s, "It works the way they already operate, with cash and digital payments. Every digital stock order becomes a record the owner holds, and over time a strong trading history, alongside the business tools they use every day.",
+      { x: 0.6, y: 1.95, w: 12.1, h: 0.8, fontSize: 15.5, color: C.muted });
     const outs = [
-      ["TODAY", "Less stress", "A credit book, an order book and jobs in stages: who owes you, what sold, what's due.", Fi.FiSun, C.em],
+      ["TODAY", "Less stress", "Business tools in one place: a credit book, an order book, jobs in stages and My record.", Fi.FiSun, C.em],
       ["THIS WEEK", "Buy better, pay safely", "Order from your own suppliers, matched to what you really buy. Pay digitally or cash, get a proper invoice.", Fi.FiShoppingBag, C.amL],
-      ["TOMORROW", "Ready to grow", "A sealed trading history you own and choose to share: the first step to credit, funds and registration.", Fi.FiTrendingUp, C.emL],
+      ["TOMORROW", "Ready to grow", "A sealed trading history you own and choose to share: the first step to finance and registration.", Fi.FiTrendingUp, C.emL],
     ];
     for (let i = 0; i < 3; i++) {
       const x = 0.6 + i * 4.1;
-      card(s, x, 2.7, 3.8, 3.05);
-      t(s, outs[i][0], { x: x + 0.35, y: 2.95, w: 2.5, h: 0.35, fontSize: 13, bold: true, color: outs[i][4], charSpacing: 3 });
-      await disc(s, outs[i][3], x + 2.75, 2.9, 0.72, outs[i][4]);
-      t(s, outs[i][1], { x: x + 0.35, y: 3.7, w: 3.3, h: 0.5, fontFace: TITLE, fontSize: 19, bold: true });
-      t(s, outs[i][2], { x: x + 0.35, y: 4.3, w: 3.15, h: 1.35, fontSize: 14, color: C.muted });
+      card(s, x, 2.85, 3.8, 2.3);
+      t(s, outs[i][0], { x: x + 0.3, y: 3.02, w: 2.5, h: 0.35, fontSize: 12.5, bold: true, color: outs[i][4], charSpacing: 3 });
+      await disc(s, outs[i][3], x + 3.0, 2.97, 0.52, outs[i][4]);
+      t(s, outs[i][1], { x: x + 0.3, y: 3.5, w: 3.3, h: 0.45, fontFace: TITLE, fontSize: 18, bold: true });
+      t(s, outs[i][2], { x: x + 0.3, y: 4.0, w: 3.25, h: 1.1, fontSize: 13, color: C.muted });
     }
-    const who = [["Businesses", "use it free, always", C.em], ["Suppliers", "pay us: more orders, no cash lost on the road", C.amL], ["Banks and funds", "next, only with the owner's consent", C.emL]];
-    card(s, 0.6, 5.95, 12.1, 0.8, C.panel2);
+    const who = [
+      ["USERS", "Small businesses", "Use it free, always.", C.em],
+      ["CUSTOMERS", "Suppliers", "Pay a monthly fee for more orders from the businesses they already serve, paid up front, with no cash lost on the road.", C.amL],
+      ["TOMORROW", "Banks and lenders", "Partnerships: a verified trading history they can trust, shared only with the owner's consent.", C.emL],
+    ];
+    const ws = [3.0, 5.0, 3.8], xs = [0.6, 3.75, 8.9];
     for (let i = 0; i < 3; i++) {
-      t(s, [{ text: who[i][0] + "  ", options: { bold: true, color: who[i][2] } }, { text: who[i][1], options: { color: C.white } }],
-        { x: 0.85 + i * 4.05, y: 6.1, w: 3.9, h: 0.5, fontSize: 13.5, valign: "middle" });
+      card(s, xs[i], 5.3, ws[i], 1.5, C.panel2);
+      t(s, who[i][0], { x: xs[i] + 0.22, y: 5.4, w: ws[i] - 0.4, h: 0.28, fontSize: 10.5, bold: true, color: C.muted, charSpacing: 2 });
+      t(s, who[i][1], { x: xs[i] + 0.22, y: 5.66, w: ws[i] - 0.4, h: 0.35, fontSize: 15, bold: true, color: who[i][3] });
+      t(s, who[i][2], { x: xs[i] + 0.22, y: 6.04, w: ws[i] - 0.4, h: 0.72, fontSize: 12 });
     }
-    foot(s, 3);
+    foot(s, 3, "Honest limit: only digital payments count as proof, because the payment provider confirms the money moved. Cash and the business tools are the owner's own record.", 11.2);
     s.addNotes(
-      "SAY (25 s): 'That's where Akayza comes in. One free app that runs the business the way it already works, and turns every sale, order and payment into a record the owner holds. Today, less stress. This week, they buy better from their own suppliers and pay safely. Tomorrow, a trading history they own: the first step to credit and funding. Businesses never pay. Suppliers pay us, because we bring them more orders.'\n\n" +
-      "Honest wording if pushed: payments made in the app are confirmed by the payment provider; the rest is the owner's own record. Never call tool records 'proof'.");
+      "SAY (25 s): 'That's where Akayza comes in. One free app that makes the business visible, and ready for tomorrow. It works the way they already operate, cash or digital. Every digital stock order becomes a record the owner holds, and over time a strong trading history. Today, the business tools take the stress away. This week, they buy better from their own suppliers and pay safely. Tomorrow, that history is their first step to finance. Businesses never pay. Suppliers are our customers: they pay a monthly fee because we bring them more orders, paid up front. And next, banks and lenders, as partners, only with the owner's consent.'\n\n" +
+      "HONEST LIMIT (say it before a judge does): 'We only call digital payments proof, because the payment provider confirms the money moved. Cash and what an owner writes in the tools is their own record. We never add them together.'\n" +
+      "We don't lend or offer credit ourselves; banks and lenders are future partners.");
   }
 
   // ================================================================ 4. USER JOURNEY
@@ -141,27 +148,27 @@ async function icon(Comp, color, px = 256) {
     const s = pres.addSlide(); base(s);
     kicker(s, "User journey");
     title(s, "Thandi's week, with Akayza");
-    t(s, "Thandi runs a small shop. She's busy, she trusts her customers, and she's never had a record of any of it.", { x: 0.6, y: 1.65, w: 12.1, h: 0.5, fontSize: 17, italic: true, color: C.muted });
+    t(s, "Thandi runs a small shop. Her customers pay her in cash, with no proof it moved. Where money can be proven is with her suppliers, so that's where Akayza starts.", { x: 0.6, y: 1.65, w: 12.1, h: 0.7, fontSize: 16, italic: true, color: C.muted });
     const days = [
       ["Monday", "Restocks in 2 minutes", "Her usual supplier, their prices, delivered. No calls, no running out.", Fi.FiTruck, C.em],
-      ["Wednesday", "Gets paid back", "A customer settles his credit. It's off her book on the spot.", Fi.FiBookOpen, C.amL],
+      ["Wednesday", "Records a repayment", "A customer settles his credit. She records it in her credit book, one of her business tools.", Fi.FiBookOpen, C.amL],
       ["Friday", "Pays without cash risk", "Pays the supplier in the app. The provider confirms it; the invoice arrives.", Fi.FiCreditCard, C.emL],
-      ["Month end", "Sees her business", "What she sold, what she's owed, what she bought. She seals it, and it's hers.", Fi.FiBarChart2, C.am],
+      ["Month end", "Sees her business", "Who owes her, what she orders most and how often, and the suppliers that fit how she buys.", Fi.FiBarChart2, C.am],
     ];
     for (let i = 0; i < 4; i++) {
       const x = 0.6 + i * 3.08;
-      card(s, x, 2.45, 2.85, 3.9);
-      await disc(s, days[i][3], x + 0.3, 2.75, 0.8, days[i][4]);
-      t(s, days[i][0].toUpperCase(), { x: x + 0.3, y: 3.75, w: 2.4, h: 0.35, fontSize: 13, bold: true, color: days[i][4], charSpacing: 2 });
-      t(s, days[i][1], { x: x + 0.3, y: 4.15, w: 2.35, h: 0.8, fontSize: 18, bold: true });
-      t(s, days[i][2], { x: x + 0.3, y: 5.0, w: 2.35, h: 1.3, fontSize: 13.5, color: C.muted });
-      if (i < 3) s.addShape(pres.shapes.LINE, { x: x + 2.88, y: 4.4, w: 0.18, h: 0, line: { color: C.faint, width: 1.5, endArrowType: "triangle" } });
+      card(s, x, 2.55, 2.85, 3.8);
+      await disc(s, days[i][3], x + 0.3, 2.82, 0.78, days[i][4]);
+      t(s, days[i][0].toUpperCase(), { x: x + 0.3, y: 3.8, w: 2.4, h: 0.35, fontSize: 13, bold: true, color: days[i][4], charSpacing: 2 });
+      t(s, days[i][1], { x: x + 0.3, y: 4.18, w: 2.35, h: 0.75, fontSize: 17, bold: true });
+      t(s, days[i][2], { x: x + 0.3, y: 4.98, w: 2.35, h: 1.3, fontSize: 13.5, color: C.muted });
+      if (i < 3) s.addShape(pres.shapes.LINE, { x: x + 2.88, y: 4.45, w: 0.18, h: 0, line: { color: C.faint, width: 1.5, endArrowType: "triangle" } });
     }
-    t(s, "Sipho the builder has the same week: stock for the site, jobs in stages, the client signs off each stage from a link.", { x: 0.6, y: 6.45, w: 12, h: 0.4, fontSize: 14, italic: true, color: C.em });
+    t(s, "Same week for Sipho the builder: materials for the site from his suppliers, jobs tracked in stages.", { x: 0.6, y: 6.45, w: 12, h: 0.4, fontSize: 14, italic: true, color: C.em });
     foot(s, 4);
     s.addNotes(
-      "SAY (20 s), tell it as a story: 'Meet Thandi. Monday she restocks from her usual supplier in two minutes. Wednesday a customer pays back his credit. Friday she pays her supplier in the app: no cash on the road, the payment is confirmed and the invoice arrives. And at month end, for the first time, she can see her business, and it's hers.'\n\n" +
-      "Thandi and Sipho are illustrations, not real customers. If asked: 'they're the owners we built for; the pilot puts real names to them.'");
+      "SAY (20 s), tell it as a story: 'Meet Thandi. Her customers pay her in cash, and there's no proof that money moved. But with her suppliers there can be, so that's where we start. Monday she restocks from her usual supplier in two minutes. Wednesday a customer pays back his credit, and she records it in her credit book. Friday she pays her supplier in the app: no cash on the road, the payment is confirmed and the invoice arrives. And at month end she sees her business: who owes her, what she orders most, and the suppliers that fit how she buys.' Then: 'Any informal business has the same week, like Sipho the builder.'\n\n" +
+      "We recommend suppliers, never products: the month-end view is her own numbers. Thandi and Sipho are illustrations, not real customers.");
   }
 
   // ================================================================ 5. MARKET + BUSINESS MODEL (+ why SA first, go-to-market)
