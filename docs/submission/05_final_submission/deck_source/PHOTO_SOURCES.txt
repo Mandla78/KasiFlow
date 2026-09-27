@@ -1,10 +1,11 @@
-Photos on slide 2 (the problem), credited on the slide. News photos, used
-for the hackathon pitch only; swap for our own photos (with the owner's
-permission) before any public use.
+Photos on slide 2 of our own deck (the problem). They were news photos,
+credited on the slide, used for the hackathon pitch only. They are not in
+this public repository, because we don't hold the rights to publish them.
+To rebuild the deck, add your own photos (or ones with a free licence) as
+problem_counter.png, problem_shop.webp and problem_shelves.webp.
 
-  problem_counter.png    Business Explainer, "Study: spaza shops beating big retail" (7 Mar 2026)
-                         https://businessexplainer.co.za/economy/2026/03/07/study-spaza-shops-beating-big-retail/
-  problem_shop.webp      SABC News, "Spaza shops to be granted chance to finalise registration process"
-  problem_shelves.webp   https://www.sabcnews.com/sabcnews/spaza-shops-to-be-granted-chance-to-finalise-registration-process/
+  Business Explainer, "Study: spaza shops beating big retail" (7 Mar 2026)
+  SABC News, "Spaza shops to be granted chance to finalise registration process"
 
-paving.jpg is no longer used (Pexels licence, see frontend/mobile/assets/sample-work/SOURCES.txt).
+The pitch deck the team submitted uses Wikimedia Commons photos under
+Creative Commons licences; see REUSE.md.
