@@ -9,48 +9,55 @@ WHAT WE UPLOAD
 ---------------------------------------------------------------------------
 
   FILE 1  Name:  Akayza - Presentation Slides
-          Notes: 14 slides: problem with data, solution, user journeys
-                 (builder and spaza), architecture, security, data
-                 privacy, competitive analysis, business model and
-                 figures, go-to-market, TRL, impact and the ask. Demo
-                 video link on the last slide.
+          TWO DECKS on main, submit ONE: Mandla's at
+          Akayza_Pitch_TeamPR.pptx, or Risuna's speech deck at
+          speech_deck/Akayza_Pitch_Speech_Deck.pptx (it follows her speech;
+          the notes and slide list below describe that one).
+          Notes: 10 slides, the organisers' limit. Slides 1-8 are the
+                 3-minute pitch; 9-10 are the architecture and the
+                 data privacy policy. Required items: problem with
+                 charts and photos (2-3), solution (4), user journey
+                 (5), competitive analysis (7), architecture (9), data
+                 privacy (10). The demo plays inside slide 5 (49 s,
+                 starts by itself, no Wi-Fi needed); the full 81-second
+                 video is linked there.
   FILE 2  Name:  Akayza - UX Design
           Notes: the designed screens of the full journey; the demo
                  shows the built part.
-  VIDEO   Under 90 seconds. Link on the Sonke project overview AND on
-          the last slide. Unlisted YouTube or Google Drive (set to
+  VIDEO   https://drive.google.com/file/d/1yYQfVBEG-dnn-hxgRRtD5xDVw8vZV8Es/view
+          (81 s, "Team PR GKHack26 demo", anyone with the link; opens
+          signed out, checked Sun 27 Sep 02:55). Room cut: 49 s, silent.
+          Under 90 seconds. Link on the Sonke project overview AND on
+          slide 5 (DEMO_URL=<link> node build.js). Unlisted YouTube or Google Drive (set to
           "anyone with the link"). Test the link in a private window.
   PROFILE Switch the project name to Akayza and update the overview
           (01_team_profile) before uploading.
 
 
 ---------------------------------------------------------------------------
-THE SLIDES (more than 10; their required items marked *)
+THE SLIDES (10 at most; required items marked *)
 ---------------------------------------------------------------------------
 
-   1  Akayza · team PR · one line: "Your business, proven by the
-      people you trade with." · reuse declaration
-   2  * Problem statement justification: chart (R900bn / <9% bank
-      loans / 38% informal construction) + the 354 + a photo
-   3  Who: Bongani the builder and Nomsa the spaza owner; suppliers
-      as customers (hybrid-facing)
-   4  * Solution offering
-   5  * User journey story: Bongani's job from quote to sign-off;
-      Nomsa's week from credit sale to confirmed delivery
-   6  Demo screens (+ video link)
-   7  * Technological architecture: app -> Cloudflare -> domain-
-      driven API -> PostgreSQL; PayFast, Cloudinary (malware scan),
-      Mapbox; integration API for supplier ERPs; sealed records
-   8  * Security considerations: threat model, SSDLC, tamper demo,
-      honest limits
-   9  * Data privacy policies (POPIA): what we collect, why, who sees
-      it, sharing by consent, revoke, deletion, data in SA at scale
-  10  * Competitive analysis
-  11  Business model: traders free (Pro later), suppliers subscribe,
-      ~1% commission, verification fees; real running costs
-  12  * Go-to-market: trader-led invites, sales, supplier-led, pilot
-  13  * Technology Readiness Level: what is built and tested
-  14  Impact + the ask: R300,000 for a 6-month pilot
+  Built from deck_source/build.js, then deck_source/autoplay_video.ps1
+  (27 Sep). The pitch follows the speech:
+   1  Title: Akayza, "Keep it in the kasi.", the theme (igniting
+      capabilities for South Africa's informal market), Team PR
+   2  * Problem: everyone wants a piece of the informal market; R900bn,
+      with photos of a spaza shop and a builder's site
+   3  * Problem: three charts (bank loans, the Spaza fund, unregistered)
+   4  * Solution: one free app, three real screens, airtime advance
+   5  * User journey: Sipho and Thabo, step by step, beside the demo
+      video (inside the slide) and the link to the full video
+   6  Business model and the ask: suppliers pay; R300,000, the sum of
+      the 6-month pilot's costs
+   7  * Competitive analysis: they sell to you, we build your record
+   8  The close: the next Maponya; thank you
+  For the assessors:
+   9  * Technological architecture: app -> API (a module per area) ->
+      PostgreSQL; PayFast, Cloudinary, Mapbox, email; request guards
+      and test counts
+  10  * Data privacy policy (POPIA): what we collect and why, what we
+      never do, your rights, with honest status
 
 
 ---------------------------------------------------------------------------

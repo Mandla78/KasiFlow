@@ -22,6 +22,10 @@ if (-not (Test-Path $envFile)) { throw 'backend/.env not found' }
 
 $log = Join-Path $env:TEMP 'akayza-tunnel.log'
 Remove-Item $log -ErrorAction SilentlyContinue
+# HTTP/2 over TCP: the default QUIC (UDP) dropped mid-payment on our Wi-Fi
+# while we recorded the demo (docs/teammate/feedback/FINDING_demo_tunnel_drops.txt).
+# cloudflared reads this setting; the quick tunnel's help doesn't list a flag for it.
+$env:TUNNEL_TRANSPORT_PROTOCOL = 'http2'
 $tunnel = Start-Process -FilePath $cf -ArgumentList 'tunnel', '--no-autoupdate', '--url', 'http://localhost:5000' -RedirectStandardError $log -PassThru -WindowStyle Hidden
 
 $url = $null

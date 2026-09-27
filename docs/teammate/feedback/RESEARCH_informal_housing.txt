@@ -1,0 +1,138 @@
+===========================================================================
+RESEARCH -- the informal housing boom, and why builders are our edge
+===========================================================================
+
+BY / DATE:   Risuna, Sunday 27 September 2026
+FOR:         Mandla, and anyone answering "why builders?" in Q&A
+STATUS:      desk research with sources; not tested with real builders yet
+
+
+QUESTION WE HAD
+  Builders are what no competitor serves (Vuleka, Shop2Shop and the
+  rest are all about spaza shops). Is informal home building big enough,
+  and does it fit what the app already does? With a close look at rural
+  areas.
+
+
+WHAT I FOUND
+
+  1. Why people build for themselves
+  - More than 2.3 million households need housing assistance, and 3.4
+    million are on the housing needs database (Minister Simelane, Sep
+    2026). The state delivered 23,027 of a targeted 37,779 houses in
+    2025/26.
+  - Most housing in Africa is built incrementally, by households
+    themselves or by small builders they hire, paid from savings,
+    family and personal loans (CAHF).
+  - Building materials lead hardware sales because South Africa has a
+    large owner-builder and contractor-led culture, in townships,
+    peri-urban areas and rural provinces (Nexdigm).
+  So: the state can't keep up, and families build in stages, with cash
+  and a local builder.
+
+  2. Rural areas (the strongest case)
+  - Urban working- and middle-class South Africans are putting their
+    life savings into new homes in the former homelands, not into city
+    property (African Arguments; Daily Maverick).
+  - Teachers, nurses and civil servants build without mortgages, in
+    phases as money allows (The Brief, Aug 2026; its author says the
+    scale needs more research).
+  - Land on communal land comes from traditional authorities at little
+    or no cost, but only with a Permission to Occupy, never a title
+    deed. A PLAAS study in Limpopo villages (2021-22, 127 people):
+    75.25% of those who got customary land in the past 10 years paid
+    cash. No title deed means no mortgage, so the house goes up stage by
+    stage, in cash, with no record.
+  - In the former Transkei, wattle-and-daub rondavels are giving way to
+    brick-and-mortar houses on family land (The Conversation). Census
+    2022: 88.5% live in formal housing, and traditional and informal
+    dwellings have fallen over 10 years. Every one of those brick
+    houses is work for a local builder.
+  - Chains like Cashbuild put stores in townships and rural areas and
+    sell for cash to owner-builders and small contractors. Local
+    hardware stores and brickyards are the suppliers who would pay us.
+
+  3. Townships: the backroom boom (the same pattern, in the city)
+  - About 1 million backroom rental units (2016 Human Settlements data).
+    Market estimates range from R20bn to R50bn a year (Forbes Africa,
+    quoting reports and GG Alcock's KasiNomics): say "billions a year".
+  - Urban households in backyards rose from 8.9% (2011) to 13.4% (2016).
+  - Small landlords are building, and funders back them: TUHF lent
+    R4.7bn to 350 small landlords (40,000 homes); Bitprop has built 506
+    backyard flats; Indlu funds backyard rooms (CDE; Bitprop).
+
+  4. The builders
+  - Construction employs about 1.2 million people, 38% informally
+    ("likely higher"; ILO, Nov 2024). Small and micro contractors are
+    now over half of construction employment (Business Day, 16 Jul
+    2026). Both are in v1_14_SOURCES.txt, VERIFIED.
+  - Government warns homeowners about rogue builders (unfinished homes,
+    builders who vanish after payment) and tells them to keep payment
+    records (Vuk'uzenzele, Jun 2026).
+
+
+HOW IT MAPS TO WHAT WE BUILT
+  Homes built in stages, paid in cash  -> jobs in stages, each priced
+  Nobody can prove what was paid       -> the client signs off each stage
+                                          from a link: confirmed by both
+  "Did he even build it?"              -> camera-only stage photos, with
+                                          our server's time and fingerprint
+  No track record beyond word of mouth -> finished jobs become his record
+  Cash sales at the rural hardware     -> suppliers who deliver, materials
+                                          per job: the store is who pays us
+  Patchy signal in villages            -> credit and order books work
+                                          offline; JOBS DON'T YET
+
+
+PITCH LINES
+  - "More than 2.3 million families are waiting for a house, and the
+    state built 23,000 last year. Everyone else builds for themselves,
+    stage by stage, with cash and a local builder."
+  - "In Limpopo villages, three in four people who got land in the last
+    ten years paid cash. There's no title deed, so there's no mortgage:
+    the house goes up in stages, in cash, with no record. Akayza gives
+    the family and the builder the record neither has."
+  - "The government tells homeowners to keep payment records against
+    rogue builders. Akayza is that record, and the honest builder's
+    proof of work."
+
+
+CAREFUL
+  - We haven't tested with rural builders; the pilot is the first test.
+  - Jobs don't work offline yet (only the credit book and order book).
+  - Market sizes are estimates from different sources: say "about" and
+    name the source.
+  - Never "street vendors". Say owner-builders, small builders, spaza
+    shops.
+
+
+WHAT THIS SUGGESTS WE BUILD NEXT (for Mandla to decide)
+  1. Jobs offline, like the credit book (the same pattern: queue, key,
+     send once).
+  2. The two-phone cash hand-over (QR), so a stage paid in cash is
+     confirmed by both without the internet.
+  3. A builder's shareable track record: signed-off stages and photos,
+     sealed, shown to the next client with the builder's consent.
+  4. Hardware stores and brickyards as the first rural suppliers.
+
+
+SOURCES (checked 27 Sep 2026)
+  https://iol.co.za/capeargus/news/2026-09-25-simelane-says-more-than-23-million-households-need-housing-assistance/
+  https://iol.co.za/news/politics/2026-05-28-what-minister-simelanes-budget-vote-reveals-about-south-africas-housing-challenges/
+  https://housingfinanceafrica.org/discussion/self-build-for-housing-development-have-we-come-a-full-circle/
+  https://www.nexdigm.com/market-research/report-store/south-africa-hardware-stores-retail-market/
+  https://startupmag.co.za/2025/02/building-success-the-rise-of-cashbuild-in-south-africa/
+  https://africanarguments.org/2024/07/houses-of-hope-populism-and-south-africas-complex-urban-rural-connections/
+  https://www.dailymaverick.co.za/article/2023-03-30-new-rural-land-grab-as-urban-elites-build-homes-on-customary-areas/
+  https://thebrief.com.na/2026/08/rethinking-homeownership-in-namibia-what-limpopo-can-teach-us-about-solving-the-housing-crisis/
+  https://theconversation.com/south-africas-modern-rondavels-family-homes-may-be-changing-but-traditions-remain-242247
+  https://www.forbesafrica.com/small-business/2023/12/21/the-big-backroom-boom-in-south-africas-townships
+  https://justspatialdesignza.com/2022/03/09/south-african-backyard-rentals-a-case-for-support/
+  https://cde.org.za/micro-developers-open-doors-and-windows-for-solving-sas-housing-problem/
+  https://www.bitprop.com/impact-report-2025
+  https://www.vukuzenzele.gov.za/how-protect-your-home-investment-rogue-builders
+  https://www.gov.za/news/media-statements/statssa-releases-general-household-survey-2024-27-may-2025
+  ILO construction and Business Day small contractors: see
+  docs/v1_rev4/v1/v1_14_SOURCES.txt (VERIFIED)
+
+DECISION:

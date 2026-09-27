@@ -1,0 +1,70 @@
+FINDING: the quick tunnel broke three ways while we recorded the demo
+BY / DATE: Risuna, Sunday 27 September 2026, 01:30-02:45
+FOR TOOL: platform (backend/scripts/demo_tunnel.ps1, APP_BASE_URL) -- your
+          area; and anyone demoing sign-off or PayFast live in the room
+
+QUESTION WE HAD
+  Can we rely on the Cloudflare quick tunnel (SETUP_cloudflare_tunnel.txt)
+  for the sign-off link and PayFast, live, in front of the judges?
+
+WHAT I FOUND
+  What went wrong tonight, in order:
+
+  1. Links made before a restart point at a dead address.
+     Every quick tunnel gets a new random *.trycloudflare.com address, and
+     the backend reads APP_BASE_URL once, when it starts. Our first
+     sign-off link still carried Saturday's address, so the client's page
+     said "This site can't be reached" (ERR_NAME_NOT_RESOLVED). The fix
+     each time: run the script, restart the backend, send a NEW link.
+
+  2. The tunnel dropped in the middle of a payment: Cloudflare error 1033.
+     cloudflared uses QUIC (UDP) by default. On our Wi-Fi the QUIC
+     connection timed out ("failed to dial to edge with quic: timeout: no
+     recent network activity") and took about 50 s to come back, and the
+     PayFast pay page landed in that gap. Restarted over HTTP/2 (TCP) and
+     it held for the rest of the night: the sign-off page, the pay page,
+     PayFast's payment notice and the return page all worked.
+
+  3. The phone reopened the dead page.
+     After the failed attempt Chrome's tab stayed open, and the next "Pay
+     securely" brought back the old tab with the old address, so reloading
+     kept failing. Swiping Chrome away in recent apps fixed it.
+
+  4. Once, Chrome showed ERR_CERT_VERIFIER_CHANGED on the new address. A
+     reload fixed it.
+
+  The options:
+  - option A: keep the quick tunnel, but over HTTP/2. Done in this pull
+    request: demo_tunnel.ps1 now sets TUNNEL_TRANSPORT_PROTOCOL=http2,
+    the exact setting that held tonight. Free, no account. The address
+    still changes on every start (problem 1).
+  - option B: ngrok's free static domain (your suggestion; .env.example
+    already has the slot). The address never changes, so old links keep
+    working. Needs an ngrok account and its authtoken on the demo laptop.
+    The free plan shows a "You are about to visit" warning page the first
+    time a browser opens the address, which the client's sign-off page
+    and PayFast's return page would hit.
+  - option C: a named Cloudflare tunnel on our own domain (the roadmap's
+    "Cloudflare protection on our own domain"). A fixed address, no
+    warning page, and FINDING_client_ip_behind_cloudflare.txt applies.
+    Needs the domain and a Cloudflare account, so not for today.
+
+RISKS (privacy, cost, a new native module, rate limits, reliability)
+  - The tunnel makes the laptop's backend public. Close it after the demo
+    (Ctrl+C in its window). I closed tonight's at 02:55.
+  - PayFast needs PAYFAST_TRUST_PROXY=true behind any tunnel (the script
+    already checks).
+  - If the tunnel dies during a live demo, the PayFast part fails. The
+    recorded demo (the Drive link on slide 6) doesn't depend on it.
+
+MY RECOMMENDATION
+  Today: play the recorded demo in the room. If we demo live, start the
+  tunnel (now HTTP/2) just before, restart the backend, swipe Chrome away
+  on the phone, and send fresh links. After the hackathon: option C.
+  ngrok isn't needed for today, because HTTP/2 fixed the drops, but B
+  works if you'd rather use your account.
+
+WHAT I NEED FROM MANDLA
+  A yes to the one-line script change (HTTP/2), and B or C for later.
+
+DECISION:
