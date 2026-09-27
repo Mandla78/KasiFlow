@@ -32,3 +32,18 @@ Coming later, with the features that need them: the PayFast provider and payment
 | Library | Licence | Where | Why |
 |---|---|---|---|
 | [dilithium-py](https://github.com/GiacomoPope/dilithium-py) 1.4.0 (Giacomo Pope) | MIT | `backend/src/domains/proof/integrity/services/seal_keys.py` | ML-DSA-65 (NIST FIPS 204) post-quantum signatures on record seals, in pure Python. Used as a library, not copied; if it isn't installed, seals are signed with Ed25519 alone. |
+
+## Photos in the pitch deck
+
+| Photo | Author | Licence | Where | Changes |
+|---|---|---|---|---|
+| [Nomonde Tuck Shop](https://commons.wikimedia.org/wiki/File:Nomonde_Tuck_Shop.jpg) | HelenOnline | [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/) | `docs/submission/05_final_submission/deck_source/photo_spaza.jpg`, slide 2 | resized; our caption on top |
+| [Aliwal North - Dukatole - 03.05 - Housebuilding Projekt](https://commons.wikimedia.org/wiki/File:Aliwal_North_-_Dukatole_-_03.05_-_Housebuilding_Projekt.jpg) | Heinz-Josef Lücking | [CC BY-SA 3.0 DE](https://creativecommons.org/licenses/by-sa/3.0/de/deed.en) | `docs/submission/05_final_submission/deck_source/photo_builder.jpg`, slide 2 | resized; our caption on top |
+
+Both come from Wikimedia Commons; the resized copies are shared under the same licences, and the slide credits them. Every other picture in the deck is a screen from our own app.
+
+## Music in the demo video
+
+| Track | Author | Licence | Where | Changes |
+|---|---|---|---|---|
+| [Carefree](https://incompetech.com/music/royalty-free/) | Kevin MacLeod (incompetech.com) | [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/) | the submission demo video (not in the repo) | trimmed to the video, loudness-normalised, faded in and out; credited on the end card |
