@@ -1,0 +1,10 @@
+Photos on slide 2 (the problem), credited on the slide. News photos, used
+for the hackathon pitch only; swap for our own photos (with the owner's
+permission) before any public use.
+
+  problem_counter.png    Business Explainer, "Study: spaza shops beating big retail" (7 Mar 2026)
+                         https://businessexplainer.co.za/economy/2026/03/07/study-spaza-shops-beating-big-retail/
+  problem_shop.webp      SABC News, "Spaza shops to be granted chance to finalise registration process"
+  problem_shelves.webp   https://www.sabcnews.com/sabcnews/spaza-shops-to-be-granted-chance-to-finalise-registration-process/
+
+paving.jpg is no longer used (Pexels licence, see frontend/mobile/assets/sample-work/SOURCES.txt).

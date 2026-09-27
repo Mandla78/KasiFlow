@@ -13,6 +13,7 @@ import { creditBookApi } from '../api/creditBookApi';
 import { EntryRow } from '../components/EntryRow';
 import { SummaryHeader } from '../components/SummaryHeader';
 import { UndoSnackbar } from '../components/UndoSnackbar';
+import { WaitingCard } from '../components/WaitingCard';
 import { todayIso } from '../lib/dueDates';
 import { CreditEntry } from '../types';
 
@@ -68,6 +69,7 @@ export default function CreditBookScreen() {
         </>
       }>
       <Title>Credit book</Title>
+      <WaitingCard onSent={load} />
 
       {failed ? (
         <Card style={styles.center}>

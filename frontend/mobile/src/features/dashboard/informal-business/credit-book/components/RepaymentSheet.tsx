@@ -1,7 +1,9 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 
+import { randomKey } from '@/features/dashboard/informal-business/order-book/lib/keys';
 import { ApiError } from '@/shared/api/client';
+import { isRetryable } from '@/shared/api/retryable';
 import { Button } from '@/shared/components/Button';
 import { formatRand } from '@/shared/lib/money';
 import { colors, fonts } from '@/shared/theme/tokens';
@@ -9,6 +11,7 @@ import { colors, fonts } from '@/shared/theme/tokens';
 import { creditBookApi } from '../api/creditBookApi';
 import { amountError, centsToInput, parseRand } from '../lib/amounts';
 import { addDays, shortDate } from '../lib/dueDates';
+import { keepForLater } from '../lib/pending';
 import { CreditEntry, CreditEntryDetail } from '../types';
 import { AmountField } from './AmountField';
 import { CalendarSheet } from './CalendarSheet';
@@ -20,13 +23,16 @@ type Props = {
   today: string;
   onClose: () => void;
   onSaved: (entry: CreditEntryDetail) => void;
+  /** No signal: the repayment was kept on the phone and goes when the signal is back. */
+  onKept?: () => void;
 };
 
 /**
  * Record money paid back: all of it or part, today or an earlier day.
  * Mount it only while open, so every opening starts from a clean form.
  */
-export function RepaymentSheet({ entry, today, onClose, onSaved }: Props) {
+export function RepaymentSheet({ entry, today, onClose, onSaved, onKept }: Props) {
+  const payKey = useRef(randomKey());
   const left = entry.outstandingCents;
   const [amount, setAmount] = useState(() => centsToInput(left));
   const [paidOn, setPaidOn] = useState(today);
@@ -44,9 +50,15 @@ export function RepaymentSheet({ entry, today, onClose, onSaved }: Props) {
     if (error || cents === null || saving) return;
     setSaving(true);
     setFailure('');
+    const input = { amountCents: cents, paidOn };
     try {
-      onSaved(await creditBookApi.recordRepayment(entry.id, { amountCents: cents, paidOn }));
+      onSaved(await creditBookApi.recordRepayment(entry.id, input, payKey.current));
     } catch (e) {
+      const label = `Repayment ${formatRand(cents)} · ${entry.customer.name}`;
+      if (onKept && isRetryable(e) && (await keepForLater({ key: payKey.current, kind: 'repayment', entryId: entry.id, input, label, at: new Date().toISOString() }))) {
+        onKept();
+        return;
+      }
       setFailure(e instanceof ApiError ? e.message : 'Something went wrong. Try again.');
     } finally {
       setSaving(false);

@@ -21,7 +21,7 @@ Flask-Limiter==4.1.1
 limits==5.8.0
 
 # Signatures and hashing for sealed records (Ed25519)
-cryptography==46.0.3
+cryptography==50.0.1
 # Post-quantum signatures for sealed records (ML-DSA, NIST FIPS 204), pure Python
 dilithium-py==1.4.0
 

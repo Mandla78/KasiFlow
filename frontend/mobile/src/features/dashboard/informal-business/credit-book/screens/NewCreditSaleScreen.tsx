@@ -1,18 +1,22 @@
 import { router, useLocalSearchParams } from 'expo-router';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 
 import { useSession } from '@/features/auth/session/SessionProvider';
+import { randomKey } from '@/features/dashboard/informal-business/order-book/lib/keys';
 import { ApiError } from '@/shared/api/client';
+import { isRetryable } from '@/shared/api/retryable';
 import { Button } from '@/shared/components/Button';
 import { Checkbox } from '@/shared/components/Choice';
 import { Card, InfoNote } from '@/shared/components/Parts';
 import { Screen } from '@/shared/components/Screen';
 import { Title } from '@/shared/components/Text';
 import { TextField } from '@/shared/components/TextField';
+import { formatRand } from '@/shared/lib/money';
 import { colors, fonts } from '@/shared/theme/tokens';
 
 import { creditBookApi } from '../api/creditBookApi';
+import { keepForLater } from '../lib/pending';
 import { AmountField } from '../components/AmountField';
 import { CustomerField } from '../components/CustomerField';
 import { CalendarSheet } from '../components/CalendarSheet';
@@ -74,23 +78,33 @@ export default function NewCreditSaleScreen() {
     if (picked && next !== picked.name) setPicked(null);
   }
 
+  // One key per sale: however often it's retried -- now or later from the phone's queue -- it lands once.
+  const saleKey = useRef(randomKey());
+
   async function save() {
     setTouched(true);
     const cents = parseRand(amount);
     if (Object.values(errors).some(Boolean) || cents === null || !dueOn || saving) return;
     setSaving(true);
     setFailure('');
+    const input = {
+      customer: picked ? { id: picked.id } : { name: name.trim(), phone: typedPhone },
+      amountCents: cents,
+      description: description.trim(),
+      givenOn,
+      dueOn,
+    };
     try {
-      const entry = await creditBookApi.addSale({
-        customer: picked ? { id: picked.id } : { name: name.trim(), phone: typedPhone },
-        amountCents: cents,
-        description: description.trim(),
-        givenOn,
-        dueOn,
-      });
+      const entry = await creditBookApi.addSale(input, saleKey.current);
       if (receipt && whatsappTo) await openWhatsApp(whatsappTo, receiptText(entry, profile.businessName, today));
       router.dismissTo({ pathname: '/informal-business/credit-book', params: { saved: entry.id } });
     } catch (err) {
+      // No signal: keep it on the phone; it goes (once) when the signal is back.
+      const label = `${picked ? picked.name : name.trim()} · ${formatRand(cents)} credit`;
+      if (isRetryable(err) && (await keepForLater({ key: saleKey.current, kind: 'sale', input, label, at: new Date().toISOString() }))) {
+        router.dismissTo({ pathname: '/informal-business/credit-book', params: { waiting: '1' } });
+        return;
+      }
       // Keep everything typed; just say what to do.
       setFailure(err instanceof ApiError ? err.message : 'Something went wrong. Try again.');
       setSaving(false);
