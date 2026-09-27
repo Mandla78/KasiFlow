@@ -88,7 +88,7 @@ async function icon(Comp, color, px = 256) {
     const s = newSlide();
     kicker(s, "The problem");
     t(s, "Everyone wants a piece of the kasi economy", { x: 0.6, y: 0.85, w: 7.9, h: 1.3, fontFace: TITLE, fontSize: 34, bold: true });
-    const wants = [[Fi.FiShoppingBag, "Big retailers are moving into townships"], [Fi.FiTool, "On some building sites, groups demand a cut of the work"]];
+    const wants = [[Fi.FiShoppingBag, "Big retailers are moving into townships"], [Fi.FiCreditCard, "Banks and payment apps are fighting for its customers"]];
     for (let i = 0; i < 2; i++) {
       const y = 2.5 + i * 0.85;
       await disc(s, wants[i][0], 0.6, y, 0.62, C.am);
@@ -106,8 +106,8 @@ async function icon(Comp, color, px = 256) {
     }
     foot(s, "Standard Bank, Township Informal Economy Report, Oct 2025 (Foshizi; 250+ businesses, 5 provinces). Photos: HelenOnline (CC BY-SA 4.0) and Heinz-Josef Lücking (CC BY-SA 3.0 DE), Wikimedia Commons.");
     s.addNotes(
-      "SAY (0:00-0:15): 'Everyone wants a piece of the kasi economy. Big retailers are moving into townships. On some building sites, groups demand a cut of the work. Because it's worth about R900 billion a year.'\n\n" +
-      "R900 bn: Standard Bank's Township Informal Economy Report, October 2025 (research by Foshizi, 250+ businesses in 5 provinces). Say 'about R900 billion'. The retailer and building-site lines are lived evidence: no number, so don't add one.\n\n" +
+      "SAY (0:00-0:15): 'Everyone wants a piece of the kasi economy. Big retailers are moving into townships. Banks and payment apps are fighting for its customers. Because it's worth about R900 billion a year.'\n\n" +
+      "R900 bn: Standard Bank's Township Informal Economy Report, October 2025 (research by Foshizi, 250+ businesses in 5 provinces). Say 'about R900 billion'. The retailer and bank lines are lived evidence: no number, so don't add one.\n\n" +
       "Photos: 'Nomonde Tuck Shop' by HelenOnline (CC BY-SA 4.0) and 'Aliwal North - Dukatole - Housebuilding Projekt' by Heinz-Josef Lücking (CC BY-SA 3.0 DE), Wikimedia Commons, resized, with our captions. Credits are also in REUSE.md.");
   }
 
