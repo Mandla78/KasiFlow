@@ -58,7 +58,7 @@ async function icon(Comp, color, px = 256) {
     s.addImage({ data: LOGO, x: 0.75, y: 1.1, w: 1.6, h: 1.6 });
     wordmark(s, 0.72, 2.9, 72);
     t(s, "Keep it in the kasi.", { x: 0.8, y: 4.3, w: 8, h: 0.7, fontFace: TITLE, fontSize: 30, italic: true, color: C.amL });
-    t(s, "Making South Africa's informal and small businesses visible, and ready for what's next.", { x: 0.8, y: 5.05, w: 7.4, h: 0.8, fontSize: 18, color: C.muted });
+    t(s, "Making South Africa's informal and small businesses visible, and ready for tomorrow.", { x: 0.8, y: 5.05, w: 7.4, h: 0.8, fontSize: 18, color: C.muted });
     t(s, "Prepared by Team PR: Mandla and Risuna  ·  GKHack26  ·  27 September 2026", { x: 0.8, y: 6.35, w: 9, h: 0.4, fontSize: 13, color: C.faint });
     s.addShape(pres.shapes.OVAL, { x: 9.2, y: 0.9, w: 3.6, h: 3.6, fill: { color: C.bg }, line: { color: C.panel2, width: 2 } });
     s.addShape(pres.shapes.OVAL, { x: 10.1, y: 2.5, w: 2.9, h: 2.9, fill: { color: C.bg, transparency: 100 }, line: { color: C.em, width: 1.5, transparency: 40 } });
@@ -72,31 +72,35 @@ async function icon(Comp, color, px = 256) {
   // ================================================================ 2. PROBLEM (evidence, chart, picture)
   {
     const s = pres.addSlide(); base(s);
-    // A real worker's hands on the right: the people behind the numbers.
-    const photo = await sharp(__dirname + "/paving.jpg").extract({ left: 300, top: 0, width: 336, height: 533 }).jpeg({ quality: 88 }).toBuffer();
-    s.addImage({ data: "image/jpeg;base64," + photo.toString("base64"), x: 8.6, y: 0, w: 4.733, h: 7.5 });
+    // Real spaza shops on the right: the trade nobody records. News photos, credited on the slide.
+    const pics = ["problem_counter.png", "problem_shop.webp", "problem_shelves.webp"];
+    for (let i = 0; i < 3; i++) {
+      const buf = await sharp(__dirname + "/" + pics[i]).resize(946, 496, { fit: "cover", position: i === 0 ? "centre" : "centre" }).jpeg({ quality: 90 }).toBuffer();
+      s.addImage({ data: "image/jpeg;base64," + buf.toString("base64"), x: 8.6, y: i * 2.52, w: 4.733, h: 2.48 });
+    }
     kicker(s, "The problem");
-    t(s, "R900 billion a year, and nobody can see it", { x: 0.6, y: 0.8, w: 7.6, h: 1.3, fontFace: TITLE, fontSize: 32, bold: true });
+    t(s, "R900 billion a year, hidden in plain sight", { x: 0.6, y: 0.8, w: 7.6, h: 1.25, fontFace: TITLE, fontSize: 32, bold: true });
+    t(s, "About 12% of South Africa's GDP, and 1 in 5 jobs.", { x: 0.6, y: 2.05, w: 7.6, h: 0.4, fontSize: 18, color: C.amL });
     const stats = [["< 9%", "can get a bank loan", C.amL], ["80%", "are unregistered", C.em], ["57%", "run on savings and family", C.emL]];
     for (let i = 0; i < 3; i++) {
       const x = 0.6 + i * 2.6;
-      card(s, x, 2.3, 2.4, 1.75);
-      t(s, stats[i][0], { x: x + 0.25, y: 2.45, w: 2.0, h: 0.8, fontFace: TITLE, fontSize: 38, bold: true, color: stats[i][2] });
-      t(s, stats[i][1], { x: x + 0.25, y: 3.3, w: 2.0, h: 0.65, fontSize: 14, color: C.muted });
+      card(s, x, 2.65, 2.4, 1.55);
+      t(s, stats[i][0], { x: x + 0.25, y: 2.75, w: 2.0, h: 0.8, fontFace: TITLE, fontSize: 38, bold: true, color: stats[i][2] });
+      t(s, stats[i][1], { x: x + 0.25, y: 3.55, w: 2.0, h: 0.65, fontSize: 14, color: C.muted });
     }
-    card(s, 0.6, 4.3, 7.6, 2.4);
+    card(s, 0.6, 4.4, 7.6, 2.35);
     s.addChart(pres.charts.BAR, [{ name: "Spaza Shop Support Fund", labels: ["Put on the table", "Reached shops"], values: [500, 179.6] }], {
-      x: 0.75, y: 4.4, w: 4.6, h: 2.2, barDir: "bar",
+      x: 0.75, y: 4.48, w: 4.6, h: 2.2, barDir: "bar",
       showTitle: true, title: "Spaza Shop Support Fund (R million)", titleColor: C.white, titleFontFace: BODY, titleFontSize: 12,
       chartColors: [C.faint, C.am], showValue: true, dataLabelPosition: "outEnd", dataLabelColor: C.white, dataLabelFontSize: 12, dataLabelFontBold: true,
       catAxisLabelColor: C.white, catAxisLabelFontSize: 12, valAxisHidden: true, valAxisMaxVal: 650, dataLabelFormatCode: "#,##0.0", valGridLine: { style: "none" }, catGridLine: { style: "none" },
       showLegend: false, barGapWidthPct: 45,
     });
-    t(s, "354 applications failed verification. With no record, even help can't reach them.", { x: 5.45, y: 4.65, w: 2.55, h: 1.9, fontSize: 14, italic: true, color: C.amL, valign: "middle" });
-    foot(s, 2, "Standard Bank Township Informal Economy Report, Oct 2025; DSBD, Spaza Shop Support Fund update, May 2026.", 7.7);
+    t(s, "354 applications failed verification. With no record, even help can't reach them.", { x: 5.45, y: 4.6, w: 2.55, h: 2.0, fontSize: 14, italic: true, color: C.amL, valign: "middle" });
+    foot(s, 2, "Standard Bank, Oct 2025; DSBD, May 2026. Photos: Business Explainer; SABC News.", 7.7);
     s.addNotes(
-      "SAY (20 s): 'R900 billion moves through South Africa's township economy every year: shops, builders, food sellers, salons. And nobody can see it. Fewer than 9% of these businesses can get a bank loan. 80% are unregistered. When government put R500 million on the table for spaza shops, only R179.6 million reached them, because 354 applications couldn't be verified. With no record, even help can't reach them.'\n\n" +
-      "IF ASKED where R900 bn comes from: Standard Bank's Township Informal Economy Report, October 2025, research by Foshizi, 250+ businesses in five provinces. Say 'about R900 billion', never 800.\n" +
+      "SAY (20 s): 'R900 billion moves through South Africa's township economy every year. That's about 12% of our GDP and one in five jobs: shops, builders, food sellers, salons. And it's hidden in plain sight. Fewer than 9% of these businesses can get a bank loan. 80% are unregistered. When government put R500 million on the table for spaza shops, only R179.6 million reached them, because 354 applications couldn't be verified. With no record, even help can't reach them.'\n\n" +
+      "IF ASKED where R900 bn comes from: Standard Bank's Township Informal Economy Report, October 2025, research by Foshizi, 250+ businesses in five provinces. Say 'about R900 billion', never 800. 12.3% of GDP and ~19.5% of employment: same report.\nMORE EVIDENCE if pushed: DSBD (May 2026): ~82,000 spaza shops registered, 44,696 verified, ~15,000 licensed. NIQ (Mar 2026): traditional trade ~R170.1 bn in sales, growing faster than the big chains.\n" +
       "The fund figures are specifically about spaza shops, so we name them there. WhatsApp is how they talk; it isn't the problem. The problem is that nothing turns everyday trading into a record.");
   }
 
