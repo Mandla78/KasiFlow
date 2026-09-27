@@ -9,6 +9,10 @@ WHAT WE UPLOAD
 ---------------------------------------------------------------------------
 
   FILE 1  Name:  Akayza - Presentation Slides
+          TWO DECKS on main, submit ONE: Mandla's at
+          Akayza_Pitch_TeamPR.pptx, or Risuna's speech deck at
+          speech_deck/Akayza_Pitch_Speech_Deck.pptx (it follows her speech;
+          the notes and slide list below describe that one).
           Notes: 10 slides, the organisers' limit. Slides 1-8 are the
                  3-minute pitch; 9-10 are the architecture and the
                  data privacy policy. Required items: problem with

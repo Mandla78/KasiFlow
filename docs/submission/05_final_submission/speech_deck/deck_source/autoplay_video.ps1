@@ -4,9 +4,9 @@ so nobody has to find a play button mid-pitch. pptxgenjs can embed a video
 but can't set its timing, so PowerPoint does it and saves the file. It also
 writes the PDF next to the deck. Run it after build.js:
 
-  cd docs\submission\05_final_submission
-  node deck_source\build.js Akayza_Pitch_TeamPR.pptx
-  powershell -ExecutionPolicy Bypass -File deck_source\autoplay_video.ps1 Akayza_Pitch_TeamPR.pptx
+  cd docs\submission\05_final_submission\speech_deck
+  node deck_source\build.js Akayza_Pitch_Speech_Deck.pptx
+  powershell -ExecutionPolicy Bypass -File deck_source\autoplay_video.ps1 Akayza_Pitch_Speech_Deck.pptx
 
 Needs PowerPoint, with the deck itself closed.
 #>
