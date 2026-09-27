@@ -362,13 +362,13 @@ async function icon(Comp, color, px = 256) {
   {
     const s = pres.addSlide(); base(s);
     kicker(s, "See it working");
-    // The 49-second room cut plays inside the deck: no browser, no Wi-Fi. It's silent, so the
-    // speaker narrates it. The full 81-second version with music is on Drive (the link below).
+    // The full 81-second demo, with its music, plays inside the deck: no browser, no Wi-Fi.
+    // The same file is on Drive (the link below) for the assessors.
     card(s, 0.52, 0.92, 6.96, 3.995, C.panel2); // a thin frame, so the video reads as a screen
-    s.addMedia({ type: "video", path: __dirname + "/demo_room.mp4", cover: "image/png;base64," + fs.readFileSync(__dirname + "/demo_poster.png").toString("base64"),
+    s.addMedia({ type: "video", path: __dirname + "/../Akayza_Demo_TeamPR.mp4", cover: "image/png;base64," + fs.readFileSync(__dirname + "/demo_poster.png").toString("base64"),
       x: 0.6, y: 1.0, w: 6.8, h: 3.825, objectName: "Demo video" });
     t(s, "Meet Sipho and Thabo, on a real phone", { x: 0.6, y: 5.05, w: 6.8, h: 0.4, fontSize: 14, bold: true, align: "center" });
-    t(s, [{ text: "Full video with music (81 s): watch on Drive", options: { hyperlink: { url: DEMO_URL, tooltip: "Watch the full demo" }, bold: true } }], { x: 0.6, y: 5.5, w: 6.8, h: 0.35, fontSize: 13, color: C.amL, align: "center" });
+    t(s, [{ text: "Also on Google Drive (81 s)", options: { hyperlink: { url: DEMO_URL, tooltip: "Watch the full demo" }, bold: true } }], { x: 0.6, y: 5.5, w: 6.8, h: 0.35, fontSize: 13, color: C.amL, align: "center" });
     t(s, [{ text: DEMO_URL, options: { hyperlink: { url: DEMO_URL } } }], { x: 0.6, y: 5.9, w: 6.8, h: 0.3, fontSize: 9, color: C.faint, align: "center" });
     s.addImage({ data: LOGO, x: 7.75, y: 1.0, w: 1.1, h: 1.1 });
     t(s, "Thank you", { x: 7.7, y: 2.3, w: 5.2, h: 1.0, fontFace: TITLE, fontSize: 50, bold: true });
@@ -378,9 +378,9 @@ async function icon(Comp, color, px = 256) {
     t(s, "Prepared by Team PR", { x: 7.75, y: 5.9, w: 5.2, h: 0.4, fontSize: 14, color: C.white });
     foot(s, 10);
     s.addNotes(
-      "DEMO (49 s): click the video to play it (it's inside the deck; no Wi-Fi needed). It's silent, so speak over it, one line per scene:\n" +
-      "'Any kasi business. Sipho runs a kota shop: he picks Food seller, and drops a pin where he trades. Akayza shows him suppliers who deliver to him. He orders bread from a bakery that delivers, and pays on PayFast's own page: confirmed by the payment provider. Every kota he sells goes in his order book, and his record marks the provider-confirmed payments. Now Thabo, a builder: every stage photographed in the app, and his client confirms it. That's his track record.'\n" +
-      "To make it start by itself: in PowerPoint, select the video > Playback > Start: Automatically.\n\n" +
+      "DEMO: the full 81-second video, with music, is inside the deck (no Wi-Fi needed). Click it to play, or set Playback > Start: Automatically once in PowerPoint.\n" +
+      "3-MINUTE ROUND: let it run about 50 seconds (to Sipho's order book and record), then click on to close. TOP 12: play it all.\n" +
+      "Let the music and captions carry it; add at most one line: 'This is Akayza on a real phone, against our real system.'\n\n" +
       "CLOSE (10 s), look at the panel, not the screen: 'R900 billion is moving, and nobody can see it. Akayza makes it visible, and suppliers pay for it. It's built, it works, and R300,000 puts it in real businesses. Are you buying?' Then stop talking.");
   }
 
