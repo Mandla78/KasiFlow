@@ -126,7 +126,7 @@ async function icon(Comp, color, px = 256) {
     }
     const who = [
       ["USERS", "Small businesses", "Use it free, always.", C.em],
-      ["CUSTOMERS", "Suppliers", "Pay a monthly fee for more orders from the businesses they already serve, paid up front, with no cash lost on the road.", C.amL],
+      ["CUSTOMERS", "Suppliers", "Pay a monthly subscription or contract, plus a commission on every order: more orders from the businesses they already serve.", C.amL],
       ["TOMORROW", "Banks and lenders", "Partnerships: a verified trading history they can trust, shared only with the owner's consent.", C.emL],
     ];
     const ws = [3.0, 5.0, 3.8], xs = [0.6, 3.75, 8.9];
@@ -138,7 +138,7 @@ async function icon(Comp, color, px = 256) {
     }
     foot(s, 3, "Honest limit: only digital payments count as proof, because the payment provider confirms the money moved. Cash and the business tools are the owner's own record.", 11.2);
     s.addNotes(
-      "SAY (25 s): 'That's where Akayza comes in. One free app that makes the business visible, and ready for tomorrow. It works the way they already operate, cash or digital. Every digital stock order becomes a record the owner holds, and over time a strong trading history. Today, the business tools take the stress away. This week, they buy better from their own suppliers and pay safely. Tomorrow, that history is their first step to finance. Businesses never pay. Suppliers are our customers: they pay a monthly fee because we bring them more orders, paid up front. And next, banks and lenders, as partners, only with the owner's consent.'\n\n" +
+      "SAY (25 s): 'That's where Akayza comes in. One free app that makes the business visible, and ready for tomorrow. It works the way they already operate, cash or digital. Every digital stock order becomes a record the owner holds, and over time a strong trading history. Today, the business tools take the stress away. This week, they buy better from their own suppliers and pay safely. Tomorrow, that history is their first step to finance. Businesses never pay. Suppliers are our customers: they pay a monthly subscription or contract, plus a commission on every order, because we bring them more orders. And next, banks and lenders, as partners, only with the owner's consent.'\n\n" +
       "HONEST LIMIT (say it before a judge does): 'We only call digital payments proof, because the payment provider confirms the money moved. Cash and what an owner writes in the tools is their own record. We never add them together.'\n" +
       "We don't lend or offer credit ourselves; banks and lenders are future partners.");
   }
@@ -370,7 +370,7 @@ async function icon(Comp, color, px = 256) {
     t(s, "Keep it in the kasi.", { x: 7.75, y: 3.35, w: 5.2, h: 0.6, fontFace: TITLE, fontSize: 24, italic: true, color: C.amL });
     t(s, "R300,000  ·  6-month pilot", { x: 7.75, y: 4.2, w: 5.2, h: 0.45, fontSize: 18, bold: true, color: C.emL });
     t(s, "Making informal and small businesses visible, and ready for tomorrow.", { x: 7.75, y: 4.7, w: 5.2, h: 0.45, fontSize: 15, color: C.muted });
-    t(s, "Team PR", { x: 7.75, y: 5.9, w: 5.2, h: 0.4, fontSize: 14, color: C.white });
+    t(s, "Prepared by Team PR", { x: 7.75, y: 5.9, w: 5.2, h: 0.4, fontSize: 14, color: C.white });
     foot(s, 10);
     s.addNotes(
       "DEMO (50 s): play the video, or do it live. Let it speak; don't narrate every tap. Before going on: phone charged, backend + ngrok running.\n" +
