@@ -1,8 +1,10 @@
 ===========================================================================
 [DRAFT] SSDLC -- SECURITY (due Sat 12:30) -- PASTE INTO SONKE
-Updated Sat 26 Sep (01:30) to match what is BUILT AND TESTED: identity,
-the business tools, suppliers, orders, payments and invoices. Anything not
-built yet is under "PLANNED" and says so.
+Updated Sun 27 Sep (04:00) to match what is BUILT AND TESTED: identity,
+the business tools, suppliers, orders, payments and invoices, plus sealed
+records, the supply-chain scans and the offline credit book. Anything not
+built yet is under "PLANNED" and says so; anything waiting for a merge
+today says "(merging today)".
 ===========================================================================
 
 SECURITY REQUIREMENTS (RISK ASSESSMENT)
@@ -31,8 +33,9 @@ SECURITY REQUIREMENTS (RISK ASSESSMENT)
     only by the server; upload details taken from the storage provider,
     not from the phone.
   - POPIA: collect only what we can verify or need; consent versions
-    recorded at sign-up; users can download their data and close their
-    account; unconfirmed sign-ups deleted after 7 days.
+    recorded at sign-up; users can close their account in the app and
+    download their data (built on the server; the app button is next);
+    unconfirmed sign-ups deleted after 7 days.
   - We never hold money: payments go through a licensed provider
     (PayFast); card details never touch our systems.
   - Honest proof of payment: every order says what backs its money --
@@ -53,7 +56,8 @@ WHO WE PROTECT, AND ARE WE SECURING WHAT WE COLLECT? (data inventory)
        and map point, CIPC number (optional), what they buy, consents.
      Why: sign-in, delivery, supplier recommendations, company check.
      Protect: password as a bcrypt hash only; every query limited to the
-       signed-in business; data export and account closure in the app;
+       signed-in business; account closure in the app, data export on
+       the server (the app button is next);
        sessions and trusted phones they can see and revoke.
   2. Their customers (credit book)
      Collect: a name and, optionally, a cellphone -- the business's own
@@ -149,6 +153,12 @@ THREAT MODELLING & DESIGN REVIEW (STRIDE -- what is built)
   - Job stage photos: the server records its own time and a SHA-256
     fingerprint of the stored file, so a swapped or back-dated photo is
     detectable; camera only, never the gallery.
+  - Sealed records: the owner can seal every record in their tools -- a
+    Merkle tree (RFC 6962) over the records, its root signed with Ed25519
+    and ML-DSA-65 (NIST FIPS 204, post-quantum). The owner keeps the seal,
+    and a check shows exactly which records changed or were deleted since,
+    even straight in our database. Our public keys are published, so
+    anyone can check a seal without us.
   - Supplier data feeds are checked row by row: unknown columns refused,
     money parsed exactly, barcodes' GS1 check digits verified, cells that
     start with = + - @ refused (spreadsheet-formula injection), image
@@ -280,7 +290,8 @@ DEVELOPMENT (SECURE CODING PRACTICES)
 
 SECURITY TESTING (automated, run before every merge)
 
-  - 1,071 backend tests and 147 app tests, including hostile-input suites
+  - 1,281 backend tests and 204 app tests (214 with the offline credit
+    book, merging today), including hostile-input suites
     for identity, the credit book, jobs, the order book and the partner
     network: malformed and
     injected emails (SQL, CR/LF header injection, script), emoji,
@@ -300,6 +311,16 @@ SECURITY TESTING (automated, run before every merge)
     server is reachable only through Cloudflare; 19 tests prove a forged
     header never reaches a session, consent or audit row and buys no
     extra sign-in attempts.
+  - Supply chain (scanned 27 Sep): pip-audit found 7 advisories in
+    cryptography 46.0.3, including its bundled OpenSSL; upgraded to
+    50.0.1, none left. npm audit on what ships in the app: 0 critical,
+    0 high (14 moderate, inside Expo's own build tooling). gitleaks over
+    every commit: no secret was ever committed. All three now run in CI
+    on every pull request, next to the backend suite and the app's type
+    check and tests (merging today).
+  - Found and fixed on 27 Sep: the order book treated "no signal" as a
+    refusal and dropped the orders it was holding; now one shared rule,
+    with a test that uses the real no-signal error (merging today).
   - Commerce: the phone can't send prices; out-of-stock holds nothing;
     a retried order lands once; cash limits; cancel rules; unpaid orders
     lapse and give stock back; every PayFast check refuses a forged
@@ -342,8 +363,9 @@ ASSESSMENT & SECURE INTEGRATION -- PLANNED (not built yet)
     check); Access in front of staff-only tools. Bot Fight Mode stays off
     on the API because it would block our app and payment notifications.
     Cloudflare will be named as an operator in the privacy policy (POPIA).
-    Today a fixed https tunnel (ngrok) is used for payment notifications
-    and links.
+    For the demo, a Cloudflare quick tunnel carries payment notifications
+    and links, over HTTP/2: its default QUIC connection dropped mid-payment
+    on our Wi-Fi.
   - Shared rate-limit store (Redis) so limits hold across servers.
   - Malware scanning of every upload (Cloudinary + Perception Point) with
     files hidden until approved -- the approval path is built and tested;
@@ -354,21 +376,23 @@ ASSESSMENT & SECURE INTEGRATION -- PLANNED (not built yet)
   - Supplier system integration (ERP): scoped, hashed API keys with
     rotation and revocation, signed requests, per-key limits.
   - Offline first: much of the informal economy runs on patchy or no
-    signal. Already built: the order book keeps unsent orders on the phone
-    (secure storage) and sends them when the signal returns, with ids
-    that make a retry land only once. Next: an on-device SQLite store so
+    signal. Already built: the order book and the credit book keep unsent
+    entries on the phone (secure storage) and send them when the signal
+    returns, with ids that make a retry land only once (the credit book is
+    merging today). Next: an on-device SQLite store so
     the business tools work fully offline -- encrypted with a key held in
     the phone's secure keystore, wiped on sign-out, holding only the
     business's own data. The server stays the authority: every offline
     change is re-checked, priced and scoped to the signed-in business when
     it syncs, and conflicts are settled on the server, never on the phone.
-  - Two-sided proof: records sealed with hashes and phone-held signing
-    keys (the server check for phone keys is built; the phone side comes
-    with the next app build).
+  - Two-sided records made offline, phone to phone: each phone signs with
+    its own key (the server check for phone keys is built; the phone side
+    comes next). Owner-held sealed records are already built (see
+    Tampering).
   - Refusing known leaked and common passwords, a password that contains
     the email or name, and reuse of recent passwords (OWASP authentication
-    testing; no forced expiry, as NIST advises); dependency and secret scanning in CI;
-    an external penetration test and a POPIA legal review before launch.
+    testing; no forced expiry, as NIST advises); an external penetration
+    test and a POPIA legal review before launch.
 
   Honest limits: what a business enters in its tools (the credit book,
   the order book, jobs) is its own record, not proof. When both
