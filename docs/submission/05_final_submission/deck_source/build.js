@@ -316,7 +316,7 @@ async function icon(Comp, color, px = 256) {
       t(s, svc[i][1], { x: x + 0.9, y: 4.15, w: 1.9, h: 0.4, fontSize: 13, bold: true });
       t(s, svc[i][2], { x: x + 0.9, y: 4.55, w: 1.9, h: 0.6, fontSize: 12, color: C.muted });
     }
-    const nums = [["1,281", "system tests"], ["204", "app tests"], ["TRL 4", "today; pilot → TRL 6"], ["ML-DSA-65", "post-quantum sealed records"]];
+    const nums = [["1,281", "system tests"], ["214", "app tests"], ["TRL 4", "today; pilot → TRL 6"], ["ML-DSA-65", "post-quantum sealed records"]];
     for (let i = 0; i < 4; i++) {
       const x = 0.6 + i * 3.08;
       t(s, nums[i][0], { x, y: 5.5, w: 2.85, h: 0.6, fontFace: TITLE, fontSize: 26, bold: true, color: i === 3 ? C.amL : C.emL });
