@@ -71,7 +71,9 @@ async function icon(Comp, color, px = 256) {
     s.addImage({ data: LOGO, x: 0.75, y: 1.2, w: 1.7, h: 1.7 });
     wordmark(s, 0.72, 3.05, 72);
     t(s, "Keep it in the kasi.", { x: 0.8, y: 4.45, w: 8, h: 0.7, fontFace: TITLE, fontSize: 30, italic: true, color: C.amL });
-    t(s, "Making South Africa's informal businesses visible, and ready for what's next.", { x: 0.8, y: 5.2, w: 7.4, h: 0.8, fontSize: 18, color: C.muted });
+    // The event theme, "Build for Use: Igniting Capabilities for Markets", in our words.
+    t(s, "Igniting capabilities for South Africa's informal market.", { x: 0.8, y: 5.15, w: 8.2, h: 0.45, fontSize: 19, bold: true, color: C.white });
+    t(s, "Built for use by spaza shops, food sellers and builders, on the phones they already own.", { x: 0.8, y: 5.62, w: 8.0, h: 0.6, fontSize: 15, color: C.muted });
     t(s, "Prepared by Team PR  ·  GKHack26  ·  27 September 2026", { x: 0.8, y: 6.35, w: 8, h: 0.4, fontSize: 13, color: C.faint });
     // A quiet motif on the right: the three flows of the logo as rings.
     s.addShape(pres.shapes.OVAL, { x: 9.2, y: 0.9, w: 3.6, h: 3.6, fill: { color: C.bg }, line: { color: C.panel2, width: 2 } });
@@ -79,15 +81,15 @@ async function icon(Comp, color, px = 256) {
     s.addShape(pres.shapes.OVAL, { x: 9.0, y: 3.5, w: 2.5, h: 2.5, fill: { color: C.bg, transparency: 100 }, line: { color: C.am, width: 1.5, transparency: 40 } });
     s.addNotes(
       "On screen while we're introduced. Start the speech on the next slide.\n\n" +
-      "THE 3-MINUTE PITCH follows the speech, slides 2-10: 0:00 the problem (2-3) · 0:28 the solution (4-5) · 0:55 the demo video, 50 s (6) · 1:45 cost and ask (7-8) · 2:06 why we stand out (9) · 2:27 the close (10), done by 2:50.\n" +
-      "Slides 11 onwards are the detail for the assessors. Don't present them; open one only if a question calls for it.");
+      "THE 3-MINUTE PITCH follows the speech, slides 2-8: 0:00 the problem (2-3) · 0:28 the solution and airtime advance (4) · 0:55 the demo video, 50 s (5) · 1:45 cost and ask (6) · 2:06 why we stand out (7) · 2:27 the close (8), done by 2:50.\n" +
+      "Slides 9-10 (architecture, data privacy) are for the assessors. Don't present them; open one only if a question calls for it. The rules allow 10 slides at most.");
   }
 
   // ================================================================ 2. HOOK
   {
     const s = newSlide();
     kicker(s, "The problem");
-    t(s, "Everyone wants a piece of the kasi economy", { x: 0.6, y: 0.85, w: 7.9, h: 1.3, fontFace: TITLE, fontSize: 34, bold: true });
+    t(s, "Everyone wants a piece of the informal market", { x: 0.6, y: 0.85, w: 7.9, h: 1.3, fontFace: TITLE, fontSize: 34, bold: true });
     const wants = [[Fi.FiShoppingBag, "Big retailers are moving into townships"], [Fi.FiCreditCard, "Banks and payment apps are fighting for its customers"]];
     for (let i = 0; i < 2; i++) {
       const y = 2.5 + i * 0.85;
@@ -106,7 +108,7 @@ async function icon(Comp, color, px = 256) {
     }
     foot(s, "Standard Bank, Township Informal Economy Report, Oct 2025 (Foshizi; 250+ businesses, 5 provinces). Photos: HelenOnline (CC BY-SA 4.0) and Heinz-Josef Lücking (CC BY-SA 3.0 DE), Wikimedia Commons.");
     s.addNotes(
-      "SAY (0:00-0:15): 'Everyone wants a piece of the kasi economy. Big retailers are moving into townships. Banks and payment apps are fighting for its customers. Because it's worth about R900 billion a year.'\n\n" +
+      "SAY (0:00-0:15): 'Everyone wants a piece of the informal market. Big retailers are moving into townships. Banks and payment apps are fighting for its customers. Because it's worth about R900 billion a year.'\n\n" +
       "R900 bn: Standard Bank's Township Informal Economy Report, October 2025 (research by Foshizi, 250+ businesses in 5 provinces). Say 'about R900 billion'. The retailer and bank lines are lived evidence: no number, so don't add one.\n\n" +
       "Photos: 'Nomonde Tuck Shop' by HelenOnline (CC BY-SA 4.0) and 'Aliwal North - Dukatole - Housebuilding Projekt' by Heinz-Josef Lücking (CC BY-SA 3.0 DE), Wikimedia Commons, resized, with our captions. Credits are also in REUSE.md.");
   }
@@ -152,82 +154,60 @@ async function icon(Comp, color, px = 256) {
   {
     const s = newSlide();
     s.addImage({ data: LOGO, x: 0.6, y: 0.5, w: 0.9, h: 0.9 });
-    t(s, "One free app for the whole kasi economy", { x: 1.75, y: 0.66, w: 10.9, h: 0.8, fontFace: TITLE, fontSize: 32, bold: true });
+    t(s, "One free app for the whole informal market", { x: 1.75, y: 0.66, w: 11.0, h: 0.8, fontFace: TITLE, fontSize: 32, bold: true });
     const rows = [
       [Fi.FiTruck, "Matched with suppliers who deliver", "Spaza shops and food sellers order from the suppliers they use, and ones that fit them.", C.em, "screen_suppliers.png"],
       [Fi.FiCamera, "Every job logged with photos", "Builders photograph each stage, and the client signs it off from a link.", C.amL, "screen_job.png"],
       [Fi.FiCheckCircle, "Payments confirmed", "Paid in the app: confirmed by the payment provider. A job stage: confirmed by both sides.", C.emL, "screen_pay.png"],
     ];
     for (let i = 0; i < 3; i++) {
-      const y = 1.9 + i * 1.5;
-      await disc(s, rows[i][0], 0.6, y, 0.62, rows[i][3]);
+      const y = 1.75 + i * 1.28;
+      await disc(s, rows[i][0], 0.6, y, 0.6, rows[i][3]);
       s.addText([
         { text: rows[i][1], options: { bold: true, fontSize: 17, color: rows[i][3], breakLine: true, paraSpaceAfter: 4 } },
         { text: rows[i][2], options: { fontSize: 13.5, color: C.muted } },
-      ], { x: 1.4, y: y - 0.02, w: 3.95, h: 1.4, fontFace: BODY, margin: 0, valign: "top", isTextBox: true });
-      phone(s, rows[i][4], 5.8 + i * 2.37, 1.85, 4.2, i + 1, rows[i][3]);
+      ], { x: 1.38, y: y - 0.02, w: 4.85, h: 1.2, fontFace: BODY, margin: 0, valign: "top", isTextBox: true });
+      phone(s, rows[i][4], 6.59 + i * 2.13, 1.75, 3.55, i + 1, rows[i][3]);
     }
+    // Airtime advance: why the record matters, in an idea everyone already knows.
+    card(s, 0.6, 5.6, 12.13, 1.12, C.panel2);
+    await disc(s, Fi.FiSmartphone, 0.82, 5.8, 0.72, C.amL);
+    s.addText([
+      { text: "Airtime advance, for business. ", options: { bold: true, color: C.amL } },
+      { text: "Your network lends you airtime because it's seen that you always pay. Every paid order and signed-off job adds to a record the owner holds: the first step to credit, better suppliers and new clients.", options: { color: C.white } },
+    ], { x: 1.75, y: 5.6, w: 10.8, h: 1.12, fontFace: BODY, fontSize: 14.5, margin: 0, valign: "middle", isTextBox: true });
     foot(s);
     s.addNotes(
-      "SAY (0:28-0:40): 'Akayza is one free app for the whole kasi economy. Spaza shops and food sellers are matched with suppliers who deliver. Builders log every job with photos, and clients sign off each stage.'\n\n" +
-      "Real screens from our app on a Samsung A56, with sample suppliers and made-up customers. Honest wording: a payment made in the app is confirmed by the payment provider; a job stage is confirmed by both sides. Never call the rest proof.");
+      "SAY (0:28-0:55): 'Akayza is one free app for the whole informal market. Spaza shops and food sellers are matched with suppliers who deliver. Builders log every job with photos, and clients sign off each stage.'\n" +
+      "Then, pointing at the band: 'You know airtime advance: your network lends you airtime because it's seen that you always pay. Akayza builds that kind of history for a business. Every paid order and signed-off job adds to a record the owner holds: the first step to credit, better suppliers and new clients.'\n\n" +
+      "Real screens from our app on a Samsung A56, with sample suppliers and made-up customers. Honest wording: a payment made in the app is confirmed by the payment provider; a job stage is confirmed by both sides. IF ASKED 'do you lend?': 'No. We build the record, and the owner decides who sees it.'");
   }
 
-  // ================================================================ 5. AIRTIME ADVANCE
+  // ================================================================ 5. DEMO
   {
     const s = newSlide();
-    kicker(s, "Why it matters");
-    title(s, "Airtime advance, for business");
-    // Left: the idea everyone already knows.
-    card(s, 0.6, 1.95, 4.3, 3.9, C.panel2);
-    await disc(s, Fi.FiSmartphone, 0.95, 2.2, 0.75, C.amL);
-    t(s, "YOU ALREADY KNOW IT", { x: 0.95, y: 3.1, w: 3.7, h: 0.35, fontSize: 12.5, bold: true, color: C.amL, charSpacing: 2 });
-    t(s, "Your network lends you airtime because it's seen that you always pay.", { x: 0.95, y: 3.5, w: 3.7, h: 1.3, fontFace: TITLE, fontSize: 20, italic: true });
-    t(s, "Akayza builds that kind of history for a business.", { x: 0.95, y: 4.9, w: 3.7, h: 0.8, fontSize: 16, bold: true, color: C.emL });
-    // Right: what goes in, what it becomes, what it opens.
-    const ins = [[Fi.FiCreditCard, "Paid orders", "Confirmed by the payment provider"], [Fi.FiCheckSquare, "Signed-off jobs", "Confirmed by the builder and the client"]];
-    for (let i = 0; i < 2; i++) {
-      const x = 5.25 + i * 3.88;
-      card(s, x, 1.95, 3.6, 1.2);
-      await disc(s, ins[i][0], x + 0.2, 2.24, 0.62, C.em);
-      t(s, ins[i][1], { x: x + 0.98, y: 2.12, w: 2.5, h: 0.4, fontSize: 16, bold: true });
-      t(s, ins[i][2], { x: x + 0.98, y: 2.5, w: 2.5, h: 0.55, fontSize: 12.5, color: C.muted });
-      s.addShape(pres.shapes.LINE, { x: x + 1.8, y: 3.18, w: 0, h: 0.34, line: { color: C.faint, width: 1.5, endArrowType: "triangle" } });
-    }
-    s.addShape(pres.shapes.ROUNDED_RECTANGLE, { x: 5.25, y: 3.55, w: 7.48, h: 1.1, fill: { color: C.em }, line: { color: C.em }, rectRadius: 0.12 });
-    t(s, "A record the owner holds", { x: 5.55, y: 3.66, w: 6.9, h: 0.45, fontSize: 20, bold: true, color: C.bg });
-    t(s, "Every paid order and signed-off job adds to it. It's shared only with the owner's consent.", { x: 5.55, y: 4.12, w: 6.9, h: 0.4, fontSize: 13, color: C.bg });
-    s.addShape(pres.shapes.LINE, { x: 8.99, y: 4.68, w: 0, h: 0.34, line: { color: C.faint, width: 1.5, endArrowType: "triangle" } });
-    t(s, "The first step to", { x: 5.25, y: 5.05, w: 1.7, h: 0.8, fontSize: 14, color: C.muted, valign: "middle" });
-    const opens = [["Credit", C.amL], ["Better suppliers", C.em], ["New clients", C.emL]];
-    for (let i = 0; i < 3; i++) {
-      const x = 7.0 + i * 1.93;
-      card(s, x, 5.05, 1.8, 0.8);
-      t(s, opens[i][0], { x, y: 5.05, w: 1.8, h: 0.8, fontSize: 15, bold: true, color: opens[i][1], align: "center", valign: "middle" });
-    }
-    foot(s);
-    s.addNotes(
-      "SAY (0:40-0:55): 'You know airtime advance: your network lends you airtime because it's seen that you always pay. Akayza builds that kind of history for a business. Every paid order and signed-off job adds to a record the owner holds: the first step to credit, better suppliers and new clients.'\n\n" +
-      "IF ASKED 'do you lend?': 'No. We build the record, and the owner decides who sees it. Lenders are next, only with the owner's consent.'");
-  }
-
-  // ================================================================ 6. DEMO
-  {
-    const s = newSlide();
-    kicker(s, "Demo");
+    kicker(s, "User journey  ·  demo");
     title(s, "Meet Sipho and Thabo");
     // The 49-second room cut is inside the deck, so the pitch never leaves PowerPoint for a
     // browser or the Wi-Fi. It's silent: the speech narrates it. autoplay_video.ps1 then sets it
     // to start by itself when the slide opens. The full 81-second version stays on Drive.
-    card(s, 0.52, 1.67, 9.16, 5.2225, C.panel2); // a thin frame, so the video reads as a screen
+    card(s, 0.52, 1.67, 7.76, 4.435, C.panel2); // a thin frame, so the video reads as a screen
     s.addMedia({ type: "video", path: __dirname + "/demo_room.mp4", cover: "data:" + img("demo_poster.png"),
-      x: 0.6, y: 1.75, w: 9.0, h: 5.0625, objectName: "Demo video" });
-    t(s, "Watch for", { x: 9.95, y: 1.8, w: 2.78, h: 0.4, fontSize: 16, bold: true, color: C.em });
-    const shows = ["Sipho picks Food and drops a pin where he trades", "Suppliers who deliver to him", "Bread from a bakery that delivers, paid, confirmed by the provider", "Every kota he sells, in his order book", "Thabo's job: stage photos, signed off by the client"];
-    s.addText(shows.map((q, j) => ({ text: q, options: { bullet: true, breakLine: j < shows.length - 1 } })),
-      { x: 9.95, y: 2.3, w: 2.78, h: 3.15, fontFace: BODY, fontSize: 12.5, color: C.white, paraSpaceAfter: 6, margin: 0, valign: "top", isTextBox: true });
-    t(s, "Full video, 81 seconds:", { x: 9.95, y: 5.55, w: 2.78, h: 0.3, fontSize: 11.5, bold: true, color: C.muted });
-    if (DEMO_URL) t(s, [{ text: DEMO_URL, options: { hyperlink: { url: DEMO_URL, tooltip: "Watch the full demo" } } }], { x: 9.95, y: 5.85, w: 2.78, h: 0.85, fontSize: 9.5, color: C.emL });
+      x: 0.6, y: 1.75, w: 7.6, h: 4.275, objectName: "Demo video" });
+    if (DEMO_URL) t(s, [{ text: "Full video, 81 seconds:  ", options: { bold: true, color: C.muted } }, { text: DEMO_URL, options: { hyperlink: { url: DEMO_URL, tooltip: "Watch the full demo" }, color: C.emL } }],
+      { x: 0.6, y: 6.25, w: 7.7, h: 0.45, fontSize: 10 });
+    // The user journey, step by step, beside the video that shows it.
+    const lanes = [
+      ["SIPHO  ·  KOTA SHOP", C.em, ["Picks Food seller and drops a pin where he trades", "Finds suppliers who deliver to him", "Orders bread and pays: PayFast confirms it", "Sells kotas at the counter, in his order book", "His record grows, confirmed payments marked"]],
+      ["THABO  ·  BUILDER", C.amL, ["Photographs each stage of a job in the app", "The client signs off from a link: confirmed by both", "Finished jobs become his track record"]],
+    ];
+    let y = 1.75;
+    for (const [head, color, steps] of lanes) {
+      t(s, head, { x: 8.6, y, w: 4.13, h: 0.3, fontSize: 12, bold: true, color, charSpacing: 2 });
+      s.addText(steps.map((q, j) => ({ text: q, options: { bullet: { type: "number" }, breakLine: j < steps.length - 1 } })),
+        { x: 8.6, y: y + 0.36, w: 4.13, h: steps.length * 0.46, fontFace: BODY, fontSize: 12.5, color: C.white, paraSpaceAfter: 4, margin: 0, valign: "top", isTextBox: true });
+      y += 0.36 + steps.length * 0.46 + 0.25;
+    }
     foot(s);
     s.addNotes(
       "SAY over the video (0:55-1:45), one line per scene; let the screens breathe:\n" +
@@ -239,71 +219,41 @@ async function icon(Comp, color, px = 256) {
       "[My record] 'It all adds up in his record, with the confirmed payments marked.'\n" +
       "[Builder job] 'Now meet Thabo, a builder. Every job, stage by stage, is photographed, and the client signs off each stage from a link: confirmed by both. That's his track record.'\n\n" +
       "The 49-second video is in the deck and starts by itself when this slide opens. It's silent, so speak over it. If it doesn't start, click it (or press Alt+P). No Wi-Fi needed.\n" +
-      "The full 81-second version with music is on Google Drive (the link on the slide), for the assessors and Sonke.");
+      "The steps on the right are the user journey the organisers ask for. Sipho and Thabo are illustrations of the owners we built for, not real customers. The full 81-second version with music is on Google Drive (the link under the video).");
   }
 
-  // ================================================================ 7. MONEY
+  // ================================================================ 6. MONEY AND ASK
   {
     const s = newSlide();
-    kicker(s, "Business model");
-    title(s, "Free for businesses. Suppliers pay.");
+    kicker(s, "Business model  ·  the ask");
+    title(s, "Suppliers pay. We need R300,000.");
     const prices = [["Starter", "R299", "/month"], ["Pro", "R1,499", "/month"], ["ERP link", "R4,999", "/month + setup"], ["Digital orders", "~1%", "cash stays free"]];
     for (let i = 0; i < 4; i++) {
-      const y = 1.95 + i * 1.0;
-      card(s, 0.6, y, 5.1, 0.86);
-      t(s, prices[i][0], { x: 0.9, y: y + 0.21, w: 2.3, h: 0.45, fontSize: 18, bold: true, color: C.muted });
-      t(s, prices[i][1], { x: 2.7, y: y + 0.05, w: 1.9, h: 0.75, fontFace: TITLE, fontSize: 30, bold: true, color: i === 3 ? C.amL : C.emL, align: "right" });
-      t(s, prices[i][2], { x: 4.65, y: y + 0.28, w: 1.0, h: 0.4, fontSize: 11, color: C.faint });
+      const y = 1.9 + i * 0.82;
+      card(s, 0.6, y, 5.4, 0.7);
+      t(s, prices[i][0], { x: 0.85, y: y + 0.15, w: 2.3, h: 0.4, fontSize: 16, bold: true, color: C.muted });
+      t(s, prices[i][1], { x: 2.9, y: y + 0.04, w: 1.9, h: 0.62, fontFace: TITLE, fontSize: 26, bold: true, color: i === 3 ? C.amL : C.emL, align: "right" });
+      t(s, prices[i][2], { x: 4.9, y: y + 0.21, w: 1.05, h: 0.35, fontSize: 10.5, color: C.faint });
     }
-    card(s, 6.0, 1.95, 6.7, 3.86);
-    s.addChart(pres.charts.BAR, [
-      { name: "Supplier subscriptions", labels: ["Year 1", "Year 2", "Year 3"], values: [16, 83, 310] },
-      { name: "~1% on digital orders", labels: ["Year 1", "Year 2", "Year 3"], values: [40, 200, 800] },
-    ], {
-      x: 6.15, y: 2.05, w: 6.4, h: 3.0, barDir: "col", barGrouping: "stacked",
-      showTitle: true, title: "Monthly revenue at year end (R thousand, estimate)", titleColor: C.white, titleFontFace: BODY, titleFontSize: 13,
-      chartColors: [C.em, C.am], showValue: false,
-      catAxisLabelColor: C.white, catAxisLabelFontSize: 13, valAxisHidden: true, valGridLine: { style: "none" }, catGridLine: { style: "none" },
-      showLegend: true, legendPos: "b", legendColor: C.white, legendFontSize: 12, barGapWidthPct: 55,
+    t(s, "Businesses use it free. Next: lenders pay to see a business's record, only with the owner's consent.", { x: 0.6, y: 5.25, w: 5.4, h: 0.6, fontSize: 13.5, italic: true, color: C.amL });
+    t(s, "Estimates: about R56,000 a month by the end of year 1, and R1.1 million a month by year 3.", { x: 0.6, y: 5.95, w: 5.4, h: 0.55, fontSize: 12, color: C.muted });
+    card(s, 6.35, 1.9, 6.38, 4.75);
+    t(s, "R300,000", { x: 6.65, y: 2.02, w: 5.8, h: 0.8, fontFace: TITLE, fontSize: 44, bold: true, color: C.amL });
+    t(s, "for a 6-month pilot: the sum of its costs (R thousand)", { x: 6.65, y: 2.85, w: 5.9, h: 0.4, fontSize: 14.5, bold: true });
+    s.addChart(pres.charts.DOUGHNUT, [{ name: "Use of funds", labels: ["Stipends for pilot businesses", "Field agent", "Data bundles", "Running costs", "POPIA review + security test", "Devices + contingency"], values: [96, 60, 60, 24, 30, 30] }], {
+      x: 6.5, y: 3.25, w: 6.1, h: 2.75, holeSize: 55, showTitle: false,
+      chartColors: [C.em, C.am, C.emL, "7C93B5", C.red, "C4B5FD"], showValue: true, showPercent: false, dataLabelColor: C.bg, dataLabelFontSize: 11, dataLabelFontBold: true,
+      showLegend: true, legendPos: "r", legendColor: C.white, legendFontSize: 10.5,
     });
-    t(s, "Y1 ≈ R56k  ·  Y2 ≈ R283k  ·  Y3 ≈ R1.1m a month", { x: 6.2, y: 5.08, w: 6.3, h: 0.35, fontSize: 14, bold: true, align: "center" });
-    t(s, "15 → 60 → 200 suppliers  ·  1,000 → 5,000 → 20,000 businesses", { x: 6.2, y: 5.4, w: 6.3, h: 0.3, fontSize: 11.5, color: C.muted, align: "center" });
-    card(s, 0.6, 6.05, 12.1, 0.68, C.panel2);
-    await disc(s, Fi.FiUnlock, 0.78, 6.14, 0.5, C.amL);
-    t(s, "Next: lenders pay to see a business's record, only with the owner's consent.", { x: 1.45, y: 6.05, w: 11.1, h: 0.68, fontSize: 15, italic: true, color: C.amL, valign: "middle" });
+    t(s, "2 suppliers and 50-100 businesses live  ·  break-even at 2 suppliers on Starter (about R460 a month to run)", { x: 6.65, y: 6.05, w: 5.9, h: 0.5, fontSize: 11.5, color: C.muted });
     foot(s, "Estimates. Commission assumes ~R4,000 of digital orders per business per month.");
     s.addNotes(
-      "SAY (1:45-1:55): 'Businesses use Akayza for free. Suppliers pay: from R299 a month, plus about 1% on digital orders, never on cash. Next, lenders pay to see a business's record, only with the owner's consent.'\n\n" +
-      "IF ASKED how: subscriptions = supplier mix × price; commission = active businesses × ~R4,000 digital orders a month × 1%. Year 1: 5 Starter + 10 Pro suppliers, 1,000 businesses. They're estimates, and we say so. Lenders are next, not revenue today.");
+      "SAY (1:45-2:06): 'Businesses use Akayza for free. Suppliers pay: from R299 a month, plus about 1% on digital orders, never on cash. Next, lenders pay to see a business's record, only with the owner's consent.' Then, slowly, it's the most important number: 'For a six-month pilot in Soshanguve, with 2 suppliers and 50 to 100 businesses, we need R300,000: field agents, stipends for pilot businesses, data, running costs and a POPIA review.'\n\n" +
+      "Use of funds: stipends R96k, field agent R60k, data R60k, running costs R24k, POPIA review + external security test R30k, devices + contingency R30k. After the pilot it costs about R460 a month to run, so two suppliers on Starter already cover it.\n" +
+      "IF ASKED how the revenue adds up: subscriptions = supplier mix × price; commission = active businesses × ~R4,000 digital orders a month × 1%. Year 1: 5 Starter + 10 Pro suppliers, 1,000 businesses. They're estimates, and we say so. Lenders are next, not revenue today.");
   }
 
-  // ================================================================ 8. THE ASK
-  {
-    const s = newSlide();
-    kicker(s, "The ask");
-    t(s, "R300,000", { x: 0.6, y: 1.05, w: 6, h: 1.4, fontFace: TITLE, fontSize: 72, bold: true, color: C.amL });
-    t(s, "for a 6-month pilot: the sum of its costs", { x: 0.6, y: 2.5, w: 6.1, h: 0.5, fontSize: 20, bold: true });
-    const gets = [["2 suppliers", "signed and live"], ["50-100 businesses", "using it every week"], ["TRL 6", "proven in real shops and sites"], ["Break-even", "at 2 suppliers on Starter (~R460/month to run)"]];
-    for (let i = 0; i < 4; i++) {
-      const y = 3.25 + i * 0.82;
-      await disc(s, Fi.FiCheck, 0.6, y, 0.55, C.em);
-      t(s, gets[i][0], { x: 1.35, y: y + 0.08, w: 2.3, h: 0.4, fontSize: 17, bold: true });
-      t(s, gets[i][1], { x: 3.6, y: y + 0.1, w: 3.0, h: 0.4, fontSize: 14, color: C.muted });
-    }
-    card(s, 6.9, 1.2, 5.8, 5.35);
-    s.addChart(pres.charts.DOUGHNUT, [{ name: "Use of funds", labels: ["Stipends for pilot businesses", "Field agent", "Data bundles", "Running costs", "POPIA review + security test", "Devices + contingency"], values: [96, 60, 60, 24, 30, 30] }], {
-      x: 7.0, y: 1.3, w: 5.6, h: 5.15, holeSize: 55,
-      showTitle: true, title: "What the pilot costs: R300,000 (R thousand)", titleColor: C.white, titleFontFace: BODY, titleFontSize: 14,
-      chartColors: [C.em, C.am, C.emL, "7C93B5", C.red, "C4B5FD"], showValue: true, showPercent: false, dataLabelColor: C.bg, dataLabelFontSize: 12, dataLabelFontBold: true,
-      showLegend: true, legendPos: "b", legendColor: C.white, legendFontSize: 11.5,
-    });
-    foot(s);
-    s.addNotes(
-      "SAY (1:55-2:06), slowly, it's the most important number: 'For a six-month pilot in Soshanguve, with 2 suppliers and 50 to 100 businesses, we need R300,000: field agents, stipends for pilot businesses, data, running costs and a POPIA review.'\n\n" +
-      "Use of funds: stipends R96k, field agent R60k, data R60k, running costs R24k, POPIA review + external security test R30k, devices + contingency R30k. After the pilot it costs about R460 a month to run, so two suppliers on Starter already cover it.");
-  }
-
-  // ================================================================ 9. WHY WE WIN
+  // ================================================================ 7. WHY WE WIN
   {
     const s = newSlide();
     kicker(s, "Why we stand out");
@@ -329,15 +279,15 @@ async function icon(Comp, color, px = 256) {
       { x: 0.6, y: 6.08, w: 12.1, h: 0.7, fontSize: 15, italic: true, color: C.amL });
     foot(s);
     s.addNotes(
-      "SAY (2:06-2:27): 'Ordering apps give traders a place to buy. Payment apps take cards. Akayza gives the kasi economy something it's never had: a record people can trust. Payments are confirmed by the payment provider, and job stages by both sides, so it's more than a receipt. And the record belongs to the owner: nothing goes to a lender without their consent.'\n\n" +
+      "SAY (2:06-2:27): 'Ordering apps give traders a place to buy. Payment apps take cards. Akayza gives the informal market something it's never had: a record people can trust. Payments are confirmed by the payment provider, and job stages by both sides, so it's more than a receipt. And the record belongs to the owner: nothing goes to a lender without their consent.'\n\n" +
       "Our biggest competitor is the habit of WhatsApp and a notebook. Don't attack anyone; show the gap. We complement payment apps; we don't replace them.");
   }
 
-  // ================================================================ 10. CLOSE
+  // ================================================================ 8. CLOSE
   {
     const s = newSlide();
     s.addImage({ data: LOGO, x: 0.75, y: 0.7, w: 1.0, h: 1.0 });
-    t(s, "In the 1950s, Richard Maponya started a milk round in Soweto, delivered by bicycle. His customers trusted him, and decades later he opened Maponya Mall.",
+    t(s, "In the 1950s, Richard Maponya started a milk business in Soweto. His customers trusted him, and decades later he opened Maponya Mall.",
       { x: 0.8, y: 2.0, w: 11.5, h: 0.85, fontSize: 17, color: C.muted });
     t(s, "The next Maponya is out there right now.", { x: 0.8, y: 2.95, w: 12.0, h: 0.8, fontFace: TITLE, fontSize: 36, bold: true });
     t(s, "Selling kotas. Running a spaza. Laying bricks.", { x: 0.8, y: 3.8, w: 11.5, h: 0.55, fontFace: TITLE, fontSize: 24, italic: true, color: C.amL });
@@ -345,205 +295,15 @@ async function icon(Comp, color, px = 256) {
     t(s, "Keep it in the kasi.", { x: 0.8, y: 5.35, w: 11.5, h: 0.75, fontFace: TITLE, fontSize: 32, italic: true });
     t(s, "Thank you  ·  R300,000 for a 6-month pilot  ·  Team PR, GKHack26", { x: 0.8, y: 6.5, w: 11.5, h: 0.4, fontSize: 13, color: C.faint });
     s.addNotes(
-      "SAY (2:27-2:50), look at the panel, not the screen: 'Richard Maponya started in the 1950s with a milk round in Soweto, delivered by bicycle. His customers trusted him, and decades later he opened Maponya Mall. The next Maponya is out there right now: selling kotas, running a spaza, laying bricks. Everyone wants a piece of the kasi economy. Akayza makes sure the people who run it keep theirs. We don't hold the stock. We build the record. Keep it in the kasi.' Then stop talking.\n\n" +
+      "SAY (2:27-2:50), look at the panel, not the screen: 'Richard Maponya started in the 1950s with a milk business in Soweto. His customers trusted him, and decades later he opened Maponya Mall. The next Maponya is out there right now: selling kotas, running a spaza, laying bricks. Everyone wants a piece of the informal market. Akayza makes sure the people who run it keep theirs. We don't hold the stock. We build the record. Keep it in the kasi.' Then stop talking.\n\n" +
       "Maponya: Dube Hygienic Dairy, early 1950s, milk delivered by young men on bicycles to homes without fridges; Maponya Mall opened in 2007 (Daily Maverick, Wikipedia).");
   }
 
-  // ================================================================ 11. DETAIL
+  // ================================================================ 9. ARCHITECTURE
   {
-    // Everything from here on is the detail for the assessors, in its own section.
+    // The last two slides are the detail for the assessors, in their own section.
     section = "The detail";
     pres.addSection({ title: section });
-    const s = newSlide();
-    kicker(s, "The detail");
-    title(s, "Everything behind the pitch");
-    t(s, "The pitch is slides 1 to 10. What follows is the detail, mapped to what the organisers asked for.", { x: 0.6, y: 1.62, w: 12.1, h: 0.4, fontSize: 16, color: C.muted });
-    const map = [
-      [Fi.FiAlertCircle, "Problem statement", "Evidence, charts and photos", "2, 3, 13", C.am],
-      [Fi.FiSmartphone, "Solution offering", "What it is, and how it works", "4-6, 12, 15", C.em],
-      [Fi.FiUser, "User journey story", "Sipho's week, and Thabo's job", "14", C.emL],
-      [Fi.FiLayers, "Technological architecture", "How it's built, and kept safe", "18, 20", C.em],
-      [Fi.FiBarChart2, "Competitive analysis", "Why we stand out", "9", C.amL],
-      [Fi.FiEyeOff, "Data privacy policy", "What we collect, why, your rights", "19", C.emL],
-      [Fi.FiDollarSign, "Costs and the ask", "Business model, pilot, break-even", "7, 8, 23", C.am],
-      [Fi.FiTrendingUp, "Market and growth", "Opportunity, traction, team", "16-17, 21-24", C.em],
-    ];
-    for (let i = 0; i < 8; i++) {
-      const x = 0.6 + (i % 2) * 6.15, y = 2.2 + Math.floor(i / 2) * 1.1;
-      card(s, x, y, 5.85, 0.95);
-      await disc(s, map[i][0], x + 0.2, y + 0.17, 0.6, map[i][4]);
-      t(s, map[i][1], { x: x + 0.98, y: y + 0.14, w: 3.0, h: 0.36, fontSize: 15, bold: true });
-      t(s, map[i][2], { x: x + 0.98, y: y + 0.52, w: 3.0, h: 0.3, fontSize: 12, color: C.muted });
-      t(s, map[i][3], { x: x + 3.95, y: y + 0.24, w: 1.7, h: 0.45, fontFace: TITLE, fontSize: 16, bold: true, color: map[i][4], align: "right" });
-    }
-    foot(s);
-    s.addNotes("Not presented in the room. A map for the assessors: each item the organisers asked for, and the slides that answer it.");
-  }
-
-  // ================================================================ 12. HOW IT WORKS (real screens)
-  {
-    const s = newSlide();
-    kicker(s, "How it works");
-    title(s, "One app, at the counter and on site");
-    const shots = [
-      ["screen_tools.png", "Switch on the tools your business needs", C.em],
-      ["screen_suppliers.png", "Your own suppliers, and ones that fit you", C.amL],
-      ["screen_pay.png", "Pay on PayFast's page, confirmed by the provider", C.emL],
-      ["screen_credit.png", "Who owes you, with customers' names private", C.em],
-      ["screen_job.png", "A builder's job in stages, signed off by the client", C.amL],
-    ];
-    for (let i = 0; i < 5; i++) {
-      const x = 0.745 + i * 2.43; // five 2.13" frames, centred
-      const w = phone(s, shots[i][0], x, 1.85, 4.05, i + 1, shots[i][2]);
-      t(s, shots[i][1], { x, y: 6.18, w, h: 0.6, fontSize: 12, bold: true, align: "center" });
-    }
-    foot(s);
-    s.addNotes(
-      "Detail slide, not in the pitch. If asked how it works: 'The owner switches on the tools the business needs. Akayza shows the suppliers she already uses, and recommends ones that fit: suppliers, never products. She pays on PayFast's own page, and the provider confirms it. The credit book keeps who owes her. And a builder runs each job in stages, with the client signing off.'\n\n" +
-      "These are real screens from our app on a Samsung A56, recorded for the demo, with sample suppliers and made-up customers.");
-  }
-
-  // ================================================================ 13. WHY IT STAYS INVISIBLE
-  {
-    const s = newSlide();
-    kicker(s, "Why nobody has fixed it");
-    title(s, "Business tools were built for the formal few");
-    card(s, 0.6, 2.0, 5.9, 4.5);
-    t(s, "What the tools assume", { x: 0.95, y: 2.25, w: 5.2, h: 0.45, fontSize: 19, bold: true, color: C.muted });
-    const assume = ["A registered company and a bookkeeper", "Card machines and bank statements", "Time at a desk to capture everything", "One supplier's shop, or a marketplace"];
-    const real = ["Cash, credit on trust, and memory", "A phone that's also the business", "Busy all day at the counter or on site", "The same few suppliers, for years"];
-    for (let i = 0; i < 4; i++) {
-      await disc(s, Fi.FiX, 0.95, 2.95 + i * 0.85, 0.5, C.faint);
-      t(s, assume[i], { x: 1.6, y: 3.02 + i * 0.85, w: 4.7, h: 0.45, fontSize: 16, color: C.muted });
-    }
-    card(s, 6.8, 2.0, 5.9, 4.5, C.panel2);
-    t(s, "How they really work", { x: 7.15, y: 2.25, w: 5.3, h: 0.45, fontSize: 19, bold: true, color: C.emL });
-    for (let i = 0; i < 4; i++) {
-      await disc(s, Fi.FiCheck, 7.15, 2.95 + i * 0.85, 0.5, C.em);
-      t(s, real[i], { x: 7.8, y: 3.02 + i * 0.85, w: 4.7, h: 0.45, fontSize: 16 });
-    }
-    foot(s);
-    s.addNotes(
-      "SAY (20 s): 'Why hasn't anyone fixed this? Because the tools were built for formal businesses: they assume a registered company, a bookkeeper, card machines. Informal businesses run on cash, trust and a phone, busy all day, buying from the same few suppliers for years. Nothing fits how they work, so nothing gets captured.'\n\n" +
-      "WhatsApp is how they talk to each other; it isn't the problem. The problem is that nothing turns their everyday trading into a record.");
-  }
-
-  // ================================================================ 14. USER JOURNEY
-  {
-    const s = newSlide();
-    kicker(s, "User journey");
-    title(s, "Sipho's week, and Thabo's job");
-    const lanes = [
-      ["Sipho", "runs a kota shop by the taxi rank", C.em, [
-        [Fi.FiMapPin, "Signs up", "Picks Food and drops a pin where he trades"],
-        [Fi.FiTruck, "Finds suppliers", "Ones who deliver to him, near and recommended"],
-        [Fi.FiCreditCard, "Orders and pays", "Bread from a bakery that delivers, paid in the app, confirmed by the provider"],
-        [Fi.FiBarChart2, "Sees his business", "Kotas sold, stock bought, and his record growing"],
-      ]],
-      ["Thabo", "a builder", C.amL, [
-        [Fi.FiClipboard, "Logs a job", "The client, the price and the stages"],
-        [Fi.FiCamera, "Photographs each stage", "Our server keeps each photo's time and fingerprint"],
-        [Fi.FiCheckSquare, "Client signs off", "From a link: the stage is confirmed by both"],
-        [Fi.FiAward, "Builds a track record", "Finished jobs he can show his next client"],
-      ]],
-    ];
-    for (let l = 0; l < 2; l++) {
-      const y = 1.9 + l * 2.0, [name, sub, color, steps] = lanes[l];
-      card(s, 0.6, y, 2.1, 1.75, C.panel2);
-      t(s, name, { x: 0.8, y: y + 0.3, w: 1.8, h: 0.55, fontFace: TITLE, fontSize: 24, bold: true, color });
-      t(s, sub, { x: 0.8, y: y + 0.9, w: 1.75, h: 1.0, fontSize: 12.5, color: C.muted });
-      for (let j = 0; j < 4; j++) {
-        const x = 2.9 + j * 2.47;
-        card(s, x, y, 2.3, 1.75);
-        await disc(s, steps[j][0], x + 0.18, y + 0.2, 0.52, color);
-        t(s, steps[j][1], { x: x + 0.82, y: y + 0.16, w: 1.4, h: 0.6, fontSize: 14, bold: true, valign: "middle" });
-        t(s, steps[j][2], { x: x + 0.18, y: y + 0.88, w: 1.95, h: 0.8, fontSize: 12, color: C.muted });
-        if (j < 3) s.addShape(pres.shapes.LINE, { x: x + 2.31, y: y + 0.88, w: 0.15, h: 0, line: { color: C.faint, width: 1.25, endArrowType: "triangle" } });
-      }
-    }
-    t(s, "The same journey works for a spaza shop, a salon or a mechanic.", { x: 0.6, y: 5.95, w: 12, h: 0.35, fontSize: 14, italic: true, color: C.em });
-    foot(s);
-    s.addNotes(
-      "The user journey behind the demo. Sipho and Thabo are illustrations of the owners we built for, not real customers. If asked: 'they're the kind of owners we built for; the pilot puts real names to them.'\n" +
-      "Honest status: Sipho's payment in the app is confirmed by the payment provider; his order book and credit book are his own records. Thabo's stages are confirmed by both him and the client.");
-  }
-
-  // ================================================================ 15. WHO WINS
-  {
-    const s = newSlide();
-    kicker(s, "Who wins");
-    title(s, "Everyone gains. Suppliers pay.");
-    const cols = [
-      [Fi.FiUsers, "Businesses", "Use it free, always", ["Less stress, less lost money", "Better buying from their own suppliers", "A record they own, for tomorrow"], C.em],
-      [Fi.FiTruck, "Suppliers", "Our paying customers", ["More orders from shops they already serve", "No cash lost between driver and depot", "See what their customers will need"], C.amL],
-      [Fi.FiBriefcase, "Partners", "Next: banks, funds, government", ["Businesses they can finally see", "Shared only with the owner's consent", "Faster, fairer verification"], C.emL],
-    ];
-    for (let i = 0; i < 3; i++) {
-      const x = 0.6 + i * 4.1;
-      card(s, x, 1.95, 3.8, 4.6, i === 1 ? C.panel2 : C.panel);
-      await disc(s, cols[i][0], x + 0.35, 2.25, 0.85, cols[i][4]);
-      t(s, cols[i][1], { x: x + 1.4, y: 2.3, w: 2.3, h: 0.45, fontSize: 21, bold: true, color: cols[i][4] });
-      t(s, cols[i][2], { x: x + 1.4, y: 2.77, w: 2.3, h: 0.4, fontSize: 13.5, color: C.muted });
-      s.addText(cols[i][3].map((q, j) => ({ text: q, options: { bullet: true, breakLine: j < 2 } })),
-        { x: x + 0.35, y: 3.6, w: 3.2, h: 2.8, fontFace: BODY, fontSize: 16, color: C.white, paraSpaceAfter: 12, margin: 0, valign: "top", isTextBox: true });
-    }
-    foot(s);
-    s.addNotes(
-      "SAY (20 s): 'Everyone in the chain gains. Businesses use it free. Suppliers pay us, because we bring them more orders from the shops and builders they already serve and end the cash lost between the driver and the depot. And next, banks, funds and government get businesses they can finally see, only with the owner's consent.'\n\n" +
-      "Partners are the roadmap, not revenue today. Our revenue is suppliers.");
-  }
-
-  // ================================================================ 16. THE OPPORTUNITY
-  {
-    const s = newSlide();
-    kicker(s, "The opportunity");
-    title(s, "Start where the money already moves");
-    const rings = [[0.6, 1.95, 4.6, C.panel, C.faint], [1.3, 2.9, 3.2, C.panel2, C.am], [1.95, 3.8, 1.9, C.em, C.em]];
-    for (const [x, y, d, fill, line] of rings) s.addShape(pres.shapes.OVAL, { x, y, w: d, h: d, fill: { color: fill }, line: { color: line, width: 1.5 } });
-    t(s, "R900 bn", { x: 0.6, y: 2.2, w: 4.6, h: 0.5, fontFace: TITLE, fontSize: 22, bold: true, align: "center", color: C.muted });
-    t(s, "R180 bn", { x: 1.3, y: 3.15, w: 3.2, h: 0.5, fontFace: TITLE, fontSize: 20, bold: true, align: "center", color: C.amL });
-    t(s, "20,000", { x: 1.95, y: 4.5, w: 1.9, h: 0.5, fontFace: TITLE, fontSize: 20, bold: true, align: "center", color: C.bg });
-    const rows = [
-      ["R900 bn", "The township economy a year: every informal and small business we can serve.", C.muted],
-      ["R180 bn", "Moves through spaza shops alone every year: one segment, already buying from suppliers every week.", C.amL],
-      ["20,000", "Businesses and 200 paying suppliers by year 3: about R13 million a year in revenue.", C.emL],
-    ];
-    for (let i = 0; i < 3; i++) {
-      const y = 2.05 + i * 1.5;
-      t(s, rows[i][0], { x: 5.9, y, w: 2.2, h: 0.6, fontFace: TITLE, fontSize: 28, bold: true, color: rows[i][2] });
-      t(s, rows[i][1], { x: 8.15, y: y + 0.05, w: 4.55, h: 1.2, fontSize: 16, color: C.white });
-    }
-    foot(s, "Standard Bank 2025 (economy size; spaza segment ~R180 bn a year). Year-3 figures are our estimates.");
-    s.addNotes(
-      "SAY (20 s): 'The whole township economy is R900 billion. Spaza shops alone move about R180 billion a year: one segment, already buying every week. Our goal is 20,000 businesses and 200 paying suppliers by year three, about R13 million a year.'\n\n" +
-      "R180 bn is specifically spaza shops (that's what the evidence measures), so we name them here. Everywhere else: informal and small businesses.");
-  }
-
-  // ================================================================ 17. WHY SOUTH AFRICA FIRST
-  {
-    const s = newSlide();
-    kicker(s, "Why South Africa first");
-    title(s, "We know this market from the inside");
-    const why = [
-      [Fi.FiHome, "We live it", "We grew up in these communities. We know how a business restocks, gives credit and gets paid."],
-      [Fi.FiMap, "Big and dense", "R900 bn, in every province. One supplier serves hundreds of businesses on the same route."],
-      [Fi.FiSmartphone, "Ready for digital", "56% already prefer EFT. Local payment rails and cheap Android phones are everywhere."],
-      [Fi.FiCheckSquare, "Clear rules", "POPIA, CIPC, VAT invoicing: we built to them from day one. Then: the rest of Africa."],
-    ];
-    for (let i = 0; i < 4; i++) {
-      const x = 0.6 + (i % 2) * 6.15, y = 2.0 + Math.floor(i / 2) * 2.3;
-      card(s, x, y, 5.85, 2.05);
-      await disc(s, why[i][0], x + 0.3, y + 0.32, 0.8, i === 3 ? C.amL : C.em);
-      t(s, why[i][1], { x: x + 1.35, y: y + 0.32, w: 4.2, h: 0.45, fontSize: 20, bold: true });
-      t(s, why[i][2], { x: x + 1.35, y: y + 0.85, w: 4.25, h: 1.1, fontSize: 15, color: C.muted });
-    }
-    foot(s, "Standard Bank 2025 (56% prefer EFT or bank transfer).");
-    s.addNotes(
-      "SAY (20 s): 'Why South Africa first, not Africa? Because we know this market from the inside. It's big and dense, it's already moving to digital payments (56% prefer EFT), and the rules are clear. Win here, then take the same model across the continent.'");
-  }
-
-  // ================================================================ 18. ARCHITECTURE
-  {
     const s = newSlide();
     kicker(s, "Technological architecture");
     title(s, "How it's built");
@@ -582,7 +342,7 @@ async function icon(Comp, color, px = 256) {
         { x: x + 0.8, y: 5.38, w: 2.02, h: 0.56, fontFace: BODY, margin: 0, valign: "middle", isTextBox: true });
     }
     card(s, 0.6, 6.12, 12.13, 0.66, C.panel2);
-    t(s, "On every request: HTTPS, a signed-in token, only the owner's data (anyone else's is 'not found'), strict input checks, rate limits, no double orders, and the server sets every price.",
+    t(s, "On every request: HTTPS, a signed-in token, only the owner's data (anyone else's is 'not found'), strict input checks, rate limits, no double orders, and the server sets every price. 1,281 backend and 204 app tests run before every merge.",
       { x: 0.85, y: 6.12, w: 11.65, h: 0.66, fontSize: 12.5, valign: "middle" });
     foot(s);
     s.addNotes(
@@ -590,7 +350,7 @@ async function icon(Comp, color, px = 256) {
       "Numbers: about 1,280 backend tests and 204 app tests run before every merge. Sealed records: the owner can seal the whole record with ML-DSA-65 (NIST FIPS 204, post-quantum) plus Ed25519, and a check shows anything changed or deleted since.");
   }
 
-  // ================================================================ 19. DATA PRIVACY POLICY
+  // ================================================================ 10. DATA PRIVACY POLICY
   {
     const s = newSlide();
     kicker(s, "Data privacy policy");
@@ -636,157 +396,6 @@ async function icon(Comp, color, px = 256) {
       "SAY (only if asked, 20 s): 'We collect only what the service needs, and we say why. No ID numbers, no card numbers; we never sell data or use it for ads, and suppliers never see your customers. You can download your data and close your account, and if there's ever a breach, we tell you and the Information Regulator.'\n\n" +
       "HONEST STATUS, don't claim more: data download is built on the server (GET /me/export), but the app has no button for it yet. 'Close my account' works in the app. 'Delete my account and data' says 'Coming soon'; when it comes, personal data is deleted or anonymised, and orders, invoices and payment records stay 5 years (tax law).\n" +
       "The full policy is in the app (src/content/legal/privacyPolicy.ts). Customer names in the credit book stay private to the owner; the supplier engine uses aggregates only. PayFast, Cloudinary, Mapbox and the email provider may store data outside South Africa: POPIA section 72.");
-  }
-
-  // ================================================================ 20. SECURITY
-  {
-    const s = newSlide();
-    kicker(s, "Security");
-    title(s, "Safe by design, simple to use");
-    const items = [
-      [Fi.FiLock, "Your data is yours", "Every request is limited to the owner. Anyone else's record answers 'not found'."],
-      [Fi.FiSmartphone, "Simple, still safe", "Email and password; one code only on a new phone. The rest runs on our side."],
-      [Fi.FiCreditCard, "No card data", "The payment provider's own page. A payment counts only after 4 checks."],
-      [Fi.FiLink, "Signed links", "Invoice, receipt and payment links are signed and expire. A QR check shows no personal details."],
-      [Fi.FiCheckSquare, "Honest proof", "Only provider-confirmed payments are proof. The rest is the owner's own record."],
-      [Fi.FiAlertTriangle, "Tested like an attacker", "Hostile-input tests on every endpoint, rate limits, the OWASP API Top 10."],
-    ];
-    for (let i = 0; i < 6; i++) {
-      const x = 0.6 + (i % 3) * 4.1, y = 1.95 + Math.floor(i / 3) * 2.35;
-      card(s, x, y, 3.8, 2.15);
-      await disc(s, items[i][0], x + 0.3, y + 0.3, 0.7, i === 4 ? C.amL : C.em);
-      t(s, items[i][1], { x: x + 1.15, y: y + 0.4, w: 2.5, h: 0.5, fontSize: 16, bold: true });
-      t(s, items[i][2], { x: x + 0.3, y: y + 1.1, w: 3.25, h: 0.95, fontSize: 13, color: C.muted });
-    }
-    foot(s);
-    s.addNotes("Answer to 'won't security make it hard to use?': 'Security is invisible to the owner: email, password, and a code only on a new phone. Everything else happens on our server.'");
-  }
-
-  // ================================================================ 21. GO-TO-MARKET
-  {
-    const s = newSlide();
-    kicker(s, "Go-to-market");
-    title(s, "One supplier brings hundreds of businesses");
-    const phases = [
-      ["0-6 months", "Pilot", C.em, ["2 suppliers", "The 50-100 businesses they already serve", "A field agent at the counter and on the route"]],
-      ["6-18 months", "Grow", C.amL, ["15 paying suppliers", "1,000 active businesses", "Owners invite the suppliers they use"]],
-      ["18-36 months", "Scale", C.emL, ["200 suppliers, all 9 provinces", "Business associations, trade events", "Then other African markets"]],
-    ];
-    for (let i = 0; i < 3; i++) {
-      const x = 0.6 + i * 4.1;
-      card(s, x, 1.95, 3.8, 4.35);
-      t(s, phases[i][0], { x: x + 0.35, y: 2.2, w: 3.1, h: 0.4, fontSize: 14, color: C.muted });
-      t(s, phases[i][1], { x: x + 0.35, y: 2.6, w: 3.1, h: 0.75, fontFace: TITLE, fontSize: 32, bold: true, color: phases[i][2] });
-      s.addText(phases[i][3].map((q, j) => ({ text: q, options: { bullet: true, breakLine: j < 2 } })),
-        { x: x + 0.35, y: 3.55, w: 3.2, h: 2.6, fontFace: BODY, fontSize: 16, color: C.white, paraSpaceAfter: 11, margin: 0, valign: "top", isTextBox: true });
-      if (i < 2) s.addShape(pres.shapes.LINE, { x: x + 3.82, y: 4.1, w: 0.26, h: 0, line: { color: C.faint, width: 1.5, endArrowType: "triangle" } });
-    }
-    t(s, "Suppliers are both our customer and our channel: no expensive ads, one relationship at a time.", { x: 0.6, y: 6.45, w: 12.1, h: 0.4, fontSize: 15, italic: true, color: C.em });
-    foot(s);
-    s.addNotes(
-      "SAY (20 s): 'We don't chase businesses one by one. We sign a supplier, and the supplier brings the businesses it already delivers to. Two suppliers in the pilot, fifteen in the first year, two hundred by year three.'");
-  }
-
-  // ================================================================ 22. IT'S REAL
-  {
-    const s = newSlide();
-    kicker(s, "Traction");
-    title(s, "Not an idea. It's built, and it works.");
-    const nums = [["1,281", "automated system tests pass"], ["204", "app tests pass"], ["1,672", "products from 11 sample suppliers"], ["0", "card numbers ever touch our servers"]];
-    for (let i = 0; i < 4; i++) {
-      const x = 0.6 + i * 3.08;
-      card(s, x, 1.95, 2.85, 2.0);
-      t(s, nums[i][0], { x: x + 0.15, y: 2.15, w: 2.55, h: 0.95, fontFace: TITLE, fontSize: 44, bold: true, align: "center", color: i === 3 ? C.amL : C.emL });
-      t(s, nums[i][1], { x: x + 0.2, y: 3.1, w: 2.45, h: 0.75, fontSize: 14, align: "center", color: C.muted });
-    }
-    const trl = [["TRL 4  ·  today", "Every flow works end to end in our own environment, with real payments in the provider's sandbox.", C.em], ["TRL 5-6  ·  pilot", "Real suppliers and businesses, live payments, in their own shops and sites.", C.amL], ["TRL 7+  ·  year 1", "All nine provinces; suppliers' stock systems connected.", C.emL]];
-    for (let i = 0; i < 3; i++) {
-      const y = 4.35 + i * 0.75;
-      s.addShape(pres.shapes.OVAL, { x: 0.65, y: y + 0.1, w: 0.36, h: 0.36, fill: { color: trl[i][2] }, line: { color: trl[i][2] } });
-      t(s, trl[i][0], { x: 1.2, y: y + 0.06, w: 2.9, h: 0.45, fontSize: 16, bold: true, color: trl[i][2] });
-      t(s, trl[i][1], { x: 4.1, y: y + 0.06, w: 8.6, h: 0.5, fontSize: 15 });
-    }
-    foot(s);
-    s.addNotes(
-      "SAY (15 s): 'This isn't a mock-up. It's built: over a thousand automated tests pass before every change, payments run end to end in the provider's sandbox, and card numbers never touch our servers. We're at TRL 4 today; the pilot takes us to 6.'\n\nIf a mentor rated the TRL differently, change it to match.");
-  }
-
-  // ================================================================ 23. COSTS: START AND GROW
-  {
-    const s = newSlide();
-    kicker(s, "What it costs");
-    title(s, "Small to start. Profitable by year 3.");
-    const steps = [
-      ["Start", "R300k", "One-off: the 6-month pilot (the ask)", C.amL],
-      ["Grow", "~R1.5m", "Raised after the pilot, to hire ahead of revenue", C.emL],
-      ["Break even", "Year 2", "Suppliers' fees cover all costs", C.em],
-    ];
-    for (let i = 0; i < 3; i++) {
-      const y = 2.0 + i * 1.5;
-      card(s, 0.6, y, 5.3, 1.3);
-      t(s, steps[i][0].toUpperCase(), { x: 0.85, y: y + 0.12, w: 2.2, h: 0.35, fontSize: 12, bold: true, color: C.muted, charSpacing: 2 });
-      t(s, steps[i][1], { x: 0.85, y: y + 0.45, w: 2.2, h: 0.65, fontFace: TITLE, fontSize: 30, bold: true, color: steps[i][3] });
-      t(s, steps[i][2], { x: 3.0, y: y + 0.2, w: 2.75, h: 0.95, fontSize: 13.5, valign: "middle" });
-    }
-    card(s, 6.3, 1.9, 6.4, 4.4);
-    s.addChart(pres.charts.BAR, [
-      { name: "Running costs", labels: ["Year 1", "Year 2", "Year 3"], values: [75, 270, 650] },
-      { name: "Revenue", labels: ["Year 1", "Year 2", "Year 3"], values: [56, 283, 1100] },
-    ], {
-      x: 6.4, y: 2.0, w: 6.2, h: 4.2, barDir: "col", barGrouping: "clustered",
-      showTitle: true, title: "A month at year end (R thousand, estimate)", titleColor: C.white, titleFontFace: BODY, titleFontSize: 13,
-      chartColors: [C.red, C.em], showValue: true, dataLabelPosition: "outEnd", dataLabelColor: C.white, dataLabelFontSize: 12, dataLabelFontBold: true,
-      catAxisLabelColor: C.white, catAxisLabelFontSize: 13, valAxisHidden: true, valGridLine: { style: "none" }, catGridLine: { style: "none" },
-      showLegend: true, legendPos: "b", legendColor: C.white, legendFontSize: 12, barGapWidthPct: 60,
-    });
-    t(s, "Most of the cost is people: the team and field agents.", { x: 6.3, y: 6.4, w: 6.4, h: 0.4, fontSize: 12.5, italic: true, color: C.amL });
-    foot(s, "Estimates. Costs: team, field agents, sales, hosting and messaging, security and POPIA.");
-    s.addNotes(
-      "SAY (20 s): 'To start, R300,000 for the pilot. After the pilot we raise about R1.5 million to hire ahead of revenue. Costs grow with us, but suppliers' fees grow faster: we break even in year two, and by year three we make about R1.1 million a month against R650,000 in costs.'\n\n" +
-      "IF ASKED for the breakdown (a month at year end, R thousand, estimates): team 40 / 150 / 350 (2, 5, 10 people); field agents 16 / 50 / 120 (2, 6, 15); sales and marketing 10 / 40 / 100; hosting, SMS, email, maps 5 / 15 / 40; security, POPIA, audits 4 / 15 / 40. Totals 75 / 270 / 650.\n" +
-      "Why R1.5m: year 1 runs at a loss of about R20-40k a month while suppliers sign up, plus hiring the year-2 team before their revenue arrives, plus six months of safety.\n" +
-      "Running costs stay low because we don't hold stock, cash or delivery vans: suppliers deliver, the payment provider holds the money.");
-  }
-
-  // ================================================================ 24. TEAM
-  {
-    const s = newSlide();
-    kicker(s, "Team PR");
-    title(s, "Builders who know the kasi");
-    const team = [["Mandla", "Team lead", "Product, backend, payments and the supplier engine", C.em], ["Risuna", "Business tools", "Credit book, order book, jobs, builder network, notifications", C.amL]];
-    for (let i = 0; i < 2; i++) {
-      const x = 0.6 + i * 6.15;
-      card(s, x, 1.95, 5.85, 3.2);
-      await disc(s, Fi.FiUser, x + 0.4, 2.3, 1.35, team[i][3]);
-      t(s, team[i][0], { x: x + 2.05, y: 2.35, w: 3.6, h: 0.7, fontFace: TITLE, fontSize: 32, bold: true, color: team[i][3] });
-      t(s, team[i][1], { x: x + 2.05, y: 3.05, w: 3.6, h: 0.4, fontSize: 16, bold: true });
-      t(s, team[i][2], { x: x + 2.05, y: 3.5, w: 3.6, h: 1.4, fontSize: 15, color: C.muted });
-    }
-    card(s, 0.6, 5.45, 12.1, 1.1, C.panel2);
-    t(s, "Built this weekend, end to end: the app, the system behind it and real payments, with over 1,400 automated tests.", { x: 0.95, y: 5.72, w: 11.4, h: 0.6, fontSize: 16, valign: "middle" });
-    foot(s);
-    s.addNotes("TEAM (10 s): who we are in one line each. Edit the roles to how you want to be introduced; add the DataQuest 2026 win here if you want it.");
-  }
-
-  // ================================================================ 25. WHAT'S NEXT
-  {
-    const s = newSlide();
-    kicker(s, "What's next");
-    title(s, "The road from here");
-    const road = [
-      ["Next 3 months", ["Google sign-in, phone push alerts", "Two-phone cash confirmation", "Cloudflare protection on our own domain"], C.em],
-      ["Next 12 months", ["Direct links to suppliers' stock systems", "Split payouts straight to suppliers", "Share your record with a lender, by consent"], C.amL],
-      ["Quantum-safe", ["Built: the owner seals their record with ML-DSA-65 (NIST FIPS 204) plus Ed25519", "A check shows any record changed or deleted", "Next: invoices and receipts too"], C.emL],
-    ];
-    for (let i = 0; i < 3; i++) {
-      const x = 0.6 + i * 4.1;
-      card(s, x, 1.95, 3.8, 4.4, i === 2 ? C.panel2 : C.panel);
-      t(s, road[i][0], { x: x + 0.35, y: 2.2, w: 3.2, h: 0.5, fontFace: TITLE, fontSize: 22, bold: true, color: road[i][2] });
-      s.addText(road[i][1].map((q, j) => ({ text: q, options: { bullet: true, breakLine: j < 2 } })),
-        { x: x + 0.35, y: 2.95, w: 3.2, h: 3.2, fontFace: BODY, fontSize: 15.5, color: C.white, paraSpaceAfter: 11, margin: 0, valign: "top", isTextBox: true });
-    }
-    foot(s);
-    s.addNotes("Post-quantum (built): 'Records are meant to prove things for years, and quantum computers will break today\'s signatures. So the owner can seal their whole record with two signatures: ML-DSA-65, the NIST post-quantum standard, and Ed25519. A check shows exactly which records changed or were deleted, even straight in the database. We keep no copy of the seal, and our public keys are published so anyone can check without us.' Built and tested; invoices and receipts are next.");
   }
 
   await pres.writeFile({ fileName: OUT });

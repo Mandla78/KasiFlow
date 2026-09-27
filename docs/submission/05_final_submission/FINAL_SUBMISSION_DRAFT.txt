@@ -9,14 +9,14 @@ WHAT WE UPLOAD
 ---------------------------------------------------------------------------
 
   FILE 1  Name:  Akayza - Presentation Slides
-          Notes: 24 slides. Slides 1-10 are the 3-minute pitch; slide
-                 11 maps each required item to its slides: problem with
-                 charts and photos, solution with real app screens,
-                 user journey, architecture, security, data privacy
-                 policy, competitive analysis, business model, costs
-                 and the ask, go-to-market, traction. The demo plays
-                 inside slide 6 (49 s, starts by itself, no Wi-Fi
-                 needed); the full 81-second video is linked there.
+          Notes: 10 slides, the organisers' limit. Slides 1-8 are the
+                 3-minute pitch; 9-10 are the architecture and the
+                 data privacy policy. Required items: problem with
+                 charts and photos (2-3), solution (4), user journey
+                 (5), competitive analysis (7), architecture (9), data
+                 privacy (10). The demo plays inside slide 5 (49 s,
+                 starts by itself, no Wi-Fi needed); the full 81-second
+                 video is linked there.
   FILE 2  Name:  Akayza - UX Design
           Notes: the designed screens of the full journey; the demo
                  shows the built part.
@@ -24,39 +24,36 @@ WHAT WE UPLOAD
           (81 s, "Team PR GKHack26 demo", anyone with the link; opens
           signed out, checked Sun 27 Sep 02:55). Room cut: 49 s, silent.
           Under 90 seconds. Link on the Sonke project overview AND on
-          slide 6 (DEMO_URL=<link> node build.js). Unlisted YouTube or Google Drive (set to
+          slide 5 (DEMO_URL=<link> node build.js). Unlisted YouTube or Google Drive (set to
           "anyone with the link"). Test the link in a private window.
   PROFILE Switch the project name to Akayza and update the overview
           (01_team_profile) before uploading.
 
 
 ---------------------------------------------------------------------------
-THE SLIDES (more than 10; their required items marked *)
+THE SLIDES (10 at most; required items marked *)
 ---------------------------------------------------------------------------
 
-  Built from deck_source/build.js (27 Sep). The 3-minute pitch, in the
-  order of the organisers' pro tip:
-   1  Akayza · Team PR · "Keep it in the kasi."
-   2  * Problem: R900bn, with photos of a spaza shop and a builder's site
+  Built from deck_source/build.js, then deck_source/autoplay_video.ps1
+  (27 Sep). The pitch follows the speech:
+   1  Title: Akayza, "Keep it in the kasi.", the theme (igniting
+      capabilities for South Africa's informal market), Team PR
+   2  * Problem: everyone wants a piece of the informal market; R900bn,
+      with photos of a spaza shop and a builder's site
    3  * Problem: three charts (bank loans, the Spaza fund, unregistered)
-   4  * Solution offering: today, this week, tomorrow
-   5  * Solution: how it works, five real app screens
-   6  Demo (50 s in the room; the under-90-second video link is here)
-   7  * Competitive analysis: why we stand out
-   8  Business model: suppliers pay, businesses never do
-   9  The ask: R300,000, the sum of the 6-month pilot's costs
-  10  Thank you
-  The detail, for the assessors:
-  11  A map of the required items to their slides
-  12  * Problem: tools built for the formal few
-  13  * User journey story: Thandi's week
-  14  Who wins · 15 the opportunity · 16 why South Africa first
-  17  * Technological architecture: app -> API (a module per area) ->
-      PostgreSQL; PayFast, Cloudinary, Mapbox, email
-  18  * Data privacy policy (POPIA): what we collect and why, what we
+   4  * Solution: one free app, three real screens, airtime advance
+   5  * User journey: Sipho and Thabo, step by step, beside the demo
+      video (inside the slide) and the link to the full video
+   6  Business model and the ask: suppliers pay; R300,000, the sum of
+      the 6-month pilot's costs
+   7  * Competitive analysis: they sell to you, we build your record
+   8  The close: the next Maponya; thank you
+  For the assessors:
+   9  * Technological architecture: app -> API (a module per area) ->
+      PostgreSQL; PayFast, Cloudinary, Mapbox, email; request guards
+      and test counts
+  10  * Data privacy policy (POPIA): what we collect and why, what we
       never do, your rights, with honest status
-  19  Security · 20 go-to-market · 21 traction (TRL) · 22 costs and
-      break-even · 23 team · 24 what's next (post-quantum seals)
 
 
 ---------------------------------------------------------------------------
