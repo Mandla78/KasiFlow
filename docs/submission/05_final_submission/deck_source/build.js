@@ -10,6 +10,8 @@ const fs = require("fs");
 const Fi = require("react-icons/fi");
 
 const OUT = process.argv[2] || "Akayza_Pitch_TeamPR.pptx";
+// The demo video on Google Drive (anyone with the link). DEMO_URL=https://... node build.js overrides it.
+const DEMO_URL = process.env.DEMO_URL || "https://drive.google.com/file/d/1yYQfVBEG-dnn-hxgRRtD5xDVw8vZV8Es/view";
 const LOGO = "image/png;base64," + fs.readFileSync(__dirname + "/logo_mark.png").toString("base64");
 
 // Brand: navy ground, emerald (goods flowing out), amber (cash coming back).
@@ -361,10 +363,13 @@ async function icon(Comp, color, px = 256) {
     const s = pres.addSlide(); base(s);
     kicker(s, "See it working");
     card(s, 0.6, 1.0, 6.6, 4.6, C.panel2);
-    await disc(s, Fi.FiPlay, 3.2, 2.0, 1.4, C.amL);
-    t(s, "90-second demo, on a real phone, against our real system", { x: 0.8, y: 3.75, w: 6.2, h: 0.45, fontSize: 15, bold: true, align: "center" });
-    t(s, "Video: [paste link here]", { x: 0.8, y: 4.3, w: 6.2, h: 0.4, fontSize: 14, color: C.amL, align: "center" });
-    t(s, "Home at a glance  ·  suppliers matched  ·  paid and confirmed  ·  a sealed record", { x: 0.8, y: 4.9, w: 6.2, h: 0.5, fontSize: 12, color: C.muted, align: "center" });
+    await disc(s, Fi.FiPlay, 3.2, 1.55, 1.4, C.amL);
+    // The whole card opens the video: an invisible shape carries the link over the play button.
+    s.addShape(pres.shapes.RECTANGLE, { x: 0.6, y: 1.0, w: 6.6, h: 4.6, fill: { color: C.bg, transparency: 100 }, line: { color: C.bg, transparency: 100 }, hyperlink: { url: DEMO_URL, tooltip: "Watch the demo" } });
+    t(s, "Meet Sipho and Thabo: 81 seconds, on a real phone, against our real system", { x: 0.9, y: 3.2, w: 6.0, h: 0.75, fontSize: 15, bold: true, align: "center" });
+    t(s, [{ text: "Watch the demo", options: { hyperlink: { url: DEMO_URL, tooltip: "Watch the demo" }, bold: true } }], { x: 0.9, y: 4.0, w: 6.0, h: 0.4, fontSize: 16, color: C.amL, align: "center" });
+    t(s, "A kota shop orders from suppliers who deliver, pays in the app, confirmed by the provider  ·  a builder's job in stages", { x: 0.9, y: 4.55, w: 6.0, h: 0.8, fontSize: 12, color: C.muted, align: "center" });
+    t(s, [{ text: DEMO_URL, options: { hyperlink: { url: DEMO_URL } } }], { x: 0.6, y: 5.75, w: 6.6, h: 0.3, fontSize: 9, color: C.faint, align: "center" });
     s.addImage({ data: LOGO, x: 7.75, y: 1.0, w: 1.1, h: 1.1 });
     t(s, "Thank you", { x: 7.7, y: 2.3, w: 5.2, h: 1.0, fontFace: TITLE, fontSize: 50, bold: true });
     t(s, "Keep it in the kasi.", { x: 7.75, y: 3.35, w: 5.2, h: 0.6, fontFace: TITLE, fontSize: 24, italic: true, color: C.amL });
@@ -374,7 +379,7 @@ async function icon(Comp, color, px = 256) {
     foot(s, 10);
     s.addNotes(
       "DEMO (50 s): play the video, or do it live. Let it speak; don't narrate every tap. Before going on: phone charged, backend + ngrok running.\n" +
-      "Replace '[paste link here]' with the real link, and link the play button too (Insert > Link).\n\n" +
+      "The card and 'Watch the demo' open the video on Google Drive. In the room, open it in the browser before you start, so it's one click away.\n\n" +
       "CLOSE (10 s), look at the panel, not the screen: 'R900 billion is moving, and nobody can see it. Akayza makes it visible, and suppliers pay for it. It's built, it works, and R300,000 puts it in real businesses. Are you buying?' Then stop talking.");
   }
 
