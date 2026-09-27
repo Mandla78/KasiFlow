@@ -175,7 +175,7 @@ async function icon(Comp, color, px = 256) {
   {
     const s = pres.addSlide(); base(s);
     kicker(s, "Market and business model");
-    title(s, "Suppliers pay. Businesses never do.");
+    title(s, "Suppliers pay. Businesses use it free.");
     const rows = [
       ["R900 bn", "a year through the township economy: every informal and small business.", C.muted],
       ["R180 bn", "through spaza shops alone, already buying from suppliers every week.", C.amL],
@@ -187,8 +187,8 @@ async function icon(Comp, color, px = 256) {
       t(s, rows[i][1], { x: 2.75, y: y + 0.03, w: 3.2, h: 1.0, fontSize: 14.5 });
     }
     card(s, 0.6, 5.4, 5.4, 1.3, C.panel2);
-    t(s, [{ text: "Go-to-market  ", options: { bold: true, color: C.amL } }, { text: "Sign a supplier, and it brings the businesses it already delivers to. 2 suppliers in the pilot, 15 in year 1, 200 by year 3.", options: { color: C.white } }],
-      { x: 0.85, y: 5.52, w: 5.0, h: 1.1, fontSize: 13.5, valign: "middle" });
+    t(s, [{ text: "Go-to-market  ", options: { bold: true, color: C.amL } }, { text: "Two ways in. Sign a supplier, and it brings the businesses it delivers to. Businesses invite the suppliers they already order from. 2 suppliers in the pilot, 15 in year 1, 200 by year 3.", options: { color: C.white } }],
+      { x: 0.85, y: 5.47, w: 5.0, h: 1.18, fontSize: 12.5, valign: "middle" });
     const prices = [["R299", "Starter"], ["R1,499", "Pro"], ["R4,999", "Stock-system link"], ["~1%", "digital orders only"]];
     for (let i = 0; i < 4; i++) {
       const x = 6.4 + i * 1.6;
@@ -210,7 +210,7 @@ async function icon(Comp, color, px = 256) {
     t(s, "R56k → R283k → R1.1m a month", { x: 6.5, y: 6.2, w: 6.1, h: 0.35, fontSize: 12.5, bold: true, align: "center" });
     foot(s, 5, "Standard Bank 2025 (economy, spaza segment, EFT). Revenue: our estimates; commission assumes ~R4,000 of digital orders per business a month.");
     s.addNotes(
-      "SAY (25 s): 'The township economy is R900 billion a year; spaza shops alone move R180 billion. And 56% already prefer EFT: that's why South Africa first. Suppliers pay us, businesses never do: R299 or R1,499 a month, and about 1% only on digital orders, never on cash. We don't chase businesses one by one: we sign a supplier, and it brings the businesses it already delivers to. End of year one, about R56,000 a month; year three, about R1.1 million.'\n\n" +
+      "SAY (25 s): 'Our users are small and informal businesses; they use it free. Our customers are suppliers. The township economy is R900 billion a year; spaza shops alone move R180 billion. And 56% already prefer EFT: that's why South Africa first. Suppliers pay us, businesses never do: R299 or R1,499 a month, and about 1% only on digital orders, never on cash. We don't chase businesses one by one: we sign a supplier, and it brings the businesses it already delivers to. And businesses invite the suppliers they already order from. End of year one, about R56,000 a month; year three, about R1.1 million.'\n\n" +
       "WHY SA FIRST (if asked): we live it; big and dense (one supplier route serves hundreds of businesses); ready for digital; clear rules (POPIA, CIPC, VAT). Then the rest of Africa.\n" +
       "HOW the revenue works: subscriptions = supplier mix × price; commission = active businesses × ~R4,000 digital orders a month × 1%. Year 1: 5 Starter + 10 Pro suppliers, 1,000 businesses. Estimates, and we say so.");
   }
@@ -262,32 +262,32 @@ async function icon(Comp, color, px = 256) {
     title(s, "They serve a slice. We serve the whole business.");
     const rows = [
       ["", "Runs the business", "Your own suppliers", "Any kind of business", "Verified payment"],
-      ["WhatsApp + notebook (today)", "no", "by voice note", "yes", "no"],
+      ["WhatsApp, calls + a notebook (today)", "no", "scattered: calls, voice notes", "yes", "no"],
       ["A wholesaler's own app (e.g. Shoprite Cash & Carry)", "no", "one wholesaler", "shops", "yes"],
       ["Payments / POS (iKhokha, Yoco)", "sales only", "no", "yes", "cards"],
       ["Bulk buying (Spazapp)", "no", "their range", "shops", "yes"],
-      ["Akayza", "yes", "any supplier", "yes", "yes"],
+      ["Akayza", "business tools", "all your suppliers, one place", "yes", "digital, verified"],
     ];
     const last = rows.length - 1;
     s.addTable(rows.map((r, i) => r.map((c, j) => ({
       text: c,
       options: {
-        fontFace: BODY, fontSize: 13.5, bold: i === 0 || j === 0 || i === last,
+        fontFace: BODY, fontSize: 12.5, bold: i === 0 || j === 0 || i === last,
         color: i === last ? C.bg : i === 0 ? C.emL : j === 0 ? C.white : c === "no" ? C.faint : C.white,
         fill: { color: i === last ? C.em : i % 2 ? C.panel : C.bg }, align: j === 0 ? "left" : "center", valign: "middle",
       },
-    }))), { x: 0.6, y: 1.9, w: 12.1, colW: [4.0, 2.0, 2.1, 2.0, 2.0], rowH: 0.64, border: { type: "solid", color: C.panel2, pt: 1 } });
-    const edge = [["Gets smarter with use", "What a business does today shapes the suppliers it's matched with tomorrow."], ["A record that holds up", "Provider-verified payments, and a sealed history nobody can quietly change."]];
+    }))), { x: 0.6, y: 1.9, w: 12.1, colW: [4.0, 2.0, 2.1, 2.0, 2.0], rowH: 0.6, border: { type: "solid", color: C.panel2, pt: 1 } });
+    const edge = [["Gets smarter with use", "What a business orders and records today shapes the suppliers it's matched with tomorrow: closer, a better fit, stocking what it buys."], ["A record that holds up", "Digital payments verified by the provider, and a sealed history of stock orders that nobody can quietly change."]];
     for (let i = 0; i < 2; i++) {
       const x = 0.6 + i * 6.15;
-      card(s, x, 5.9, 5.95, 0.85, C.panel2);
+      card(s, x, 5.95, 5.95, 0.9, C.panel2);
       t(s, [{ text: edge[i][0] + "  ", options: { bold: true, color: C.amL } }, { text: edge[i][1], options: { color: C.white } }],
-        { x: x + 0.25, y: 5.95, w: 5.5, h: 0.75, fontSize: 13, valign: "middle" });
+        { x: x + 0.25, y: 5.98, w: 5.5, h: 0.84, fontSize: 12.5, valign: "middle" });
     }
     foot(s, 7);
     s.addNotes(
       "SAY (20 s): 'Everyone serves a slice. A wholesaler's own app, like Shoprite Cash & Carry's, sells its own range. Payment apps take card payments. We serve the whole business, with the suppliers it already uses, for any kind of business. It gets smarter with use, and it builds a record that holds up.'\n\n" +
-      "Our biggest competitor is the habit of WhatsApp and a notebook. Don't attack anyone; show the gap. We complement payment apps; we don't replace them. We're not a marketplace: we recommend suppliers, never products.");
+      "Our biggest competitor is the habit: calls, voice notes and WhatsApp messages to different suppliers, nothing in one place, nothing to track. Then a notebook. Don't attack anyone; show the gap. We complement payment apps; we don't replace them. We're not a marketplace: we recommend suppliers, never products.");
   }
 
   // ================================================================ 8. TECHNOLOGICAL ARCHITECTURE
